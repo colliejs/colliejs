@@ -1,0 +1,33 @@
+{
+  "name": "@colliejs/core",
+  "version": "0.0.34",
+  "description": "foo",
+  "type": "module",
+  "scripts": {
+    "build": "rollup -c rollup.config.js && pnpm type ",
+    "buildOnly": "rollup -c rollup.config.js",
+    "clean": "rm -rf dist  ",
+    "reset": "pnpm clean && rm -rf node_modules && pnpm install",
+    "type": "tsc --project . --paths null --emitDeclarationOnly --declaration",
+    "watchtype": "tsc --project . --watch"
+  },
+  "types": "./dist/index.d.ts",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-node-resolve": "^15.0.1"
+  },
+  "gitHead": "27b6889c4e336e4f58c20d23c710aa6ede398968",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./css": "./dist/index.css"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

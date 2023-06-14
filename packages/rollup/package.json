@@ -1,0 +1,41 @@
+{
+  "name": "@colliejs/rollup",
+  "version": "0.0.87",
+  "description": "awesesome",
+  "type": "module",
+  "scripts": {
+    "build": "NODE_ENV=development rollup -c rollup.config.js && pnpm type ",
+    "buildOnly": "rollup -c rollup.config.js",
+    "clean": "rm -rf dist  ",
+    "reset": "pnpm clean && rm -rf node_modules && pnpm install",
+    "type": "tsc --project . --paths null --emitDeclarationOnly --declaration",
+    "watchtype": "tsc --project . --watch"
+  },
+  "types": "./dist/index.d.ts",
+  "keywords": [],
+  "author": "colliedog1001@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "@colliejs/core": "workspace:^0.0.34",
+    "@colliejs/react": "workspace:^0.0.83",
+    "@colliejs/transform": "workspace:^"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "organize-imports-cli",
+      "prettier --write",
+      "eslint --cache --fix"
+    ]
+  },
+  "gitHead": "27b6889c4e336e4f58c20d23c710aa6ede398968",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./css": "./dist/index.css"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

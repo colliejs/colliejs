@@ -1,0 +1,38 @@
+{
+  "name": "@colliejs/playground",
+  "version": "1.0.78",
+  "description": "awesesome",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "colliedog1001@gmail.com",
+  "license": "MIT",
+  "devDependencies": {
+    "@colliejs/react": "workspace:^0.0.83"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "organize-imports-cli",
+      "prettier --write",
+      "eslint --cache --fix"
+    ]
+  },
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@colliejs/rollup": "workspace:^0.0.87",
+    "@colliejs/vite": "workspace:^0.0.87"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./css": "./dist/index.css"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

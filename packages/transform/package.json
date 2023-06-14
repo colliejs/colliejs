@@ -1,0 +1,45 @@
+{
+  "name": "@colliejs/transform",
+  "version": "0.0.69",
+  "description": "awesesome",
+  "type": "module",
+  "scripts": {
+    "build:dev": "NODE_ENV=development rollup -c rollup.config.js && pnpm type ",
+    "build": "rollup -c rollup.config.js && pnpm type ",
+    "buildOnly": "rollup -c rollup.config.js",
+    "clean": "rm -rf dist  ",
+    "reset": "pnpm clean && rm -rf node_modules && pnpm install",
+    "type": "tsc --project . --paths null --emitDeclarationOnly --declaration",
+    "watchtype": "tsc --project . --watch"
+  },
+  "types": "./dist/index.d.ts",
+  "keywords": [],
+  "author": "colliedog1001@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "@types/jest": "^29.2.4",
+    "@colliejs/core": "workspace:^0.0.34",
+    "lodash-es": "^4.17.21"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "organize-imports-cli",
+      "prettier --write",
+      "eslint --cache --fix"
+    ]
+  },
+  "devDependencies": {
+    "@nindaff/ascii-tree": "^0.0.2"
+  },
+  "gitHead": "27b6889c4e336e4f58c20d23c710aa6ede398968",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./css": "./dist/index.css"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

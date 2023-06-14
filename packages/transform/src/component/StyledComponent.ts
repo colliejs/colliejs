@@ -1,0 +1,108 @@
+import * as t from "@babel/types";
+import { Config, StaticVariantKey, defaultConfig } from "@colliejs/core";
+import log from "npmlog";
+import { Component } from "../component/Component";
+import CustomComponent from "../component/CustomComponent";
+import { HostComponent } from "../component/HostComponent";
+import { ComponentId } from "../component/componentId";
+import { parseStyling } from "../styling/styling";
+import { Styling, StylingParsed } from "../styling/types";
+
+import { buildObjectExpression, isStyledComponentDecl } from "../utils/index";
+import { ImportsByName, Stylable, StyledComponentDecl } from "../utils/types";
+import { parseStyledComponentDeclaration } from "./parseStyledComponent";
+
+export class StyledComponent extends Component implements Stylable {
+  stylingParsed: StylingParsed;
+  dependent: CustomComponent | StyledComponent | HostComponent;
+  styling: Styling;
+
+  constructor(
+    public ast: StyledComponentDecl,
+    moduleId: string,
+    moduleIdByName: ImportsByName,
+    fileAst: t.File,
+    config: Config = defaultConfig
+  ) {
+    if (!isStyledComponentDecl) {
+      log.error("not a styledComponentDecl", "ast", ast);
+      throw new Error("not a styledComponentDecl");
+    }
+
+    const { styledComponentName, dependent, styling } =
+      parseStyledComponentDeclaration(ast, moduleIdByName, fileAst, moduleId);
+    super(new ComponentId(moduleId, styledComponentName));
+    this.stylingParsed = parseStyling(styling, config, styledComponentName);
+    this.dependent = dependent;
+    this.styling = styling;
+  }
+
+  getBaseStyle() {
+    return this.stylingParsed.baseStyle;
+  }
+
+  getVariantNames() {
+    return Object.keys(this.styling["variants"] || {});
+  }
+
+  getCssText() {
+    let text = "";
+    for (const key of Object.keys(this.stylingParsed)) {
+      text += this.stylingParsed[key as StaticVariantKey].cssText + "\n";
+    }
+    return text;
+  }
+
+  _emitCssFile() {
+    const cssText = `@layer ${this.layerName} {${this.getCssText()}}\n`;
+    return { cssText };
+  }
+  get layerName() {
+    return this.id.displayName;
+  }
+  //TODO：三方组件支持自定义LayerName
+  cssLayerDep() {
+    return {
+      [this.layerName]:
+        this.dependent instanceof StyledComponent
+          ? this.dependent.layerName
+          : this.dependent.id.displayName,
+    };
+  }
+  /**
+   * @description
+   * @example
+   *  const StyledButton = styled(button,{color:'red'},option)
+   *
+   *  =>
+   *  const StyledButton = styled(
+   *    button,
+   *    __classNameByVariant:Record<string, string>,
+   *    __classNameOfBaseStyle，
+   *    option
+   * )
+   */
+  transform() {
+    const classNameByVariant: Record<string, string> = {};
+    for (const key of Object.keys(this.stylingParsed)) {
+      if (key.startsWith("variants-")) {
+        classNameByVariant[key] =
+          this.stylingParsed[key as StaticVariantKey].className;
+      }
+    }
+
+    let classNameOfBaseStyle = "";
+    if (Object.keys(this.stylingParsed.baseStyle.cssObj).length !== 0) {
+      classNameOfBaseStyle = `${this.stylingParsed.baseStyle.className}`;
+    }
+
+    const args = (this.ast.declarations[0].init as t.CallExpression).arguments;
+    args.splice(1, 1);
+    args.splice(1, 0, buildObjectExpression(classNameByVariant));
+    args.splice(2, 0, t.stringLiteral(classNameOfBaseStyle));
+
+    //emit css file
+    const { cssText } = this._emitCssFile();
+    return { ast: this.ast, cssText };
+  }
+}
