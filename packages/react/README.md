@@ -11,7 +11,7 @@ TODO：
 
    1.3 fix：单元测试无法运行=
 
-2. 实现@colliejs/core 中的 cx 方法[]
+2. 实现@border-collie-js/core 中的 cx 方法[]
 
 ```mermaid
 graph LR

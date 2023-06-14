@@ -4,7 +4,7 @@ import {
   StaticVariantKey,
   VariantName,
   VariantValue,
-} from "@colliejs/core";
+} from "@border-collie-js/core";
 
 export type CSSInfo = {
   cssText: string;

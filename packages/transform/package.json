@@ -1,5 +1,5 @@
 {
-  "name": "@colliejs/transform",
+  "name": "@border-collie-js/transform",
   "version": "0.0.70",
   "description": "awesesome",
   "type": "module",
@@ -17,7 +17,7 @@
   "author": "colliedog1001@gmail.com",
   "license": "MIT",
   "dependencies": {
-    "@colliejs/core": "workspace:^",
+    "@border-collie-js/core": "workspace:^",
     "@types/jest": "^29.5.2",
     "lodash-es": "^4.17.21"
   },

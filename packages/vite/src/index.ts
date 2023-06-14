@@ -1,8 +1,8 @@
 import log from "npmlog";
-import { Config, defaultConfig } from "@colliejs/core";
+import { Config, defaultConfig } from "@border-collie-js/core";
 import { parse } from "@babel/parser";
 import { createFilter, FilterPattern } from "@rollup/pluginutils";
-import { getDepPaths, transform, parseCode, getImports } from "@colliejs/transform";
+import { getDepPaths, transform, parseCode, getImports } from "@border-collie-js/transform";
 
 import fs from "node:fs";
 import { createRequire } from "node:module";

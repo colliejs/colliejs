@@ -1,5 +1,5 @@
 import React, { ElementType } from "react";
-import { type Styling } from "@colliejs/transform";
+import { type Styling } from "@border-collie-js/transform";
 
 export type StyledOption<
   BaseProp,

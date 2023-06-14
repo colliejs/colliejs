@@ -1,5 +1,5 @@
 import { abs } from '@unstyled-ui/css';
-import { styled } from '@colliejs/react';
+import { styled } from '@border-collie-js/react';
 import { Button } from './Button';
 const width = 200;
 const height = 40;

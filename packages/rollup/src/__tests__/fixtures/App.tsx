@@ -1,4 +1,4 @@
-import { CSSPropertiesComplex } from '@colliejs/core';
+import { CSSPropertiesComplex } from '@border-collie-js/core';
 import React from 'react';
 import Button from './Button';
 

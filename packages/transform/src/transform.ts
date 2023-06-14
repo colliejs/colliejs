@@ -1,4 +1,4 @@
-import { Config } from "@colliejs/core";
+import { Config } from "@border-collie-js/core";
 import { StyledComponent, StyledElement } from "./component";
 import { parseCode } from "./parse";
 import {

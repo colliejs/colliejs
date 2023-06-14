@@ -1,6 +1,6 @@
-import { defaultConfig } from "@colliejs/core";
+import { defaultConfig } from "@border-collie-js/core";
 import { parse } from "@babel/parser";
-import { getDepPaths, getImports, transform } from "@colliejs/transform";
+import { getDepPaths, getImports, transform } from "@border-collie-js/transform";
 import fs from "node:fs";
 import path from "node:path";
 import { type Plugin } from "rollup";

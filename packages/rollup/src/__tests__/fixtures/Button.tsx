@@ -1,4 +1,4 @@
-import { styled } from '@colliejs/react';
+import { styled } from '@border-collie-js/react';
 import { BaseButton } from './AntdButton';
 
 const Button = styled(BaseButton, {

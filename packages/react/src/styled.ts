@@ -3,7 +3,7 @@ import {
   unitProps,
   getStaticVariantKey,
   getDynamicVariantKey,
-} from "@colliejs/core";
+} from "@border-collie-js/core";
 import _ from "lodash";
 import React, { ElementType, ForwardRefRenderFunction } from "react";
 

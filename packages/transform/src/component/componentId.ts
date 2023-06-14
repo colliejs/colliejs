@@ -1,5 +1,5 @@
 import { REG_HOST_COMPONENT } from "./HostComponent";
-import { toHash } from "@colliejs/core";
+import { toHash } from "@border-collie-js/core";
 import path from "node:path";
 
 declare const __DEV__: boolean;

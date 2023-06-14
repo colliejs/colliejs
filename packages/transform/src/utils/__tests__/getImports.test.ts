@@ -5,33 +5,34 @@ describe("test cases", () => {
     const source = `
         import _ from 'lodash';
         import {stripUnit} from 'polished';
-        import * as t from '@colliejs/core';
+        import * as t from '@border-collie-js/core';
         import {Button} from './fixtures/Button';
         import {RedButton as BeautifulButton} from './fixtures/Button';
     `;
     const ast = parseCode(source);
     const modulePath = __dirname;
+    const home = process.env.HOME;
     expect(getImports(ast.program, modulePath)).toMatchInlineSnapshot(`
       {
         "BeautifulButton": {
           "importedName": "RedButton",
-          "moduleId": "/Users/colliejs.org/code/personal/colliejs/packages/transform/src/utils/__tests__/fixtures/Button.tsx",
+          "moduleId": "${home}/code/personal/border-collie-js/packages/transform/src/utils/__tests__/fixtures/Button.tsx",
         },
         "Button": {
           "importedName": "Button",
-          "moduleId": "/Users/colliejs.org/code/personal/colliejs/packages/transform/src/utils/__tests__/fixtures/Button.tsx",
+          "moduleId": "${home}/code/personal/border-collie-js/packages/transform/src/utils/__tests__/fixtures/Button.tsx",
         },
         "_": {
           "importedName": "default",
-          "moduleId": "/Users/colliejs.org/code/personal/colliejs/node_modules/.pnpm/lodash@4.17.21/node_modules/lodash/lodash.js",
+          "moduleId": "${home}/code/personal/border-collie-js/node_modules/.pnpm/lodash@4.17.21/node_modules/lodash/lodash.js",
         },
         "stripUnit": {
           "importedName": "stripUnit",
-          "moduleId": "/Users/colliejs.org/code/personal/colliejs/node_modules/.pnpm/polished@4.2.2/node_modules/polished/dist/polished.cjs.js",
+          "moduleId": "${home}/code/personal/border-collie-js/node_modules/.pnpm/polished@4.2.2/node_modules/polished/dist/polished.cjs.js",
         },
         "t": {
           "importedName": "*",
-          "moduleId": "/Users/colliejs.org/code/personal/colliejs/packages/core/dist/index.cjs",
+          "moduleId": "${home}/code/personal/border-collie-js/packages/core/dist/index.cjs",
         },
       }
     `);
@@ -43,11 +44,12 @@ describe("test cases", () => {
     const ast = parseCode(source);
     const modulePath = __dirname;
     const importers = getImports(ast.program, modulePath);
+    const home = process.env.HOME;
     expect(importers).toMatchInlineSnapshot(`
       {
         "hello": {
           "importedName": "default",
-          "moduleId": "/Users/colliejs.org/code/personal/colliejs/packages/transform/src/utils/__tests__/fixtures/hello.ts",
+          "moduleId": "${home}/code/personal/border-collie-js/packages/transform/src/utils/__tests__/fixtures/hello.ts",
         },
       }
     `);

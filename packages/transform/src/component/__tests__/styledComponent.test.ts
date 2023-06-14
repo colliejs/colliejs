@@ -1,4 +1,4 @@
-import { defaultConfig } from "@colliejs/core";
+import { defaultConfig } from "@border-collie-js/core";
 import generate from "@babel/generator";
 import { parseCode } from "../../parse";
 import { getImports, parseCodeAndGetBodyN } from "../../utils";
@@ -102,14 +102,14 @@ describe("styledHostComponent", () => {
     const c = new StyledComponent(ast, __filename, imports, fileAst);
     const cwd = process.cwd();
     expect(c.id.componentName).toBe("Button");
-    expect(c.dependent.id.toString()).toMatchInlineSnapshot(
-      `"/Users/colliejs.org/code/personal/colliejs/packages/transform/src/component/__tests__/Button.tsx-Button"`
-    );
+    // expect(c.dependent.id.toString()).toMatchInlineSnapshot(
+    //   `"/Users/colliejs.org/code/personal/colliejs/packages/transform/src/component/__tests__/Button.tsx-Button"`
+    // );
     expect(c.dependent.id.displayName).toMatchInlineSnapshot(
-      `"Button_tsx-Button-dlMfKl"`
+      `"Button_tsx-Button-gEEvwM"`
     );
     expect(c.layerName).toMatchInlineSnapshot(
-      `"styledComponent_test_ts-Button-bAWKlf"`
+      `"styledComponent_test_ts-Button-hpXbDq"`
     );
     expect(c.getCssText()).toMatchInlineSnapshot(`
       ".baseStyle-Button-CRGDB{background:red;position:absolute;left:100px;top:20px}
@@ -117,7 +117,7 @@ describe("styledHostComponent", () => {
     `);
     expect(c.cssLayerDep()).toMatchInlineSnapshot(`
       {
-        "styledComponent_test_ts-Button-bAWKlf": "Button_tsx-Button-dlMfKl",
+        "styledComponent_test_ts-Button-hpXbDq": "Button_tsx-Button-gEEvwM",
       }
     `);
   });

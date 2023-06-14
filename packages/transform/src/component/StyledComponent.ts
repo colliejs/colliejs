@@ -1,5 +1,5 @@
 import * as t from "@babel/types";
-import { Config, StaticVariantKey, defaultConfig } from "@colliejs/core";
+import { Config, StaticVariantKey, defaultConfig } from "@border-collie-js/core";
 import log from "npmlog";
 import { Component } from "../component/Component";
 import CustomComponent from "../component/CustomComponent";

@@ -1,4 +1,4 @@
-import { defaultConfig } from "@colliejs/core";
+import { defaultConfig } from "@border-collie-js/core";
 import { transform } from "../transform";
 
 describe("test cases", () => {

@@ -1,5 +1,5 @@
 {
-  "name": "@colliejs/react",
+  "name": "@border-collie-js/react",
   "version": "0.0.84",
   "description": "awesesome",
   "type": "module",
@@ -16,8 +16,8 @@
   "author": "colliedog1001@gmail.com",
   "license": "MIT",
   "dependencies": {
-    "@colliejs/core": "workspace:^",
-    "@colliejs/transform": "workspace:^"
+    "@border-collie-js/core": "workspace:^",
+    "@border-collie-js/transform": "workspace:^"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

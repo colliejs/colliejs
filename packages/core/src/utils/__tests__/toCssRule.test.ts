@@ -1,58 +1,58 @@
-import { defaultConfig } from '../../../dist';
-import { Config, toCssRules } from '../toCssRules';
+import { defaultConfig } from "../../config/defaultConfigure";
+import { Config, toCssRules } from "../toCssRules";
 
-describe('test cases', () => {
-  it(' property with util ', () => {
+describe("test cases", () => {
+  it(" property with util ", () => {
     const cssObj = { w: 10 };
-    toCssRules(cssObj, ['.ab'], [], defaultConfig, x => {
+    toCssRules(cssObj, [".ab"], [], defaultConfig, x => {
       expect(x).toMatchInlineSnapshot(`".ab{width:10px}"`);
     });
   });
-  it(' property with polyfill ', () => {
+  it(" property with polyfill ", () => {
     const cssObj = { appearance: 10 };
-    toCssRules(cssObj, ['.ab'], [], defaultConfig, x => {
+    toCssRules(cssObj, [".ab"], [], defaultConfig, x => {
       expect(x).toMatchInlineSnapshot(
         `".ab{-webkit-appearance:10;appearance:10}"`
       );
     });
   });
-  it('isRuleLike', () => {
+  it("isRuleLike", () => {
     const isRuleLike = (
       camelName: string,
       data: any,
       config: Config,
       selectors: string[]
     ) =>
-      typeof data === 'object' &&
+      typeof data === "object" &&
       data &&
       data.toString === Object.prototype.toString &&
       (!config.utils[camelName] || !selectors.length);
     //属性不是util名，满足条件之一
-    expect(isRuleLike('width', { height: 10 }, defaultConfig, [])).toBe(true);
-    expect(isRuleLike('_after', { height: 10 }, defaultConfig, [])).toBe(true);
-    expect(isRuleLike('width', { height: 10 }, defaultConfig, ['e'])).toBe(
+    expect(isRuleLike("width", { height: 10 }, defaultConfig, [])).toBe(true);
+    expect(isRuleLike("_after", { height: 10 }, defaultConfig, [])).toBe(true);
+    expect(isRuleLike("width", { height: 10 }, defaultConfig, ["e"])).toBe(
       true
     );
-    expect(isRuleLike('width', 100, defaultConfig, ['e'])).not.toBe(true);
+    expect(isRuleLike("width", 100, defaultConfig, ["e"])).not.toBe(true);
 
     //如果属性是util名，则不能指定selector
-    expect(isRuleLike('_after', { width: 10 }, defaultConfig, [])).toBe(true);
+    expect(isRuleLike("_after", { width: 10 }, defaultConfig, [])).toBe(true);
     expect(
-      isRuleLike('_after', { width: 10 }, defaultConfig, ['selector'])
+      isRuleLike("_after", { width: 10 }, defaultConfig, ["selector"])
     ).not.toBe(true);
   });
 
-  it('selector rule ', () => {
+  it("selector rule ", () => {
     const cssObj = {
-      '& > span': {
-        '@media (max-width:968px)': { w: 10 }, //@media自动提到外面
-        _after: { color: 'red' },
+      "& > span": {
+        "@media (max-width:968px)": { w: 10 }, //@media自动提到外面
+        _after: { color: "red" },
       },
     };
-    let text = '';
+    let text = "";
     let callCount = 0;
-    const res = toCssRules(cssObj, ['.button'], [], defaultConfig, x => {
-      text += x + '\n';
+    const res = toCssRules(cssObj, [".button"], [], defaultConfig, x => {
+      text += x + "\n";
       callCount++;
     });
     expect(callCount).toBe(3);
@@ -63,19 +63,19 @@ describe('test cases', () => {
       "
     `);
   });
-  it('selector nested ', () => {
+  it("selector nested ", () => {
     const cssObj = {
       w: 10,
-      '& > div': {
-        color: 'red',
-        '&:hover': { color: 'orange' }, // &指向嵌套的上一个选择器
-        ':hover': { color: 'yellow' }, // &指向嵌套的上一个选择器
+      "& > div": {
+        color: "red",
+        "&:hover": { color: "orange" }, // &指向嵌套的上一个选择器
+        ":hover": { color: "yellow" }, // &指向嵌套的上一个选择器
       },
     };
-    let text = '';
+    let text = "";
     let callCount = 0;
-    const res = toCssRules(cssObj, ['.button'], [], defaultConfig, x => {
-      text += x + '\n';
+    const res = toCssRules(cssObj, [".button"], [], defaultConfig, x => {
+      text += x + "\n";
       callCount++;
     });
     expect(callCount).toBe(4);
@@ -87,27 +87,27 @@ describe('test cases', () => {
       "
     `);
   });
-  it('condition rule ', () => {
+  it("condition rule ", () => {
     const cssObj = {
-      '@supports (display:flex)': {
+      "@supports (display:flex)": {
         w: 10,
-        '@media (max-width:100px)': {
-          '& > div': {
-            color: 'red',
-            '@media (min-width:200px)': {
-              color: 'white',
-              '& > span': {
-                color: 'green',
+        "@media (max-width:100px)": {
+          "& > div": {
+            color: "red",
+            "@media (min-width:200px)": {
+              color: "white",
+              "& > span": {
+                color: "green",
               },
             },
           },
         },
       },
     };
-    let text = '';
+    let text = "";
     let callCount = 0;
-    const res = toCssRules(cssObj, ['.button'], [], defaultConfig, x => {
-      text += x + '\n';
+    const res = toCssRules(cssObj, [".button"], [], defaultConfig, x => {
+      text += x + "\n";
       callCount++;
     });
     expect(callCount).toBe(4);
@@ -119,17 +119,17 @@ describe('test cases', () => {
       "
     `);
   });
-  it('TODO:should throw error for this syntax', () => {
+  it("TODO:should throw error for this syntax", () => {
     const cssObj = {
       width: {
-        '@media (max-width:968px)': 10,
-        '@media (min-width:969px)': 20,
+        "@media (max-width:968px)": 10,
+        "@media (min-width:969px)": 20,
       },
     };
-    let text = '';
+    let text = "";
     let callCount = 0;
-    const res = toCssRules(cssObj, ['.button'], [], defaultConfig, x => {
-      text += x + '\n';
+    const res = toCssRules(cssObj, [".button"], [], defaultConfig, x => {
+      text += x + "\n";
       callCount++;
     });
     expect(text).toMatchInlineSnapshot(`
@@ -137,5 +137,5 @@ describe('test cases', () => {
       "
     `);
   });
-  it('rule Like value ', () => {});
+  it("rule Like value ", () => {});
 });
