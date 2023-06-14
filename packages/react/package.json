@@ -16,7 +16,7 @@
   "author": "colliedog1001@gmail.com",
   "license": "MIT",
   "dependencies": {
-    "@colliejs/core": "workspace:^0.0.34",
+    "@colliejs/core": "workspace:^",
     "@colliejs/transform": "workspace:^"
   },
   "lint-staged": {
@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@rollup/plugin-babel": "^6.0.3",
-    "@rollup/plugin-node-resolve": "^15.0.1"
+    "@rollup/plugin-node-resolve": "^15.1.0"
   },
   "gitHead": "27b6889c4e336e4f58c20d23c710aa6ede398968",
   "exports": {

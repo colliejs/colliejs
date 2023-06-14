@@ -11,7 +11,7 @@
   "author": "colliedog1001@gmail.com",
   "license": "MIT",
   "devDependencies": {
-    "@colliejs/react": "workspace:^0.0.83"
+    "@colliejs/react": "workspace:^"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -22,8 +22,8 @@
   },
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@colliejs/rollup": "workspace:^0.0.87",
-    "@colliejs/vite": "workspace:^0.0.87"
+    "@colliejs/rollup": "workspace:^",
+    "@colliejs/vite": "workspace:^"
   },
   "exports": {
     ".": {

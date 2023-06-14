@@ -16,8 +16,8 @@
   "author": "colliedog1001@gmail.com",
   "license": "MIT",
   "dependencies": {
-    "@colliejs/core": "workspace:^0.0.34",
-    "@colliejs/react": "workspace:^0.0.83",
+    "@colliejs/core": "workspace:^",
+    "@colliejs/react": "workspace:^",
     "@colliejs/transform": "workspace:^"
   },
   "lint-staged": {
