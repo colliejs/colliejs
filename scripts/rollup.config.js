@@ -59,7 +59,6 @@ const config = {
     "resolve",
     "npmlog",
     /@border-collie-js\//,
-    /@c3\//,
     /@babel\//,
     /@rollup\//,
     /node:/,

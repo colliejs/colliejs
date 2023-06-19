@@ -2,7 +2,12 @@ import log from "npmlog";
 import { Config, defaultConfig } from "@border-collie-js/core";
 import { parse } from "@babel/parser";
 import { createFilter, FilterPattern } from "@rollup/pluginutils";
-import { getDepPaths, transform, parseCode, getImports } from "@border-collie-js/transform";
+import {
+  getDepPaths,
+  transform,
+  parseCode,
+  getImports,
+} from "@border-collie-js/transform";
 
 import fs from "node:fs";
 import { createRequire } from "node:module";
@@ -72,6 +77,7 @@ const collie = (option: VitePluginOptions): Plugin => {
 
   return {
     name: "collie",
+    enforce: "pre",
     async transform(_code, url) {
       const REGEX_JS = /\.[cm]?[tj]sx?$/;
       if (url.includes("node_modules") || !filter(url) || !REGEX_JS.test(url)) {
