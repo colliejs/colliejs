@@ -12,9 +12,9 @@ import log from "npmlog";
 export const buildObjectExpression = (
   obj: Record<string, any>,
   replacer?: (val: any) => any
-): t.ObjectExpression => {
+) => {
   const isArray = Array.isArray(obj);
-  let exp;
+  let exp: t.ObjectExpression | t.ArrayExpression;
   if (isArray) {
     exp = t.arrayExpression([]);
   } else if (_.isPlainObject(obj)) {
@@ -52,7 +52,7 @@ export const buildObjectExpression = (
           throw new Error("not support type");
       }
     }
-    if (isArray) {
+    if (t.isArrayExpression(exp)) {
       exp.elements.push(value);
     } else {
       const prop = t.objectProperty(t.stringLiteral(key), value);

@@ -3,6 +3,7 @@ import {
   unitProps,
   getStaticVariantKey,
   getDynamicVariantKey,
+  StaticVariantKey,
 } from "@border-collie-js/core";
 import _ from "lodash";
 import React, { ElementType, ForwardRefRenderFunction } from "react";
@@ -69,6 +70,7 @@ export const styled = <
       if (!isVariant) {
         continue;
       }
+      //@ts-ignore
       restPropsWithoutVariant[prop] = undefined;
       //编译时variants
       if (!isObject(valOfProp)) {
@@ -81,6 +83,7 @@ export const styled = <
           classNames.push(__generatedClassNameOfAllVariants[staticVariantKey]);
         } else if (dynamicVariantKey in __generatedClassNameOfAllVariants) {
           //dynamic variant
+          //@ts-ignore
           classNames.push(__generatedClassNameOfAllVariants[dynamicVariantKey]);
 
           //TODO: 处理各种情况，不是简单的px
@@ -120,7 +123,9 @@ export const styled = <
         child = React.createElement(as || option.as || component, childProps);
       } else {
         // isStyledComponent || is3rdComponent
+        //@ts-ignore
         childProps.as = as || option.as;
+        //@ts-ignore
         child = React.createElement(component, childProps);
       }
       return React.createElement(
@@ -136,6 +141,7 @@ export const styled = <
       if (asIsWebComponent) {
         //@ts-ignore
         forwardProps.class = forwardProps.className;
+        //@ts-ignore
         delete forwardProps.className;
         return React.createElement(_as, forwardProps);
       }

@@ -2,7 +2,6 @@ import { transformTs } from "./transformTs";
 import { writeFileSync } from "fs";
 import { ImportsByName } from "./types";
 import log from "npmlog";
-import * as babel from "@babel/core";
 
 export const load = (imports: ImportsByName, key: string) => {
   const module = imports[key];

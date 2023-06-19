@@ -1,6 +1,6 @@
-import { styled } from '@border-collie-js/react';
+import { styled } from "@border-collie-js/react";
 
-export const Button = styled('button', {
-  border: 'none',
-  color: 'red',
+export const Button = styled<JSX.IntrinsicElements["button"]>("button", {
+  border: "none",
+  color: "red",
 });

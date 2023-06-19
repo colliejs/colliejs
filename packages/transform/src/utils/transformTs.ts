@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import * as babel from "@babel/core";
 import { writeFileSync } from "fs";
 export const transformTs =  (file: string) => {
