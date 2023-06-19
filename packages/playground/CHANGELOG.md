@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.81](https://github.com/border-collie-js/border-collie-js/compare/@border-collie-js/playground@1.0.80...@border-collie-js/playground@1.0.81) (2023-06-19)
+
+**Note:** Version bump only for package @border-collie-js/playground
+
 ## 1.0.80 (2023-06-14)
 
 ### Features
