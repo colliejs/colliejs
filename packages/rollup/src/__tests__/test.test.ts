@@ -22,7 +22,7 @@ const config: RollupOptions = {
     "react-dom",
     "react/jsx-runtime",
     "react-dom/client",
-    /@border-collie/,
+    /@colliejs/,
   ],
   output: [
     {
@@ -40,7 +40,7 @@ describe("test cas2es", () => {
     const code = output[0].code;
     expect(code).toMatchInlineSnapshot(`
       "import 'react';
-      import { styled } from '@border-collie-js/react';
+      import { styled } from '@colliejs/react';
       import { jsx } from 'react/jsx-runtime';
       import { createRoot } from 'react-dom/client';
 

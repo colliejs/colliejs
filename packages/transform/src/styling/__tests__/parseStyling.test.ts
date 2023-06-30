@@ -1,4 +1,4 @@
-import { defaultConfig, CSSPropertiesComplex } from "@border-collie-js/core";
+import { defaultConfig, CSSPropertiesComplex } from "@colliejs/core";
 import { parseStyling, Styling } from "../styling";
 
 describe("parseStyleObj", () => {

@@ -1,6 +1,6 @@
 {
-  "name": "@border-collie-js/playground",
-  "version": "1.0.82",
+  "name": "@colliejs/playground",
+  "version": "1.0.0",
   "description": "awesesome",
   "type": "module",
   "private": true,
@@ -11,7 +11,7 @@
   "author": "colliedog1001@gmail.com",
   "license": "MIT",
   "devDependencies": {
-    "@border-collie-js/react": "workspace:^"
+    "@colliejs/react": "workspace:^"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -22,8 +22,8 @@
   },
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@border-collie-js/rollup": "workspace:^",
-    "@border-collie-js/vite": "workspace:^"
+    "@colliejs/rollup": "workspace:^",
+    "@colliejs/vite": "workspace:^"
   },
   "exports": {
     ".": {

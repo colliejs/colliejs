@@ -1,11 +1,11 @@
-import { defaultConfig } from "@border-collie-js/core";
+import { defaultConfig } from "@colliejs/core";
 import generate from "@babel/generator";
 import {
   getImports,
   parseCode,
   parseCodeAndGetBodyN,
   StyledComponent,
-} from "@border-collie-js/transform";
+} from "@colliejs/transform";
 
 import { styled } from "../styled";
 import TestRenderer from "react-test-renderer";

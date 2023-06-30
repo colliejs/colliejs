@@ -14,7 +14,7 @@ import {
   toHash,
   getStaticVariantKey,
   getDynamicVariantKey,
-} from "@border-collie-js/core";
+} from "@colliejs/core";
 import _ from "lodash";
 
 export type Props = { [k: string]: any };

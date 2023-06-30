@@ -1,6 +1,6 @@
 import { isStyledElement } from "./../../utils/variableDecl";
 import { getImports } from "./../../utils/importer";
-import { defaultConfig } from "@border-collie-js/core";
+import { defaultConfig } from "@colliejs/core";
 import { parseCode } from "../../parse";
 const { default: generate } = require("@babel/generator");
 import { parseCodeAndGetBodyN } from "../../utils";

@@ -1,4 +1,4 @@
-import { defaultConfig } from "@border-collie-js/core";
+import { defaultConfig } from "@colliejs/core";
 import generate from "@babel/generator";
 import { parseCode } from "../../parse";
 import { getImports, parseCodeAndGetBodyN } from "../../utils";

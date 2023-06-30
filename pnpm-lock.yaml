@@ -220,14 +220,14 @@ importers:
 
   packages/playground:
     dependencies:
-      "@border-collie-js/rollup":
+      "@colliejs/rollup":
         specifier: workspace:^
         version: link:../rollup
-      "@border-collie-js/vite":
+      "@colliejs/vite":
         specifier: workspace:^
         version: link:../vite
     devDependencies:
-      "@border-collie-js/react":
+      "@colliejs/react":
         specifier: workspace:^
         version: link:../react
 
@@ -235,10 +235,10 @@ importers:
 
   packages/react:
     dependencies:
-      "@border-collie-js/core":
+      "@colliejs/core":
         specifier: workspace:^
         version: link:../core
-      "@border-collie-js/transform":
+      "@colliejs/transform":
         specifier: workspace:^
         version: link:../transform
     devDependencies:
@@ -251,19 +251,19 @@ importers:
 
   packages/rollup:
     dependencies:
-      "@border-collie-js/core":
+      "@colliejs/core":
         specifier: workspace:^
         version: link:../core
-      "@border-collie-js/react":
+      "@colliejs/react":
         specifier: workspace:^
         version: link:../react
-      "@border-collie-js/transform":
+      "@colliejs/transform":
         specifier: workspace:^
         version: link:../transform
 
   packages/transform:
     dependencies:
-      "@border-collie-js/core":
+      "@colliejs/core":
         specifier: workspace:^
         version: link:../core
       "@types/jest":
@@ -279,13 +279,13 @@ importers:
 
   packages/vite:
     dependencies:
-      "@border-collie-js/core":
+      "@colliejs/core":
         specifier: workspace:^
         version: link:../core
-      "@border-collie-js/react":
+      "@colliejs/react":
         specifier: workspace:^
         version: link:../react
-      "@border-collie-js/transform":
+      "@colliejs/transform":
         specifier: workspace:^
         version: link:../transform
 

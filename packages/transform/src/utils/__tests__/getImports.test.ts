@@ -5,7 +5,7 @@ describe("test cases", () => {
     const source = `
         import _ from 'lodash';
         import {stripUnit} from 'polished';
-        import * as t from '@border-collie-js/core';
+        import * as t from '@colliejs/core';
         import {Button} from './fixtures/Button';
         import {RedButton as BeautifulButton} from './fixtures/Button';
     `;

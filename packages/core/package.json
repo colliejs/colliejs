@@ -1,6 +1,6 @@
 {
-  "name": "@border-collie-js/core",
-  "version": "0.0.37",
+  "name": "@colliejs/core",
+  "version": "1.0.0",
   "description": "foo",
   "type": "module",
   "scripts": {

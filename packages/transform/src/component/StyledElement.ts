@@ -1,4 +1,4 @@
-import { Config, CSSPropertiesComplex } from "@border-collie-js/core";
+import { Config, CSSPropertiesComplex } from "@colliejs/core";
 import * as t from "@babel/types";
 import log from "npmlog";
 import {
