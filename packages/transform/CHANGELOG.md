@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.72](https://github.com/border-collie-js/border-collie-js/compare/@border-collie-js/transform@0.0.71...@border-collie-js/transform@0.0.72) (2023-06-30)
+
+### Features
+
+- enforce ([f634b10](https://github.com/border-collie-js/border-collie-js/commit/f634b109e942ecd6db3bf8844d35fb42babe43b0))
+
 ## 0.0.71 (2023-06-14)
 
 ### Features

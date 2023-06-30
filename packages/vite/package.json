@@ -1,6 +1,6 @@
 {
   "name": "@border-collie-js/vite",
-  "version": "0.0.90",
+  "version": "0.0.91",
   "description": "awesesome",
   "type": "module",
   "scripts": {
