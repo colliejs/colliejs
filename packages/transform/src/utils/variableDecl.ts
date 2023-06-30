@@ -63,9 +63,9 @@ export const isStyledCallExpression = (
 };
 
 /**
- * 
- * @param node 
- * @returns 
+ *
+ * @param node
+ * @returns
  * @example:
  * const Button = styled('button',{})
  */
@@ -84,5 +84,5 @@ export const isStyledComponentDecl = (
 };
 
 export const isStyledElement = (ele: t.JSXElement) => {
-  return isPropExisted(ele, "css");
+  return isPropExisted(ele, "css") || isPropExisted(ele, "_css");
 };
