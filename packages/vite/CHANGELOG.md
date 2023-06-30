@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.1](https://github.com/border-collie-js/border-collie-js/compare/@colliejs/vite@0.0.88...@colliejs/vite@1.0.1) (2023-06-30)
+
+### Features
+
+- enforce ([4095a83](https://github.com/border-collie-js/border-collie-js/commit/4095a832d4251ea557a1f4c6ac8a7325094d3a29))
+
 ## [0.0.91](https://github.com/colliejs/colliejs/compare/@colliejs/vite@0.0.90...@colliejs/vite@0.0.91) (2023-06-30)
 
 **Note:** Version bump only for package @colliejs/vite
