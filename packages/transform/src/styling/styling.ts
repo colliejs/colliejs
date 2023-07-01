@@ -51,7 +51,7 @@ export const parseStyling = (
 
       const className = `${variantKey}-${toHash(cssObj)}`;
       retVariants[variantKey] = {
-        cssText: css(cssObj, [`.${className}`], undefined, config),
+        cssText: css(cssObj, [`.${className}`], [], config),
         cssObj: cssObj,
         className: className,
       };
@@ -68,12 +68,7 @@ export const parseStyling = (
   );
   return {
     baseStyle: {
-      cssText: css(
-        baseStyleCssObject,
-        [`.${baseStyleSelector}`],
-        undefined,
-        config
-      ),
+      cssText: css(baseStyleCssObject, [`.${baseStyleSelector}`], [], config),
       cssObj: baseStyleCssObject,
       className: baseStyleSelector,
     },
@@ -101,7 +96,7 @@ export const parseCssProp = (
   }
   const className = `css-${toHash(cssPropObj)}`;
   return {
-    cssText: css(cssPropObj, [`.${className}`], undefined, config),
+    cssText: css(cssPropObj, [`.${className}`], [], config),
     cssObj: cssPropObj,
     className,
   };
