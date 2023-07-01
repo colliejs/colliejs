@@ -1,5 +1,5 @@
 import * as t from "@babel/types";
-import { Config, StaticVariantKey, defaultConfig } from "@colliejs/core";
+import { Config, StaticVariantKey } from "@colliejs/core";
 import log from "npmlog";
 import { Component } from "../component/Component";
 import CustomComponent from "../component/CustomComponent";
@@ -22,7 +22,7 @@ export class StyledComponent extends Component implements Stylable {
     moduleId: string,
     moduleIdByName: ImportsByName,
     fileAst: t.File,
-    config: Config = defaultConfig
+    config: Config
   ) {
     if (!isStyledComponentDecl) {
       log.error("not a styledComponentDecl", "ast", ast);

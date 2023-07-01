@@ -1,10 +1,10 @@
-import { isStyledElement } from "./../../utils/variableDecl";
-import { getImports } from "./../../utils/importer";
 import { defaultConfig } from "@colliejs/core";
 import { parseCode } from "../../parse";
-const { default: generate } = require("@babel/generator");
 import { parseCodeAndGetBodyN } from "../../utils";
 import { StyledElement } from "../StyledElement";
+import { getImports } from "./../../utils/importer";
+import { isStyledElement } from "./../../utils/variableDecl";
+const { default: generate } = require("@babel/generator");
 
 const transform = (sourceCode: string, n = 0) => {
   const code = parseCodeAndGetBodyN(sourceCode, n);
@@ -28,13 +28,13 @@ describe("test cases", () => {
   it("isStyleElement is true if have css prop", () => {
     const sourceCode = ` <Button css={{color:'red'}}>login</Button>`;
     const code = parseCodeAndGetBodyN(sourceCode, 0);
-    const res = isStyledElement(code.expression);
+    const res = isStyledElement(code.expression, defaultConfig);
     expect(res).toBeTruthy();
   });
   it("isStyleElement is false if without css prop", () => {
     const sourceCode = ` <Button>login</Button>`;
     const code = parseCodeAndGetBodyN(sourceCode, 0);
-    const res = isStyledElement(code.expression);
+    const res = isStyledElement(code.expression, defaultConfig);
     expect(res).not.toBeTruthy();
   });
   it.todo("should throw error if css prop is not object");

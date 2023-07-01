@@ -1,9 +1,9 @@
-import { utils } from "./util";
-import { defaultThemeMap } from "./defaultThemeMap";
 import { Config } from "../type";
+import { defaultThemeMap } from "./defaultThemeMap";
+import { utils } from "./util";
 
 export const defaultConfig: Config = {
-  prefix: "ust",
+  prefix: "co-",
   themeMap: defaultThemeMap,
   media: {
     phone: "(max-width: 767.999px)",
@@ -19,4 +19,5 @@ export const defaultConfig: Config = {
     },
   },
   utils: utils as any,
+  styledElementProp: "css",
 };

@@ -172,10 +172,11 @@ describe("render StyledComponent", () => {
     const Comp = styled("a", {}, "baseStyle-gmqXFB", {
       attrs: { target: "_blank" },
     });
-    const comp = TestRenderer.create(<Comp target="_self" />);
+    const comp = TestRenderer.create(<Comp target="_self" round />);
     expect(comp.toJSON()).toMatchInlineSnapshot(`
       <a
         className="baseStyle-gmqXFB "
+        round={true}
         target="_self"
       />
     `);
@@ -205,5 +206,33 @@ describe("render StyledComponent", () => {
   //============================================================================
   it.skip("attr need static analysis ", () => {
     return 0;
+  });
+
+  it("render wrapper component with Component Inside", () => {
+    const InnerLink = styled(
+      "a",
+      {
+        "variants-static-shape-round": "variants-static-shape-round-hECRKn",
+      },
+      "baseStyle-gmqXFB",
+      {}
+    );
+    const MyLink = styled(
+      InnerLink,
+      {
+        "variants-static-rect-true": "variants-static-rect-true-hECRKx",
+      },
+      "baseStyle-xxxxx",
+      {}
+    );
+    const comp = TestRenderer.create(
+      <MyLink rect shape="round" unexpectForward />
+    );
+    expect(comp.toJSON()).toMatchInlineSnapshot(`
+      <a
+        className="baseStyle-gmqXFB baseStyle-xxxxx  variants-static-rect-true-hECRKx variants-static-shape-round-hECRKn"
+        unexpectForward={true}
+      />
+    `);
   });
 });

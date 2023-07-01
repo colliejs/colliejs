@@ -1,18 +1,17 @@
-import log from "npmlog";
 import { Config, defaultConfig } from "@colliejs/core";
-import { parse } from "@babel/parser";
-import { createFilter, FilterPattern } from "@rollup/pluginutils";
 import {
   getDepPaths,
-  transform,
-  parseCode,
   getImports,
+  parseCode,
+  transform,
 } from "@colliejs/transform";
+import { FilterPattern, createFilter } from "@rollup/pluginutils";
+import log from "npmlog";
 
 import fs from "node:fs";
 import { createRequire } from "node:module";
 import path from "path";
-import { Plugin, ResolvedConfig } from "vite";
+import { Plugin } from "vite";
 
 global.require = global.require || createRequire(import.meta.url);
 
@@ -29,7 +28,7 @@ type VitePluginOptions = {
   include?: FilterPattern;
   exclude?: FilterPattern;
   index: string;
-  styled: Config;
+  styledConfig?: Config;
   // sourceMap?: boolean;
   // preprocessor?: Preprocessor;
 };
@@ -70,7 +69,7 @@ const collie = (option: VitePluginOptions): Plugin => {
     include,
     exclude,
     index = "src/index.ts",
-    styled = defaultConfig,
+    styledConfig = defaultConfig,
   } = option || {};
   const cssLayerDeps = {};
   const filter = createFilter(include, exclude);
@@ -89,7 +88,7 @@ const collie = (option: VitePluginOptions): Plugin => {
         _code,
         url,
         imports,
-        styled
+        styledConfig
       );
       //如果有cssLayerDep，就把它合并到cssLayerDeps
       Object.assign(cssLayerDeps, cssLayerDep);

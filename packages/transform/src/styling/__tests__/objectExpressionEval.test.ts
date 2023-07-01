@@ -33,7 +33,7 @@ describe("test cases", () => {
     const res = evalObjectString(code, 2);
     expect(res).toMatchInlineSnapshot(`
       {
-        "backgroundImage": "url(${process.env.HOME}/code/personal/border-collie-js/packages/transform/src/styling/__tests__/fixtures/dog.jpeg)",
+        "backgroundImage": "url(${process.env.HOME}/code/personal/colliejs/packages/transform/src/styling/__tests__/fixtures/dog.jpeg)",
         "color": "red",
         "position": "fixed",
       }

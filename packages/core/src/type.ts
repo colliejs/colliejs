@@ -1,5 +1,5 @@
 type Selector = string;
-import * as CSS from 'csstype';
+import * as CSS from "csstype";
 
 export interface CSSProperties extends CSS.Properties<string | number> {
   /**
@@ -29,7 +29,7 @@ type CustomPropertyRule = {
 
 export type CSSPropertiesComplex = CSSProperties &
   CustomPropertyRule &
-  ConditionRule 
+  ConditionRule;
 //   & SelectorRule;
 
 export type Config = {
@@ -39,4 +39,5 @@ export type Config = {
   prefix?: string;
   theme?: Record<string, any>;
   themeMap: Record<string, any>;
+  styledElementProp?: string;
 };

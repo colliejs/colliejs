@@ -1,6 +1,7 @@
 import * as t from "@babel/types";
+import { Config } from "@colliejs/core";
 import { traverse } from "./module";
-import { getProp, isPropExisted } from "./prop";
+import { isPropExisted } from "./prop";
 import { StyledComponentDecl } from "./types";
 
 export const getInitOfDecl = (
@@ -35,7 +36,8 @@ export const getVariableValueInFile = (ast: t.File, name: string) => {
     /**
      * @example
      * import {a} from 'xx';
-     * const b = a; //考虑这种情况。需要把a先计算出来
+     * import { Config } from '@colliejs/core';
+const b = a; //考虑这种情况。需要把a先计算出来
      */
     // switch(decl.init?.type){
     //   case 'StringLiteral':
@@ -83,6 +85,6 @@ export const isStyledComponentDecl = (
   return false;
 };
 
-export const isStyledElement = (ele: t.JSXElement) => {
-  return isPropExisted(ele, "css") || isPropExisted(ele, "_css");
+export const isStyledElement = (ele: t.JSXElement, config: Config) => {
+  return isPropExisted(ele, config.styledElementProp || "css");
 };

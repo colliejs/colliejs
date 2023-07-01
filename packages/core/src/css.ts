@@ -1,7 +1,6 @@
-import { defaultConfig } from './config/defaultConfigure';
-import { CSSPropertiesComplex } from './type';
+import { CSSPropertiesComplex, Config } from "./type";
 //@ts-ignore
-import { toCssRules } from './utils/toCssRules';
+import { toCssRules } from "./utils/toCssRules";
 /**
  * 写个函数把
  * const  o = {
@@ -59,7 +58,7 @@ export const convertCssObjToMediaQuery = (
     const value = cssObj[key];
     if (Array.isArray(value)) {
       Object.assign(res, arraySyntax(key, value, breakpoints));
-    } else if (typeof value === 'object' && value) {
+    } else if (typeof value === "object" && value) {
       res[key] = convertCssObjToMediaQuery(value, breakpoints);
     } else {
       res[key] = value;
@@ -70,16 +69,16 @@ export const convertCssObjToMediaQuery = (
 
 export const css = (
   cssObj: CSSPropertiesComplex,
-  selectors = ['.my-class-name'],
+  selectors = [".my-class-name"],
   conditions = [],
-  config = defaultConfig
+  config: Config
 ) => {
   const newCssObj = config.breakpoints
     ? convertCssObjToMediaQuery(cssObj, config.breakpoints!)
     : cssObj;
-  let res = '';
+  let res = "";
   toCssRules(newCssObj, selectors, conditions, config, (cssText: string) => {
-    res += cssText + '\n';
+    res += cssText + "\n";
   });
   return res.slice(0, -1);
 };

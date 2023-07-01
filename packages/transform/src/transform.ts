@@ -21,7 +21,6 @@ export const transform = (
   const cssLayerDep: Record<string, string> = {};
 
   traverse(fileAst, {
-
     //1.transform styled component
     VariableDeclaration(path) {
       if (isStyledComponentDecl(path.node)) {
@@ -39,7 +38,7 @@ export const transform = (
     },
     //2.transform styled element
     JSXElement(path) {
-      if (isStyledElement(path.node)) {
+      if (isStyledElement(path.node, config)) {
         const styledElement = new StyledElement(
           path.node,
           modulesByName,

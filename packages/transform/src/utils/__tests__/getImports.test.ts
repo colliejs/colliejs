@@ -1,4 +1,4 @@
-import { getImportDeclarations, getImports, parseCode } from "../..";
+import { getImports, parseCode } from "../..";
 
 describe("test cases", () => {
   it("should work ", () => {
@@ -16,23 +16,23 @@ describe("test cases", () => {
       {
         "BeautifulButton": {
           "importedName": "RedButton",
-          "moduleId": "${home}/code/personal/border-collie-js/packages/transform/src/utils/__tests__/fixtures/Button.tsx",
+          "moduleId": "${home}/code/personal/colliejs/packages/transform/src/utils/__tests__/fixtures/Button.tsx",
         },
         "Button": {
           "importedName": "Button",
-          "moduleId": "${home}/code/personal/border-collie-js/packages/transform/src/utils/__tests__/fixtures/Button.tsx",
+          "moduleId": "${home}/code/personal/colliejs/packages/transform/src/utils/__tests__/fixtures/Button.tsx",
         },
         "_": {
           "importedName": "default",
-          "moduleId": "${home}/code/personal/border-collie-js/node_modules/.pnpm/lodash@4.17.21/node_modules/lodash/lodash.js",
+          "moduleId": "${home}/code/personal/colliejs/node_modules/.pnpm/lodash@4.17.21/node_modules/lodash/lodash.js",
         },
         "stripUnit": {
           "importedName": "stripUnit",
-          "moduleId": "${home}/code/personal/border-collie-js/node_modules/.pnpm/polished@4.2.2/node_modules/polished/dist/polished.cjs.js",
+          "moduleId": "${home}/code/personal/colliejs/node_modules/.pnpm/polished@4.2.2/node_modules/polished/dist/polished.cjs.js",
         },
         "t": {
           "importedName": "*",
-          "moduleId": "${home}/code/personal/border-collie-js/packages/core/dist/index.cjs",
+          "moduleId": "${home}/code/personal/colliejs/packages/core/dist/index.cjs",
         },
       }
     `);
@@ -49,7 +49,7 @@ describe("test cases", () => {
       {
         "hello": {
           "importedName": "default",
-          "moduleId": "${home}/code/personal/border-collie-js/packages/transform/src/utils/__tests__/fixtures/hello.ts",
+          "moduleId": "${home}/code/personal/colliejs/packages/transform/src/utils/__tests__/fixtures/hello.ts",
         },
       }
     `);

@@ -1,18 +1,24 @@
-import { defaultConfig } from "@colliejs/core";
 import { parse } from "@babel/parser";
+import { Config, defaultConfig } from "@colliejs/core";
 import { getDepPaths, getImports, transform } from "@colliejs/transform";
+import { FilterPattern, createFilter } from "@rollup/pluginutils";
 import fs from "node:fs";
 import path from "node:path";
 import { type Plugin } from "rollup";
-import { createFilter, FilterPattern } from "@rollup/pluginutils";
 
 type Option = {
   outDir: string;
   include?: FilterPattern;
   exclude?: FilterPattern;
+  styledConfig?: Config;
 };
 const collie = (option?: Option): Plugin => {
-  const { outDir = "dist/", include, exclude } = option || {};
+  const {
+    outDir = "dist/",
+    include,
+    exclude,
+    styledConfig = defaultConfig,
+  } = option || {};
   let cssTexts = "";
   const cssLayerDeps = {};
   const filter = createFilter(include, exclude);
@@ -37,7 +43,7 @@ const collie = (option?: Option): Plugin => {
         _code,
         id,
         imports,
-        defaultConfig // //TODO: 从配置文件中读取config:Config
+        styledConfig
       );
       cssTexts += cssText + "\n";
       Object.assign(cssLayerDeps, cssLayerDep);
