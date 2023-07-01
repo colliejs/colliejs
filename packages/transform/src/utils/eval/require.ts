@@ -1,7 +1,6 @@
-import { transformTs } from "./transformTs";
-import { writeFileSync } from "fs";
-import { ImportsByName } from "./types";
 import log from "npmlog";
+import { transformTs } from "../transformTs";
+import { ImportsByName } from "../types";
 
 export const load = (imports: ImportsByName, key: string) => {
   const module = imports[key];

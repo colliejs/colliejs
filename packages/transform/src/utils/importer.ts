@@ -106,12 +106,10 @@ export const getFileModuleImport = (imports: ImportsByName) => {
     })
     .map(([key, value]) => {
       return [key, value.moduleId];
-    });
-  const args = [];
-  const values = [];
-  for (const [key, value] of imgPair) {
-    args.push(key);
-    values.push(value);
-  }
-  return { args, values, imgPair };
+    })
+    .reduce((acc, [key, value]) => {
+      acc[key] = value;
+      return acc;
+    }, {} as any);
+  return imgPair;
 };

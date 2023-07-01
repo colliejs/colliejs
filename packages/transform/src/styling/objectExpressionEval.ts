@@ -12,8 +12,9 @@ import {
   load,
   traverse,
 } from "../utils/index";
-import { evalAst } from "./../utils/eval";
+import { evalExp } from "../utils/eval/eval";
 import { isNull } from "lodash";
+import { evalIdentifer } from "../utils/eval/evalIdentifier";
 
 //@ts-ignore
 if (!global.__JEST__) {
@@ -46,49 +47,50 @@ export class ObjectExpressionEval {
           const varName = path.node.argument;
           if (t.isIdentifier(varName)) {
             //@ts-ignore
-            path.node.argument = ObjectExpressionEval.getVariableValue(
-              varName,
-              imports,
-              fileAst
-            );
+            path.node.argument = evalIdentifer(varName, imports, fileAst);
           }
         },
         ObjectProperty(path) {
           const { key, value } = path.node;
-          //计算属性
+          /**
+           * 计算属性
+           * o={
+           *  [foo]:'bar'
+           * }
+           **/
+
           if (path.node.computed) {
             path.node.computed = false;
             let newKey = key;
-            if (t.isExpression(key)) {
-              // newKey = evalAst(key);
-            }
             if (t.isIdentifier(newKey)) {
               //@ts-ignore
-              path.node.key = ObjectExpressionEval.getVariableValue(
-                newKey,
-                imports,
-                fileAst
-              );
+              path.node.key = evalIdentifer(newKey, imports, fileAst);
             }
           }
 
+          //处理value
           /**
            * 计算出mycolor的值
            * {
            *    color:mycolor
            * }
            */
-
           if (t.isIdentifier(value)) {
-            if (ObjectExpressionEval.isDynamicFuncArg(path, value.name)) {
+            if (isArgOfDynamicFunc(path, value.name)) {
               return;
             }
             //@ts-ignore
-            path.node.value = ObjectExpressionEval.getVariableValue(
-              value,
-              imports,
-              fileAst
-            );
+            path.node.value = evalIdentifer(value, imports, fileAst);
+            return;
+          }
+          /**
+           *  o = {
+           *   background:colors.grey[100]
+           * }
+           */
+          if (t.isMemberExpression(value)) {
+          } else {
+            // throw new Error("TODO: not support");
           }
         },
         ObjectMethod(path) {
@@ -166,8 +168,8 @@ export class ObjectExpressionEval {
                 argNameIfInObjectMethodLike = (arg as t.Identifier).name;
                 return `__PLACEHOLDER__`; //其实上一定是"var(--variants-xxx-dynamic)"
               } else {
-                const { args, values } = getFileModuleImport(imports);
-                return evalAst(arg, args, values);
+                const context = getFileModuleImport(imports);
+                return evalExp(arg, context);
               }
             } catch (err) {
               log.error("CallExpression,argument", generate(arg).code);
@@ -244,73 +246,37 @@ export class ObjectExpressionEval {
     );
     return this;
   }
-  static getVariableValue(
-    variable: t.Identifier,
-    imports: ImportsByName,
-    fileAst: t.File
-  ) {
-    if (variable.name in imports) {
-      return this.getExternalVariableValue(variable, imports);
-    } else {
-      return this.getInternalVariableValue(variable, fileAst);
-    }
-  }
 
-  static getExternalVariableValue(
-    variable: t.Identifier,
-    imports: ImportsByName
-  ) {
-    const name = variable.name;
-    if (name in imports) {
-      const res = load(imports, name);
-      // const res = load(imports[name], name);
-      switch (typeof res) {
-        case "string":
-          return t.stringLiteral(res);
-        case "number":
-          return t.numericLiteral(res);
-        case "object":
-          return buildObjectExpression(res);
-        default:
-          log.error("not support type res=", res);
-          throw new Error("not support type");
-      }
-    }
-    log.error("not support type name=", name);
-    throw new Error("not support type");
-  }
-
-  static getInternalVariableValue(variable: t.Identifier, fileAst: t.File) {
-    if (!fileAst) {
-      throw new Error("fileAst is must provided");
-    }
-    return getVariableValueInFile(fileAst, variable.name);
-  }
-
-  static isDynamicFuncArg(path: NodePath, arg: string) {
-    const objectMethod = path.findParent(
-      p =>
-        p.isObjectMethod() &&
-        // p.node.key.name === "dynamic" &&
-        //@ts-ignore
-        p.node.params[0].name === arg
-    );
-    if (objectMethod) {
-      return true;
-    }
-    const fnPath = path.findParent(
-      p =>
-        p.isObjectProperty() &&
-        (t.isArrowFunctionExpression(p.node.value) ||
-          t.isFunctionExpression(p.node.value)) &&
-        // p.node.key.name === "dynamic" &&
-        //@ts-ignore
-        p.node.value.params[0].name === arg
-    );
-    return fnPath ? true : false;
-  }
-
-  eval(args: any[], values: any[]) {
-    return evalAst(this.objectExp, args, values);
+  eval(context: object) {
+    return evalExp(this.objectExp, context);
   }
 }
+
+/**
+ * x is the args of  dynamic function
+ * o={
+ *  dynamic(x){return {...pos(x)}}
+ * }
+ */
+export const isArgOfDynamicFunc = (path: NodePath, arg: string) => {
+  const objectMethod = path.findParent(
+    p =>
+      p.isObjectMethod() &&
+      // p.node.key.name === "dynamic" &&
+      //@ts-ignore
+      p.node.params[0].name === arg
+  );
+  if (objectMethod) {
+    return true;
+  }
+  const fnPath = path.findParent(
+    p =>
+      p.isObjectProperty() &&
+      (t.isArrowFunctionExpression(p.node.value) ||
+        t.isFunctionExpression(p.node.value)) &&
+      // p.node.key.name === "dynamic" &&
+      //@ts-ignore
+      p.node.value.params[0].name === arg
+  );
+  return fnPath ? true : false;
+};

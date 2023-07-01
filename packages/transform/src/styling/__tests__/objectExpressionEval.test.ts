@@ -12,10 +12,10 @@ const evalObjectString = (code: string, objectExpIndex = 1) => {
   const exp = new ObjectExpressionEval(objexp);
   const fileAst = parseCode(code);
   const imports = getImports(fileAst.program, __dirname);
-  const { args, values } = getFileModuleImport(imports);
+  const context = getFileModuleImport(imports);
   const res = exp
     .prepareEvaluableObjectExp(imports, fileAst)
-    .eval(args, values);
+    .eval(context);
   return res;
 };
 

@@ -3,6 +3,7 @@ import * as t from "@babel/types";
 import { ObjectExpressionEval } from "../styling/objectExpressionEval";
 import { ImportsByName } from "./types";
 import { getFileModuleImport } from "./importer";
+import { evalIdentifer } from "./eval/evalIdentifier";
 
 export const getPropValue = (
   ele: t.JSXElement,
@@ -29,10 +30,10 @@ export const getPropValue = (
       const exp = (val as t.JSXExpressionContainer).expression;
       switch (exp.type) {
         case "ObjectExpression":
-          const { args, values } = getFileModuleImport(importsByName);
+          const context = getFileModuleImport(importsByName);
           return new ObjectExpressionEval(exp)
             .prepareEvaluableObjectExp(importsByName, fileAst)
-            .eval(args, values);
+            .eval(context);
         case "StringLiteral":
         case "NumericLiteral":
         case "BooleanLiteral":
@@ -44,19 +45,15 @@ export const getPropValue = (
             return undefined;
           }
           //TODO:标志符可能是一个对象。
-          const x = ObjectExpressionEval.getVariableValue(
-            exp,
-            importsByName,
-            fileAst
-          );
+          const x = evalIdentifer(exp, importsByName, fileAst);
           if (!x) {
             throw new Error(`indentifer ${exp.name} is not found`);
           }
           if (x.type === "ObjectExpression") {
-            const { args, values } = getFileModuleImport(importsByName);
+            const context = getFileModuleImport(importsByName);
             return new ObjectExpressionEval(x)
               .prepareEvaluableObjectExp(importsByName, fileAst)
-              .eval(args, values);
+              .eval(context);
           } else {
             console.log("maybe something wrong");
           }

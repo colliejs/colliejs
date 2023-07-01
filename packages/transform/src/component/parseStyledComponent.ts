@@ -76,10 +76,10 @@ export const parseStyledComponentDeclaration = (
     }
     if (t.isObjectExpression(styling)) {
       const exp = new ObjectExpressionEval(styling);
-      const { args, values } = getFileModuleImport(moduleIdByName);
+      const context = getFileModuleImport(moduleIdByName);
       const val = exp
         .prepareEvaluableObjectExp(moduleIdByName, fileAst)
-        .eval(args, values);
+        .eval(context);
       result.styling = val;
     } else {
       log.error("error:", "not support type", styling);
