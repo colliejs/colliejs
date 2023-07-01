@@ -1,21 +1,19 @@
 import {
-  Styling,
-  StylingParsed,
-  VariantParsed,
-  VariantDeclBlock,
-  CSSInfo,
-  DynamicVariant,
-} from "./types";
-import {
+  CSSPropertiesComplex,
   Config,
   css,
-  CSSPropertiesComplex,
-  toCamelCase,
-  toHash,
-  getStaticVariantKey,
   getDynamicVariantKey,
+  getStaticVariantKey,
+  toHash,
 } from "@colliejs/core";
 import _ from "lodash";
+import {
+  CSSInfo,
+  Styling,
+  StylingParsed,
+  VariantDeclBlock,
+  VariantParsed,
+} from "./types";
 
 export type Props = { [k: string]: any };
 
@@ -70,7 +68,12 @@ export const parseStyling = (
   );
   return {
     baseStyle: {
-      cssText: css(baseStyleCssObject, [`.${baseStyleSelector}`]),
+      cssText: css(
+        baseStyleCssObject,
+        [`.${baseStyleSelector}`],
+        undefined,
+        config
+      ),
       cssObj: baseStyleCssObject,
       className: baseStyleSelector,
     },
