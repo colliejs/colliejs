@@ -5,11 +5,12 @@ import * as t from "@babel/types";
  * <Button css={{color:'red'}}>
  * @param path :
  */
-export const getNodePathOfValueForStyledElement = (
-  path: NodePath,
+export const getNodePathOfValueForStyledElement = <T = t.Node>(
+  path: NodePath<t.JSXElement>,
   propsName: string
 ) => {
-  let res;
+  //@ts-ignore
+  let res: NodePath = undefined;
   path.traverse({
     JSXAttribute(ipath) {
       if (ipath.node.name.name !== propsName) {
@@ -25,7 +26,7 @@ export const getNodePathOfValueForStyledElement = (
         Identifier(iipath) {
           res = iipath;
         },
-      });  
+      });
     },
   });
   return res;

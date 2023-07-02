@@ -6,6 +6,7 @@ import { ImportsByName } from "../utils/types";
 import { getNodePathOfValueForStyledElement } from "./getNodePathOfStyling";
 import { getProp } from "./prop";
 import { evalIdentifer } from "../utils/eval/evalIdentifier";
+import { assert } from "@c3/utils";
 
 export const evalPropValue = (
   ele: t.JSXElement,
@@ -47,7 +48,12 @@ export const evalPropValue = (
       if (exp.name === "undefined") {
         return undefined;
       }
-      const ipath = getNodePathOfValueForStyledElement(path, propName);
+      const ipath = getNodePathOfValueForStyledElement<t.Identifier>(
+        path,
+        propName
+      );
+      assert(!!ipath, "ipath should be existed");
+      //@ts-ignore
       return evalIdentifer(ipath, importsByName);
 
     default:

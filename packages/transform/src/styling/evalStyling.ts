@@ -33,8 +33,8 @@ export const getCtx = (
       },
     },
     path.scope, //scope
-    path.node,
-    path.parentPath
+    path.node, //state
+    path.parentPath! //parentPath
   );
   return ctx;
 };

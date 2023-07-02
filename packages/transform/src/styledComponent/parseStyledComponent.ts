@@ -1,19 +1,16 @@
+import { NodePath } from "@babel/traverse";
 import * as t from "@babel/types";
-import { ImportsByName, StyledComponentDecl } from "../utils/types";
-import { evalStyling } from "../styling/evalStyling";
-import {
-  generate,
-  getFileModuleImport,
-  isStyledCallExpression,
-} from "../utils/index";
+import _ from "lodash";
+import log from "npmlog";
 import CustomComponent from "../component/CustomComponent";
 import { HostComponent } from "../component/HostComponent";
-import { StyledComponent } from "./StyledComponent";
-import log from "npmlog";
+import { evalStyling } from "../styling/evalStyling";
 import { type Styling } from "../styling/types";
-import _ from "lodash";
-import { NodePath } from "@babel/traverse";
+import { generate, isStyledCallExpression } from "../utils/index";
+import { ImportsByName, StyledComponentDecl } from "../utils/types";
+import { StyledComponent } from "./StyledComponent";
 import { getNodePathOfStyling } from "./getNodePathOfStyling";
+import { assert } from "@c3/utils";
 
 export type StyledData = {
   styledComponentName: string;
@@ -84,6 +81,7 @@ export const parseStyledComponentDeclaration = (
     }
     if (t.isObjectExpression(styling)) {
       const stylingPath = getNodePathOfStyling(path);
+      assert(!!stylingPath);
       result.styling = evalStyling(styling, moduleIdByName, stylingPath);
     } else {
       log.error("error:", "not support type", styling);
