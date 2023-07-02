@@ -1,8 +1,14 @@
 import generate from "@babel/generator";
 import { defaultConfig } from "@colliejs/core";
 import { parseCode } from "../../parse";
-import { getImports, parseCodeAndGetBodyN } from "../../utils";
+import {
+  getImports,
+  isStyledComponentDecl,
+  parseCodeAndGetBodyN,
+  traverse,
+} from "../../utils";
 import { StyledComponent } from "../StyledComponent";
+import * as t from "@babel/types";
 //@ts-ignore
 global.window = {
   //@ts-ignore
@@ -12,6 +18,30 @@ global.window = {
     },
   },
 };
+const prepareStyledComponent = (sourcecode: string, idx: number = 0) => {
+  let styledCompDeclPath;
+
+  const fileAst = parseCode(sourcecode);
+  const imports = getImports(fileAst.program, __dirname);
+  traverse(fileAst, {
+    VariableDeclaration(path) {
+      if (!isStyledComponentDecl(path.node)) {
+        return;
+      }
+      styledCompDeclPath = path;
+    },
+  });
+
+  return new StyledComponent(
+    parseCodeAndGetBodyN(sourcecode, idx),
+    __filename,
+    imports,
+    fileAst,
+    defaultConfig,
+    styledCompDeclPath
+  );
+};
+
 describe("styledHostComponent", () => {
   it("hostComponent ", () => {
     const code = `
@@ -28,14 +58,7 @@ describe("styledHostComponent", () => {
                 }
             }
         });`;
-    const ast = parseCodeAndGetBodyN(code);
-    const c = new StyledComponent(
-      ast,
-      "module-id-1",
-      {},
-      parseCode(code),
-      defaultConfig
-    );
+    const c = prepareStyledComponent(code);
     expect(c.id.componentName).toBe("Button");
     expect(c.dependent.id.toString()).toBe("button");
     expect(c.stylingParsed).toMatchInlineSnapshot(`
@@ -91,39 +114,28 @@ describe("styledHostComponent", () => {
     const code = `
       import { Button } from './Button';
       import {abs} from '@unstyled-ui/css';
-          const Button = styled(Button, {
+          const MyButton = styled(Button, {
               background: 'red',
-              ...abs({left:100,top:20}),
-            
-          });`;
-    const ast = parseCodeAndGetBodyN(code, 2);
-    const fileAst = parseCode(code);
-    const imports = getImports(fileAst.program, __dirname);
-    const c = new StyledComponent(
-      ast,
-      __filename,
-      imports,
-      fileAst,
-      defaultConfig
-    );
+              ...abs({left:100,top:20}),            
+          });
+          `;
+    const c = prepareStyledComponent(code, 2);
+
     const cwd = process.cwd();
-    expect(c.id.componentName).toBe("Button");
-    // expect(c.dependent.id.toString()).toMatchInlineSnapshot(
-    //   `"/Users/colliejs.org/code/personal/colliejs/packages/transform/src/component/__tests__/Button.tsx-Button"`
-    // );
+    expect(c.id.componentName).toBe("MyButton");
     expect(c.dependent.id.displayName).toMatchInlineSnapshot(
-      `"Button_tsx-Button-isPius"`
+      `"Button_tsx-Button-eYfSKb"`
     );
     expect(c.layerName).toMatchInlineSnapshot(
-      `"styledComponent_test_ts-Button-juYBS"`
+      `"styledComponent_test_ts-MyButton-bVmnfB"`
     );
     expect(c.getCssText()).toMatchInlineSnapshot(`
-      ".baseStyle-Button-CRGDB{background:red;position:absolute;left:100px;top:20px}
+      ".baseStyle-MyButton-CRGDB{background:red;position:absolute;left:100px;right:;top:20px;bottom:}
       "
     `);
     expect(c.cssLayerDep()).toMatchInlineSnapshot(`
       {
-        "styledComponent_test_ts-Button-juYBS": "Button_tsx-Button-isPius",
+        "styledComponent_test_ts-MyButton-bVmnfB": "Button_tsx-Button-eYfSKb",
       }
     `);
   });
@@ -146,14 +158,8 @@ describe("dynamic variable transform", () => {
         });
         const btn= <Button shape={10} />
         `;
-    const ast = parseCodeAndGetBodyN(code);
-    let c = new StyledComponent(
-      ast,
-      "module-id-1",
-      {},
-      parseCode(code),
-      defaultConfig
-    );
+
+    const c = prepareStyledComponent(code);
 
     const astTransformed = c.transform();
     expect(generate(astTransformed.ast).code).toMatchInlineSnapshot(`
@@ -170,14 +176,7 @@ describe("dynamic variable transform", () => {
         },{as:'a'});
         const btn= <Button shape={10} />
         `;
-    const ast = parseCodeAndGetBodyN(code);
-    let c = new StyledComponent(
-      ast,
-      "module-id-1",
-      {},
-      parseCode(code),
-      defaultConfig
-    );
+    const c = prepareStyledComponent(code);
 
     const astTransformed = c.transform();
     expect(generate(astTransformed.ast).code).toMatchInlineSnapshot(`

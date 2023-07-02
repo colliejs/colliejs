@@ -1,17 +1,19 @@
 import * as t from "@babel/types";
 import { ImportsByName, StyledComponentDecl } from "../utils/types";
-import { ObjectExpressionEval } from "../styling/objectExpressionEval";
+import { evalStyling } from "../styling/evalStyling";
 import {
   generate,
   getFileModuleImport,
   isStyledCallExpression,
 } from "../utils/index";
-import CustomComponent from "./CustomComponent";
-import { HostComponent } from "./HostComponent";
+import CustomComponent from "../component/CustomComponent";
+import { HostComponent } from "../component/HostComponent";
 import { StyledComponent } from "./StyledComponent";
 import log from "npmlog";
 import { type Styling } from "../styling/types";
 import _ from "lodash";
+import { NodePath } from "@babel/traverse";
+import { getNodePathOfStyling } from "./getNodePathOfStyling";
 
 export type StyledData = {
   styledComponentName: string;
@@ -23,15 +25,17 @@ export type StyledData = {
 export const parseStyledComponentDeclaration = (
   decl: StyledComponentDecl,
   moduleIdByName: ImportsByName,
-  fileAst: t.File,
-  moduleId: string
+  moduleId: string,
+  path: NodePath
 ): StyledData => {
   const result = {} as StyledData;
   const { init, id } = decl.declarations[0];
   if (init && isStyledCallExpression(init)) {
     const { arguments: _arguments } = init;
 
-    //1. parse component name
+    //===========================================================
+    // 1. parse component name
+    //===========================================================
     if (t.isIdentifier(id)) {
       result.styledComponentName = id.name;
     } else {
@@ -39,7 +43,9 @@ export const parseStyledComponentDeclaration = (
       throw new Error("not support");
     }
 
-    //2.parse component type
+    //===========================================================
+    // 2. parse component type
+    //===========================================================
     let exp = _arguments[0];
     let type = exp.type;
     if (_.isObject(exp) && t.isTSAsExpression(exp)) {
@@ -69,18 +75,16 @@ export const parseStyledComponentDeclaration = (
         throw new Error("Unknown element type");
     }
 
-    //3.parse styledObject
+    //===========================================================
+    // 3.parse styledObject
+    //===========================================================
     let styling = _arguments[1];
     if (t.isTSAsExpression(styling)) {
       styling = styling.expression;
     }
     if (t.isObjectExpression(styling)) {
-      const exp = new ObjectExpressionEval(styling);
-      const context = getFileModuleImport(moduleIdByName);
-      const val = exp
-        .prepareEvaluableObjectExp(moduleIdByName, fileAst)
-        .eval(context);
-      result.styling = val;
+      const stylingPath = getNodePathOfStyling(path);
+      result.styling = evalStyling(styling, moduleIdByName, stylingPath);
     } else {
       log.error("error:", "not support type", styling);
       throw new Error("not support variable as styledObject.in todo list");

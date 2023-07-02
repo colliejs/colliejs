@@ -1,20 +1,27 @@
 import { defaultConfig } from "@colliejs/core";
 import { parseCode } from "../../parse";
-import { parseCodeAndGetBodyN } from "../../utils";
+import { isStyledElement, parseCodeAndGetBodyN } from "../../utils";
+import { getImports } from "../../utils/importer";
 import { StyledElement } from "../StyledElement";
-import { getImports } from "./../../utils/importer";
-import { isStyledElement } from "./../../utils/variableDecl";
+import traverse from "@babel/traverse";
 const { default: generate } = require("@babel/generator");
 
 const transform = (sourceCode: string, n = 0) => {
   const code = parseCodeAndGetBodyN(sourceCode, n);
   const fileAst = parseCode(sourceCode);
   const moduleIdByName = getImports(fileAst.program, __dirname);
+  let path;
+  traverse(fileAst, {
+    JSXElement(ipath) {
+      path = ipath;
+    },
+  });
   const btn = new StyledElement(
     code.expression,
     moduleIdByName,
     fileAst,
-    defaultConfig
+    defaultConfig,
+    path
   );
   const res = btn.transform();
   return {

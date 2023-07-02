@@ -3,10 +3,11 @@ import log from "npmlog";
 import { generate } from "../module";
 import { ImportsByName } from "../types";
 
-export const evalCodeText = (code: string, context: object) => {
+export const evalCodeText = (code: string, context: object = {}) => {
   const body = `return ${code};`;
   try {
-    // return new Function(...args, body)(...values);
+    console.log(code);
+    console.log(context);
     return new Function(...Object.keys(context), body)(
       ...Object.values(context)
     );

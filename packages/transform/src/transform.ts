@@ -21,29 +21,36 @@ export const transform = (
   const cssLayerDep: Record<string, string> = {};
 
   traverse(fileAst, {
-    //1.transform styled component
+    //===========================================================
+    // 1.transform styled component
+    //===========================================================
     VariableDeclaration(path) {
-      if (isStyledComponentDecl(path.node)) {
-        const styledComponent = new StyledComponent(
-          path.node,
-          moduleId,
-          modulesByName,
-          fileAst,
-          config
-        );
-        const { cssText } = styledComponent.transform();
-        cssTexts += cssText + "\n";
-        Object.assign(cssLayerDep, styledComponent.cssLayerDep());
+      if (!isStyledComponentDecl(path.node)) {
+        return;
       }
+      const styledComponent = new StyledComponent(
+        path.node,
+        moduleId,
+        modulesByName,
+        fileAst,
+        config,
+        path
+      );
+      const { cssText } = styledComponent.transform();
+      cssTexts += cssText + "\n";
+      Object.assign(cssLayerDep, styledComponent.cssLayerDep());
     },
-    //2.transform styled element
+    //===========================================================
+    // 2.transform styled element
+    //===========================================================
     JSXElement(path) {
       if (isStyledElement(path.node, config)) {
         const styledElement = new StyledElement(
           path.node,
           modulesByName,
           fileAst,
-          config
+          config,
+          path
         );
         const { cssText } = styledElement.transform();
         cssTexts += cssText + "\n";

@@ -5,14 +5,15 @@ import {
   delProp,
   getJSXElementName,
   getProp,
-  getPropValue,
   isPropExisted,
 } from "../utils/index";
+import { evalPropValue } from "./evalPropValue";
 
 import { ImportsByName, Stylable } from "../utils/types";
 import { parseCssProp } from "../styling/styling";
 import { CSSInfo } from "../styling/types";
 import _ from "lodash";
+import { NodePath } from "@babel/traverse";
 
 export class StyledElement implements Stylable {
   cssProp: CSSInfo;
@@ -21,14 +22,19 @@ export class StyledElement implements Stylable {
     public jsxElement: t.JSXElement,
     public importsByName: ImportsByName,
     public fileAst: t.File,
-    config: Config
+    config: Config,
+    public path: NodePath<t.JSXElement>
   ) {
     if (!t.isJSXElement(jsxElement)) {
       log.error("StyledElement must be a JSXElement", jsxElement);
       throw new Error("StyledElement must be a JSXElement");
     }
-    const css = (getPropValue(this.jsxElement, "css", importsByName, fileAst) ||
-      {}) as CSSPropertiesComplex;
+    const css = (evalPropValue(
+      this.jsxElement,
+      config.styledElementProp || "css",
+      importsByName,
+      path
+    ) || {}) as CSSPropertiesComplex;
     if (!_.isObject(css)) {
       log.error("css prop must be a object", css);
       throw new Error("css prop must be a object");
@@ -41,11 +47,11 @@ export class StyledElement implements Stylable {
   }
 
   get classnames(): string[] {
-    const className = getPropValue(
+    const className = evalPropValue(
       this.jsxElement,
       "className",
       this.importsByName,
-      this.fileAst
+      this.path
     ) as string;
     return [className || "", this.cssProp.className];
   }

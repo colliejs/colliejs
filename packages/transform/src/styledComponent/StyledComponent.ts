@@ -11,6 +11,7 @@ import { Styling, StylingParsed } from "../styling/types";
 import { buildObjectExpression, isStyledComponentDecl } from "../utils/index";
 import { ImportsByName, Stylable, StyledComponentDecl } from "../utils/types";
 import { parseStyledComponentDeclaration } from "./parseStyledComponent";
+import { NodePath } from "@babel/traverse";
 
 export class StyledComponent extends Component implements Stylable {
   stylingParsed: StylingParsed;
@@ -22,7 +23,8 @@ export class StyledComponent extends Component implements Stylable {
     moduleId: string,
     moduleIdByName: ImportsByName,
     fileAst: t.File,
-    config: Config
+    config: Config,
+    path: NodePath
   ) {
     if (!isStyledComponentDecl) {
       log.error("not a styledComponentDecl", "ast", ast);
@@ -30,7 +32,12 @@ export class StyledComponent extends Component implements Stylable {
     }
 
     const { styledComponentName, dependent, styling } =
-      parseStyledComponentDeclaration(ast, moduleIdByName, fileAst, moduleId);
+      parseStyledComponentDeclaration(
+        ast,
+        moduleIdByName,
+        moduleId,
+        path
+      );
     super(new ComponentId(moduleId, styledComponentName));
     this.stylingParsed = parseStyling(styling, config, styledComponentName);
     this.dependent = dependent;

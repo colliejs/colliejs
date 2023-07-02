@@ -1,5 +1,5 @@
-import { load } from "../load";
 import path from "path";
+import { load } from "../eval/require";
 
 describe("test cases", () => {
   it("should work ", async () => {
