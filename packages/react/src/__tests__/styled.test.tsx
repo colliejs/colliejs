@@ -10,16 +10,27 @@ import {
 import { styled } from "../styled";
 import TestRenderer from "react-test-renderer";
 import React, { AnchorHTMLAttributes, HTMLAttributes } from "react";
+import traverse_ from "@babel/traverse";
+const traverse = traverse_.default || traverse_;
+
 const transform = (source: string, n: number = 0) => {
   const ast = parseCodeAndGetBodyN(source, n);
   const fileAst = parseCode(source);
   const imports = getImports(fileAst.program, __dirname);
+  let path;
+  traverse(fileAst, {
+    VariableDeclaration(p) {
+      path = p;
+    },
+  });
+
   const comp = new StyledComponent(
     ast,
     "moduleId1",
     imports,
     fileAst,
-    defaultConfig
+    defaultConfig,
+    path
   );
   return generate(comp.transform().ast).code;
 };
@@ -152,6 +163,7 @@ describe("render StyledComponent", () => {
       </a>
     `);
   });
+
   it("add wrapper for 3rd component", () => {
     const Button = props => {
       return <button>hello</button>;

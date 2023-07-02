@@ -31,5 +31,13 @@ export const evalIdentifer = (
   if (binding.kind === "module") {
     return getExternalIdentifierValue(path.node, imports);
   }
+  if (binding.kind === "param") {
+    throw new Error("should deal before....");
+  }
+  /**
+   * @example
+   * const a = 1;
+   * <Button css={{color:a}}/>
+   */
   return evalExp(binding.path.node, {}); //TODO:ctx
 };

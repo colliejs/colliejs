@@ -21,4 +21,3 @@ export const evalExp = (ast: t.Node, context: object) => {
   const code = generate(ast).code;
   return evalCodeText(code, context);
 };
-// eval

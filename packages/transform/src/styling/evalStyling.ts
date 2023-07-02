@@ -1,6 +1,11 @@
 import * as t from "@babel/types";
-import { ImportsByName, generate, isStyledComponentDecl } from "../utils";
-import traverse, { NodePath } from "@babel/traverse";
+import {
+  ImportsByName,
+  generate,
+  isStyledComponentDecl,
+  traverse,
+} from "../utils";
+import { NodePath } from "@babel/traverse";
 import { evalIdentifer } from "../utils/eval/evalIdentifier";
 import { evalCodeText } from "../utils/eval/eval";
 
@@ -24,6 +29,15 @@ export const getCtx = (
     {
       Identifier(ipath) {
         if (!ipath.isReferenced()) {
+          return;
+        }
+        //===========================================================
+        // 是函数参数
+        // return语句中x是函数参数，需要忽略
+        // {foo:(x)=>{return x+1} }
+        //===========================================================
+
+        if (ipath.scope.getBinding(ipath.node.name)?.kind === "param") {
           return;
         }
         const ctx1 = {

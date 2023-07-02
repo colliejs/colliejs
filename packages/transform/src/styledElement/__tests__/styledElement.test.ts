@@ -1,9 +1,8 @@
 import { defaultConfig } from "@colliejs/core";
 import { parseCode } from "../../parse";
-import { isStyledElement, parseCodeAndGetBodyN } from "../../utils";
+import { isStyledElement, parseCodeAndGetBodyN, traverse } from "../../utils";
 import { getImports } from "../../utils/importer";
 import { StyledElement } from "../StyledElement";
-import traverse from "@babel/traverse";
 const { default: generate } = require("@babel/generator");
 
 const transform = (sourceCode: string, n = 0) => {

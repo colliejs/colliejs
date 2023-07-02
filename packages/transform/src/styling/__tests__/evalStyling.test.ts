@@ -3,6 +3,7 @@ import { parseCode } from "../../parse";
 import { getImports, parseCodeAndGetBodyN } from "../../utils";
 import { evalCodeText } from "../../utils/eval/eval";
 import { evalStyling } from "../evalStyling";
+import * as t from "@babel/types";
 
 const evalObjectString = (sourcecode: string) => {
   const fileAst = parseCode(sourcecode);
@@ -11,7 +12,15 @@ const evalObjectString = (sourcecode: string) => {
   let res;
   traverse(fileAst, {
     ObjectExpression(path) {
-      res = evalStyling(path.node, imports, path);
+      const lastOne = fileAst.program.body.length - 1;
+      if (
+        t.isNodesEquivalent(
+          path.node,
+          fileAst.program.body[lastOne].declarations[0].init
+        )
+      ) {
+        res = evalStyling(path.node, imports, path);
+      }
     },
   });
   return res;
@@ -31,26 +40,26 @@ describe("test cases", () => {
     expect(res.foo()).toMatchInlineSnapshot(`0`);
   });
 
-  it.skip("call expression ", () => {
+  it("call expression ", () => {
     const code = `
       import Image from './fixtures/dog.jpeg';
-      // const abs=(x)=>({posit.skipion:x});
+      const abs=(x)=>({position:x});
       const o = {
           color:'red',
           backgroundImage:\`url(\${Image})\`,
-          // ...abs('fixed')
+          ...abs('fixed')
       }`;
     const res = evalObjectString(code);
     expect(res).toMatchInlineSnapshot(`
       {
         "backgroundImage": "url(/Users/che3vinci/code/personal/colliejs/packages/transform/src/styling/__tests__/fixtures/dog.jpeg)",
         "color": "red",
+        "position": "fixed",
       }
     `);
   });
-  /*
-  
-  it.skip("wit.skiph object in this module ", () => {
+
+  it("wit.skiph object in this module ", () => {
     const expr = `
       const flex = {display:'flex'}
       const o = {
@@ -60,7 +69,8 @@ describe("test cases", () => {
     const res = evalObjectString(expr);
     expect(res).toEqual({ display: "flex" });
   });
-  it.skip("wit.skiph external module ", () => {
+
+  it("wit.skiph external module ", () => {
     const expr = `
       import {pos,flex} from './fixtures/abs';
       const o = {
@@ -71,21 +81,21 @@ describe("test cases", () => {
 
     const res = evalObjectString(expr);
 
-    expect(res).toEqual({ color: "red", posit.skipion: "fixed", display: "flex" });
+    expect(res).toEqual({ color: "red", position: "fixed", display: "flex" });
   });
-  it.skip("variable in this module ", () => {
+  
+  it("variable in this module ", () => {
     const expr = `
       const big = '100px';
       const o = {
           color:'red',
           width:big,
       }`;
-
     const res = evalObjectString(expr);
-
     expect(res).toEqual({ color: "red", width: "100px" });
   });
-  it.skip("variable in relative module ", () => {
+
+  it("variable in relative module ", () => {
     const expr = `
       import {big} from './fixtures/abs';
       const o = {
@@ -94,14 +104,14 @@ describe("test cases", () => {
       }`;
 
     const res = evalObjectString(expr);
-
     expect(res).toEqual({ color: "red", width: "100px" });
   });
-  it.skip("variable in external module ", () => {
+  
+  it("variable in external module ", () => {
     const expr = `
-      import {stripUnit.skip} from 'polished';
+      import {stripUnit} from 'polished';
       const o = {
-          width:stripUnit.skip('1000px'),
+          width:stripUnit('1000px'),
       }`;
 
     const res = evalObjectString(expr);
@@ -129,7 +139,7 @@ describe("test cases", () => {
     expect(res).toEqual({ width: 1000 });
   });
 
-  it.skip("shorthand property", () => {
+  it("shorthand property", () => {
     const expr = `
       const w = 100;
       const o = {
@@ -138,7 +148,8 @@ describe("test cases", () => {
     const res = evalObjectString(expr);
     expect(res).toEqual({ w: 100 });
   });
-  it.skip("computed property", () => {
+  
+  it("computed property", () => {
     const expr = `
       const media = '@media screen and (min-width: 768px)';
       const o = {
@@ -149,8 +160,10 @@ describe("test cases", () => {
       "@media screen and (min-width: 768px)": { color: "whit.skipe" },
     });
   });
+  
+  
 
-  it.skip("relative module", () => {
+  it("relative module", () => {
     const expr = `
       import {big} from './fixtures/abs';
       const o = {
@@ -161,7 +174,7 @@ describe("test cases", () => {
     expect(res).toEqual({ width: "100px" });
   });
 
-  it.skip("object expression wit.skiph ObjectMethod", () => {
+  it("object expression wit.skiph ObjectMethod", () => {
     const expr = `
       const o = {
           foo(w){return {width:w}}
@@ -174,7 +187,8 @@ describe("test cases", () => {
         }
       `);
   });
-  it.skip("object expression wit.skiph ObjectMethod which have callExpression", () => {
+  
+  it("object expression wit.skiph ObjectMethod which have callExpression", () => {
     const expr = `
       const color='red'
       const o = {
@@ -189,7 +203,7 @@ describe("test cases", () => {
       `);
   });
 
-  it.skip("object expression wit.skiph ObjectProperties which have ArrowFunction As Value", () => {
+  it("object expression with ObjectProperties which have ArrowFunction As Value", () => {
     const expr = `
       import {pos,flex} from './fixtures/abs';
       const o = {
@@ -200,23 +214,26 @@ describe("test cases", () => {
         }
       }
       `;
-    const res = evalObjectString(expr, 1);
+    const res = evalObjectString(expr);
     expect(res.foo("fixed")).toMatchInlineSnapshot(`
             {
-              "posit.skipion": "fixed",
+              "position": "fixed",
             }
         `);
     expect(res.bar("fixed")).toMatchInlineSnapshot(`
         {
-          "posit.skipion": "fixed",
+          "position": "fixed",
         }
       `);
     expect(res.zoo("fixed")).toMatchInlineSnapshot(`
         {
-          "posit.skipion": "fixed",
+          "position": "fixed",
         }
       `);
   });
+  
+  /*
+  
   it.skip("remove type info in typescript", () => {
     const expr = `
       const o = {

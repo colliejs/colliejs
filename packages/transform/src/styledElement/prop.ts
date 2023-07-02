@@ -1,14 +1,4 @@
-import log from "npmlog";
 import * as t from "@babel/types";
-import { ImportsByName } from "../utils/types";
-import { getFileModuleImport } from "../utils/importer";
-import { evalIdentifer } from "../utils/eval/evalIdentifier";
-import { evalCodeText } from "../utils/eval/eval";
-import { generate } from "../utils/module";
-import { NodePath } from "@babel/traverse";
-import { evalStyling } from "../styling";
-import { getNodePathOfValueForStyledElement } from "./getNodePathOfStyling";
-
 
 export function isPropExisted(ele: t.JSXElement, propName: string) {
   return getProp(ele, propName) !== undefined;
