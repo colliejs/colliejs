@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.4](https://github.com/colliejs/colliejs/compare/@colliejs/transform@1.0.3...@colliejs/transform@1.0.4) (2023-07-02)
+
+### Features
+
+- exp ([07c4dc7](https://github.com/colliejs/colliejs/commit/07c4dc7580bd5b3f84aff1ed622bcf5cdb5d80cf))
+
 ## [1.0.3](https://github.com/colliejs/colliejs/compare/@colliejs/transform@1.0.2...@colliejs/transform@1.0.3) (2023-07-01)
 
 **Note:** Version bump only for package @colliejs/transform
