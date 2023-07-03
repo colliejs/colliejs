@@ -43,7 +43,7 @@ export class StyledElement implements Stylable {
   }
 
   getCssText() {
-    return this.cssProp.cssText;
+    return this.cssProp.cssGenText;
   }
 
   get classnames(): string[] {
@@ -77,7 +77,7 @@ export class StyledElement implements Stylable {
       }.css`;
 
       //without css layer
-      const cssText = `${this.cssProp.cssText}`;
+      const cssText = `${this.cssProp.cssGenText}`;
       return {
         ast: this.jsxElement,
         cssFileName,

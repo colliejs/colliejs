@@ -7,9 +7,9 @@ import {
 } from "@colliejs/core";
 
 export type CSSInfo = {
-  cssText: string;
+  cssRawObj: CSSPropertiesComplex;
+  cssGenText: string;
   className: string; //被渲染的原数的className。当前元素的className
-  cssObj: CSSPropertiesComplex;
 };
 
 export type DynamicVariant = {

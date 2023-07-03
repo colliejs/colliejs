@@ -86,12 +86,12 @@ export const styled = <
           //@ts-ignore
           classNames.push(__generatedClassNameOfAllVariants[dynamicVariantKey]);
 
-          //TODO: 处理各种情况，不是简单的px
-          const cssValue =
-            typeof valOfProp === "number" && prop in unitProps
-              ? `${valOfProp}px`
-              : valOfProp;
-          style[`--${dynamicVariantKey}`] = cssValue;
+          /**
+           * TODO:
+          * 1: 处理各种情况，不是简单的px
+          * 2.支持简称比如(w=>width)
+           */     
+          style[`--${dynamicVariantKey}`] = valOfProp;
         }
       } else {
         throw new Error(

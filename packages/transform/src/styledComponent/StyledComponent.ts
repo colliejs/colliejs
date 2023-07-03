@@ -55,7 +55,7 @@ export class StyledComponent extends Component implements Stylable {
   getCssText() {
     let text = "";
     for (const key of Object.keys(this.stylingParsed)) {
-      text += this.stylingParsed[key as StaticVariantKey].cssText + "\n";
+      text += this.stylingParsed[key as StaticVariantKey].cssGenText + "\n";
     }
     return text;
   }
@@ -99,7 +99,7 @@ export class StyledComponent extends Component implements Stylable {
     }
 
     let classNameOfBaseStyle = "";
-    if (Object.keys(this.stylingParsed.baseStyle.cssObj).length !== 0) {
+    if (Object.keys(this.stylingParsed.baseStyle.cssRawObj).length !== 0) {
       classNameOfBaseStyle = `${this.stylingParsed.baseStyle.className}`;
     }
 

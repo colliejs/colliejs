@@ -18,29 +18,29 @@ describe("parseStyleObj", () => {
       {
         "baseStyle": {
           "className": "baseStyle-lcviVg",
-          "cssObj": {
+          "cssGenText": ".baseStyle-lcviVg{background:red;line-height:1}",
+          "cssRawObj": {
             "background": "red",
             "lineHeight": 1,
           },
-          "cssText": ".baseStyle-lcviVg{background:red;line-height:1}",
         },
         "variants-static-size-medium": {
           "className": "variants-static-size-medium-cZffyS",
-          "cssObj": {
+          "cssGenText": ".variants-static-size-medium-cZffyS{width:200px}",
+          "cssRawObj": {
             "w": 200,
           },
-          "cssText": ".variants-static-size-medium-cZffyS{width:200px}",
         },
         "variants-static-size-small": {
           "className": "variants-static-size-small-qoyAQ",
-          "cssObj": {
+          "cssGenText": ".variants-static-size-small-qoyAQ{width:100px}
+      .variants-static-size-small-qoyAQ span{width:50px}",
+          "cssRawObj": {
             "span": {
               "w": 50,
             },
             "width": "100px",
           },
-          "cssText": ".variants-static-size-small-qoyAQ{width:100px}
-      .variants-static-size-small-qoyAQ span{width:50px}",
         },
       }
     `);
@@ -58,15 +58,15 @@ describe("parseStyleObj", () => {
       {
         "baseStyle": {
           "className": "baseStyle-prefix-PJLV",
-          "cssObj": {},
-          "cssText": "",
+          "cssGenText": "",
+          "cssRawObj": {},
         },
         "variants-dynamic-gap": {
           "className": "variants-dynamic-gap-icbYTO",
-          "cssObj": {
+          "cssGenText": ".variants-dynamic-gap-icbYTO{gap:var(--variants-dynamic-gap)}",
+          "cssRawObj": {
             "gap": "var(--variants-dynamic-gap)",
           },
-          "cssText": ".variants-dynamic-gap-icbYTO{gap:var(--variants-dynamic-gap)}",
         },
       }
     `);
@@ -85,15 +85,15 @@ describe("parseStyleObj", () => {
       {
         "baseStyle": {
           "className": "baseStyle-PJLV",
-          "cssObj": {},
-          "cssText": "",
+          "cssGenText": "",
+          "cssRawObj": {},
         },
         "variants-dynamic-gap": {
           "className": "variants-dynamic-gap-icbYTO",
-          "cssObj": {
+          "cssGenText": ".variants-dynamic-gap-icbYTO{gap:var(--variants-dynamic-gap)}",
+          "cssRawObj": {
             "gap": "var(--variants-dynamic-gap)",
           },
-          "cssText": ".variants-dynamic-gap-icbYTO{gap:var(--variants-dynamic-gap)}",
         },
       }
     `);

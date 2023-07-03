@@ -107,17 +107,17 @@ describe("render StyledComponent", () => {
       "div",
       {
         "variants-static-shape-round": "variants-static-shape-round-hECRKn",
-        "variants-dynamic-shape": "variants-dynamic-shape-dBkvcz",
+        "variants-dynamic-width": "variants-dynamic-width-dBkvcz",
       },
       "baseStyle-Text-xxxx"
     );
-    const comp = TestRenderer.create(<Text shape={2}>hello</Text>);
+    const comp = TestRenderer.create(<Text width={2}>hello</Text>);
     expect(comp.toJSON()).toMatchInlineSnapshot(`
       <div
-        className="baseStyle-Text-xxxx  variants-dynamic-shape-dBkvcz"
+        className="baseStyle-Text-xxxx  variants-dynamic-width-dBkvcz"
         style={
           {
-            "--variants-dynamic-shape": 2,
+            "--variants-dynamic-width": 2,
           }
         }
       >

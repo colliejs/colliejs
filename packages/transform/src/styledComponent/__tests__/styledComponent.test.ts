@@ -65,24 +65,24 @@ describe("styledHostComponent", () => {
       {
         "baseStyle": {
           "className": "baseStyle-Button-elTJue",
-          "cssObj": {
+          "cssGenText": ".baseStyle-Button-elTJue{background:red}",
+          "cssRawObj": {
             "background": "red",
           },
-          "cssText": ".baseStyle-Button-elTJue{background:red}",
         },
         "variants-static-shape-rect": {
           "className": "variants-static-shape-rect-iydAuT",
-          "cssObj": {
+          "cssGenText": ".variants-static-shape-rect-iydAuT{border-radius:0}",
+          "cssRawObj": {
             "borderRadius": 0,
           },
-          "cssText": ".variants-static-shape-rect-iydAuT{border-radius:0}",
         },
         "variants-static-shape-round": {
           "className": "variants-static-shape-round-hECRKn",
-          "cssObj": {
+          "cssGenText": ".variants-static-shape-round-hECRKn{border-radius:50%}",
+          "cssRawObj": {
             "borderRadius": "50%",
           },
-          "cssText": ".variants-static-shape-round-hECRKn{border-radius:50%}",
         },
       }
     `);
