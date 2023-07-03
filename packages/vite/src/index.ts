@@ -1,4 +1,4 @@
-import { Config, defaultConfig } from "@colliejs/core";
+import { Config, defaultConfig, createTheme } from "@colliejs/core";
 import {
   getDepPaths,
   getImports,
@@ -29,6 +29,7 @@ type VitePluginOptions = {
   exclude?: FilterPattern;
   index: string;
   styledConfig?: Config;
+  root: string;
   // sourceMap?: boolean;
   // preprocessor?: Preprocessor;
 };
@@ -78,11 +79,26 @@ const collie = (option: VitePluginOptions): Plugin => {
     name: "collie",
     enforce: "pre",
     async transform(_code, url) {
-      const REGEX_JS = /\.[cm]?[tj]sx?$/;
-      if (url.includes("node_modules") || !filter(url) || !REGEX_JS.test(url)) {
+      if (
+        url.includes("node_modules") ||
+        !filter(url) ||
+        !/\.[cm]?[tj]sx?$/.test(url)
+      ) {
         return UNCHANGED;
       }
       log.info("transform", "changed url is: ", url);
+      //===========================================================
+      // 配置文件变动后，重新生成theme 样式文件
+      //===========================================================
+      if (/collie\.config\.(ts|js|cjs)/.test(url)) {
+        const cssText = createTheme(styledConfig);
+        writeCssText(cssText, genCssFileName(path.resolve(index)));
+        return -1;
+      }
+
+      //===========================================================
+      // 普通文件
+      //===========================================================
       const imports = getImports(parseCode(_code).program, path.dirname(url));
       let { code, cssText, cssLayerDep } = transform(
         _code,

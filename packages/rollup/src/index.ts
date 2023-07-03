@@ -1,5 +1,5 @@
 import { parse } from "@babel/parser";
-import { Config, defaultConfig } from "@colliejs/core";
+import { Config, createTheme, defaultConfig } from "@colliejs/core";
 import { getDepPaths, getImports, transform } from "@colliejs/transform";
 import { FilterPattern, createFilter } from "@rollup/pluginutils";
 import fs from "node:fs";
@@ -22,6 +22,8 @@ const collie = (option?: Option): Plugin => {
   let cssTexts = "";
   const cssLayerDeps = {};
   const filter = createFilter(include, exclude);
+  const cssText = createTheme(styledConfig);
+  cssTexts += cssText + "\n";
 
   return {
     name: "collie", // this name will show up in warnings and errors

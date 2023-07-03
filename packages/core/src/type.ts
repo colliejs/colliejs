@@ -36,7 +36,7 @@ export type Config = {
   utils?: ConfigUtils;
   breakpoints?: number[];
   media?: Record<string, string>; //to remove
-  prefix?: string;
+  prefix: string;
   theme?: Record<string, any>;
   themeMap: Record<string, any>;
   styledElementProp?: string;

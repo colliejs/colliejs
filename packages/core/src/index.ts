@@ -8,3 +8,4 @@ export * from "./config/defaultConfigure";
 //@ts-ignore
 export { unitProps } from "./utils/toCssRules";
 export * from "./extra";
+export * from "./createTheme";
