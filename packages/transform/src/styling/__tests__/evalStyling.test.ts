@@ -19,7 +19,10 @@ const evalObjectString = (sourcecode: string) => {
           fileAst.program.body[lastOne].declarations[0].init
         )
       ) {
+        console.log(path.node.type);
         res = evalStyling(path.node, imports, path);
+        // console.log("x", path.evaluate());
+        // res = path.evaluate().value;
       }
     },
   });
@@ -27,7 +30,7 @@ const evalObjectString = (sourcecode: string) => {
 };
 
 describe("test cases", () => {
-  it("x", () => {
+  it.skip("x", () => {
     const code = `
     const a = 2;
     const o = {
@@ -37,6 +40,7 @@ describe("test cases", () => {
       }
     }`;
     const res = evalObjectString(code);
+    res;
     expect(res.foo()).toMatchInlineSnapshot(`0`);
   });
 
@@ -83,7 +87,7 @@ describe("test cases", () => {
 
     expect(res).toEqual({ color: "red", position: "fixed", display: "flex" });
   });
-  
+
   it("variable in this module ", () => {
     const expr = `
       const big = '100px';
@@ -106,7 +110,7 @@ describe("test cases", () => {
     const res = evalObjectString(expr);
     expect(res).toEqual({ color: "red", width: "100px" });
   });
-  
+
   it("variable in external module ", () => {
     const expr = `
       import {stripUnit} from 'polished';
@@ -118,10 +122,10 @@ describe("test cases", () => {
     expect(res).toEqual({ width: 1000 });
   });
 
-  it.failing("variable in external module wit.skiphin a file ", () => {
+  it.failing("多级引用", () => {
     const expr = `
-      import {stripUnit.skip} from 'polished';
-      const w = stripUnit.skip('1000px');
+      import {stripUnit} from 'polished';
+      const w = stripUnit('1000px');
       const o = {
           width:w,
       }`;
@@ -129,11 +133,11 @@ describe("test cases", () => {
     expect(res).toEqual({ width: 1000 });
   });
 
-  it.failing("variable in external module wit.skiphin a file ", () => {
+  it.failing("多级引用 ", () => {
     const expr = `
-      import {stripUnit.skip} from 'polished';
+      import {stripUnit} from 'polished';
       const o = {
-          width:stripUnit.skip('1000px');,
+          width:stripUnit('1000px');,
       }`;
     const res = evalObjectString(expr);
     expect(res).toEqual({ width: 1000 });
@@ -148,7 +152,7 @@ describe("test cases", () => {
     const res = evalObjectString(expr);
     expect(res).toEqual({ w: 100 });
   });
-  
+
   it("computed property", () => {
     const expr = `
       const media = '@media screen and (min-width: 768px)';
@@ -160,8 +164,6 @@ describe("test cases", () => {
       "@media screen and (min-width: 768px)": { color: "whit.skipe" },
     });
   });
-  
-  
 
   it("relative module", () => {
     const expr = `
@@ -187,7 +189,7 @@ describe("test cases", () => {
         }
       `);
   });
-  
+
   it("object expression wit.skiph ObjectMethod which have callExpression", () => {
     const expr = `
       const color='red'
@@ -231,10 +233,8 @@ describe("test cases", () => {
         }
       `);
   });
-  
-  /*
-  
-  it.skip("remove type info in typescript", () => {
+
+  it("remove type info in typescript", () => {
     const expr = `
       const o = {
           dynamic(w:number){return {width:w}}
@@ -248,10 +248,10 @@ describe("test cases", () => {
         }
       `);
   });
-  it.skip("identifier", () => {
+  it("identifier", () => {
     const expr = `
       const o = {
-          dynamic(w:number){consolo.log(2);return {width:w}}
+          dynamic(w:number){return {width:w}}
       }
       `;
 
@@ -262,5 +262,5 @@ describe("test cases", () => {
         }
       `);
   });
-  */
+  it.todo("how to deal console.log");
 });

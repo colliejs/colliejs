@@ -88,11 +88,13 @@ const collie = (option: VitePluginOptions): Plugin => {
       }
       log.info("transform", "changed url is: ", url);
       //===========================================================
-      // 配置文件变动后，重新生成theme 样式文件
+      // collie.config.js配置文件变动后，重新生成theme 样式文件
       //===========================================================
       if (/collie\.config\.(ts|js|cjs)/.test(url)) {
         const cssText = createTheme(styledConfig);
-        writeCssText(cssText, genCssFileName(path.resolve(index)));
+        const cssFilename = genCssFileName(url);
+        writeCssText(cssText, cssFilename);
+        
         return -1;
       }
 
