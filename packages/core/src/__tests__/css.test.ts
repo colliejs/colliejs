@@ -41,7 +41,7 @@ describe("test cases", () => {
     } as unknown as CSSPropertiesComplex;
     const res = css(cssRawObj, [".button"], [], defaultConfig);
     expect(res).toMatchInlineSnapshot(
-      `".button{color:var(--co--colors-primary);width:100px}"`
+      `".button{color:var(--co-colors-primary);width:100px}"`
     );
   });
 });

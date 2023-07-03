@@ -30,7 +30,5 @@ export const createTheme = (config: Config) => {
       cssProps.push(`${propertyName}:${propertyValue}`);
     }
   }
-  console.log(config.theme);
-  console.log(cssProps);
   return `:root{${cssProps.join(";")}}`;
 };

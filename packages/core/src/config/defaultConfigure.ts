@@ -3,7 +3,7 @@ import { defaultThemeMap } from "./defaultThemeMap";
 import { utils } from "./util";
 
 export const defaultConfig: Config = {
-  prefix: "co-",
+  prefix: "co",
   themeMap: defaultThemeMap,
   media: {
     phone: "(max-width: 767.999px)",

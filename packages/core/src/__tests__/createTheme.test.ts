@@ -5,7 +5,7 @@ describe("test cases", () => {
   it("should work ", () => {
     const x = createTheme(defaultConfig);
     expect(x).toMatchInlineSnapshot(
-      `":root{--co--colors-primary:blue;--co--colors-secondary:white}"`
+      `":root{--co-colors-primary:blue;--co-colors-secondary:white}"`
     );
   });
 });
