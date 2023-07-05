@@ -5,7 +5,7 @@ import { assert } from "@c3/utils";
 import { getFileModuleImport } from "../importer";
 import { ImportsByName } from "../types";
 import { load } from "./require";
-import { evalText } from "./evalText";
+import { evalExpText } from "./evalText";
 import { getCtxOf } from "./getCtx";
 
 const getExternalIdentifierValue = (
@@ -41,10 +41,11 @@ export const evalIdentifer = (
     case "let":
     case "var":
     default: {
-      //@ts-ignore
-      const parentPathOfInit = binding.path.get("init").parentPath;
-      const ctx = getCtxOf(parentPathOfInit, imports);
-      return evalExpDirectly(parentPathOfInit.node as t.Expression, ctx);
+      const init = binding.path.get("init");
+      assert(!Array.isArray(init), "init should not be array");
+      const initParent = init.parentPath;
+      const ctx = getCtxOf(initParent, imports);
+      return evalExpDirectly(init.node , ctx);
     }
   }
 };

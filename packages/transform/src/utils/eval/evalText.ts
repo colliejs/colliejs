@@ -3,16 +3,15 @@ import log from "npmlog";
 import { generate } from "../module";
 import { ImportsByName } from "../types";
 
-export const evalText = (code: string, context: object = {}) => {
+export const evalExpText = (code: string, context: object = {}) => {
   const body = `return ${code};`;
   try {
-
     return new Function(...Object.keys(context), body)(
       ...Object.values(context)
     );
   } catch (e) {
-    log.error("eval", "source code=", code, "context=", context);
+    log.error("eval", "source code=", code);
+    log.error("eval", "context=", context);
     throw e;
   }
 };
-

@@ -9,7 +9,7 @@ import { type Styling } from "../styling/types";
 import { generate, isStyledCallExpression } from "../utils/index";
 import { ImportsByName, StyledComponentDecl } from "../utils/types";
 import { StyledComponent } from "./StyledComponent";
-import { getNodePathOfStyling } from "./getNodePathOfStyling";
+import { getPathOfStyling } from "./getNodePathOfStyling";
 import { assert } from "@c3/utils";
 
 export type StyledData = {
@@ -18,15 +18,15 @@ export type StyledData = {
   styling: Styling;
 };
 
-//TODO:好像有问题，应该判断t.isAssignmentExpression(node, opts)
+//TODO: multiple declarator
 export const parseStyledComponentDeclaration = (
   decl: StyledComponentDecl,
   moduleIdByName: ImportsByName,
   moduleId: string,
-  path: NodePath
+  path: NodePath<t.VariableDeclaration>
 ): StyledData => {
   const result = {} as StyledData;
-  const { init, id } = decl.declarations[0];
+  const { init, id } = decl.declarations[0]; ////TODO: multiple declarator
   if (init && isStyledCallExpression(init)) {
     const { arguments: _arguments } = init;
 
@@ -80,7 +80,7 @@ export const parseStyledComponentDeclaration = (
       styling = styling.expression;
     }
     if (t.isObjectExpression(styling)) {
-      const stylingPath = getNodePathOfStyling(path);
+      const stylingPath = getPathOfStyling(path);
       assert(!!stylingPath);
       result.styling = evalStyling(moduleIdByName, stylingPath);
     } else {

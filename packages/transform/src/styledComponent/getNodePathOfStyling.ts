@@ -4,9 +4,10 @@ import * as t from "@babel/types";
  *
  * @param styledComponentPath :styled()函数变量声明的Node
  */
-export const getNodePathOfStyling = (styledComponentPath: NodePath) => {
-  //@ts-ignore
-  let res: NodePath = undefined;
+export const getPathOfStyling = (
+  styledComponentPath: NodePath<t.VariableDeclaration>
+) => {
+  let res: NodePath<t.ObjectExpression> = undefined;
   styledComponentPath.traverse({
     ObjectExpression(ipath) {
       if (

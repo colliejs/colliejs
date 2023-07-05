@@ -3,7 +3,7 @@ import * as t from "@babel/types";
 import log from "npmlog";
 import { evalStyling } from "../styling";
 import { ImportsByName } from "../utils/types";
-import { getNodePathOfValueForStyledElement } from "./getNodePathOfStyling";
+import { getPathOfValueForStyledElement } from "./getNodePathOfStyling";
 import { getProp } from "./prop";
 import { evalIdentifer } from "../utils/eval/evalIdentifier";
 import { assert } from "@c3/utils";
@@ -35,7 +35,7 @@ export const evalPropValue = (
   }
   switch (exp.type) {
     case "ObjectExpression": {
-      const ipath = getNodePathOfValueForStyledElement(path, propName);
+      const ipath = getPathOfValueForStyledElement(path, propName);
       return evalStyling(importsByName, ipath);
     }
     case "StringLiteral":
@@ -48,12 +48,11 @@ export const evalPropValue = (
       if (exp.name === "undefined") {
         return undefined;
       }
-      const ipath = getNodePathOfValueForStyledElement<t.Identifier>(
+      const ipath = getPathOfValueForStyledElement(
         path,
         propName
-      );
-      assert(!!ipath, "ipath should be existed");
-      //@ts-ignore
+      ) as NodePath<t.Identifier>;
+      assert(!!ipath && ipath.isIdentifier(), "ipath is not identifier");
       return evalIdentifer(ipath, importsByName);
 
     default:

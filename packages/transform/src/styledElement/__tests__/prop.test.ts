@@ -1,5 +1,5 @@
 import traverse from "@babel/traverse";
-import { parseCodeAndGetBodyN } from "../../utils";
+import { getImports, parseCodeAndGetBodyN } from "../../utils";
 import { parseCode } from "../../parse";
 import { evalPropValue } from "../evalPropValue";
 
@@ -47,5 +47,35 @@ describe("props", () => {
     const v = evalPropValue(path.node, "css", {}, path);
     expect(v).toEqual({ color: "red" });
   });
-  it.todo("evalPropValue, prop with object having variable reference");
+  it("evalPropValue, prop with object having variable reference", () => {
+    const code = `
+    import {flexCenter} from './fixture'
+    const innerBoxStyle = {
+      background: "gray",
+      ...flexCenter,
+      w: 50,
+      h: 50,
+    };
+    <Button css={{color:'red',...innerBoxStyle}} >hello</Button>`;
+    const file = parseCode(code);
+    let path;
+    traverse(file, {
+      JSXElement(ipath) {
+        path = ipath;
+      },
+    });
+    const imports = getImports(file.program, __dirname);
+    const v = evalPropValue(path.node, "css", imports, path);
+    expect(v).toMatchInlineSnapshot(`
+      {
+        "alignItems": "center",
+        "background": "gray",
+        "color": "red",
+        "display": "flex",
+        "h": 50,
+        "justifyContent": "center",
+        "w": 50,
+      }
+    `);
+  });
 });

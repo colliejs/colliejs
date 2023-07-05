@@ -1,8 +1,8 @@
 import { generate } from "../module";
 import * as t from "@babel/types";
-import { evalText } from "./evalText";
+import { evalExpText } from "./evalText";
 
-export const evalExpDirectly = (exp: t.Node, ctx: object) => {
+export const evalExpDirectly = (exp: t.Expression, ctx: object) => {
   const code = generate(exp).code;
-  return evalText(code, ctx);
+  return evalExpText(code, ctx);
 };

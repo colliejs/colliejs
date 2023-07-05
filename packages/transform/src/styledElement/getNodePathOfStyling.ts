@@ -5,18 +5,25 @@ import * as t from "@babel/types";
  * <Button css={{color:'red'}}>
  * @param path :
  */
-export const getNodePathOfValueForStyledElement = <T = t.Node>(
+
+//TODO: boolean类型会被当做null
+export const getPathOfValueForStyledElement = (
   path: NodePath<t.JSXElement>,
   propsName: string
 ) => {
-  //@ts-ignore
   let res: NodePath = undefined;
   path.traverse({
     JSXAttribute(ipath) {
       if (ipath.node.name.name !== propsName) {
         return;
       }
-      res = ipath.get("value.expression") as NodePath;
+      switch (ipath.node.value.type) {
+        case "JSXExpressionContainer":
+          res = ipath.get("value.expression") as NodePath;
+          break;
+        default:
+          res = ipath.get("value");
+      }
     },
   });
   return res;
