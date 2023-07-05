@@ -53,7 +53,10 @@ export const evalPropValue = (
         path,
         propName
       ) as unknown as NodePath<t.Identifier>;
-      assert(!!ipath && ipath.isIdentifier(), "ipath is not identifier");
+      assert(!!ipath && ipath.isIdentifier(), "ipath is not identifier", {
+        ipath,
+        propName,
+      });
       return evalIdentifer(ipath, importsByName);
 
     default:
