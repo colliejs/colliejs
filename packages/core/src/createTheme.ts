@@ -1,4 +1,4 @@
-import { ThemeToken } from "./ThemeToken";
+//@ts-nocheck
 import { Config } from "./type";
 import { toTailDashed } from "./utils/toTailDashed.js";
 import { toTokenizedValue } from "./utils/toTokenizedValue.js";

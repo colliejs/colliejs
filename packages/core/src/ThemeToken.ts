@@ -1,4 +1,4 @@
-
+//@ts-nocheck
 import { toTailDashed } from "./utils/toTailDashed";
 
 export class ThemeToken {

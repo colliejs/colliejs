@@ -16,7 +16,7 @@ export const getNodePathOfValueForStyledElement = <T = t.Node>(
       if (ipath.node.name.name !== propsName) {
         return;
       }
-      res = ipath.get("value.expression");
+      res = ipath.get("value.expression") as NodePath;
     },
   });
   return res;

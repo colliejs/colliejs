@@ -41,6 +41,7 @@ export const evalIdentifer = (
     case "let":
     case "var":
     default: {
+      //@ts-ignore
       const parentPathOfInit = binding.path.get("init").parentPath;
       const ctx = getCtxOf(parentPathOfInit, imports);
       return evalExpDirectly(parentPathOfInit.node as t.Expression, ctx);

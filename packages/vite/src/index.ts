@@ -95,7 +95,7 @@ const collie = (option: VitePluginOptions): Plugin => {
         const cssFilename = genCssFileName(url);
         writeCssText(cssText, cssFilename);
         
-        return -1;
+        return UNCHANGED;
       }
 
       //===========================================================
