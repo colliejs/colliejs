@@ -11,7 +11,7 @@ export const getPathOfValueForStyledElement = (
   path: NodePath<t.JSXElement>,
   propsName: string
 ) => {
-  let res: NodePath = undefined;
+  let res: NodePath | undefined = undefined;
   path.traverse({
     JSXAttribute(ipath) {
       if (ipath.node.name.name !== propsName) {

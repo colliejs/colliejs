@@ -24,7 +24,7 @@ export class StyledComponent extends Component implements Stylable {
     moduleIdByName: ImportsByName,
     fileAst: t.File,
     config: Config,
-    path: NodePath
+    path: NodePath<t.VariableDeclaration>
   ) {
     if (!isStyledComponentDecl) {
       log.error("not a styledComponentDecl", "ast", ast);
@@ -32,12 +32,7 @@ export class StyledComponent extends Component implements Stylable {
     }
 
     const { styledComponentName, dependent, styling } =
-      parseStyledComponentDeclaration(
-        ast,
-        moduleIdByName,
-        moduleId,
-        path
-      );
+      parseStyledComponentDeclaration(ast, moduleIdByName, moduleId, path);
     super(new ComponentId(moduleId, styledComponentName));
     this.stylingParsed = parseStyling(styling, config, styledComponentName);
     this.dependent = dependent;

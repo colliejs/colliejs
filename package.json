@@ -21,8 +21,6 @@
     "test:ci": "jest --ci ",
     "preversion": "pnpm -r build",
     "prepare": "husky install",
-    "watchtype": "tsc --project . --watch",
-    "typecheck": "tsc --project . --noEmit",
     "release": "./scripts/cli.mjs release"
   },
   "workspaces": [
@@ -98,7 +96,7 @@
     "prettier": "^2.8.8",
     "react-test-renderer": "^18.2.0",
     "semver": "^7.5.2",
-    "typescript": "^4.9.5",
+    "typescript": "^5.1.6",
     "vite": "^3.2.7",
     "vite-plugin-inspect": "^0.7.28",
     "zx": "^7.2.2"

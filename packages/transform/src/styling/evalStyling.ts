@@ -5,9 +5,8 @@ import { evalExpText } from "../utils/eval/evalText";
 import { getCtxOf } from "../utils/eval/getCtx";
 
 export const evalStyling = (
-  // stylingExp: t.ObjectExpression,
   imports: ImportsByName,
-  path: NodePath
+  path: NodePath<t.ObjectExpression>
 ) => {
   const stylingExp = path.node;
   const ctx = getCtxOf(path, imports);
