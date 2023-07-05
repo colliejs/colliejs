@@ -19,7 +19,7 @@ const evalObjectString = (sourcecode: string) => {
         )
       ) {
         console.log(path.node.type);
-        res = evalStyling(imports, path);
+        res = evalStyling(path, imports);
         // console.log("x", path.evaluate());
         // res = path.evaluate().value;
       }

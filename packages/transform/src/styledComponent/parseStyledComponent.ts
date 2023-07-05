@@ -82,7 +82,7 @@ export const parseStyledComponentDeclaration = (
     if (t.isObjectExpression(styling)) {
       const stylingPath = getPathOfStyling(path);
       assert(!!stylingPath);
-      result.styling = evalStyling(moduleIdByName, stylingPath);
+      result.styling = evalStyling(stylingPath,moduleIdByName);
     } else {
       log.error("error:", "not support type", styling);
       throw new Error("not support variable as styledObject.in todo list");

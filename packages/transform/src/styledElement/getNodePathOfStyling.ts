@@ -24,6 +24,7 @@ export const getPathOfValueForStyledElement = (
         default:
           res = ipath.get("value");
       }
+      ipath.stop();
     },
   });
   return res;

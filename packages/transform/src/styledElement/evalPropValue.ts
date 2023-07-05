@@ -36,8 +36,12 @@ export const evalPropValue = (
   switch (exp.type) {
     case "ObjectExpression": {
       const ipath = getPathOfValueForStyledElement(path, propName);
-      assert(!!ipath && ipath.isObjectExpression(), "ipath is not object");
-      return evalStyling(importsByName, ipath);
+      assert(!!ipath && ipath.isObjectExpression(), "ipath is not object", {
+        propName,
+        ipath,
+        exp,
+      });
+      return evalStyling(ipath, importsByName);
     }
     case "StringLiteral":
     case "NumericLiteral":

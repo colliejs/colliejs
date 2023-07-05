@@ -87,12 +87,16 @@ describe("props", () => {
       w: 50,
       h: 50,
     };
-    <Button css={innerBoxStyle} >hello</Button>`;
+    if(1){      
+      <Button css={innerBoxStyle} >hello</Button>
+    }
+      `;
     const file = parseCode(code);
     let path;
     traverse(file, {
       JSXElement(ipath) {
         path = ipath;
+        ipath.stop();
       },
     });
     const imports = getImports(file.program, __dirname);

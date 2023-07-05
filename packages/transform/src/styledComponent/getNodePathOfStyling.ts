@@ -17,6 +17,7 @@ export const getPathOfStyling = (
         t.isNodesEquivalent(ipath.parentPath.node.arguments[1], ipath.node)
       ) {
         res = ipath;
+        ipath.stop();
       }
     },
   });
