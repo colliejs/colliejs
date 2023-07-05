@@ -43,11 +43,11 @@ describe("test cases", () => {
             a:1,
             b:2,
             c:d            
-        }
-        function foo(){
-            const a = k;
-            return a
-        }
+     }
+    function foo(){
+       const a = k;
+       return a
+    }
     `;
     const file: t.File = parseCode(code);
     traverse(file, {

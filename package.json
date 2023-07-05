@@ -45,13 +45,15 @@
     "@unstyled-ui/css": "^1.6.0",
     "babel-plugin-transform-import-meta": "^2.2.0",
     "csstype": "^3.1.2",
+    "esprima": "^4.0.1",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
     "npmlog": "^7.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "resolve": "^1.22.2",
-    "rollup": "^3.25.1"
+    "rollup": "^3.25.1",
+    "static-eval": "^2.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.22.5",

@@ -2,12 +2,12 @@ import { NodePath } from "@babel/traverse";
 import * as t from "@babel/types";
 /**
  *
- * @param path :styled()函数变量声明的Node
+ * @param styledComponentPath :styled()函数变量声明的Node
  */
-export const getNodePathOfStyling = (path: NodePath) => {
+export const getNodePathOfStyling = (styledComponentPath: NodePath) => {
   //@ts-ignore
   let res: NodePath = undefined;
-  path.traverse({
+  styledComponentPath.traverse({
     ObjectExpression(ipath) {
       if (
         ipath.parentPath.node.type === "CallExpression" &&

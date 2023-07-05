@@ -16,17 +16,7 @@ export const getNodePathOfValueForStyledElement = <T = t.Node>(
       if (ipath.node.name.name !== propsName) {
         return;
       }
-      ipath.traverse({
-        StringLiteral(iipath) {
-          res = iipath;
-        },
-        NumericLiteral(iipath) {
-          res = iipath;
-        },
-        Identifier(iipath) {
-          res = iipath;
-        },
-      });
+      res = ipath.get("value.expression");
     },
   });
   return res;

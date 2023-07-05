@@ -1,7 +1,6 @@
 import { traverse } from "../../utils/module";
 import { parseCode } from "../../parse";
 import { getImports, parseCodeAndGetBodyN } from "../../utils";
-import { evalCodeText } from "../../utils/eval/eval";
 import { evalStyling } from "../evalStyling";
 import * as t from "@babel/types";
 
@@ -20,7 +19,7 @@ const evalObjectString = (sourcecode: string) => {
         )
       ) {
         console.log(path.node.type);
-        res = evalStyling(path.node, imports, path);
+        res = evalStyling(imports, path);
         // console.log("x", path.evaluate());
         // res = path.evaluate().value;
       }
@@ -47,7 +46,10 @@ describe("test cases", () => {
   it("call expression ", () => {
     const code = `
       import Image from './fixtures/dog.jpeg';
-      const abs=(x)=>({position:x});
+      const k = 222
+      const abs=(x)=>{return {
+         position: x
+      }};
       const o = {
           color:'red',
           backgroundImage:\`url(\${Image})\`,
@@ -63,7 +65,7 @@ describe("test cases", () => {
     `);
   });
 
-  it("wit.skiph object in this module ", () => {
+  it("with object in this module ", () => {
     const expr = `
       const flex = {display:'flex'}
       const o = {
@@ -122,22 +124,23 @@ describe("test cases", () => {
     expect(res).toEqual({ width: 1000 });
   });
 
-  it.failing("多级引用", () => {
+  it("多级引用", () => {
     const expr = `
       import {stripUnit} from 'polished';
       const w = stripUnit('1000px');
       const o = {
           width:w,
       }`;
+
     const res = evalObjectString(expr);
     expect(res).toEqual({ width: 1000 });
   });
 
-  it.failing("多级引用 ", () => {
+  it("xx ", () => {
     const expr = `
       import {stripUnit} from 'polished';
       const o = {
-          width:stripUnit('1000px');,
+          width:stripUnit('1000px'),
       }`;
     const res = evalObjectString(expr);
     expect(res).toEqual({ width: 1000 });
