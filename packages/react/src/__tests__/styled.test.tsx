@@ -21,6 +21,7 @@ const transform = (source: string, n: number = 0) => {
   traverse(fileAst, {
     VariableDeclaration(p) {
       path = p;
+      p.stop();
     },
   });
 

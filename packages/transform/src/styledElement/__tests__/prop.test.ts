@@ -41,6 +41,7 @@ describe("props", () => {
     traverse(file, {
       JSXElement(ipath) {
         path = ipath;
+        ipath.stop();
       },
     });
 
@@ -62,6 +63,7 @@ describe("props", () => {
     traverse(file, {
       JSXElement(ipath) {
         path = ipath;
+        ipath.stop();
       },
     });
     const imports = getImports(file.program, __dirname);
