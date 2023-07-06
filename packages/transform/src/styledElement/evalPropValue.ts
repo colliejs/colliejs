@@ -16,7 +16,12 @@ export const evalPropValue = (
   try {
     return _evalPropValue(path, propName, importsByName);
   } catch (e) {
-    console.error({ function: "evalPropValue", path, propName, importsByName });
+    log.error("===>error", "evalPropValue", {
+      function: "evalPropValue",
+      path,
+      propName,
+      importsByName,
+    });
     throw e;
   }
 };

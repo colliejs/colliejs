@@ -2,6 +2,7 @@ import { NodePath } from "@babel/traverse";
 import * as t from "@babel/types";
 import { ImportsByName, traverse } from "..";
 import { evalIdentifer } from "./evalIdentifier";
+import log from "npmlog";
 
 //获得当前节点的所有变量和他的值
 const _getCtxOf = (path: NodePath<t.Node>, imports: ImportsByName = {}) => {
@@ -46,7 +47,7 @@ export const getCtxOf = (
   try {
     return _getCtxOf(path, imports);
   } catch (e) {
-    console.error({ path, imports });
+    log.error("===>error", "getCtxOf", { path, imports });
     throw e;
   }
 };

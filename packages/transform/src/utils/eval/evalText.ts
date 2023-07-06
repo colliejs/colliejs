@@ -1,7 +1,4 @@
-import * as t from "@babel/types";
 import log from "npmlog";
-import { generate } from "../module";
-import { ImportsByName } from "../types";
 
 export const evalExpText = (code: string, context: object = {}) => {
   const body = `return ${code};`;

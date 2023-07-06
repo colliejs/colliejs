@@ -7,6 +7,7 @@ import { ImportsByName } from "../types";
 import { load } from "./require";
 import { evalExpText } from "./evalText";
 import { getCtxOf } from "./getCtx";
+import log from "npmlog";
 
 const getExternalIdentifierValue = (
   variable: t.Identifier,
@@ -29,6 +30,11 @@ export const evalIdentifer = (
     return _evalIdentifer(path, imports);
   } catch (e) {
     console.error({ function: "evalIdentifer", path, imports });
+    log.error("===>error", "c", {
+      function: "evalIdentifer",
+      path,
+      imports,
+    });
     throw e;
   }
 };
