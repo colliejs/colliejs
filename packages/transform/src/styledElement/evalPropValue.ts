@@ -9,11 +9,24 @@ import { evalIdentifer } from "../utils/eval/evalIdentifier";
 import { assert } from "@c3/utils";
 
 export const evalPropValue = (
-  ele: t.JSXElement,
+  path: NodePath<t.JSXElement>,
   propName: string,
-  importsByName: ImportsByName = {},
-  path: NodePath<t.JSXElement>
+  importsByName: ImportsByName = {}
 ) => {
+  try {
+    return _evalPropValue(path, propName, importsByName);
+  } catch (e) {
+    console.error({ function: "evalPropValue", path, propName, importsByName });
+    throw e;
+  }
+};
+
+const _evalPropValue = (
+  path: NodePath<t.JSXElement>,
+  propName: string,
+  importsByName: ImportsByName = {}
+) => {
+  const ele = path.node;
   const prop = getProp(ele, propName);
   if (!prop) {
     log.info("prop", `prop ${propName} is not existed`);

@@ -30,10 +30,9 @@ export class StyledElement implements Stylable {
       throw new Error("StyledElement must be a JSXElement");
     }
     const css = (evalPropValue(
-      this.jsxElement,
+      path,
       config.styledElementProp || "css",
-      importsByName,
-      path
+      importsByName
     ) || {}) as CSSPropertiesComplex;
     if (!_.isObject(css)) {
       log.error("css prop must be a object", css);
@@ -48,10 +47,9 @@ export class StyledElement implements Stylable {
 
   get classnames(): string[] {
     const className = evalPropValue(
-      this.jsxElement,
+      this.path,
       "className",
-      this.importsByName,
-      this.path
+      this.importsByName
     ) as string;
     return [className || "", this.cssProp.className];
   }

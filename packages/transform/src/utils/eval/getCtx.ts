@@ -4,7 +4,7 @@ import { ImportsByName, traverse } from "..";
 import { evalIdentifer } from "./evalIdentifier";
 
 //获得当前节点的所有变量和他的值
-export const getCtxOf = (path: NodePath<t.Node>, imports: ImportsByName = {}) => {
+const _getCtxOf = (path: NodePath<t.Node>, imports: ImportsByName = {}) => {
   const ctx = {};
   traverse(path.node, {
     TSTypeAnnotation(path) {
@@ -37,4 +37,16 @@ export const getCtxOf = (path: NodePath<t.Node>, imports: ImportsByName = {}) =>
     },
   });
   return ctx;
+};
+
+export const getCtxOf = (
+  path: NodePath<t.Node>,
+  imports: ImportsByName = {}
+) => {
+  try {
+    return _getCtxOf(path, imports);
+  } catch (e) {
+    console.error({ path, imports });
+    throw e;
+  }
 };

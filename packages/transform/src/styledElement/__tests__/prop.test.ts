@@ -2,54 +2,58 @@ import traverse from "@babel/traverse";
 import { getImports, parseCodeAndGetBodyN } from "../../utils";
 import { parseCode } from "../../parse";
 import { evalPropValue } from "../evalPropValue";
+import * as t from "@babel/types";
 
+const getPathOfJSXElement = (source: string) => {
+  const file = parseCode(source);
+  let path;
+  traverse(file, {
+    JSXElement(ipath) {
+      path = ipath;
+      ipath.stop();
+    },
+  });
+  return path;
+};
 describe("props", () => {
   it("evalPropValue, prop doesnt exist", () => {
-    const jsx = parseCodeAndGetBodyN(`<Button />`).expression;
-    const v = evalPropValue(jsx, "size", {}, {});
+    const source = `<Button />`;
+    const v = evalPropValue(getPathOfJSXElement(source), "size", {});
     expect(v).toBe(undefined);
   });
   it("evalPropValue ,boolean explict", () => {
-    const jsx = parseCodeAndGetBodyN(`<Button disabled={true} />`).expression;
-    const v = evalPropValue(jsx, "disabled", {}, {});
+    const source = `<Button disabled={false} />`;
+    const v = evalPropValue(getPathOfJSXElement(source), "disabled", {});
+    expect(v).toBe(false);
+  });
+  it("evalPropValue ,boolean explict", () => {
+    const source = `<Button disabled />`;
+    const v = evalPropValue(getPathOfJSXElement(source), "disabled", {});
     expect(v).toBe(true);
   });
-  it("evalPropValue, prop without value", () => {
-    const jsx = parseCodeAndGetBodyN(`<Button disabled />`).expression;
-    const v = evalPropValue(jsx, "disabled", {}, {});
-    expect(v).toBe(true);
-  });
+
   it("evalPropValue, prop with number", () => {
-    const jsx = parseCodeAndGetBodyN(`<Button size={2} />`).expression;
-    const v = evalPropValue(jsx, "size", {}, {});
+    const source = `<Button size={2} />`;
+    const v = evalPropValue(getPathOfJSXElement(source), "size", {});
     expect(v).toBe(2);
   });
   it("evalPropValue, prop with string", () => {
-    const jsx = parseCodeAndGetBodyN(`<Button size={'tall'} />`).expression;
-    const v = evalPropValue(jsx, "size", {}, {});
+    const source = `<Button size={'tall'} />`;
+    const v = evalPropValue(getPathOfJSXElement(source), "size", {});
     expect(v).toBe("tall");
   });
   it("evalPropValue, prop with null", () => {
-    const jsx = parseCodeAndGetBodyN(`<Button size={null} />`).expression;
-    const v = evalPropValue(jsx, "size", {}, {});
+    const source = `<Button size={null} />`;
+    const v = evalPropValue(getPathOfJSXElement(source), "size", {});
     expect(v).toBe(null);
   });
   it("evalPropValue, prop with object ", () => {
-    const code = `const x= <Button css={{color:'red'}} />`;
-    const file = parseCode(code);
-    let path;
-    traverse(file, {
-      JSXElement(ipath) {
-        path = ipath;
-        ipath.stop();
-      },
-    });
-
-    const v = evalPropValue(path.node, "css", {}, path);
+    const source = `const x= <Button css={{color:'red'}} />`;
+    const v = evalPropValue(getPathOfJSXElement(source), "css", {});
     expect(v).toEqual({ color: "red" });
   });
   it("evalPropValue, prop with object having variable reference", () => {
-    const code = `
+    const source = `
     import {flexCenter} from './fixture'
     const innerBoxStyle = {
       background: "gray",
@@ -58,16 +62,9 @@ describe("props", () => {
       h: 50,
     };
     <Button css={{color:'red',...innerBoxStyle}} >hello</Button>`;
-    const file = parseCode(code);
-    let path;
-    traverse(file, {
-      JSXElement(ipath) {
-        path = ipath;
-        ipath.stop();
-      },
-    });
-    const imports = getImports(file.program, __dirname);
-    const v = evalPropValue(path.node, "css", imports, path);
+    const path = getPathOfJSXElement(source);
+    const imports = getImports(parseCode(source).program, __dirname);
+    const v = evalPropValue(path, "css", imports);
     expect(v).toMatchInlineSnapshot(`
       {
         "alignItems": "center",
@@ -81,36 +78,21 @@ describe("props", () => {
     `);
   });
   it("evalPropValue, prop with object having variable reference", () => {
-    const code = `
-    import {flexCenter} from './fixture'
-    const innerBoxStyle = {
+    const source = `
+    let innerBoxStyle = {
       background: "gray",
-      ...flexCenter,
-      w: 50,
-      h: 50,
     };
-    if(1){      
-      <Button css={innerBoxStyle} >hello</Button>
-    }
+    <Button css={innerBoxStyle} >hello</Button>
+    innerBoxStyle={background:'red'}
       `;
-    const file = parseCode(code);
-    let path;
-    traverse(file, {
-      JSXElement(ipath) {
-        path = ipath;
-        ipath.stop();
-      },
-    });
-    const imports = getImports(file.program, __dirname);
-    const v = evalPropValue(path.node, "css", imports, path);
+    const path = getPathOfJSXElement(source);
+    const imports = getImports(parseCode(source).program, __dirname);
+
+    expect(path.get("openingElement").get("attributes").length).toBe(1);
+    const v = evalPropValue(path, "css", imports);
     expect(v).toMatchInlineSnapshot(`
       {
-        "alignItems": "center",
         "background": "gray",
-        "display": "flex",
-        "h": 50,
-        "justifyContent": "center",
-        "w": 50,
       }
     `);
   });

@@ -7,3 +7,10 @@ export const parseCode = (code: string) => {
   });
   return ast;
 };
+/**
+ *   return parse(x, {
+    allowReturnOutsideFunction: true,
+    plugins: ['jsx', 'typescript'],
+    sourceType: 'module',
+  }).program.body[n] as any;
+ */

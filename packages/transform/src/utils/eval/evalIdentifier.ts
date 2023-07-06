@@ -25,6 +25,17 @@ export const evalIdentifer = (
   path: NodePath<t.Identifier>,
   imports: ImportsByName
 ) => {
+  try {
+    return _evalIdentifer(path, imports);
+  } catch (e) {
+    console.error({ function: "evalIdentifer", path, imports });
+    throw e;
+  }
+};
+const _evalIdentifer = (
+  path: NodePath<t.Identifier>,
+  imports: ImportsByName
+) => {
   const name = path.node.name;
   const binding = path.scope.getBinding(name);
   assert(
@@ -45,7 +56,7 @@ export const evalIdentifer = (
       assert(!Array.isArray(init), "init should not be array");
       const initParent = init.parentPath;
       const ctx = getCtxOf(initParent, imports);
-      return evalExpDirectly(init.node , ctx);
+      return evalExpDirectly(init.node, ctx);
     }
   }
 };
