@@ -2,7 +2,7 @@ import { defaultConfig } from "@colliejs/core";
 import { transform } from "../transform";
 
 describe("test cases", () => {
-  it("should work ", () => {
+  it("StyledComponent ", () => {
     const code = `
     const Button = styled('button', {
         background: 'red',
@@ -56,4 +56,61 @@ describe("test cases", () => {
       }
     `);
   });
+
+  it("styledElement", () => {
+    const code = `
+      const MyButton = (props)=>{
+        const {className}=props
+        return <Button css={{display:'flex'}} className={className}>
+          <button>
+            <Text css={{alignItem:"center"}}>hello</Text>
+          </button>
+        </Button>
+      }
+    `;
+
+    const res = transform(code, "moduleId2", {}, defaultConfig);
+    console.log(res);
+    expect(res).toMatchInlineSnapshot(`
+      {
+        "code": "const MyButton = () => {
+        return <Button className="css-dhzjXW">
+              <button>
+                <Text className="css-djzozw">hello</Text>
+              </button>
+              </Button>;
+      };",
+        "cssLayerDep": {},
+        "cssText": ".css-dhzjXW{display:flex}.css-djzozw{align-item:center}",
+      }
+    `);
+  });
+  it("styledElement", () => {
+    const code = `
+      const MyButton = (props)=>{
+        const {className}=props
+        return <Button css={{display:'flex'}} className={className}>
+          <button>
+            <Text css={{alignItem:"center"}}>hello</Text>
+          </button>
+        </Button>
+      }
+    `;
+
+    const res = transform(code, "moduleId2", {}, defaultConfig);
+    console.log(res);
+    expect(res).toMatchInlineSnapshot(`
+      {
+        "code": "const MyButton = () => {
+        return <Button className="css-dhzjXW">
+              <button>
+                <Text className="css-djzozw">hello</Text>
+              </button>
+              </Button>;
+      };",
+        "cssLayerDep": {},
+        "cssText": ".css-dhzjXW{display:flex}.css-djzozw{align-item:center}",
+      }
+    `);
+  });us
 });

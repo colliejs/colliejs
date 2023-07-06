@@ -13,16 +13,17 @@ const transform = (sourceCode: string, n = 0) => {
   traverse(fileAst, {
     JSXElement(ipath) {
       path = ipath;
+      ipath.stop();
     },
   });
-  const btn = new StyledElement(
+  const ele = new StyledElement(
     code.expression,
     moduleIdByName,
     fileAst,
     defaultConfig,
     path
   );
-  const res = btn.transform();
+  const res = ele.transform();
   return {
     code: generate(res.ast).code,
     cssText: res.cssText,
@@ -116,4 +117,6 @@ describe("test cases", () => {
           `);
     }
   );
+
+
 });

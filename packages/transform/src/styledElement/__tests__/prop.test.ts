@@ -52,6 +52,13 @@ describe("props", () => {
     const v = evalPropValue(getPathOfJSXElement(source), "css", {});
     expect(v).toEqual({ color: "red" });
   });
+  it("evalPropValue, prop with object ", () => {
+    const source = `
+    const a= 'red';
+    const x= <Button css={{color:a}} />`;
+    const v = evalPropValue(getPathOfJSXElement(source), "css", {});
+    expect(v).toEqual({ color: "red" });
+  });
   it("evalPropValue, prop with object having variable reference", () => {
     const source = `
     import {flexCenter} from './fixture'

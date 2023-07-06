@@ -58,10 +58,18 @@ const _evalIdentifer = (
     case "let":
     case "var":
     default: {
+      let ctx;
       const init = binding.path.get("init");
       assert(!Array.isArray(init), "init should not be array");
-      const initParent = init.parentPath;
-      const ctx = getCtxOf(initParent, imports);
+      if (init.isIdentifier()) {
+        const replacedInit = init.replaceWithSourceString(
+          `(()=>{return ${init.toString()}})()`
+        )[0];
+        ctx = getCtxOf(replacedInit, imports);
+      } else {
+        ctx = getCtxOf(init, imports);
+      }
+
       return evalExpDirectly(init.node, ctx);
     }
   }
