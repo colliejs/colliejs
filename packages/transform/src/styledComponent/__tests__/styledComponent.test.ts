@@ -1,14 +1,10 @@
+import { getImportFromSource } from "./../../__tests__/common/getPathOfJsxEle";
 import generate from "@babel/generator";
 import { defaultConfig } from "@colliejs/core";
-import { parseCode } from "../../parse";
-import {
-  getImports,
-  isStyledComponentDecl,
-  parseCodeAndGetBodyN,
-  traverse,
-} from "../../utils";
+
 import { StyledComponent } from "../StyledComponent";
 import * as t from "@babel/types";
+import { getPathOfStyledComponentDecl } from "../../__tests__/common/getPathOfJsxEle";
 //@ts-ignore
 global.window = {
   //@ts-ignore
@@ -18,27 +14,14 @@ global.window = {
     },
   },
 };
-const prepareStyledComponent = (sourcecode: string, idx: number = 0) => {
-  let styledCompDeclPath;
-
-  const fileAst = parseCode(sourcecode);
-  const imports = getImports(fileAst.program, __dirname);
-  traverse(fileAst, {
-    VariableDeclaration(path) {
-      if (!isStyledComponentDecl(path.node)) {
-        return;
-      }
-      styledCompDeclPath = path;
-    },
-  });
-
+const prepareStyledComponent = (sourcecode: string) => {
+  let styledCompDeclPath = getPathOfStyledComponentDecl(sourcecode);
+  console.log("__filename", __filename);
   return new StyledComponent(
-    parseCodeAndGetBodyN(sourcecode, idx),
+    styledCompDeclPath,
     __filename,
-    imports,
-    fileAst,
-    defaultConfig,
-    styledCompDeclPath
+    getImportFromSource(sourcecode, __dirname),
+    defaultConfig
   );
 };
 
@@ -119,7 +102,7 @@ describe("styledHostComponent", () => {
               ...abs({left:100,top:20}),            
           });
           `;
-    const c = prepareStyledComponent(code, 2);
+    const c = prepareStyledComponent(code);
 
     const cwd = process.cwd();
     expect(c.id.componentName).toBe("MyButton");

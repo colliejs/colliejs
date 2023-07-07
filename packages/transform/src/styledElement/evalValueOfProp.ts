@@ -4,11 +4,11 @@ import log from "npmlog";
 import { evalStyling } from "../styling";
 import { ImportsByName } from "../utils/types";
 import { getPathOfValueForStyledElement } from "./getNodePathOfStyling";
-import { getProp } from "./prop";
+import { getAttr } from "./prop";
 import { evalIdentifer } from "../utils/eval/evalIdentifier";
 import { assert } from "@c3/utils";
 
-export const evalPropValue = (
+export const evalValueOfProp = (
   path: NodePath<t.JSXElement>,
   propName: string,
   importsByName: ImportsByName = {}
@@ -32,12 +32,12 @@ const _evalPropValue = (
   importsByName: ImportsByName = {}
 ) => {
   const ele = path.node;
-  const prop = getProp(ele, propName);
+  const prop = getAttr(path, propName);
   if (!prop) {
     log.info("prop", `prop ${propName} is not existed`);
     return undefined;
   }
-  const val = prop.value;
+  const val = prop.node.value;
 
   /**
    * @example

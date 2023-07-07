@@ -19,20 +19,18 @@ export class StyledComponent extends Component implements Stylable {
   styling: Styling;
 
   constructor(
-    public ast: StyledComponentDecl,
+    public path: NodePath<t.VariableDeclaration>,
     moduleId: string,
     moduleIdByName: ImportsByName,
-    fileAst: t.File,
-    config: Config,
-    path: NodePath<t.VariableDeclaration>
+    config: Config
   ) {
     if (!isStyledComponentDecl) {
-      log.error("not a styledComponentDecl", "ast", ast);
+      log.error("not a styledComponentDecl", "ast", path);
       throw new Error("not a styledComponentDecl");
     }
 
     const { styledComponentName, dependent, styling } =
-      parseStyledComponentDeclaration(ast, moduleIdByName, moduleId, path);
+      parseStyledComponentDeclaration(path, moduleIdByName, moduleId);
     super(new ComponentId(moduleId, styledComponentName));
     this.stylingParsed = parseStyling(styling, config, styledComponentName);
     this.dependent = dependent;
@@ -98,13 +96,14 @@ export class StyledComponent extends Component implements Stylable {
       classNameOfBaseStyle = `${this.stylingParsed.baseStyle.className}`;
     }
 
-    const args = (this.ast.declarations[0].init as t.CallExpression).arguments;
+    const args = (this.path.node.declarations[0].init as t.CallExpression)
+      .arguments;
     args.splice(1, 1);
     args.splice(1, 0, buildObjectExpression(classNameByVariant));
     args.splice(2, 0, t.stringLiteral(classNameOfBaseStyle));
 
     //emit css file
     const { cssText } = this._emitCssFile();
-    return { ast: this.ast, cssText };
+    return { ast: this.path.node, cssText };
   }
 }

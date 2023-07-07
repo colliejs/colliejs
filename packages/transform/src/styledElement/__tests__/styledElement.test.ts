@@ -1,28 +1,14 @@
 import { defaultConfig } from "@colliejs/core";
 import { parseCode } from "../../parse";
 import { isStyledElement, parseCodeAndGetBodyN, traverse } from "../../utils";
-import { getImports } from "../../utils/importer";
 import { StyledElement } from "../StyledElement";
+import { getImportFromSource, getPathOfJSXElement } from "../../__tests__/common/getPathOfJsxEle";
 const { default: generate } = require("@babel/generator");
 
 const transform = (sourceCode: string, n = 0) => {
-  const code = parseCodeAndGetBodyN(sourceCode, n);
-  const fileAst = parseCode(sourceCode);
-  const moduleIdByName = getImports(fileAst.program, __dirname);
-  let path;
-  traverse(fileAst, {
-    JSXElement(ipath) {
-      path = ipath;
-      ipath.stop();
-    },
-  });
-  const ele = new StyledElement(
-    code.expression,
-    moduleIdByName,
-    fileAst,
-    defaultConfig,
-    path
-  );
+  const path = getPathOfJSXElement(sourceCode);
+  const moduleIdByName = getImportFromSource(sourceCode, __dirname);
+  const ele = new StyledElement(path, moduleIdByName, defaultConfig);
   const res = ele.transform();
   return {
     code: generate(res.ast).code,
@@ -34,14 +20,14 @@ const transform = (sourceCode: string, n = 0) => {
 describe("test cases", () => {
   it("isStyleElement is true if have css prop", () => {
     const sourceCode = ` <Button css={{color:'red'}}>login</Button>`;
-    const code = parseCodeAndGetBodyN(sourceCode, 0);
-    const res = isStyledElement(code.expression, defaultConfig);
+    const path = getPathOfJSXElement(sourceCode);
+    const res = isStyledElement(path, "css");
     expect(res).toBeTruthy();
   });
   it("isStyleElement is false if without css prop", () => {
     const sourceCode = ` <Button>login</Button>`;
     const code = parseCodeAndGetBodyN(sourceCode, 0);
-    const res = isStyledElement(code.expression, defaultConfig);
+    const res = isStyledElement(code.expression, "css");
     expect(res).not.toBeTruthy();
   });
   it.todo("should throw error if css prop is not object");
@@ -62,7 +48,7 @@ describe("test cases", () => {
     const { code } = transform(sourceCode);
 
     expect(code).toMatchInlineSnapshot(
-      `"<Button className="a css-gmqXFB">login</Button>"`
+      `"<Button className={"css-gmqXFB" + "a"}>login</Button>"`
     );
   });
   it("css props with variable", () => {
@@ -117,6 +103,4 @@ describe("test cases", () => {
           `);
     }
   );
-
-
 });

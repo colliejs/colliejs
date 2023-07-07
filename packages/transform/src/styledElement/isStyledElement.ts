@@ -3,6 +3,7 @@ import { Config } from "@colliejs/core";
 import { traverse } from "../utils/module";
 import { isPropExisted } from "./prop";
 import { StyledComponentDecl } from "../utils/types";
+import { NodePath } from "@babel/traverse";
 
 export const isStyledCallExpression = (
   exp: t.Expression
@@ -35,6 +36,9 @@ export const isStyledComponentDecl = (
   return false;
 };
 
-export const isStyledElement = (ele: t.JSXElement, config: Config) => {
-  return isPropExisted(ele, config.styledElementProp || "css");
+export const isStyledElement = (
+  path: NodePath<t.JSXElement>,
+  propsName: string
+) => {
+  return isPropExisted(path, propsName);
 };

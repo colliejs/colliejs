@@ -2,12 +2,13 @@ import { Config, CSSPropertiesComplex } from "@colliejs/core";
 import * as t from "@babel/types";
 import log from "npmlog";
 import {
-  delProp,
+  delAttr,
   getJSXElementName,
-  getProp,
+  getAttr,
   isPropExisted,
+  getValExpOfAttr,
 } from "../utils/index";
-import { evalPropValue } from "./evalPropValue";
+import { evalValueOfProp } from "./evalValueOfProp";
 
 import { ImportsByName, Stylable } from "../utils/types";
 import { parseCssProp } from "../styling/styling";
@@ -19,17 +20,15 @@ export class StyledElement implements Stylable {
   cssProp: CSSInfo;
 
   constructor(
-    public jsxElement: t.JSXElement,
+    public path: NodePath<t.JSXElement>,
     public importsByName: ImportsByName,
-    public fileAst: t.File,
-    config: Config,
-    public path: NodePath<t.JSXElement>
+    config: Config
   ) {
-    if (!t.isJSXElement(jsxElement)) {
-      log.error("StyledElement must be a JSXElement", jsxElement);
+    if (!path.isJSXElement()) {
+      log.error("StyledElement must be a JSXElement", path);
       throw new Error("StyledElement must be a JSXElement");
     }
-    const css = (evalPropValue(
+    const css = (evalValueOfProp(
       path,
       config.styledElementProp || "css",
       importsByName
@@ -45,44 +44,51 @@ export class StyledElement implements Stylable {
     return this.cssProp.cssGenText;
   }
 
-  get classnames(): string[] {
-    const className = evalPropValue(
-      this.path,
-      "className",
-      this.importsByName
-    ) as string;
-    return [className || "", this.cssProp.className];
-  }
-
   transform() {
-    //添加classname
-    const className = this.classnames.join(" ").trim();
-    const newClassNnewClassNameAmeAttr = t.jsxAttribute(
-      t.jsxIdentifier("className"),
-      t.stringLiteral(className)
-    );
-    delProp(this.jsxElement, "className");
-    this.jsxElement.openingElement.attributes.push(
-      newClassNnewClassNameAmeAttr
-    );
+    //===========================================================
+    // 合并className
+    //===========================================================
+    const isClassNameExisted = isPropExisted(this.path, "className");
+    const classNameAttr = getAttr(this.path, "className");
+    const valueOfClassName = isClassNameExisted
+      ? t.jSXExpressionContainer(
+          t.binaryExpression(
+            "+",
+            t.stringLiteral(this.cssProp.className),
+            getValExpOfAttr(this.path, "className")
+          )
+        )
+      : t.stringLiteral(this.cssProp.className);
 
-    //删除css
-    const hasCssProp = isPropExisted(this.jsxElement, "css");
+    if (isClassNameExisted) {
+      classNameAttr.replaceWith(
+        t.jsxAttribute(t.jsxIdentifier("className"), valueOfClassName)
+      );
+    } else {
+      this.path.node.openingElement.attributes.push(
+        t.jsxAttribute(t.jsxIdentifier("className"), valueOfClassName)
+      );
+    }
+
+    //===========================================================
+    // 删除CSS Props
+    //===========================================================
+    const hasCssProp = isPropExisted(this.path, "css");
     if (hasCssProp) {
-      delProp(this.jsxElement, "css");
-      const cssFileName = `${getJSXElementName(this.jsxElement)}-${
+      delAttr(this.path, "css");
+      const cssFileName = `${getJSXElementName(this.path.node)}-${
         this.cssProp.className
       }.css`;
 
       //without css layer
       const cssText = `${this.cssProp.cssGenText}`;
       return {
-        ast: this.jsxElement,
+        ast: this.path.node,
         cssFileName,
         cssText,
       };
     }
 
-    return { ast: this.jsxElement };
+    return { ast: this.path.node };
   }
 }

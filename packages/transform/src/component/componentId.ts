@@ -18,6 +18,9 @@ export class ComponentId {
     return toHash({ path: this.toString() });
   }
 
+  //===========================================================
+  // Button.tsx-Button-xxxx
+  //===========================================================
   get displayName() {
     if (REG_HOST_COMPONENT.test(this.componentName)) {
       return `${this.componentName}`;

@@ -26,12 +26,10 @@ const transform = (source: string, n: number = 0) => {
   });
 
   const comp = new StyledComponent(
-    ast,
+    path,
     "moduleId1",
     imports,
-    fileAst,
     defaultConfig,
-    path
   );
   return generate(comp.transform().ast).code;
 };

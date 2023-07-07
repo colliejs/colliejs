@@ -42,6 +42,7 @@ const _evalIdentifer = (
   path: NodePath<t.Identifier>,
   imports: ImportsByName
 ) => {
+  assert(path.isIdentifier(), "path should be Identifier", { path, imports });
   const name = path.node.name;
   const binding = path.scope.getBinding(name);
   assert(
@@ -53,7 +54,7 @@ const _evalIdentifer = (
     case "module":
       return getExternalIdentifierValue(path.node, imports);
     case "param":
-      throw new Error("should deal before....");
+      throw new Error("param is dertemined at runtime");
     case "const":
     case "let":
     case "var":
@@ -62,15 +63,11 @@ const _evalIdentifer = (
       const init = binding.path.get("init");
       assert(!Array.isArray(init), "init should not be array");
       if (init.isIdentifier()) {
-        const replacedInit = init.replaceWithSourceString(
-          `(()=>{return ${init.toString()}})()`
-        )[0];
-        ctx = getCtxOf(replacedInit, imports);
+        return evalIdentifer(init, imports);
       } else {
         ctx = getCtxOf(init, imports);
+        return evalExpDirectly(init.node, ctx);
       }
-
-      return evalExpDirectly(init.node, ctx);
     }
   }
 };

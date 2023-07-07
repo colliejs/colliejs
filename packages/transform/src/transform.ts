@@ -9,7 +9,6 @@ import {
   traverse,
 } from "./utils";
 
-//TODO: ast 到处传递的是引用
 export const transform = (
   source: string,
   moduleId: string,
@@ -29,12 +28,10 @@ export const transform = (
         return;
       }
       const styledComponent = new StyledComponent(
-        path.node,
+        path,
         moduleId,
         modulesByName,
-        fileAst,
-        config,
-        path
+        config
       );
       const { cssText } = styledComponent.transform();
       cssTexts += cssText + "\n";
@@ -44,23 +41,18 @@ export const transform = (
     // 2.transform styled element
     //===========================================================
     JSXElement(path) {
-      if (isStyledElement(path.node, config)) {
-        const styledElement = new StyledElement(
-          path.node,
-          modulesByName,
-          fileAst,
-          config,
-          path
-        );
-        const { cssText } = styledElement.transform();
-        cssTexts += cssText + "\n";
+      if (!isStyledElement(path, config.styledElementProp)) {
+        return;
       }
+      const styledElement = new StyledElement(path, modulesByName, config);
+      const { cssText } = styledElement.transform();
+      cssTexts += cssText + "\n";
     },
   });
 
-  // //2. transform styled component
-  //4. generate code
-  // const gen = typeof generate === 'function' ? generate : generate.default;
+  //===========================================================
+  // 4. generate code
+  //===========================================================
   const { code } = generate(fileAst);
 
   return { code, cssText: cssTexts.trim().replace("\n", ""), cssLayerDep };

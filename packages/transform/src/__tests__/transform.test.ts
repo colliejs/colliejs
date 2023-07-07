@@ -57,60 +57,28 @@ describe("test cases", () => {
     `);
   });
 
-  it("styledElement", () => {
+  it("trhow when identify is param at last", () => {
     const code = `
       const MyButton = (props)=>{
         const {className}=props
-        return <Button css={{display:'flex'}} className={className}>
-          <button>
-            <Text css={{alignItem:"center"}}>hello</Text>
-          </button>
+        return <Button css={{display:'flex'}} className={className}>        
         </Button>
       }
     `;
-
-    const res = transform(code, "moduleId2", {}, defaultConfig);
-    console.log(res);
-    expect(res).toMatchInlineSnapshot(`
+    expect(transform(code, "moduleId2", {}, defaultConfig))
+      .toMatchInlineSnapshot(`
       {
-        "code": "const MyButton = () => {
-        return <Button className="css-dhzjXW">
-              <button>
-                <Text className="css-djzozw">hello</Text>
-              </button>
+        "code": "const MyButton = props => {
+        const {
+          className
+        } = props;
+        return <Button className={"css-dhzjXW" + className}>        
               </Button>;
       };",
         "cssLayerDep": {},
-        "cssText": ".css-dhzjXW{display:flex}.css-djzozw{align-item:center}",
+        "cssText": ".css-dhzjXW{display:flex}",
       }
     `);
+   
   });
-  it("styledElement", () => {
-    const code = `
-      const MyButton = (props)=>{
-        const {className}=props
-        return <Button css={{display:'flex'}} className={className}>
-          <button>
-            <Text css={{alignItem:"center"}}>hello</Text>
-          </button>
-        </Button>
-      }
-    `;
-
-    const res = transform(code, "moduleId2", {}, defaultConfig);
-    console.log(res);
-    expect(res).toMatchInlineSnapshot(`
-      {
-        "code": "const MyButton = () => {
-        return <Button className="css-dhzjXW">
-              <button>
-                <Text className="css-djzozw">hello</Text>
-              </button>
-              </Button>;
-      };",
-        "cssLayerDep": {},
-        "cssText": ".css-dhzjXW{display:flex}.css-djzozw{align-item:center}",
-      }
-    `);
-  });us
 });
