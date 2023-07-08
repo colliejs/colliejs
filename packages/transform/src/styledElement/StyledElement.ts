@@ -20,9 +20,9 @@ export class StyledElement implements Stylable {
   cssProp: CSSInfo;
 
   constructor(
-    public path: NodePath<t.JSXElement>,
-    public importsByName: ImportsByName,
-    config: Config
+    private path: NodePath<t.JSXElement>,
+    private importsByName: ImportsByName,
+    private config: Config
   ) {
     if (!path.isJSXElement()) {
       log.error("StyledElement must be a JSXElement", path);
@@ -71,11 +71,12 @@ export class StyledElement implements Stylable {
     }
 
     //===========================================================
-    // 删除CSS Props
+    // 处理CSS Props
     //===========================================================
-    const hasCssProp = isPropExisted(this.path, "css");
+    const name = this.config.styledElementProp || "css";
+    const hasCssProp = isPropExisted(this.path, name);
     if (hasCssProp) {
-      delAttr(this.path, "css");
+      delAttr(this.path, name);
       const cssFileName = `${getJSXElementName(this.path.node)}-${
         this.cssProp.className
       }.css`;
@@ -83,12 +84,10 @@ export class StyledElement implements Stylable {
       //without css layer
       const cssText = `${this.cssProp.cssGenText}`;
       return {
-        ast: this.path.node,
-        cssFileName,
         cssText,
+        path: this.path,
       };
     }
-
-    return { ast: this.path.node };
+    throw new Error("not impossisble");
   }
 }

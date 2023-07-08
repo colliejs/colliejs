@@ -8,6 +8,8 @@ export const getPathOfStyling = (
   styledComponentPath: NodePath<t.VariableDeclaration>
 ) => {
   let res: NodePath<t.ObjectExpression> | undefined = undefined;
+  
+  
   styledComponentPath.traverse({
     ObjectExpression(ipath) {
       if (

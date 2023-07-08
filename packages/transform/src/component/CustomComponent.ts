@@ -1,9 +1,16 @@
-import { Component } from './Component';
-import { ComponentId } from './componentId';
+import { Component } from "./Component";
+import { ComponentId } from "./componentId";
 
+
+/**
+ * 第三方组件的css的优先级通过@import xxx @layer(a.b.c)来降低其优先级，从而不会冲突
+ */
 class CustomComponent extends Component {
-  constructor(public moduleId: string, public componentName: string) {
-    super(new ComponentId(moduleId, componentName));
+  constructor(public componentId: ComponentId) {
+    super(componentId);
+  }
+  get layerName() {
+    return this.id.uniqName;
   }
 }
 

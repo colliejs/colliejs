@@ -18,13 +18,13 @@ const MyButton = styled(Button, {
       round: {
         borderRadius: 92299,
       },
-      dynamic(x:number) {
+      dynamic(x) {
         return {
           borderRadius: x,
         };
       },
     },
   },
-} as any);
+} );
 
 export default MyButton;

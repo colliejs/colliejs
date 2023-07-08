@@ -55,7 +55,7 @@ export declare const styled: <
   // VariantsProp<__Styling>,
   T = any
 >(
-  component: React.ElementType<BaseProp>,
+  component: keyof JSX.IntrinsicElements | React.ElementType<BaseProp>,
   style: Styling,
   option?: StyledOption<BaseProp, any>
 ) => React.ForwardRefExoticComponent<

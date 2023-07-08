@@ -1,5 +1,6 @@
+import { removeTypeAnnotation } from './utils/removeType';
+import { StyledElement } from "./styledElement";
 import { Config } from "@colliejs/core";
-import { StyledComponent, StyledElement } from "./component";
 import { parseCode } from "./parse";
 import {
   ImportsByName,
@@ -8,6 +9,9 @@ import {
   isStyledElement,
   traverse,
 } from "./utils";
+import { StyledComponent } from "./styledComponent";
+import { NodePath } from "@babel/traverse";
+import { VariableDeclaration } from "@babel/types";
 
 export const transform = (
   source: string,
@@ -27,6 +31,7 @@ export const transform = (
       if (!isStyledComponentDecl(path.node)) {
         return;
       }
+      removeTypeAnnotation(path);
       const styledComponent = new StyledComponent(
         path,
         moduleId,
@@ -44,6 +49,7 @@ export const transform = (
       if (!isStyledElement(path, config.styledElementProp)) {
         return;
       }
+      removeTypeAnnotation(path);
       const styledElement = new StyledElement(path, modulesByName, config);
       const { cssText } = styledElement.transform();
       cssTexts += cssText + "\n";

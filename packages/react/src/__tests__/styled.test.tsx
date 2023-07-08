@@ -14,6 +14,7 @@ import traverse_ from "@babel/traverse";
 const traverse = traverse_.default || traverse_;
 
 const transform = (source: string, n: number = 0) => {
+  console.log("parseCodeAndGetBodyN", parseCodeAndGetBodyN);
   const ast = parseCodeAndGetBodyN(source, n);
   const fileAst = parseCode(source);
   const imports = getImports(fileAst.program, __dirname);
@@ -25,13 +26,8 @@ const transform = (source: string, n: number = 0) => {
     },
   });
 
-  const comp = new StyledComponent(
-    path,
-    "moduleId1",
-    imports,
-    defaultConfig,
-  );
-  return generate(comp.transform().ast).code;
+  const comp = new StyledComponent(path, "moduleId1", imports, defaultConfig);
+  return generate(comp.transform().path.node).code;
 };
 describe("compile styled function", () => {
   it("without variant ", () => {

@@ -7,15 +7,7 @@ import log from "npmlog";
 //获得当前节点的所有变量和他的值
 const _getCtxOf = (path: NodePath<t.Node>, imports: ImportsByName = {}) => {
   const ctx = {};
-  traverse(path.node, {
-    TSTypeAnnotation(path) {
-      path.remove();
-    },
-    TypeAnnotation(path) {
-      path.remove();
-    },
-    noScope: true,
-  });
+
 
   path.traverse({
     Identifier(ipath) {

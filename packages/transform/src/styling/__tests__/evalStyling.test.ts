@@ -3,14 +3,15 @@ import { parseCode } from "../../parse";
 import { getImports, parseCodeAndGetBodyN } from "../../utils";
 import { evalStyling } from "../evalStyling";
 import * as t from "@babel/types";
+import { removeTypeAnnotation } from "../../utils/removeType";
 
 const evalObjectString = (sourcecode: string) => {
   const fileAst = parseCode(sourcecode);
   const imports = getImports(fileAst.program, __dirname);
-  // fileAst
   let res;
   traverse(fileAst, {
     ObjectExpression(path) {
+      removeTypeAnnotation(path);
       const lastOne = fileAst.program.body.length - 1;
       if (
         t.isNodesEquivalent(
@@ -243,7 +244,7 @@ describe("test cases", () => {
       }
       `;
 
-    const res = evalObjectString(expr, 0);
+    const res = evalObjectString(expr);
     expect(res).toMatchInlineSnapshot(`
         {
           "dynamic": [Function],

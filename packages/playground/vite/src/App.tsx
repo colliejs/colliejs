@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Button } from './Button';
 import MyButton from './MyButton';
-import Input from './Input';
 import { SpecialButton } from './SpeciButton';
 
 export default function App() {
@@ -12,7 +10,7 @@ export default function App() {
   }, []);
   return (
     <div>
-      <Button
+      {/* <Button
         shape="round"
         onClick={() => {
           setCount(x => x + 1);
@@ -20,9 +18,12 @@ export default function App() {
       >
         click
       </Button>
-      count:{count}
+      count:{count} */}
       <MyButton shape={'round'}>dynmic variant MyButton</MyButton>
-      <MyButton
+      <br/>
+      <SpecialButton shape={'round'}>SpecialButton1</SpecialButton>
+
+      {/* <MyButton
         shape="rect"
         css={{
           background: 'yellow',
@@ -32,9 +33,8 @@ export default function App() {
         MyButton
       </MyButton>
       <Input ref={ref} />
-      <SpecialButton>SpecialButton1</SpecialButton>
       <Button as="a">button as link</Button>
-      <SpecialButton>SpecialButton12</SpecialButton>
+      <SpecialButton>SpecialButton12</SpecialButton> */}
     </div>
   );
 }

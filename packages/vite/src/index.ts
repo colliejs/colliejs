@@ -27,11 +27,8 @@ global.window = {
 type VitePluginOptions = {
   include?: FilterPattern;
   exclude?: FilterPattern;
-  index: string;
+  index?: string;
   styledConfig?: Config;
-  root: string;
-  // sourceMap?: boolean;
-  // preprocessor?: Preprocessor;
 };
 
 const getLayerText = (cssLayerDeps: Record<string, string>) => {
@@ -94,7 +91,7 @@ const collie = (option: VitePluginOptions): Plugin => {
         const cssText = createTheme(styledConfig);
         const cssFilename = genCssFileName(url);
         writeCssText(cssText, cssFilename);
-        
+
         return UNCHANGED;
       }
 
@@ -114,9 +111,9 @@ const collie = (option: VitePluginOptions): Plugin => {
       let codeWithCss;
       if (cssText) {
         const cssFilename = genCssFileName(url);
-        const layerText = getLayerText(cssLayerDeps);
+        // const layerText = getLayerText(cssLayerDeps);
         //TODO:这里会重复写入。但是没更好的方法保证cssLayer在普通cssText之前了
-        writeCssText(`${layerText}\n${cssText}`, cssFilename);
+        writeCssText(`${cssText}`, cssFilename);
         codeWithCss = `import "${cssFilename}"\n${code}`;
       }
 

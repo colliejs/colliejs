@@ -1,9 +1,16 @@
 import { defaultConfig } from "@colliejs/core";
 import { parseCode } from "../../parse";
-import { isStyledElement, parseCodeAndGetBodyN, traverse } from "../../utils";
+import {
+  generate,
+  isStyledElement,
+  parseCodeAndGetBodyN,
+  traverse,
+} from "../../utils";
 import { StyledElement } from "../StyledElement";
-import { getImportFromSource, getPathOfJSXElement } from "../../__tests__/common/getPathOfJsxEle";
-const { default: generate } = require("@babel/generator");
+import {
+  getImportFromSource,
+  getPathOfJSXElement,
+} from "../../__tests__/common/getPathOfJsxEle";
 
 const transform = (sourceCode: string, n = 0) => {
   const path = getPathOfJSXElement(sourceCode);
@@ -11,9 +18,8 @@ const transform = (sourceCode: string, n = 0) => {
   const ele = new StyledElement(path, moduleIdByName, defaultConfig);
   const res = ele.transform();
   return {
-    code: generate(res.ast).code,
+    code: generate(path.node).code,
     cssText: res.cssText,
-    cssFileName: res.cssFileName,
   };
 };
 
@@ -38,7 +44,6 @@ describe("test cases", () => {
     expect(res).toMatchInlineSnapshot(`
       {
         "code": "<Button className="css-gmqXFB">login</Button>",
-        "cssFileName": "Button-css-gmqXFB.css",
         "cssText": ".css-gmqXFB{color:red}",
       }
     `);
@@ -60,7 +65,6 @@ describe("test cases", () => {
     expect(res).toMatchInlineSnapshot(`
       {
         "code": "<Button className="css-gmqXFB">login</Button>",
-        "cssFileName": "Button-css-gmqXFB.css",
         "cssText": ".css-gmqXFB{color:red}",
       }
     `);
@@ -77,7 +81,6 @@ describe("test cases", () => {
     expect(res).toMatchInlineSnapshot(`
       {
         "code": "<Button className="css-IdMHn">login</Button>",
-        "cssFileName": "Button-css-IdMHn.css",
         "cssText": ".css-IdMHn{color:red;line-height:1}",
       }
     `);

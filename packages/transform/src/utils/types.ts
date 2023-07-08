@@ -1,9 +1,10 @@
+import { NodePath } from "@babel/traverse";
 import * as t from "@babel/types";
 
 export type StyledComponentDecl = t.VariableDeclaration;
 export interface Stylable {
   getCssText(): string;
-  transform(): { ast: any; cssFileName?: string; cssText?: string };
+  transform(): { cssText: string; path: NodePath<t.Node> };
 }
 
 export type ImportsByName = Record<

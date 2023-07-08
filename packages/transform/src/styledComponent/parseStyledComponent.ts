@@ -11,6 +11,7 @@ import { ImportsByName, StyledComponentDecl } from "../utils/types";
 import { StyledComponent } from "./StyledComponent";
 import { getPathOfStyling } from "./getNodePathOfStyling";
 import { assert } from "@c3/utils";
+import { ComponentId } from "../component/componentId";
 
 export type StyledDataType = {
   styledComponentName: string;
@@ -26,7 +27,7 @@ export const parseStyledComponentDeclaration = (
 ): StyledDataType => {
   const { init, id } = path.node.declarations[0]; ////TODO: multiple declarator
   if (!init || !isStyledCallExpression(init)) {
-    return;
+    throw new Error("not a styledComponentDecl");
   }
 
   const result = {} as StyledDataType;
@@ -53,7 +54,9 @@ export const parseStyledComponentDeclaration = (
   switch (type) {
     case "StringLiteral":
       assert(t.isStringLiteral(exp), "exp should be StringLiteral");
-      result.dependent = new HostComponent(exp.value);
+      result.dependent = new HostComponent(
+        ComponentId.make(moduleId, exp.value)
+      );
       break;
     case "Identifier":
       assert(t.isIdentifier(exp), "exp should be StringLiteral");
@@ -61,8 +64,10 @@ export const parseStyledComponentDeclaration = (
       //那么会在后期被替换为styledComponent
       const componentName = exp.name;
       result.dependent = new CustomComponent(
-        moduleIdByName[componentName]?.moduleId || moduleId,
-        componentName
+        ComponentId.make(
+          moduleIdByName[componentName]?.moduleId || moduleId,
+          componentName
+        )
       );
       break;
     default:
@@ -84,7 +89,7 @@ export const parseStyledComponentDeclaration = (
   }
   if (t.isObjectExpression(styling)) {
     const stylingPath = getPathOfStyling(path);
-    assert(!!stylingPath);
+    assert(!!stylingPath, "stylingPath should not be null", { styling, path });
     result.styling = evalStyling(stylingPath, moduleIdByName);
   } else {
     log.error("error:", "not support type", styling);

@@ -4,18 +4,18 @@ import log from "npmlog";
 import { Component } from "../component/Component";
 import CustomComponent from "../component/CustomComponent";
 import { HostComponent } from "../component/HostComponent";
-import { ComponentId } from "../component/componentId";
 import { parseStyling } from "../styling/styling";
 import { Styling, StylingParsed } from "../styling/types";
 
 import { buildObjectExpression, isStyledComponentDecl } from "../utils/index";
 import { ImportsByName, Stylable, StyledComponentDecl } from "../utils/types";
-import { parseStyledComponentDeclaration } from "./parseStyledComponent";
+import { parseStyledComponentDeclaration as parseStyledComponentDecl } from "./parseStyledComponent";
 import { NodePath } from "@babel/traverse";
+import { ComponentId } from "../component/componentId";
 
-export class StyledComponent extends Component implements Stylable {
+export class StyledComponent extends CustomComponent implements Stylable {
   stylingParsed: StylingParsed;
-  dependent: CustomComponent | StyledComponent | HostComponent;
+  dependent: CustomComponent | HostComponent;
   styling: Styling;
 
   constructor(
@@ -30,7 +30,7 @@ export class StyledComponent extends Component implements Stylable {
     }
 
     const { styledComponentName, dependent, styling } =
-      parseStyledComponentDeclaration(path, moduleIdByName, moduleId);
+      parseStyledComponentDecl(path, moduleIdByName, moduleId);
     super(new ComponentId(moduleId, styledComponentName));
     this.stylingParsed = parseStyling(styling, config, styledComponentName);
     this.dependent = dependent;
@@ -50,23 +50,23 @@ export class StyledComponent extends Component implements Stylable {
     for (const key of Object.keys(this.stylingParsed)) {
       text += this.stylingParsed[key as StaticVariantKey].cssGenText + "\n";
     }
-    return text;
+    if (this.dependent instanceof CustomComponent) {
+      return `
+      @layer ${this.dependent.layerName}, ${this.layerName};\n        
+      @layer ${this.layerName} { 
+        ${text} 
+      }\n`;
+    }
+    return `@layer ${this.layerName} {${text}}\n`;
   }
 
-  _emitCssFile() {
-    const cssText = `@layer ${this.layerName} {${this.getCssText()}}\n`;
-    return { cssText };
-  }
-  get layerName() {
-    return this.id.displayName;
-  }
   //TODO：三方组件支持自定义LayerName
   cssLayerDep() {
     return {
       [this.layerName]:
-        this.dependent instanceof StyledComponent
+        this.dependent instanceof CustomComponent
           ? this.dependent.layerName
-          : this.dependent.id.displayName,
+          : "", //HostComponent没有LayerName
     };
   }
   /**
@@ -74,7 +74,7 @@ export class StyledComponent extends Component implements Stylable {
    * @example
    *  const StyledButton = styled(button,{color:'red'},option)
    *
-   *  =>
+   *  变为
    *  const StyledButton = styled(
    *    button,
    *    __classNameByVariant:Record<string, string>,
@@ -103,7 +103,6 @@ export class StyledComponent extends Component implements Stylable {
     args.splice(2, 0, t.stringLiteral(classNameOfBaseStyle));
 
     //emit css file
-    const { cssText } = this._emitCssFile();
-    return { ast: this.path.node, cssText };
+    return { cssText: this.getCssText(), path: this.path };
   }
 }

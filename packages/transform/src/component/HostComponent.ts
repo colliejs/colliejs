@@ -4,11 +4,15 @@ import log from "npmlog";
 export const REG_HOST_COMPONENT = /^[a-z]/;
 
 export class HostComponent extends Component {
-  constructor(public name: string) {
-    if (!REG_HOST_COMPONENT.test(name)) {
-      log.error("HostComponent",name, "is not host component", );
+  constructor(componentId: ComponentId) {
+    if (!REG_HOST_COMPONENT.test(componentId.componentName)) {
+      log.error(
+        "HostComponent",
+        componentId.componentName,
+        "is not host component"
+      );
       throw new Error("is NOT host component");
     }
-    super(new ComponentId(undefined, name));
+    super(componentId);
   }
 }
