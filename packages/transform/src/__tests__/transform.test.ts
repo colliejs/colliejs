@@ -108,7 +108,7 @@ describe("test cases", () => {
         const {
           className
         } = props;
-        return <Button className={"css-dhzjXW" + className}>        
+        return <Button className={" css-dhzjXW " + className}>        
               </Button>;
       };",
         "cssLayerDep": {},

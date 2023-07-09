@@ -56,7 +56,7 @@ describe("test cases", () => {
     const { code } = transform(sourceCode);
 
     expect(code).toMatchInlineSnapshot(
-      `"<Button className={"css-gmqXFB" + "a"}>login</Button>"`
+      `"<Button className={" css-gmqXFB " + "a"}>login</Button>"`
     );
   });
   it("css props with variable", () => {

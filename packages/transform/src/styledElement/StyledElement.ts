@@ -57,7 +57,7 @@ export class StyledElement implements Stylable {
           t.jSXExpressionContainer(
             t.binaryExpression(
               "+",
-              t.stringLiteral(this.cssProp.className),
+              t.stringLiteral(` ${this.cssProp.className} `),//NOTE:这里必须要有个空格来分开className
               getValExpOfAttr(this.path, "className")
             )
           )
