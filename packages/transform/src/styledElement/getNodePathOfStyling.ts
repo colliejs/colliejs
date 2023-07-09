@@ -1,5 +1,6 @@
 import { NodePath } from "@babel/traverse";
 import * as t from "@babel/types";
+import { getAttr } from "./prop";
 /**
  *
  * <Button css={{color:'red'}}>
@@ -7,25 +8,18 @@ import * as t from "@babel/types";
  */
 
 //TODO: boolean类型会被当做null
-export const getPathOfValueForStyledElement = (
+export const getValOfProp = (
   path: NodePath<t.JSXElement>,
   propsName: string
 ) => {
   let res: NodePath | undefined = undefined;
-  path.traverse({
-    JSXAttribute(ipath) {
-      if (ipath.node.name.name !== propsName) {
-        return;
-      }
-      switch (ipath.node.value.type) {
-        case "JSXExpressionContainer":
-          res = ipath.get("value.expression") as NodePath;
-          break;
-        default:
-          res = ipath.get("value");
-      }
-      ipath.stop();
-    },
-  });
+  const attr = getAttr(path, propsName);
+  switch (attr.node.value.type) {
+    case "JSXExpressionContainer":
+      res = attr.get("value.expression") as NodePath;
+      break;
+    default:
+      res = attr.get("value");
+  }
   return res;
 };

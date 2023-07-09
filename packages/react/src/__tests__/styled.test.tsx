@@ -1,10 +1,12 @@
 import { defaultConfig } from "@colliejs/core";
 import generate from "@babel/generator";
+import * as t from "@babel/types";
 import {
   getImports,
   parseCode,
   parseCodeAndGetBodyN,
   StyledComponent,
+  transform as transform_,
 } from "@colliejs/transform";
 
 import { styled } from "../styled";
@@ -239,6 +241,29 @@ describe("render StyledComponent", () => {
       <a
         className="baseStyle-gmqXFB baseStyle-xxxxx  variants-static-rect-true-hECRKx variants-static-shape-round-hECRKn"
         unexpectForward={true}
+      />
+    `);
+  });
+  it("css attributes", () => {
+    const Link = styled(
+      "a",
+      {
+        "variants-static-shape-round": "variants-static-shape-round-hECRKn",
+      },
+      "baseStyle-gmqXFB",
+      {}
+    );
+    const code = `<Link css={{ background: "red" }} />`;
+    const res = transform_(code, "module-id", {}, defaultConfig);
+    const className = res.code.match(/className="(.*)"/)?.[1];
+    const t = React.createElement(Link, {
+      className: className
+    });
+
+    const comp = TestRenderer.create(t);
+    expect(comp.toJSON()).toMatchInlineSnapshot(`
+      <a
+        className="baseStyle-gmqXFB css-elTJue"
       />
     `);
   });

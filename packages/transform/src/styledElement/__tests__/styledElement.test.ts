@@ -39,7 +39,10 @@ describe("test cases", () => {
   it.todo("should throw error if css prop is not object");
 
   it("transform", () => {
-    const sourceCode = ` <Button css={{color:'red'}}>login</Button>    `;
+    const sourceCode = ` 
+      
+      <Button css={{color:'red'}}>login</Button>    
+    `;
     const res = transform(sourceCode);
     expect(res).toMatchInlineSnapshot(`
       {

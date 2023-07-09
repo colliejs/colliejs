@@ -3,7 +3,7 @@ import * as t from "@babel/types";
 import log from "npmlog";
 import { evalStyling } from "../styling";
 import { ImportsByName } from "../utils/types";
-import { getPathOfValueForStyledElement } from "./getNodePathOfStyling";
+import { getValOfProp } from "./getNodePathOfStyling";
 import { getAttr } from "./prop";
 import { evalIdentifer } from "../utils/eval/evalIdentifier";
 import { assert } from "@c3/utils";
@@ -34,8 +34,7 @@ const _evalPropValue = (
   const ele = path.node;
   const prop = getAttr(path, propName);
   if (!prop) {
-    log.info("prop", `prop ${propName} is not existed`);
-    return undefined;
+    throw new Error(`prop ${propName} is not existed`);
   }
   const val = prop.node.value;
 
@@ -53,7 +52,7 @@ const _evalPropValue = (
   }
   switch (exp.type) {
     case "ObjectExpression": {
-      const ipath = getPathOfValueForStyledElement(path, propName);
+      const ipath = getValOfProp(path, propName);
       assert(!!ipath && ipath.isObjectExpression(), "ipath is not object", {
         propName,
         ipath,
@@ -71,7 +70,7 @@ const _evalPropValue = (
       if (exp.name === "undefined") {
         return undefined;
       }
-      const ipath = getPathOfValueForStyledElement(
+      const ipath = getValOfProp(
         path,
         propName
       ) as unknown as NodePath<t.Identifier>;

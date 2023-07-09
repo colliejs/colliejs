@@ -21,18 +21,18 @@ export class StyledElement implements Stylable {
 
   constructor(
     private path: NodePath<t.JSXElement>,
-    private importsByName: ImportsByName,
+    importsByName: ImportsByName,
     private config: Config
   ) {
     if (!path.isJSXElement()) {
       log.error("StyledElement must be a JSXElement", path);
       throw new Error("StyledElement must be a JSXElement");
     }
-    const css = (evalValueOfProp(
+    const css = evalValueOfProp(
       path,
       config.styledElementProp || "css",
       importsByName
-    ) || {}) as CSSPropertiesComplex;
+    ) as CSSPropertiesComplex;
     if (!_.isObject(css)) {
       log.error("css prop must be a object", css);
       throw new Error("css prop must be a object");
@@ -49,24 +49,26 @@ export class StyledElement implements Stylable {
     // 合并className
     //===========================================================
     const isClassNameExisted = isPropExisted(this.path, "className");
-    const classNameAttr = getAttr(this.path, "className");
-    const valueOfClassName = isClassNameExisted
-      ? t.jSXExpressionContainer(
-          t.binaryExpression(
-            "+",
-            t.stringLiteral(this.cssProp.className),
-            getValExpOfAttr(this.path, "className")
+    if (isClassNameExisted) {
+      const classNameAttr = getAttr(this.path, "className");
+      classNameAttr.replaceWith(
+        t.jsxAttribute(
+          t.jsxIdentifier("className"),
+          t.jSXExpressionContainer(
+            t.binaryExpression(
+              "+",
+              t.stringLiteral(this.cssProp.className),
+              getValExpOfAttr(this.path, "className")
+            )
           )
         )
-      : t.stringLiteral(this.cssProp.className);
-
-    if (isClassNameExisted) {
-      classNameAttr.replaceWith(
-        t.jsxAttribute(t.jsxIdentifier("className"), valueOfClassName)
       );
     } else {
       this.path.node.openingElement.attributes.push(
-        t.jsxAttribute(t.jsxIdentifier("className"), valueOfClassName)
+        t.jsxAttribute(
+          t.jsxIdentifier("className"),
+          t.stringLiteral(this.cssProp.className)
+        )
       );
     }
 
@@ -77,14 +79,10 @@ export class StyledElement implements Stylable {
     const hasCssProp = isPropExisted(this.path, name);
     if (hasCssProp) {
       delAttr(this.path, name);
-      const cssFileName = `${getJSXElementName(this.path.node)}-${
-        this.cssProp.className
-      }.css`;
 
       //without css layer
-      const cssText = `${this.cssProp.cssGenText}`;
       return {
-        cssText,
+        cssText: `${this.cssProp.cssGenText}`,
         path: this.path,
       };
     }

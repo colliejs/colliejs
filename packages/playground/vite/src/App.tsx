@@ -8,6 +8,7 @@ export default function App() {
   useEffect(() => {
     ref.current?.focus?.();
   }, []);
+  
   return (
     <div>
       {/* <Button
@@ -21,7 +22,7 @@ export default function App() {
       count:{count} */}
       <MyButton shape={'round'}>dynmic variant MyButton</MyButton>
       <br/>
-      <SpecialButton shape={'round'}>SpecialButton1</SpecialButton>
+      <SpecialButton shape={'round'} css={{background:'lightblue'}}>SpecialButton1</SpecialButton>
 
       {/* <MyButton
         shape="rect"

@@ -22,8 +22,8 @@ const collie = (option?: Option): Plugin => {
   let cssTexts = "";
   const cssLayerDeps = {};
   const filter = createFilter(include, exclude);
-  const cssText = createTheme(styledConfig);
-  cssTexts += cssText + "\n";
+  // const cssText = createTheme(styledConfig);
+  // cssTexts += cssText + "\n";
 
   return {
     name: "collie", // this name will show up in warnings and errors

@@ -1,10 +1,14 @@
 import traverse from "@babel/traverse";
-import { getAttr, getImports, isPropExisted, parseCodeAndGetBodyN } from "../../utils";
+import {
+  getAttr,
+  getImports,
+  isPropExisted,
+  parseCodeAndGetBodyN,
+} from "../../utils";
 import { parseCode } from "../../parse";
 import { evalValueOfProp } from "../evalValueOfProp";
 import * as t from "@babel/types";
 import { getPathOfJSXElement } from "../../__tests__/common/getPathOfJsxEle";
-
 
 describe("props", () => {
   it("isPropsExisted", () => {
@@ -19,8 +23,9 @@ describe("props", () => {
   });
   it("evalPropValue, prop doesnt exist", () => {
     const source = `<Button />`;
-    const v = evalValueOfProp(getPathOfJSXElement(source), "size", {});
-    expect(v).toBe(undefined);
+    expect(() =>
+      evalValueOfProp(getPathOfJSXElement(source), "size", {})
+    ).toThrow();
   });
   it("evalPropValue ,boolean explict", () => {
     const source = `<Button disabled={false} />`;

@@ -18,15 +18,14 @@ export function isPropExisted(
  */
 export const getAttr = (path: NodePath<t.JSXElement>, prop: string) => {
   let ret: NodePath<t.JSXAttribute>;
-  path.traverse({
-    JSXAttribute(ipath) {
-      if (ipath.node.name.name === prop) {
-        ret = ipath;
-        ipath.stop();
+  path
+    .get("openingElement")
+    .get("attributes")
+    .forEach(attr => {
+      if (attr.isJSXAttribute() && attr.node.name.name === prop) {
+        ret = attr;
       }
-    },
-  });
-  assert(ret, `prop ${prop} is not existed`);
+    });
   return ret;
 };
 
