@@ -41,3 +41,4 @@ export type Config = {
   themeMap: Record<string, any>;
   styledElementProp?: string;
 };
+
