@@ -1,6 +1,5 @@
 import React, { ElementType } from "react";
 import { type Styling } from "@colliejs/transform";
-// import type Stitches from './types/stitches'
 import type * as Config from "./types/config";
 import type * as CSSUtil from "./types/css-util";
 import type * as StyledComponentX from "./types/styled-component";
