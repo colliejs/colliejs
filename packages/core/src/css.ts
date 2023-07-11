@@ -26,7 +26,7 @@ import { toCssRules } from "./utils/toCssRules";
 export const arraySyntax = (
   propertyKey: string,
   valueInArray: any[],
-  breakpoints: number[]
+  breakpoints: readonly number[]
 ): Record<`@media ${string}`, object> => {
   const ranges: [number | undefined, number | undefined][] = [];
   const bks = [0, ...breakpoints];
@@ -51,7 +51,7 @@ export const arraySyntax = (
 
 export const convertCssObjToMediaQuery = (
   cssObj: CSSPropertiesComplex,
-  breakpoints: number[]
+  breakpoints: readonly number[]
 ) => {
   const res = {} as CSSPropertiesComplex;
   Object.keys(cssObj).forEach(key => {

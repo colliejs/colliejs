@@ -34,7 +34,7 @@ export type CSSPropertiesComplex = CSSProperties &
 
 export type Config = {
   utils?: ConfigUtils;
-  breakpoints?: number[];
+  breakpoints?: readonly number[];
   media?: Record<string, string>; //to remove
   prefix: string;
   theme?: Record<string, any>;

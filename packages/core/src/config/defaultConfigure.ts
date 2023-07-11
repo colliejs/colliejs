@@ -20,4 +20,4 @@ export const defaultConfig = {
   },
   utils: utils,
   styledElementProp: "css",
-} as const;
+} as const satisfies Config;

@@ -1,8 +1,10 @@
 import { CSSProperties } from "../type";
 
-export type RCSSProperties = {
-  [k in keyof CSSProperties]?: CSSProperties[k] | CSSProperties[k][];
-};
+// export type RCSSProperties = {
+//   // [k in keyof CSSProperties]?: CSSProperties[k] | CSSProperties[k][];
+//   [k in keyof CSSProperties]?: CSSProperties[k] 
+// };
+export type RCSSProperties = CSSProperties;
 
 export type Typography = {
   fontSize: RCSSProperties['fontSize'];
