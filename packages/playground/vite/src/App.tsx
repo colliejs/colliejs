@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import MyButton from './MyButton';
-import { SpecialButton } from './SpeciButton';
+import { SpecialButton, SpecialButton2 } from './SpeciButton';
 
 export default function App() {
   const [count, setCount] = useState(0);
@@ -23,6 +23,7 @@ export default function App() {
       <MyButton shape={'round'}>dynmic variant MyButton</MyButton>
       <br/>
       <SpecialButton shape={'round'} css={{background:'lightblue'}}>SpecialButton1</SpecialButton>
+      <SpecialButton2 shape={'round'} css={{background:'lightyellow'}}>SpecialButton1</SpecialButton2>
 
       {/* <MyButton
         shape="rect"
