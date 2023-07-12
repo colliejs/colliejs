@@ -1,6 +1,6 @@
 {
   "name": "@colliejs/vite",
-  "version": "1.0.25",
+  "version": "1.0.26",
   "description": "awesesome",
   "type": "module",
   "scripts": {
