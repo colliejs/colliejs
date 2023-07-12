@@ -59,3 +59,6 @@ export type MakeStyled<C extends typeof defaultConfig> = <
 >;
 
 export declare const styled: MakeStyled<typeof defaultConfig>;
+export declare const makeStyled: <T extends typeof defaultConfig>(
+  config: T
+) => MakeStyled<T>;

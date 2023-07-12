@@ -4,6 +4,7 @@ import {
   getStaticVariantKey,
   getDynamicVariantKey,
   StaticVariantKey,
+  Config,
 } from "@colliejs/core";
 import _ from "lodash";
 import React, { ElementType, ForwardRefRenderFunction } from "react";
@@ -88,9 +89,9 @@ export const styled = <
 
           /**
            * TODO:
-          * 1: 处理各种情况，不是简单的px
-          * 2.支持简称比如(w=>width)
-           */     
+           * 1: 处理各种情况，不是简单的px
+           * 2.支持简称比如(w=>width)
+           */
           style[`--${dynamicVariantKey}`] = valOfProp;
         }
       } else {
@@ -107,7 +108,7 @@ export const styled = <
       ...(option.attrs || {}),
       ...restPropsWithoutVariant,
     };
-    console.log('forwardProps',forwardProps)
+    console.log("forwardProps", forwardProps);
 
     //@ts-ignore
     const isStyledComponent = !!component.__isStyledComponent;
@@ -180,3 +181,4 @@ export const styled = <
   StyledComponent.__isStyledComponent = true;
   return StyledComponent;
 };
+
