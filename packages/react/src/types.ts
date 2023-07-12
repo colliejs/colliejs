@@ -1,13 +1,14 @@
-import { MakeStyled } from "./../dist/index.d";
 import React, { CSSProperties, ElementType } from "react";
 import { type Styling } from "@colliejs/transform";
-import type * as Config from "./types/config";
+// import type * as Config from "./types/config";
 import type * as CSSUtil from "./types/css-util";
 import type * as StyledComponentX from "./types/styled-component";
 import * as Util from "./types/util";
 import Stitches, { RemoveIndex } from "./types/stitches";
 export { Util, CSSUtil, Stitches };
 import { defaultConfig } from "@colliejs/core";
+import { ConfigType, DefaultThemeMap } from "./types/config";
+
 export type Debug<T> = { [K in keyof T]: T[K] };
 
 export type StyledOption<Props, InnerAs extends keyof JSX.IntrinsicElements> = {
@@ -16,7 +17,21 @@ export type StyledOption<Props, InnerAs extends keyof JSX.IntrinsicElements> = {
   attrs?: Partial<Props> & JSX.IntrinsicElements[InnerAs];
 };
 
-type MyConfig = typeof defaultConfig;
+
+export type CollieConfig<
+  Prefix extends string = "",
+  Media extends {} = {},
+  Theme extends {} = {},
+  ThemeMap extends {} = DefaultThemeMap,
+  Utils extends {} = {}
+> = {
+  prefix?: ConfigType.Prefix<Prefix>;
+  media?: ConfigType.Media<Media>;
+  theme?: ConfigType.Theme<Theme>;
+  themeMap?: ConfigType.ThemeMap<ThemeMap>;
+  utils?: ConfigType.Utils<Utils>;
+};
+
 export type MyCss<T extends typeof defaultConfig> = CSSUtil.CSS<
   T["media"],
   T["theme"],
@@ -62,3 +77,19 @@ export declare const styled: MakeStyled<typeof defaultConfig>;
 export declare const makeStyled: <T extends typeof defaultConfig>(
   config: T
 ) => MakeStyled<T>;
+
+// export type CreateStitches = {
+//   <
+//     Prefix extends string = "",
+//     Media extends {} = {},
+//     Theme extends {} = {},
+//     ThemeMap extends {} = DefaultThemeMap,
+//     Utils extends {} = {}
+//   >(config?: {
+//     prefix?: ConfigType.Prefix<Prefix>;
+//     media?: ConfigType.Media<Media>;
+//     theme?: ConfigType.Theme<Theme>;
+//     themeMap?: ConfigType.ThemeMap<ThemeMap>;
+//     utils?: ConfigType.Utils<Utils>;
+//   }): Stitches<Prefix, Media, Theme, ThemeMap, Utils>;
+// };
