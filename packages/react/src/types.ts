@@ -1,4 +1,5 @@
-import React, { ElementType } from "react";
+import { MakeStyled } from "./../dist/index.d";
+import React, { CSSProperties, ElementType } from "react";
 import { type Styling } from "@colliejs/transform";
 import type * as Config from "./types/config";
 import type * as CSSUtil from "./types/css-util";
@@ -22,8 +23,16 @@ export type MyCss<T extends typeof defaultConfig> = CSSUtil.CSS<
   T["themeMap"],
   T["utils"]
 >;
+type DynamicFnPara<T extends string> = `var(--variants-dynamic-${T})`;
+export type DynamicFn<T extends string> = (
+  x: DynamicFnPara<T>
+) => CSSProperties;
 export type MyStyling<T extends typeof defaultConfig> = MyCss<T> & {
-  variants?: { [key: string]: { [v: string]: MyCss<T> } };
+  variants?: {
+    [key in string as key]: Partial<
+      Record<"dynamic" | (string & {}), MyCss<T> | DynamicFn<key>>
+    >;
+  };
   compoundVariants?: any;
   defaultVariants?: any;
 };
@@ -34,8 +43,7 @@ export type MyStyledComponentProps<
   [K in keyof T["variants"]]?: Util.Widen<keyof T["variants"][K]>;
 };
 
-export declare const styled: <
-  C extends typeof defaultConfig,
+export type MakeStyled<C extends typeof defaultConfig> = <
   Type extends keyof JSX.IntrinsicElements | React.ComponentType<any>,
   T extends MyStyling<C>,
   Media = C["media"]
@@ -49,3 +57,5 @@ export declare const styled: <
   Media,
   MyCss<C>
 >;
+
+export declare const styled: MakeStyled<typeof defaultConfig>;
