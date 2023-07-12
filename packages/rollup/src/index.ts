@@ -12,6 +12,18 @@ type Option = {
   exclude?: FilterPattern;
   styledConfig?: Config;
 };
+
+const writeThemeText = (styledConfig, cssFilename) => {
+  const cssText = createTheme(styledConfig);
+  if (!fs.existsSync(cssFilename)) {
+    fs.mkdirSync(path.dirname(cssFilename), { recursive: true });
+  }
+  fs.writeFileSync(cssFilename, cssText, {
+    encoding: "utf-8",
+    flag: "w",
+  });
+};
+
 const collie = (option?: Option): Plugin => {
   const {
     outDir = "dist/",
@@ -54,8 +66,10 @@ const collie = (option?: Option): Plugin => {
     },
 
     generateBundle(options, bundle) {
+      const themeFileName = path.resolve(outDir, "theme.css");
+      writeThemeText(styledConfig, themeFileName)
+      
       const cssFilename = path.resolve(outDir, "index.css");
-
       const depPaths = getDepPaths(cssLayerDeps);
       const layerText = depPaths
         .map(path => {
