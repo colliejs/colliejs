@@ -17,7 +17,6 @@ export type StyledOption<Props, InnerAs extends keyof JSX.IntrinsicElements> = {
   attrs?: Partial<Props> & JSX.IntrinsicElements[InnerAs];
 };
 
-
 export type CollieConfig<
   Prefix extends string = "",
   Media extends {} = {},
@@ -38,14 +37,19 @@ export type MyCss<T extends typeof defaultConfig> = CSSUtil.CSS<
   T["themeMap"],
   T["utils"]
 >;
+
+//===========================================================
+// DynamicFn
+//===========================================================
 type DynamicFnPara<T extends string> = `var(--variants-dynamic-${T})`;
-export type DynamicFn<T extends string> = (
+export type DynamicFn<T extends string, C extends typeof defaultConfig> = (
   x: DynamicFnPara<T>
-) => CSSProperties;
+) => MyCss<C>;
+
 export type MyStyling<T extends typeof defaultConfig> = MyCss<T> & {
   variants?: {
     [key in string as key]: Partial<
-      Record<"dynamic" | (string & {}), MyCss<T> | DynamicFn<key>>
+      Record<"dynamic" | (string & {}), MyCss<T> | DynamicFn<key, T>>
     >;
   };
   compoundVariants?: any;
@@ -58,6 +62,12 @@ export type MyStyledComponentProps<
   [K in keyof T["variants"]]?: Util.Widen<keyof T["variants"][K]>;
 };
 
+type IsHostComponent<T> = T extends keyof JSX.IntrinsicElements ? true : false;
+type As = StyledOption<any, any>["as"] extends keyof JSX.IntrinsicElements
+  ? StyledOption<any, any>["as"]
+  : never;
+// type CombinedProps<T> = StyledOption<any, any>["as"] extends keyof JSX.IntrinsicElements? StyledOption<any, any>["as"]: T & StyledOption<any, any>["as"];
+
 export type MakeStyled<C extends typeof defaultConfig> = <
   Type extends keyof JSX.IntrinsicElements | React.ComponentType<any>,
   T extends MyStyling<C>,
@@ -67,7 +77,7 @@ export type MakeStyled<C extends typeof defaultConfig> = <
   styling: T,
   option?: StyledOption<any, any>
 ) => StyledComponentX.StyledComponent<
-  Type,
+  As extends keyof JSX.IntrinsicElements ? As : Type,
   MyStyledComponentProps<T>,
   Media,
   MyCss<C>
@@ -77,19 +87,3 @@ export declare const styled: MakeStyled<typeof defaultConfig>;
 export declare const makeStyled: <T extends typeof defaultConfig>(
   config: T
 ) => MakeStyled<T>;
-
-// export type CreateStitches = {
-//   <
-//     Prefix extends string = "",
-//     Media extends {} = {},
-//     Theme extends {} = {},
-//     ThemeMap extends {} = DefaultThemeMap,
-//     Utils extends {} = {}
-//   >(config?: {
-//     prefix?: ConfigType.Prefix<Prefix>;
-//     media?: ConfigType.Media<Media>;
-//     theme?: ConfigType.Theme<Theme>;
-//     themeMap?: ConfigType.ThemeMap<ThemeMap>;
-//     utils?: ConfigType.Utils<Utils>;
-//   }): Stitches<Prefix, Media, Theme, ThemeMap, Utils>;
-// };
