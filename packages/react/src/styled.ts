@@ -50,8 +50,13 @@ export const styled = <
   T = any
 >(
   component: ElementType<P2>,
-  __generatedClassNameOfVariants: Record<StaticVariantKey, string>,
   __generatedClassNameOfBaseStyle = "",
+  __generatedClassNameOfVariants: Record<StaticVariantKey, string>,
+  __generatedClassNameOfCompoundVariants: Record<
+    `compoundVariants-${string}`,
+    string
+  >,
+
   option: StyledOption<P1, As> = {}
 ) => {
   const render: ForwardRefRenderFunction<T, P1> = (props, ref) => {
@@ -61,44 +66,67 @@ export const styled = <
       __generatedClassNameOfBaseStyle,
       className || "",
     ];
+
+    //===========================================================
+    // change variant props/value to className
+    //===========================================================
     const restPropsWithoutVariant = { ...restProps };
+    const propsWithStaticVariant = {} as Record<string, any>;
     for (const [prop, valOfProp] of Object.entries(restProps)) {
-      const isVariant = Object.keys(__generatedClassNameOfVariants).some(
-        e =>
-          e.startsWith(`variants-static-${prop}-`) ||
-          e.startsWith(`variants-dynamic-${prop}`)
+      const isStaticVariant = Object.keys(__generatedClassNameOfVariants).some(
+        e => e.startsWith(`variants-static-${prop}-`)
       );
-      if (!isVariant) {
+      const isDynamicVariant = Object.keys(__generatedClassNameOfVariants).some(
+        e => e.startsWith(`variants-dynamic-${prop}`)
+      );
+      if (!isStaticVariant && !isDynamicVariant) {
         continue;
       }
+      isStaticVariant && (propsWithStaticVariant[prop] = valOfProp);
       //@ts-ignore
       restPropsWithoutVariant[prop] = undefined;
       //编译时variants
-      if (!isObject(valOfProp)) {
-        //字符串或者boolean
-        const staticVariantKey = getStaticVariantKey(prop, valOfProp);
-        const dynamicVariantKey = getDynamicVariantKey(prop);
-
-        if (staticVariantKey in __generatedClassNameOfVariants) {
-          //静态variant
-          classNames.push(__generatedClassNameOfVariants[staticVariantKey]);
-        } else if (dynamicVariantKey in __generatedClassNameOfVariants) {
-          //dynamic variant
-          //@ts-ignore
-          classNames.push(__generatedClassNameOfVariants[dynamicVariantKey]);
-
-          /**
-           * TODO:
-           * 1: 处理各种情况，不是简单的px
-           * 2.支持简称比如(w=>width)
-           */
-          style[`--${dynamicVariantKey}`] = valOfProp;
-        }
-      } else {
+      if (isObject(valOfProp)) {
         throw new Error(
           "variant value must be string or number.because  it is used as css variable value. "
         );
       }
+      //字符串或者boolean
+      const staticVariantKey = getStaticVariantKey(prop, valOfProp);
+      const dynamicVariantKey = getDynamicVariantKey(prop);
+
+      if (staticVariantKey in __generatedClassNameOfVariants) {
+        //静态variant
+        classNames.push(__generatedClassNameOfVariants[staticVariantKey]);
+      } else if (dynamicVariantKey in __generatedClassNameOfVariants) {
+        //dynamic variant
+        //@ts-ignore
+        classNames.push(__generatedClassNameOfVariants[dynamicVariantKey]);
+
+        /**
+         * TODO:
+         * 1: 处理各种情况，不是简单的px
+         * 2.支持简称比如(w=>width)
+         */
+        style[`--${dynamicVariantKey}`] = valOfProp;
+      }
+    }
+    //===========================================================
+    // compoundVariants. FIXME: should 2x/3x/nx
+    //===========================================================
+    const compoundVariantKey = Object.entries(propsWithStaticVariant)
+      .map(([prop, val]) => {
+        return `${prop}-${val}`;
+      })
+      .reduce((acc, cur) => {
+        {
+          return `${acc}-${cur}`;
+        }
+      }, "compoundVariants-");
+    if (compoundVariantKey in __generatedClassNameOfCompoundVariants) {
+      classNames.push(
+        __generatedClassNameOfCompoundVariants[compoundVariantKey]
+      );
     }
 
     const forwardProps = {
@@ -181,4 +209,3 @@ export const styled = <
   StyledComponent.__isStyledComponent = true;
   return StyledComponent;
 };
-

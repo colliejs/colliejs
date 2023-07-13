@@ -130,7 +130,7 @@ describe("parseStyleObj", () => {
           "cssGenText": "",
           "cssRawObj": {},
         },
-        "compoundVariants-size-small-type-primary-elTJue": {
+        "compoundVariants-size-small-type-primary": {
           "className": "compoundVariants-size-small-type-primary-elTJue",
           "cssGenText": ".compoundVariants-size-small-type-primary-elTJue{background:red}",
           "cssRawObj": {

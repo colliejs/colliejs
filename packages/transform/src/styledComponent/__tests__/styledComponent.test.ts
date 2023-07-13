@@ -208,7 +208,7 @@ describe("compoundVariants", () => {
         "variants-static-shape-round": "variants-static-shape-round-PJLV",
         "variants-static-size-big": "variants-static-size-big-PJLV"
       }, {
-        "compoundVariants-shape-round-size-big-elTJue": "compoundVariants-shape-round-size-big-elTJue"
+        "compoundVariants-shape-round-size-big": "compoundVariants-shape-round-size-big-elTJue"
       });"
     `);
   });

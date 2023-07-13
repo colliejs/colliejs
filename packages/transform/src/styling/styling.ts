@@ -69,8 +69,9 @@ export const parseStyling = (
       .filter(([k, v]) => k !== "css")
       .map(([k, v]) => `${k}-${v}`)
       .join("-");
-    const className = `compoundVariants-${name}-${toHash(cssObj)}`;
-    res[className] = {
+    const variantsKey = `compoundVariants-${name}`;
+    const className = `${variantsKey}-${toHash(cssObj)}`;
+    res[variantsKey] = {
       cssGenText: css(cssObj, [`.${className}`], [], config),
       cssRawObj: cssObj,
       className: className,
