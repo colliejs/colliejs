@@ -14,9 +14,6 @@ export const defaultConfig = {
   breakpoints: [768],
   theme: {
     colors: {
-      primary: "blue",
-      secondary: "white",
-      positiveColor: "blue",
     },
   },
   utils: utils,

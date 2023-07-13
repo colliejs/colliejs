@@ -32,9 +32,15 @@ export type VariantDeclBlock = Record<
 >;
 export type Variants = Record<VariantName, VariantDeclBlock>;
 
+export type CompoundVariants<S extends Styling> = ({
+  [Name in keyof S["variants"]]?: S["variants"][Name];
+} & {
+  css: CSSPropertiesComplex;
+})[];
+
 export type Styling = CSSPropertiesComplex & {
   variants?: Variants;
-  // compoundVariants: any; //TODO:
+  compoundVariants: CompoundVariants<Styling>; //TODO:
   // defaultVariants: Record<VariantName, string>;//不可能是函数作为默认值
   [x: string]: any;
 };

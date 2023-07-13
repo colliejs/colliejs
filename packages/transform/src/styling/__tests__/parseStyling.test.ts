@@ -1,3 +1,4 @@
+import { Background } from "./../../../../react/src/types/css.d";
 import { defaultConfig, CSSPropertiesComplex } from "@colliejs/core";
 import { parseStyling, Styling } from "../styling";
 
@@ -93,6 +94,61 @@ describe("parseStyleObj", () => {
           "cssGenText": ".variants-dynamic-gap-icbYTO{gap:var(--variants-dynamic-gap)}",
           "cssRawObj": {
             "gap": "var(--variants-dynamic-gap)",
+          },
+        },
+      }
+    `);
+  });
+  it("compound variants", () => {
+    const styleObj: Styling = {
+      variants: {
+        size: {
+          small: { width: "100px" },
+        },
+        type: {
+          primary: {
+            color: "red",
+          },
+        },
+      },
+      compoundVariants: [
+        {
+          size: "small",
+          type: "primary",
+          css: {
+            Background: "red",
+          },
+        },
+      ],
+    };
+    const res = parseStyling(styleObj, defaultConfig);
+    res;
+    expect(res).toMatchInlineSnapshot(`
+      {
+        "baseStyle": {
+          "className": "baseStyle-PJLV",
+          "cssGenText": "",
+          "cssRawObj": {},
+        },
+        "compoundVariants-size-small-type-primary-elTXee": {
+          "className": "compoundVariants-size-small-type-primary-elTXee",
+          "cssGenText": ".compoundVariants-size-small-type-primary-elTXee{-background:red}",
+          "cssRawObj": {
+            "Background": "red",
+          },
+        },
+        "variants-static-size-small": {
+          "className": "variants-static-size-small-iMBqpA",
+          "cssGenText": ".variants-static-size-small-iMBqpA{width:100px}",
+          "cssRawObj": {
+            "width": "100px",
+          },
+        },
+        "variants-static-type-primary": {
+          "className": "variants-static-type-primary-gmqXFB",
+          "cssGenText": ".variants-static-type-primary-gmqXFB{color:red}",
+          "cssRawObj": {
+            "color": "red",
           },
         },
       }

@@ -33,9 +33,11 @@ export const parseStyling = (
   config: Config,
   baseStylePrefix = ""
 ): StylingParsed => {
-  const keys = Object.keys(styling);
+  const res = {} as StylingParsed;
+  //===========================================================
+  // 1.处理variants
+  //===========================================================
   const variants = styling["variants"];
-  const retVariants = {} as VariantParsed;
   for (const variantName in variants) {
     const variantDeclBlock: VariantDeclBlock = variants[variantName];
 
@@ -50,30 +52,56 @@ export const parseStyling = (
       const variantKey = isDynamic ? dynamicVariantKey : staticVariantKey;
 
       const className = `${variantKey}-${toHash(cssObj)}`;
-      retVariants[variantKey] = {
+      res[variantKey] = {
         cssGenText: css(cssObj, [`.${className}`], [], config),
         cssRawObj: cssObj,
         className: className,
       };
     }
-    // }
   }
+  //===========================================================
+  // 2.处理compoundVariants
+  //===========================================================
+  const compoundVariants = styling["compoundVariants"] || [];
+  for (const cv of compoundVariants) {
+    const cssObj = cv.css;
+    const name = Object.entries(cv)
+      .filter(([k, v]) => k !== "css")
+      .map(([k, v]) => `${k}-${v}`)
+      .join("-");
+    const className = `compoundVariants-${name}-${toHash(cssObj)}`;
+    res[className] = {
+      cssGenText: css(cssObj, [`.${className}`], [], config),
+      cssRawObj: cssObj,
+      className: className,
+    };
+  }
+  //===========================================================
+  // 3.deal width default  value
+  //===========================================================
+
+  //===========================================================
+  // 4.处理baseStyle
+  //===========================================================
+  const keys = Object.keys(styling);
   const baseStyleCssObject = _.pick(
     styling,
-    keys.filter(key => key !== "variants")
+    keys.filter(key => !["variants", "compoundVariants"].includes(key))
   );
   const baseStyleSelector = getBaseStyleSelector(
     baseStylePrefix,
     toHash(baseStyleCssObject)
   );
-  return {
-    baseStyle: {
-      cssGenText: css(baseStyleCssObject, [`.${baseStyleSelector}`], [], config),
-      cssRawObj: baseStyleCssObject,
-      className: baseStyleSelector,
-    },
-    ...retVariants,
+  res.baseStyle = {
+    cssGenText: css(baseStyleCssObject, [`.${baseStyleSelector}`], [], config),
+    cssRawObj: baseStyleCssObject,
+    className: baseStyleSelector,
   };
+
+  //===========================================================
+  // 返回结果
+  //===========================================================
+  return res;
 };
 
 /**
