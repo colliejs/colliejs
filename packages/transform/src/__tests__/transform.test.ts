@@ -23,10 +23,10 @@ describe("test cases", () => {
     `;
     const res = transform(code, "moduleId2", {}, defaultConfig);
     expect(res.code).toMatchInlineSnapshot(`
-      "const Button = styled('button', {
+      "const Button = styled('button', "baseStyle-Button-elTJue", {
         "variants-static-shape-round": "variants-static-shape-round-hECRKn",
         "variants-static-shape-rect": "variants-static-shape-rect-iydAuT"
-      }, "baseStyle-Button-elTJue");
+      }, {});
       export const App = () => {
         return <Button className="css-kydkiA"></Button>;
       };"
@@ -38,18 +38,17 @@ describe("test cases", () => {
     `);
     expect(res).toMatchInlineSnapshot(`
       {
-        "code": "const Button = styled('button', {
+        "code": "const Button = styled('button', "baseStyle-Button-elTJue", {
         "variants-static-shape-round": "variants-static-shape-round-hECRKn",
         "variants-static-shape-rect": "variants-static-shape-rect-iydAuT"
-      }, "baseStyle-Button-elTJue");
+      }, {});
       export const App = () => {
         return <Button className="css-kydkiA"></Button>;
       };",
         "cssLayerDep": {
           "moduleId2-Button-eoQCcI": "",
         },
-        "cssText": "@layer moduleId2-Button-eoQCcI {.baseStyle-Button-elTJue{background:red}.variants-static-shape-round-hECRKn{border-radius:50%}
-      .variants-static-shape-rect-iydAuT{border-radius:0}
+        "cssText": "@layer moduleId2-Button-eoQCcI {.baseStyle-Button-elTJue{background:red}.variants-static-shape-round-hECRKn{border-radius:50%}.variants-static-shape-rect-iydAuT{border-radius:0}
       }
 
       .css-kydkiA{color:blue}",
@@ -69,8 +68,8 @@ describe("test cases", () => {
     const res = transform(code, "moduleId2", {}, defaultConfig);
     expect(res).toMatchInlineSnapshot(`
       {
-        "code": "const Button = styled('button', {}, "baseStyle-Button-elTJue");
-      const MyButton = styled(Button, {}, "baseStyle-MyButton-kQvslT");
+        "code": "const Button = styled('button', "baseStyle-Button-elTJue", {}, {});
+      const MyButton = styled(Button, "baseStyle-MyButton-kQvslT", {}, {});
       export const App = () => {
         return <MyButton className="css-kydkiA"></MyButton>;
       };",
@@ -80,12 +79,10 @@ describe("test cases", () => {
         },
         "cssText": "@layer moduleId2-Button-eoQCcI {.baseStyle-Button-elTJue{background:red}}
 
-
             @layer moduleId2-Button-eoQCcI, moduleId2-MyButton-jjHfgw;
               
             @layer moduleId2-MyButton-jjHfgw { 
-              .baseStyle-MyButton-kQvslT{background:blue}
-       
+              .baseStyle-MyButton-kQvslT{background:blue} 
             }
 
       .css-kydkiA{color:blue}",

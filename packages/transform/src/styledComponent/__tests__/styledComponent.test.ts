@@ -69,27 +69,21 @@ describe("styledHostComponent", () => {
     `);
 
     expect(c.getCssText()).toMatchInlineSnapshot(`
-      "@layer styledComponent_test_ts-Button-bpDyiB {.baseStyle-Button-elTJue{background:red}
-      .variants-static-shape-round-hECRKn{border-radius:50%}
+      "@layer styledComponent_test_ts-Button-bpDyiB {.baseStyle-Button-elTJue{background:red}.variants-static-shape-round-hECRKn{border-radius:50%}
       .variants-static-shape-rect-iydAuT{border-radius:0}
       }
       "
     `);
 
-    expect(c.getVariantNames()).toMatchInlineSnapshot(`
-      [
-        "shape",
-      ]
-    `);
     /**
      * transform
      */
     const { path } = c.transform();
     expect(generate(path.node).code).toMatchInlineSnapshot(`
-      "const Button = styled('button', {
+      "const Button = styled('button', "baseStyle-Button-elTJue", {
         "variants-static-shape-round": "variants-static-shape-round-hECRKn",
         "variants-static-shape-rect": "variants-static-shape-rect-iydAuT"
-      }, "baseStyle-Button-elTJue");"
+      }, {});"
     `);
   });
 });
@@ -120,8 +114,7 @@ describe("3rdComponent", () => {
             @layer Button_tsx-Button-eYfSKb, styledComponent_test_ts-MyButton-bVmnfB;
               
             @layer styledComponent_test_ts-MyButton-bVmnfB { 
-              .baseStyle-MyButton-CRGDB{background:red;position:absolute;left:100px;right:;top:20px;bottom:}
-       
+              .baseStyle-MyButton-CRGDB{background:red;position:absolute;left:100px;right:;top:20px;bottom:} 
             }
       "
     `);
@@ -166,10 +159,10 @@ describe("dynamic variable transform", () => {
 
     const astTransformed = c.transform();
     expect(generate(astTransformed.path.node).code).toMatchInlineSnapshot(`
-            "const Button = styled('button', {
-              "variants-dynamic-shape": "variants-dynamic-shape-kfXiog"
-            }, "");"
-        `);
+      "const Button = styled('button', "", {
+        "variants-dynamic-shape": "variants-dynamic-shape-kfXiog"
+      }, {});"
+    `);
   });
 
   it("styledComponent transform with option ", () => {
@@ -182,5 +175,41 @@ describe("dynamic variable transform", () => {
     const c = prepareStyledComponent(code);
 
     const astTransformed = c.transform();
+  });
+});
+
+describe("compoundVariants", () => {
+  it("should work ", () => {
+    const code = `
+    const Button = styled('button', {
+       color:'red',
+       variants:{
+        shape:{
+          round:{}
+        },
+        size:{
+          big:{}
+        },
+       },
+       compoundVariants:[{
+          shape:'round',
+          size:'big',
+          css:{
+            background:'red'
+          }
+       }]
+    });
+    const btn= <Button shape={10} />
+    `;
+    const c = prepareStyledComponent(code);
+    const astTransformed = c.transform();
+    expect(generate(astTransformed.path.node).code).toMatchInlineSnapshot(`
+      "const Button = styled('button', "baseStyle-Button-gmqXFB", {
+        "variants-static-shape-round": "variants-static-shape-round-PJLV",
+        "variants-static-size-big": "variants-static-size-big-PJLV"
+      }, {
+        "compoundVariants-shape-round-size-big-elTJue": "compoundVariants-shape-round-size-big-elTJue"
+      });"
+    `);
   });
 });

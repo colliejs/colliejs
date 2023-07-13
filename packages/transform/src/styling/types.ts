@@ -17,10 +17,11 @@ export type DynamicVariant = {
   fn: (x: `var(--variants-dynamic-${string})`) => CSSPropertiesComplex;
 };
 
-//TODO:处理dynamic variant
-
 export type VariantParsed = {
-  [k in StaticVariantKey | DynamicVariantKey]: CSSInfo;
+  [k in
+    | StaticVariantKey
+    | DynamicVariantKey
+    | `compoundVariants-${string}`]: CSSInfo;
 };
 export type StylingParsed = {
   baseStyle: CSSInfo;

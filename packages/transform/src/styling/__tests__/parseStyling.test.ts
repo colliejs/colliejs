@@ -116,7 +116,7 @@ describe("parseStyleObj", () => {
           size: "small",
           type: "primary",
           css: {
-            Background: "red",
+            background: "red",
           },
         },
       ],
@@ -130,11 +130,11 @@ describe("parseStyleObj", () => {
           "cssGenText": "",
           "cssRawObj": {},
         },
-        "compoundVariants-size-small-type-primary-elTXee": {
-          "className": "compoundVariants-size-small-type-primary-elTXee",
-          "cssGenText": ".compoundVariants-size-small-type-primary-elTXee{-background:red}",
+        "compoundVariants-size-small-type-primary-elTJue": {
+          "className": "compoundVariants-size-small-type-primary-elTJue",
+          "cssGenText": ".compoundVariants-size-small-type-primary-elTJue{background:red}",
           "cssRawObj": {
-            "Background": "red",
+            "background": "red",
           },
         },
         "variants-static-size-small": {

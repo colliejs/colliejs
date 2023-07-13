@@ -36,7 +36,7 @@ export type BaseStyledComponentProps = {
  * runtime版本的styled（编译器生成的版本）
  *
  * @param component
- * @param __generatedClassNameOfAllVariants:编译时生成的参数
+ * @param __generatedClassNameOfVariants:编译时生成的参数
  * @param __generatedClassNameOfBaseStyle：编译时生成的参数
  * @returns
  * @example
@@ -50,7 +50,7 @@ export const styled = <
   T = any
 >(
   component: ElementType<P2>,
-  __generatedClassNameOfAllVariants: Record<StaticVariantKey, string>,
+  __generatedClassNameOfVariants: Record<StaticVariantKey, string>,
   __generatedClassNameOfBaseStyle = "",
   option: StyledOption<P1, As> = {}
 ) => {
@@ -63,7 +63,7 @@ export const styled = <
     ];
     const restPropsWithoutVariant = { ...restProps };
     for (const [prop, valOfProp] of Object.entries(restProps)) {
-      const isVariant = Object.keys(__generatedClassNameOfAllVariants).some(
+      const isVariant = Object.keys(__generatedClassNameOfVariants).some(
         e =>
           e.startsWith(`variants-static-${prop}-`) ||
           e.startsWith(`variants-dynamic-${prop}`)
@@ -79,13 +79,13 @@ export const styled = <
         const staticVariantKey = getStaticVariantKey(prop, valOfProp);
         const dynamicVariantKey = getDynamicVariantKey(prop);
 
-        if (staticVariantKey in __generatedClassNameOfAllVariants) {
+        if (staticVariantKey in __generatedClassNameOfVariants) {
           //静态variant
-          classNames.push(__generatedClassNameOfAllVariants[staticVariantKey]);
-        } else if (dynamicVariantKey in __generatedClassNameOfAllVariants) {
+          classNames.push(__generatedClassNameOfVariants[staticVariantKey]);
+        } else if (dynamicVariantKey in __generatedClassNameOfVariants) {
           //dynamic variant
           //@ts-ignore
-          classNames.push(__generatedClassNameOfAllVariants[dynamicVariantKey]);
+          classNames.push(__generatedClassNameOfVariants[dynamicVariantKey]);
 
           /**
            * TODO:

@@ -37,27 +37,28 @@ export class StyledComponent extends CustomComponent implements Stylable {
     this.styling = styling;
   }
 
-  getBaseStyle() {
-    return this.stylingParsed.baseStyle;
-  }
-
-  getVariantNames() {
-    return Object.keys(this.styling["variants"] || {});
-  }
-
   getCssText() {
-    let text = "";
-    for (const key of Object.keys(this.stylingParsed)) {
-      text += this.stylingParsed[key as StaticVariantKey].cssGenText + "\n";
+    let cssText = this.stylingParsed.baseStyle.cssGenText;
+    //NOTE: should make sure the order
+    const keys = Object.keys(this.stylingParsed);
+    for (const key of keys) {
+      if (key.startsWith("variants-")) {
+        cssText += this.stylingParsed[key].cssGenText + "\n";
+      }
+    }
+    for (const key of keys) {
+      if (key.startsWith("compoundVariants-")) {
+        cssText += this.stylingParsed[key].cssGenText + "\n";
+      }
     }
     if (this.dependent instanceof CustomComponent) {
       return `
       @layer ${this.dependent.layerName}, ${this.layerName};\n        
       @layer ${this.layerName} { 
-        ${text} 
+        ${cssText} 
       }\n`;
     }
-    return `@layer ${this.layerName} {${text}}\n`;
+    return `@layer ${this.layerName} {${cssText}}\n`;
   }
 
   //TODO：三方组件支持自定义LayerName
@@ -72,37 +73,57 @@ export class StyledComponent extends CustomComponent implements Stylable {
   /**
    * @description
    * @example
+   * change ```javascript
    *  const StyledButton = styled(button,{color:'red'},option)
+   * ```
    *
    *  变为
    *  const StyledButton = styled(
    *    button,
-   *    __classNameByVariant:Record<string, string>,
    *    __classNameOfBaseStyle，
+   *    __classNameOfVariant:Record<string, string>,
+   *    __classNameOfCompoundVariants，
    *    option
    * )
    */
   transform() {
-    const classNameByVariant: Record<string, string> = {};
+    const classNameOfVariant: Record<string, string> = {};
+    const classNamesOfCompoundVariants: Record<string, string> = {};
     for (const key of Object.keys(this.stylingParsed)) {
+      //===========================================================
+      // 1.variants
+      //===========================================================
       if (key.startsWith("variants-")) {
-        classNameByVariant[key] =
+        classNameOfVariant[key] =
           this.stylingParsed[key as StaticVariantKey].className;
+      }
+      //===========================================================
+      // 2.compoundVariants
+      //===========================================================
+      if (key.startsWith("compoundVariants")) {
+        classNamesOfCompoundVariants[key] = this.stylingParsed[key].className;
       }
     }
 
+    //===========================================================
+    // 3.classnameOfbaseStyle
+    //===========================================================
     let classNameOfBaseStyle = "";
     if (Object.keys(this.stylingParsed.baseStyle.cssRawObj).length !== 0) {
       classNameOfBaseStyle = `${this.stylingParsed.baseStyle.className}`;
     }
 
+    //===========================================================
+    // 4. replace styling to classNames
+    //===========================================================
     const args = (this.path.node.declarations[0].init as t.CallExpression)
       .arguments;
-    args.splice(1, 1);
-    args.splice(1, 0, buildObjectExpression(classNameByVariant));
-    args.splice(2, 0, t.stringLiteral(classNameOfBaseStyle));
+    args.splice(1, 1); //remove styling
+    args.splice(1, 0, t.stringLiteral(classNameOfBaseStyle)); //add classNameOfBaseStyle
+    args.splice(2, 0, buildObjectExpression(classNameOfVariant)); //add classNameOfVariant
+    args.splice(3, 0, buildObjectExpression(classNamesOfCompoundVariants)); //add classNamesOfCompoundVariants
 
-    //emit css file
+    //5. return
     return { cssText: this.getCssText(), path: this.path };
   }
 }
