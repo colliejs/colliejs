@@ -59,8 +59,11 @@ export type MyStyling<T extends typeof defaultConfig> = MyCss<T> & {
 export type MyStyledComponentProps<
   T extends { variants?: { [name: string]: unknown } }
 > = {
-  [K in keyof T["variants"]]?: Util.Widen<keyof T["variants"][K]>;
+  [K in keyof T["variants"]]?: keyof T["variants"][K] extends "dynamic"
+    ? string | number
+    : Util.Widen<keyof T["variants"][K]>;
 };
+type x = 'a'|2 extends string ?'0':1
 
 type IsHostComponent<T> = T extends keyof JSX.IntrinsicElements ? true : false;
 type As = StyledOption<any, any>["as"] extends keyof JSX.IntrinsicElements
