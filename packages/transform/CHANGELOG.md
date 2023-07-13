@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.24](https://github.com/colliejs/colliejs/compare/@colliejs/transform@1.0.23...@colliejs/transform@1.0.24) (2023-07-13)
+
+### Features
+
+- add compound variants ([8f27229](https://github.com/colliejs/colliejs/commit/8f272295058e4ecfcdc589c6b11d9aa08ab4c356))
+
 ## [1.0.23](https://github.com/colliejs/colliejs/compare/@colliejs/transform@1.0.22...@colliejs/transform@1.0.23) (2023-07-12)
 
 **Note:** Version bump only for package @colliejs/transform
