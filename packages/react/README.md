@@ -23,6 +23,3 @@ C --> F{host-component}
 D --> G{host-component}
 D --> H{host-component}
 ```
-$$
-2/33
-$$
