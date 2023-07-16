@@ -51,11 +51,11 @@ export const styled = <
 >(
   component: ElementType<P2>,
   __generatedClassNameOfBaseStyle = "",
-  __generatedClassNameOfVariants: Record<StaticVariantKey, string>,
+  __generatedClassNameOfVariants: Record<StaticVariantKey, string> = {},
   __generatedClassNameOfCompoundVariants: Record<
     `compoundVariants-${string}`,
     string
-  >,
+  > = {},
 
   option: StyledOption<P1, As> = {}
 ) => {
