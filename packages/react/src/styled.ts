@@ -136,7 +136,6 @@ export const styled = <
       ...(option.attrs || {}),
       ...restPropsWithoutVariant,
     };
-    console.log("forwardProps", forwardProps);
 
     //@ts-ignore
     const isStyledComponent = !!component.__isStyledComponent;
