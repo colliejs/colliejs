@@ -79,7 +79,10 @@ export type MyStyledComponent<
 > = React.FC<
   React.ComponentPropsWithRef<Type> &
     ExtractPropsFromStyling<Styling> &
-    (As extends keyof JSX.IntrinsicElements ? React.ComponentProps<As> : {})
+    (As extends keyof JSX.IntrinsicElements ? React.ComponentProps<As> : {}) & {
+      css?: MyCss<C>;
+      as: keyof JSX.IntrinsicElements;
+    }
 >;
 
 //===========================================================
