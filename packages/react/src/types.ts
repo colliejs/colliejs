@@ -2,7 +2,7 @@ import React, { CSSProperties, ElementType } from "react";
 import { type Styling } from "@colliejs/transform";
 // import type * as Config from "./types/config";
 import type * as CSSUtil from "./types/css-util";
-import type * as StyledComponentX from "./types/styled-component";
+// import type * as StyledComponentX from "./types/styled-component";
 import * as Util from "./types/util";
 import Stitches, { RemoveIndex } from "./types/stitches";
 export { Util, CSSUtil, Stitches };
@@ -39,7 +39,7 @@ export type MyCss<T extends typeof defaultConfig> = CSSUtil.CSS<
 >;
 
 //===========================================================
-// DynamicFn
+// ExtractPropsFromStyling
 //===========================================================
 type DynamicFnPara<T extends string> = `var(--variants-dynamic-${T})`;
 export type DynamicFn<T extends string, C extends typeof defaultConfig> = (
@@ -56,37 +56,82 @@ export type MyStyling<T extends typeof defaultConfig> = MyCss<T> & {
   defaultVariants?: any;
 };
 
-export type MyStyledComponentProps<
+export type ExtractPropsFromStyling<
   T extends { variants?: { [name: string]: unknown } }
 > = {
   [K in keyof T["variants"]]?: keyof T["variants"][K] extends "dynamic"
     ? string | number
     : Util.Widen<keyof T["variants"][K]>;
 };
-type x = 'a'|2 extends string ?'0':1
+type x = "a" extends string ? "0" : 1;
 
 type IsHostComponent<T> = T extends keyof JSX.IntrinsicElements ? true : false;
-type As = StyledOption<any, any>["as"] extends keyof JSX.IntrinsicElements
-  ? StyledOption<any, any>["as"]
-  : never;
-// type CombinedProps<T> = StyledOption<any, any>["as"] extends keyof JSX.IntrinsicElements? StyledOption<any, any>["as"]: T & StyledOption<any, any>["as"];
 
+//===========================================================
+// MyStyledComponent
+//TODO: 处理variants覆盖的情况
+//===========================================================
+export type MyStyledComponent<
+  C extends typeof defaultConfig,
+  Type extends keyof JSX.IntrinsicElements | React.ComponentType<any>,
+  Styling extends MyStyling<C>,
+  As extends keyof JSX.IntrinsicElements
+> = React.FC<
+  React.ComponentPropsWithRef<Type> &
+    ExtractPropsFromStyling<Styling> &
+    (As extends keyof JSX.IntrinsicElements ? React.ComponentProps<As> : {})
+>;
+
+//===========================================================
+// MakeStyled
+//===========================================================
 export type MakeStyled<C extends typeof defaultConfig> = <
   Type extends keyof JSX.IntrinsicElements | React.ComponentType<any>,
   T extends MyStyling<C>,
+  Option extends StyledOption<any, keyof JSX.IntrinsicElements>,
   Media = C["media"]
 >(
   type: Type,
   styling: T,
-  option?: StyledOption<any, any>
-) => StyledComponentX.StyledComponent<
-  As extends keyof JSX.IntrinsicElements ? As : Type,
-  MyStyledComponentProps<T>,
-  Media,
-  MyCss<C>
->;
+  option?: Option
+) => MyStyledComponent<C, Type, T, Option["as"]>;
 
 export declare const styled: MakeStyled<typeof defaultConfig>;
 export declare const makeStyled: <T extends typeof defaultConfig>(
   config: T
 ) => MakeStyled<T>;
+
+//===========================================================
+// FIXME:
+//===========================================================
+const Box = styled("div", {
+  variants: {
+    shape: {
+      circle: {
+        borderRadius: "50%",
+      },
+    },
+  },
+});
+const Image = styled(
+  Box,
+  {
+    variants: {
+      shape: {
+        round: {
+          borderRadius: 10,
+        },
+      },
+      size: {
+        small: {
+          width: 100,
+          height: 100,
+        },
+      },
+    },
+  },
+  { as: "img" }
+);
+
+type Prop = React.ComponentPropsWithRef<typeof Image>;
+type x1 = Prop["shape"];

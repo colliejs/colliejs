@@ -46,43 +46,43 @@ export interface StyledComponent<
 		>
 	): React.ReactElement | null
 
-	className: string
-	selector: string
+	// className: string
+	// selector: string
 
-	[$$StyledComponentType]: Type
-	[$$StyledComponentProps]: Props
-	[$$StyledComponentMedia]: Media
+	// [$$StyledComponentType]: Type
+	// [$$StyledComponentProps]: Props
+	// [$$StyledComponentMedia]: Media
 }
 
-/** Returns a new CSS Component. */
-export interface CssComponent<
-	Type = 'span',
-	Props = {},
-	Media = {},
-	CSS = {}
-> {
-	(
-		props?:
-			& TransformProps<Props, Media>
-			& {
-				css?: CSS
-			}
-			& {
-				[name in number | string]: any
-			}
-	): string & {
-		className: string
-		selector: string
-		props: {}
-	}
+// /** Returns a new CSS Component. */
+// export interface CssComponent<
+// 	Type = 'span',
+// 	Props = {},
+// 	Media = {},
+// 	CSS = {}
+// > {
+// 	(
+// 		props?:
+// 			& TransformProps<Props, Media>
+// 			& {
+// 				css?: CSS
+// 			}
+// 			& {
+// 				[name in number | string]: any
+// 			}
+// 	): string & {
+// 		className: string
+// 		selector: string
+// 		props: {}
+// 	}
 
-	className: string
-	selector: string
+// 	className: string
+// 	selector: string
 
-	[$$StyledComponentType]: Type
-	[$$StyledComponentProps]: Props
-	[$$StyledComponentMedia]: Media
-}
+// 	[$$StyledComponentType]: Type
+// 	[$$StyledComponentProps]: Props
+// 	[$$StyledComponentMedia]: Media
+// }
 
 export type TransformProps<Props, Media> = {
 	[K in keyof Props]: (
