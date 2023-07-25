@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.37](https://github.com/colliejs/colliejs/compare/@colliejs/playground@1.0.36...@colliejs/playground@1.0.37) (2023-07-25)
+
+**Note:** Version bump only for package @colliejs/playground
+
 ## [1.0.36](https://github.com/colliejs/colliejs/compare/@colliejs/playground@1.0.35...@colliejs/playground@1.0.36) (2023-07-23)
 
 **Note:** Version bump only for package @colliejs/playground
