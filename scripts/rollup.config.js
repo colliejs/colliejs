@@ -60,7 +60,6 @@ const config = {
     "numeral",
     "npmlog",
     "dayjs",
-    "dayjs/plugin/utc",
     /@colliejs\//,
     /@babel\//,
     /@rollup\//,

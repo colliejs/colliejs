@@ -13,12 +13,16 @@ import { JSXElement } from "@babel/types";
 export type Debug<T> = { [K in keyof T]: T[K] };
 
 type Union<A, B> = {
-  [K in keyof A | keyof B]: K extends keyof A
+  [K in keyof (A & B)]: K extends keyof A
     ? A[K] | (K extends keyof B ? B[K] : never)
     : K extends keyof B
     ? B[K]
     : never;
 };
+
+type A = { a: number; b?: number; c: boolean };
+type B = { a: string; d: string };
+type K23 = Union<A, B>;
 
 export type StyledOption<Props, InnerAs extends keyof JSX.IntrinsicElements> = {
   as?: InnerAs;
@@ -155,4 +159,7 @@ type x1 = Prop["shape"];
 
 type IProps = React.ComponentPropsWithRef<typeof Image>;
 type x2 = IProps["shape"];
-type x3 = IProps["src"];
+// type x3 = IProps['sr'];
+// React.Cre
+type K = Debug<IProps>;
+const x = <Image shape="circle" />;
