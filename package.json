@@ -79,7 +79,6 @@
     "@typescript-eslint/parser": "^5.59.11",
     "@vitejs/plugin-react": "^2.2.0",
     "babel-jest": "^29.5.0",
-    "core": "link:@types/@babel/core",
     "eslint": "^8.43.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jsx-a11y": "^6.7.1",
