@@ -8,8 +8,17 @@ import Stitches, { RemoveIndex } from "./types/stitches";
 export { Util, CSSUtil, Stitches };
 import { defaultConfig } from "@colliejs/core";
 import { ConfigType, DefaultThemeMap } from "./types/config";
+import { JSXElement } from "@babel/types";
 
 export type Debug<T> = { [K in keyof T]: T[K] };
+
+type Union<A, B> = {
+  [K in keyof A | keyof B]: K extends keyof A
+    ? A[K] | (K extends keyof B ? B[K] : never)
+    : K extends keyof B
+    ? B[K]
+    : never;
+};
 
 export type StyledOption<Props, InnerAs extends keyof JSX.IntrinsicElements> = {
   as?: InnerAs;
@@ -77,14 +86,16 @@ export type MyStyledComponent<
   Styling extends MyStyling<C>,
   As extends keyof JSX.IntrinsicElements
 > = React.FC<
-  React.ComponentPropsWithRef<Type> &
-    ExtractPropsFromStyling<Styling> &
-    (As extends keyof JSX.IntrinsicElements ? React.ComponentProps<As> : {}) & {
-      css?: MyCss<C>;
-      as: keyof JSX.IntrinsicElements;
-    }
+  Union<
+    Util.Assign<React.ComponentProps<Type>, React.ComponentProps<As>>,
+    ExtractPropsFromStyling<Styling>
+  > & {
+    css?: MyCss<C>;
+    as?: keyof JSX.IntrinsicElements;
+  }
 >;
 
+type a1x = { a: number } & object;
 //===========================================================
 // MakeStyled
 //===========================================================
@@ -113,6 +124,9 @@ const Box = styled("div", {
       circle: {
         borderRadius: "50%",
       },
+      rect: {
+        borderRadius: 0,
+      },
     },
   },
 });
@@ -136,5 +150,9 @@ const Image = styled(
   { as: "img" }
 );
 
-type Prop = React.ComponentPropsWithRef<typeof Image>;
+type Prop = React.ComponentPropsWithRef<typeof Box>;
 type x1 = Prop["shape"];
+
+type IProps = React.ComponentPropsWithRef<typeof Image>;
+type x2 = IProps["shape"];
+type x3 = IProps["src"];
