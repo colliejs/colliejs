@@ -162,4 +162,4 @@ type x2 = IProps["shape"];
 // type x3 = IProps['sr'];
 // React.Cre
 type K = Debug<IProps>;
-const x = <Image shape="circle" />;
+// const x = <Image shape="circle" />;
