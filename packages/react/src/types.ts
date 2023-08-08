@@ -143,7 +143,7 @@ export type MyStyledComponentWithAs<
         }
       : Util.Assign<
           Omit<
-            React.ComponentPropsWithRef<Type>,
+            React.ComponentPropsWithoutRef<Type>,
             keyof ExtractPropsFromStyling<Styling>
           >,
           JSX.IntrinsicElements[As]
@@ -152,10 +152,10 @@ export type MyStyledComponentWithAs<
   > &
     RefAttributes<
       As extends undefined
-        ? Type extends keyof JSX.IntrinsicElements
-          ? Type
-          : React.ComponentProps<Type>["ref"]
-        : As
+        ? Type extends keyof HTMLElementTagNameMap
+          ? HTMLElementTagNameMap[Type]
+          : React.ComponentProps<Type>["ref"]["current"]
+        : JSX.IntrinsicElements[As]
     >
 >;
 
@@ -219,13 +219,37 @@ const Image = styled(
   },
   { as: "img" }
 );
+const Box2 = styled(
+  Box,
+  {
+    variants: {
+      shape: {
+        round: {
+          borderRadius: 10,
+        },
+      },
+      size: {
+        small: {
+          width: 100,
+          height: 100,
+        },
+      },
+    },
+  },
+);
 
 type Prop = React.ComponentPropsWithRef<typeof Box>;
 type x1 = Prop["shape"];
-type x21 = Prop["css"]["color"];
+type x21 = Prop["ref"];
 
 type IProps = React.ComponentPropsWithRef<typeof Image>;
 type x2 = IProps["shape"];
+type x211 = IProps["ref"];
+
+type IProps2 = React.ComponentProps<typeof Box2>;
+type x22 = IProps["shape"];
+type x2112 = IProps["ref"];
+
 // type x3 = IProps['sr'];
 // React.Cre
 type K = Debug<IProps>;
