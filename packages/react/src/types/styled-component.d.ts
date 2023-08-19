@@ -46,12 +46,7 @@ export interface StyledComponent<
 		>
 	): React.ReactElement | null
 
-	// className: string
-	// selector: string
 
-	// [$$StyledComponentType]: Type
-	// [$$StyledComponentProps]: Props
-	// [$$StyledComponentMedia]: Media
 }
 
 // /** Returns a new CSS Component. */

@@ -14,6 +14,9 @@ export { Util, CSSUtil, Stitches };
 import { defaultConfig } from "@colliejs/core";
 import { ConfigType, DefaultThemeMap } from "./types/config";
 import { JSXElement } from "@babel/types";
+export type IntrinsicElementsKeys = keyof JSX.IntrinsicElements;
+export type HTMLTags = keyof HTMLElementTagNameMap;
+type IsHostComponent<T> = T extends IntrinsicElementsKeys ? true : false;
 
 export type Debug<T> = { [K in keyof T]: T[K] };
 
@@ -32,9 +35,9 @@ type K22 = A["b"];
 
 // const x:A={a:1,b:undefined,c:2}
 
-export type StyledOption<Props, InnerAs extends keyof JSX.IntrinsicElements> = {
+export type StyledOption<Props, InnerAs extends IntrinsicElementsKeys> = {
   as?: InnerAs;
-  wrapper?: keyof JSX.IntrinsicElements;
+  wrapper?: IntrinsicElementsKeys;
   attrs?: Partial<Props> & JSX.IntrinsicElements[InnerAs];
 };
 
@@ -73,7 +76,7 @@ export type DynamicFn<T extends string, C extends _Config> = (
 
 export type MyStyling<C extends _Config> = MyCss<C> & {
   variants?: {
-    [key in string as key]: Partial<
+    [key in string]: Partial<
       Record<"dynamic" | (string & {}), MyCss<C> | DynamicFn<key, C>>
     >;
   };
@@ -89,8 +92,6 @@ export type ExtractPropsFromStyling<
     : Util.Widen<keyof T["variants"][K]>;
 };
 
-type IsHostComponent<T> = T extends keyof JSX.IntrinsicElements ? true : false;
-
 //===========================================================
 // MyStyledComponent
 //TODO: 处理variants覆盖的情况
@@ -98,10 +99,10 @@ type IsHostComponent<T> = T extends keyof JSX.IntrinsicElements ? true : false;
 
 type ComposeVariant<
   C extends _Config,
-  Type extends keyof JSX.IntrinsicElements | React.ComponentType<any>,
+  Type extends IntrinsicElementsKeys | React.ComponentType<any>,
   Styling extends MyStyling<C>,
   CurVaraints = ExtractPropsFromStyling<Styling>
-> = Type extends keyof JSX.IntrinsicElements
+> = Type extends IntrinsicElementsKeys
   ? CurVaraints
   : {
       [K in keyof CurVaraints]?: K extends keyof React.ComponentProps<Type>
@@ -111,13 +112,13 @@ type ComposeVariant<
 
 export type MyStyledComponentWithoutAs<
   C extends _Config,
-  Type extends keyof JSX.IntrinsicElements | React.ComponentType<any>,
+  Type extends IntrinsicElementsKeys | React.ComponentType<any>,
   Styling extends MyStyling<C>
 > = React.ForwardRefExoticComponent<
-  Type extends keyof JSX.IntrinsicElements
+  Type extends IntrinsicElementsKeys
     ? JSX.IntrinsicElements[Type] & {
         css?: MyCss<C>;
-        as?: keyof JSX.IntrinsicElements;
+        as?: IntrinsicElementsKeys;
       } & ExtractPropsFromStyling<Styling> &
         RefAttributes<Type>
     : Util.Assign<
@@ -128,42 +129,49 @@ export type MyStyledComponentWithoutAs<
         ComposeVariant<C, Type, Styling>
       >
 >;
+type AttrOfAs<T> = T extends IntrinsicElementsKeys
+  ? JSX.IntrinsicElements[T]
+  : {};
 
 export type MyStyledComponentWithAs<
   C extends _Config,
-  Type extends keyof JSX.IntrinsicElements | React.ComponentType<any>,
+  Type extends IntrinsicElementsKeys | React.ComponentType<any>,
   Styling extends MyStyling<C>,
-  As extends keyof JSX.IntrinsicElements
+  As extends IntrinsicElementsKeys | undefined
 > = React.ForwardRefExoticComponent<
   PropsWithoutRef<
-    (Type extends keyof JSX.IntrinsicElements
-      ? Util.Assign<JSX.IntrinsicElements[Type], JSX.IntrinsicElements[As]> & {
-          css?: MyCss<C>;
-          as?: keyof JSX.IntrinsicElements;
-        }
-      : Util.Assign<
-          Omit<
-            React.ComponentPropsWithoutRef<Type>,
-            keyof ExtractPropsFromStyling<Styling>
-          >,
-          JSX.IntrinsicElements[As]
-        >) &
-      ComposeVariant<C, Type, Styling>
+    Util.Assign<
+      Type extends IntrinsicElementsKeys
+        ? As extends IntrinsicElementsKeys
+          ? Util.Assign<JSX.IntrinsicElements[Type], AttrOfAs<As>>
+          : JSX.IntrinsicElements[Type]
+        : React.ComponentPropsWithoutRef<Type>,
+      ComposeVariant<C, Type, Styling> & {
+        css?: MyCss<C>;
+        as?: IntrinsicElementsKeys;
+      }
+    >
   > &
     RefAttributes<
       As extends undefined
-        ? Type extends keyof HTMLElementTagNameMap
-          ? HTMLElementTagNameMap[Type]
+        ? Type extends IntrinsicElementsKeys
+          ? Type extends HTMLTags
+            ? HTMLElementTagNameMap[Type]
+            : HTMLElementTagNameMap["div"]
           : React.ComponentProps<Type>["ref"]["current"]
-        : JSX.IntrinsicElements[As]
+        : As extends IntrinsicElementsKeys
+        ? As extends HTMLTags
+          ? HTMLElementTagNameMap[As]
+          : HTMLElementTagNameMap["div"]
+        : never
     >
 >;
 
 export type MyStyledComponent<
   C extends _Config,
-  Type extends keyof JSX.IntrinsicElements | React.ComponentType<any>,
+  Type extends IntrinsicElementsKeys | React.ComponentType<any>,
   Styling extends MyStyling<C>,
-  As extends keyof JSX.IntrinsicElements | undefined
+  As extends IntrinsicElementsKeys | undefined
 > =
   // As extends undefined
   // ? MyStyledComponentWithoutAs<C, Type, Styling>
@@ -174,9 +182,9 @@ type a1x = { a: number } & object;
 // MakeStyled
 //===========================================================
 export type MakeStyled<C extends _Config> = <
-  Type extends keyof JSX.IntrinsicElements | React.ComponentType<any>,
+  Type extends IntrinsicElementsKeys | React.ComponentType<any>,
   T extends MyStyling<C>,
-  Option extends StyledOption<any, keyof JSX.IntrinsicElements>
+  Option extends StyledOption<any, IntrinsicElementsKeys>
 >(
   type: Type,
   styling: T,
@@ -200,57 +208,48 @@ const Box = styled("div", {
     },
   },
 });
+type Prop = React.ComponentPropsWithRef<typeof Box>;
+type x21 = Prop["ref"];
+type x1 = Prop["shape"];
+type x221 = Prop["css"];
+type x3 = Prop["onClick"];
+type x4 = JSX.IntrinsicElements["div"]['onClick'];
 const Image = styled(
   Box,
   {
     variants: {
       shape: {
-        round: {
+        roundxx: {
           borderRadius: 10,
-        },
-      },
-      size: {
-        small: {
-          width: 100,
-          height: 100,
         },
       },
     },
   },
   { as: "img" }
 );
-const Box2 = styled(
-  Box,
-  {
-    variants: {
-      shape: {
-        round: {
-          borderRadius: 10,
-        },
-      },
-      size: {
-        small: {
-          width: 100,
-          height: 100,
-        },
+const Box2 = styled(Box, {
+  variants: {
+    shape: {
+      round: {
+        borderRadius: 10,
       },
     },
   },
-);
+});
+const Box3 = styled(Box2, {});
 
-type Prop = React.ComponentPropsWithRef<typeof Box>;
-type x1 = Prop["shape"];
-type x21 = Prop["ref"];
+type ImageProps = React.ComponentPropsWithRef<typeof Image>;
+type x2 = ImageProps["shape"];
+type x211 = ImageProps["ref"];
 
-type IProps = React.ComponentPropsWithRef<typeof Image>;
-type x2 = IProps["shape"];
-type x211 = IProps["ref"];
+type IProps2 = React.ComponentPropsWithRef<typeof Box2>;
+type x22 = IProps2["shape"];
+type x2112 = IProps2["ref"];
+// type x21123 = IProps2["css"]['flex'];
 
-type IProps2 = React.ComponentProps<typeof Box2>;
-type x22 = IProps["shape"];
-type x2112 = IProps["ref"];
-
+type Iprops3 = React.ComponentPropsWithRef<typeof Box3>;
+type x23 = Iprops3["shape"];
+type x21123 = Iprops3["ref"];
 // type x3 = IProps['sr'];
 // React.Cre
 type K = Debug<IProps>;
-// const x = <Image shape="circle" />;
