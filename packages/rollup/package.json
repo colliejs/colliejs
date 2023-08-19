@@ -1,6 +1,6 @@
 {
   "name": "@colliejs/rollup",
-  "version": "1.0.42",
+  "version": "1.0.43",
   "description": "awesesome",
   "type": "module",
   "scripts": {

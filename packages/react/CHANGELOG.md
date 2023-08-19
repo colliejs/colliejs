@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.42](https://github.com/colliejs/colliejs/compare/@colliejs/react@1.0.41...@colliejs/react@1.0.42) (2023-08-19)
+
+### Features
+
+- l0 ([f274c79](https://github.com/colliejs/colliejs/commit/f274c7999d65e0d4709189bccff3262d0277cf12))
+- metamask update ([495c554](https://github.com/colliejs/colliejs/commit/495c5546e0e22b6ec7105e31863d9527439d8aef))
+- my account ([b27c063](https://github.com/colliejs/colliejs/commit/b27c06338ba411f391a16d94545e0ea53ed03b99))
+
 ## [1.0.41](https://github.com/colliejs/colliejs/compare/@colliejs/react@1.0.40...@colliejs/react@1.0.41) (2023-07-31)
 
 **Note:** Version bump only for package @colliejs/react
