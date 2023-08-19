@@ -251,4 +251,3 @@ type x23 = Iprops3["shape"];
 type x21123 = Iprops3["ref"];
 // type x3 = IProps['sr'];
 // React.Cre
-type K = Debug<IProps>;
