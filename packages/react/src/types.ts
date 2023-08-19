@@ -11,7 +11,7 @@ import type * as CSSUtil from "./types/css-util";
 import * as Util from "./types/util";
 import Stitches, { RemoveIndex } from "./types/stitches";
 export { Util, CSSUtil, Stitches };
-import { defaultConfig } from "@colliejs/core";
+// import { defaultConfig } from "@colliejs/core";
 import { ConfigType, DefaultThemeMap } from "./types/config";
 import { JSXElement } from "@babel/types";
 export type IntrinsicElementsKeys = keyof JSX.IntrinsicElements;
@@ -36,7 +36,7 @@ type K22 = A["b"];
 // const x:A={a:1,b:undefined,c:2}
 
 export type StyledOption<Props, InnerAs extends IntrinsicElementsKeys> = {
-  as?: InnerAs;
+  as?: InnerAs | undefined;
   wrapper?: IntrinsicElementsKeys;
   attrs?: Partial<Props> & JSX.IntrinsicElements[InnerAs];
 };
@@ -141,10 +141,8 @@ export type MyStyledComponentWithAs<
 > = React.ForwardRefExoticComponent<
   PropsWithoutRef<
     Util.Assign<
-      Type extends IntrinsicElementsKeys
-        ? As extends IntrinsicElementsKeys
-          ? Util.Assign<JSX.IntrinsicElements[Type], AttrOfAs<As>>
-          : JSX.IntrinsicElements[Type]
+      As extends IntrinsicElementsKeys
+        ? Util.Assign<React.ComponentPropsWithoutRef<Type>, AttrOfAs<As>>
         : React.ComponentPropsWithoutRef<Type>,
       ComposeVariant<C, Type, Styling> & {
         css?: MyCss<C>;
@@ -184,14 +182,14 @@ type a1x = { a: number } & object;
 export type MakeStyled<C extends _Config> = <
   Type extends IntrinsicElementsKeys | React.ComponentType<any>,
   T extends MyStyling<C>,
-  Option extends StyledOption<any, IntrinsicElementsKeys>
+  Option extends StyledOption<any, IntrinsicElementsKeys> = { as: undefined }
 >(
   type: Type,
   styling: T,
   option?: Option
 ) => MyStyledComponent<C, Type, T, Option["as"]>;
 
-export declare const styled: MakeStyled<typeof defaultConfig>;
+export declare const styled: MakeStyled<_Config>;
 export declare const makeStyled: <T extends _Config>(
   config: T
 ) => MakeStyled<T>;
@@ -213,9 +211,9 @@ type x21 = Prop["ref"];
 type x1 = Prop["shape"];
 type x221 = Prop["css"];
 type x3 = Prop["onClick"];
-type x4 = JSX.IntrinsicElements["div"]['onClick'];
+type x4 = JSX.IntrinsicElements["div"]["onClick"];
 const Image = styled(
-  Box,
+  'span',
   {
     variants: {
       shape: {
@@ -227,6 +225,11 @@ const Image = styled(
   },
   { as: "img" }
 );
+type ImageProps = React.ComponentPropsWithRef<typeof Image>;
+type x2 = ImageProps["shape"];
+type x211 = ImageProps["ref"];
+type kk1 = ImageProps["onClick"];
+
 const Box2 = styled(Box, {
   variants: {
     shape: {
@@ -237,10 +240,6 @@ const Box2 = styled(Box, {
   },
 });
 const Box3 = styled(Box2, {});
-
-type ImageProps = React.ComponentPropsWithRef<typeof Image>;
-type x2 = ImageProps["shape"];
-type x211 = ImageProps["ref"];
 
 type IProps2 = React.ComponentPropsWithRef<typeof Box2>;
 type x22 = IProps2["shape"];
