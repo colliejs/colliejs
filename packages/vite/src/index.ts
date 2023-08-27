@@ -83,7 +83,7 @@ const collie = (option: VitePluginOptions): Plugin => {
       ) {
         return UNCHANGED;
       }
-      log.info("transform", "changed url is: ", url);
+      log.debug("transform", "changed url is: ", url);
       //===========================================================
       // collie.config.js配置文件变动后，重新生成theme 样式文件
       //===========================================================
