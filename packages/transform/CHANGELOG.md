@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.29](https://github.com/colliejs/colliejs/compare/@colliejs/transform@1.0.28...@colliejs/transform@1.0.29) (2023-09-03)
+
+**Note:** Version bump only for package @colliejs/transform
+
 ## [1.0.28](https://github.com/colliejs/colliejs/compare/@colliejs/transform@1.0.27...@colliejs/transform@1.0.28) (2023-09-03)
 
 **Note:** Version bump only for package @colliejs/transform
