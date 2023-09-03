@@ -1,4 +1,4 @@
-import { removeTypeAnnotation } from './utils/removeType';
+import { removeTypeAnnotation } from "./utils/removeType";
 import { StyledElement } from "./styledElement";
 import { Config } from "@colliejs/core";
 import { parseCode } from "./parse";
@@ -20,7 +20,8 @@ export const transform = (
   config: Config
 ) => {
   const fileAst = parseCode(source);
-  let cssTexts = "";
+  let styledComponentCssMap = {};
+  let styledElementCssTexts = "";
   const cssLayerDep: Record<string, string> = {};
 
   traverse(fileAst, {
@@ -39,7 +40,8 @@ export const transform = (
         config
       );
       const { cssText } = styledComponent.transform();
-      cssTexts += cssText + "\n";
+      styledComponentCssMap[styledComponent.layerName] = cssText;
+      // cssTexts += cssText + "\n";
       Object.assign(cssLayerDep, styledComponent.cssLayerDep());
     },
     //===========================================================
@@ -52,7 +54,7 @@ export const transform = (
       removeTypeAnnotation(path);
       const styledElement = new StyledElement(path, modulesByName, config);
       const { cssText } = styledElement.transform();
-      cssTexts += cssText + "\n";
+      styledElementCssTexts += cssText + "\n";
     },
   });
 
@@ -61,5 +63,10 @@ export const transform = (
   //===========================================================
   const { code } = generate(fileAst);
 
-  return { code, cssText: cssTexts.trim().replace("\n", ""), cssLayerDep };
+  return {
+    code,
+    styledElementCssTexts: styledElementCssTexts.trim().replace("\n", ""),
+    cssLayerDep,
+    styledComponentCssMap,
+  };
 };

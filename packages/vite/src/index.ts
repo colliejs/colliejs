@@ -3,6 +3,8 @@ import {
   getDepPaths,
   getImports,
   parseCode,
+  getLayerTextFromPath,
+  getCssText,
   transform,
 } from "@colliejs/transform";
 import { FilterPattern, createFilter } from "@rollup/pluginutils";
@@ -28,30 +30,13 @@ type VitePluginOptions = {
   include?: FilterPattern;
   exclude?: FilterPattern;
   index?: string;
+  styledElementCssFile?: string;
+  styledComponentCssFile?: string;
   styledConfig?: Config;
 };
-
-const getLayerText = (cssLayerDeps: Record<string, string>) => {
-  const depPaths = getDepPaths(cssLayerDeps);
-  const layerText = depPaths
-    .map(path => {
-      const text = path.reduce((acc: string, cur) => {
-        return (acc = `${cur.name},${acc}`);
-      }, "");
-      return `@layer ${text.slice(0, -1)};\n`;
-    })
-    .join("\n");
-  return layerText;
-};
+type LayerName = string;
 
 const UNCHANGED = null;
-
-const genCssFileName = (url: string) => {
-  return `${path.dirname(url)}/.cache/${path.basename(
-    url,
-    path.extname(url)
-  )}.css`;
-};
 
 const writeCssText = (cssText: string, cssFilename: string) => {
   fs.mkdirSync(path.dirname(cssFilename), { recursive: true });
@@ -59,18 +44,38 @@ const writeCssText = (cssText: string, cssFilename: string) => {
     encoding: "utf-8",
     flag: "w",
   });
-  return cssFilename;
+};
+
+const writeStyledElementCssTexts = (
+  styledElementCssMap: object,
+  cssFilename: string
+) => {
+  const cssText = Object.values(styledElementCssMap).join("\n");
+  writeCssText(cssText, cssFilename);
+};
+
+const writeStyledComponentCssTexts = (
+  allCssLayerDeps: Record<LayerName, LayerName>,
+  allStyledComponentCssMap: Record<LayerName, string>,
+  cssFilename: string
+) => {
+  const cssText = getCssText(allCssLayerDeps, allStyledComponentCssMap);
+  writeCssText(cssText, cssFilename);
 };
 
 const collie = (option: VitePluginOptions): Plugin => {
   const {
     include,
     exclude,
+    styledElementCssFile = "styled-element.css",
+    styledComponentCssFile = "styled-component.css",
     index = "src/index.ts",
     styledConfig = defaultConfig,
   } = option || {};
-  const cssLayerDeps = {};
   const filter = createFilter(include, exclude);
+  const allCssLayerDeps = {};
+  const allStyledElementCssMap = {};
+  const allStyledComponentCssMap = {};
 
   return {
     name: "collie",
@@ -83,13 +88,13 @@ const collie = (option: VitePluginOptions): Plugin => {
       ) {
         return UNCHANGED;
       }
-      log.debug("transform", "changed url is: ", url);
+      log.verbose("transform", "changed url is: ", url);
       //===========================================================
       // collie.config.js配置文件变动后，重新生成theme 样式文件
       //===========================================================
       if (/collie\.config\.(ts|js|cjs)/.test(url)) {
         const cssText = createTheme(styledConfig);
-        const cssFilename = genCssFileName(url);
+        const cssFilename = "collie.config.css";
         writeCssText(cssText, cssFilename);
 
         return UNCHANGED;
@@ -99,26 +104,22 @@ const collie = (option: VitePluginOptions): Plugin => {
       // 普通文件
       //===========================================================
       const imports = getImports(parseCode(_code).program, path.dirname(url));
-      let { code, cssText, cssLayerDep } = transform(
-        _code,
-        url,
-        imports,
-        styledConfig
-      );
-      //如果有cssLayerDep，就把它合并到cssLayerDeps
-      Object.assign(cssLayerDeps, cssLayerDep);
+      let { code, styledComponentCssMap, styledElementCssTexts, cssLayerDep } =
+        transform(_code, url, imports, styledConfig);
 
-      let codeWithCss;
-      if (cssText) {
-        const cssFilename = genCssFileName(url);
-        // const layerText = getLayerText(cssLayerDeps);
-        //TODO:这里会重复写入。但是没更好的方法保证cssLayer在普通cssText之前了
-        writeCssText(`${cssText}`, cssFilename);
-        codeWithCss = `import "${cssFilename}"\n${code}`;
+      allStyledElementCssMap[url] = styledElementCssTexts;
+      writeStyledElementCssTexts(allStyledElementCssMap, styledElementCssFile);
+      if (Object.keys(styledComponentCssMap).length) {
+        Object.assign(allCssLayerDeps, cssLayerDep);
+        Object.assign(allStyledComponentCssMap, styledComponentCssMap);
+        writeStyledComponentCssTexts(
+          allCssLayerDeps,
+          allStyledComponentCssMap,
+          styledComponentCssFile
+        );
       }
-
       return {
-        code: codeWithCss,
+        code: code,
         map: { mappings: "" }, // a sourcemap is optional
       };
     },

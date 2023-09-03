@@ -1,14 +1,13 @@
-import _ from 'lodash';
+import _ from "lodash";
 
-class Node {
+export class DepNode {
   constructor(
-    public parent: Node | undefined,
-    public children: Node[],
+    public parent: DepNode | undefined,
+    public children: DepNode[],
     public name: string,
-    public isStyledNode: boolean,
     public parentName: string | undefined
   ) {}
-  addChild(node: Node) {
+  addChild(node: DepNode) {
     if (this.children.includes(node)) {
       return;
     }
@@ -18,10 +17,12 @@ class Node {
     return this.name;
   }
 }
-export const isParentOf = (parent: Node, child: Node) => {
+
+export const isParentOf = (parent: DepNode, child: DepNode) => {
   return parent.name === child.parentName;
 };
-export const findRoot = (node: Node): Node => {
+
+export const findRoot = (node: DepNode): DepNode => {
   if (node.parent) {
     return findRoot(node.parent);
   } else {
@@ -39,13 +40,13 @@ export const findRoot = (node: Node): Node => {
  */
 export const makeDepTree = (depObj: Record<string, string>) => {
   //1.获得所欲呕的styledComponent
-  const styledNodes = new Set<Node>();
+  const styledNodes = new Set<DepNode>();
   for (const [name, depName] of Object.entries(depObj)) {
-    styledNodes.add(new Node(undefined, [], name, true, depName));
+    styledNodes.add(new DepNode(undefined, [], name, depName));
   }
   console.table(
     Array.from(styledNodes).map(e =>
-      JSON.stringify(_.pick(e, ['name', 'parentName', 'parent']))
+      JSON.stringify(_.pick(e, ["name", "parentName", "parent"]))
     )
   );
 
@@ -61,7 +62,7 @@ export const makeDepTree = (depObj: Record<string, string>) => {
     }
   }
   //get roots
-  const roots = new Set<Node>();
+  const roots = new Set<DepNode>();
   for (const node of styledNodes) {
     const _root = findRoot(node);
 
@@ -69,7 +70,7 @@ export const makeDepTree = (depObj: Record<string, string>) => {
   }
 
   //get leaves
-  const leaves = new Set<Node>();
+  const leaves = new Set<DepNode>();
   for (const node of styledNodes) {
     if (node.children.length === 0) {
       leaves.add(node);
@@ -80,12 +81,12 @@ export const makeDepTree = (depObj: Record<string, string>) => {
 };
 /**
  * the last one have high priority
- * @param depObj 
- * @returns 
+ * @param depObj
+ * @returns
  */
 export const getDepPaths = (depObj: Record<string, string>) => {
   const { leaves } = makeDepTree(depObj);
-  const paths = new Set<Node[]>();
+  const paths = new Set<DepNode[]>();
   for (const leaf of leaves) {
     const path = [leaf];
     let parent = leaf.parent;
@@ -96,4 +97,36 @@ export const getDepPaths = (depObj: Record<string, string>) => {
     paths.add(path);
   }
   return Array.from(paths);
+};
+
+export const getLayerTextFromPath = (
+  path: DepNode[],
+  allStyledComponentCssMap: Record<string, string>
+) => {
+  if (path.length === 1) {
+    const layerName = path[0].name;
+    return `@layer ${layerName} {
+      ${allStyledComponentCssMap[layerName]}    
+    }`;
+  }
+  const left = getLayerTextFromPath(path.slice(1), allStyledComponentCssMap);
+  const curLayerName = path[0].name;
+  return `@layer ${curLayerName} {
+    ${allStyledComponentCssMap[curLayerName]}
+    ${left}
+  }`;
+};
+export type LayerName = string;
+export const getCssText = (
+  allCssLayerDeps: Record<LayerName, LayerName>,
+  allStyledComponentCssMap: Record<LayerName, string>
+) => {
+  const depPaths = getDepPaths(allCssLayerDeps);
+  const layerText = depPaths
+    .map(path => {
+      return getLayerTextFromPath(path, allStyledComponentCssMap);
+    })
+    .join("\n");
+
+  return layerText;
 };

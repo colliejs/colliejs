@@ -1,6 +1,11 @@
 import { parse } from "@babel/parser";
 import { Config, createTheme, defaultConfig } from "@colliejs/core";
-import { getDepPaths, getImports, transform } from "@colliejs/transform";
+import {
+  getCssText,
+  getDepPaths,
+  getImports,
+  transform,
+} from "@colliejs/transform";
 import { FilterPattern, createFilter } from "@rollup/pluginutils";
 import fs from "node:fs";
 import path from "node:path";
@@ -12,7 +17,8 @@ type Option = {
   exclude?: FilterPattern;
   styledConfig?: Config;
 };
-
+const allStyledComponentCssMap = {};
+type LayerName = string;
 const writeThemeText = (styledConfig, cssFilename) => {
   const cssText = createTheme(styledConfig);
   if (!fs.existsSync(cssFilename)) {
@@ -24,6 +30,31 @@ const writeThemeText = (styledConfig, cssFilename) => {
   });
 };
 
+// const writeCssText = (cssText: string, cssFilename: string) => {
+//   fs.mkdirSync(path.dirname(cssFilename), { recursive: true });
+//   fs.writeFileSync(cssFilename, cssText, {
+//     encoding: "utf-8",
+//     flag: "w",
+//   });
+// };
+
+// const writeStyledElementCssTexts = (
+//   styledElementCssMap: object,
+//   cssFilename: string
+// ) => {
+//   const cssText = Object.values(styledElementCssMap).join("\n");
+//   writeCssText(cssText, cssFilename);
+// };
+
+// const writeStyledComponentCssTexts = (
+//   allCssLayerDeps: Record<LayerName, LayerName>,
+//   allStyledComponentCssMap: Record<LayerName, string>,
+//   cssFilename: string
+// ) => {
+//   const cssText = getCssText(allCssLayerDeps, allStyledComponentCssMap);
+//   writeCssText(cssText, cssFilename);
+// };
+
 const collie = (option?: Option): Plugin => {
   const {
     outDir = "dist/",
@@ -31,8 +62,10 @@ const collie = (option?: Option): Plugin => {
     exclude,
     styledConfig = defaultConfig,
   } = option || {};
-  let cssTexts = "";
-  const cssLayerDeps = {};
+  const allStyledElementCssMap = {};
+  const allCssLayerDeps = {};
+  const allStyledComponentCssMap = {};
+
   const filter = createFilter(include, exclude);
 
   return {
@@ -51,14 +84,18 @@ const collie = (option?: Option): Plugin => {
       }).program;
 
       const imports = getImports(program, path.dirname(id));
-      let { code, cssText, cssLayerDep } = transform(
-        _code,
-        id,
-        imports,
-        styledConfig
-      );
-      cssTexts += cssText + "\n";
-      Object.assign(cssLayerDeps, cssLayerDep);
+      let { code, styledElementCssTexts, styledComponentCssMap, cssLayerDep } =
+        transform(_code, id, imports, styledConfig);
+      //===========================================================
+      // 处理styledElementCssTexts
+      //===========================================================
+      allStyledElementCssMap[id] = styledElementCssTexts;
+
+      //===========================================================
+      // 处理allStyledComponentCssMap
+      //===========================================================
+      Object.assign(allCssLayerDeps, cssLayerDep);
+      Object.assign(allStyledComponentCssMap, styledComponentCssMap);
       return {
         code: code,
         map: { mappings: "" }, // a sourcemap is optional
@@ -67,34 +104,30 @@ const collie = (option?: Option): Plugin => {
 
     generateBundle(options, bundle) {
       const themeFileName = path.resolve(outDir, "theme.css");
-      writeThemeText(styledConfig, themeFileName)
-      
+      writeThemeText(styledConfig, themeFileName);
+
       const cssFilename = path.resolve(outDir, "index.css");
-      const depPaths = getDepPaths(cssLayerDeps);
-      const layerText = depPaths
-        .map(path => {
-          const text = path.reduce((acc, cur) => {
-            return (acc = `${cur.name},${acc}`);
-          }, "");
-          return `@layer ${text.slice(0, -1)};\n`;
-        })
-        .join("\n");
+      const cssText = getCssText(allCssLayerDeps, allStyledComponentCssMap);
 
       //ignore empty layer
-      if (layerText.replace(/[\n\s]/g, "") === "") return;
+      if (cssText.replace(/[\n\s]/g, "") === "") return;
 
       if (!fs.existsSync(cssFilename)) {
         fs.mkdirSync(path.dirname(cssFilename), { recursive: true });
       }
 
-      fs.writeFileSync(cssFilename, layerText, {
+      fs.writeFileSync(cssFilename, cssText, {
         encoding: "utf-8",
         flag: "w",
       });
-      fs.writeFileSync(cssFilename, cssTexts, {
-        encoding: "utf-8",
-        flag: "a",
-      });
+      fs.writeFileSync(
+        cssFilename,
+        Object.values(allStyledElementCssMap).join("\n"),
+        {
+          encoding: "utf-8",
+          flag: "a",
+        }
+      );
     },
   };
 };

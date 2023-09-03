@@ -13,9 +13,9 @@ export const defaultConfig = {
   },
   breakpoints: [768],
   theme: {
-    colors: {
-    },
+    colors: {},
   },
   utils: utils,
   styledElementProp: "css",
+  layername: "app",
 } as const satisfies Config;

@@ -12,11 +12,13 @@ import { ImportsByName, Stylable, StyledComponentDecl } from "../utils/types";
 import { parseStyledComponentDeclaration as parseStyledComponentDecl } from "./parseStyledComponent";
 import { NodePath } from "@babel/traverse";
 import { ComponentId } from "../component/componentId";
+import { config } from "node:process";
 
 export class StyledComponent extends CustomComponent implements Stylable {
   stylingParsed: StylingParsed;
   dependent: CustomComponent | HostComponent;
   styling: Styling;
+  config: Config;
 
   constructor(
     public path: NodePath<t.VariableDeclaration>,
@@ -51,14 +53,16 @@ export class StyledComponent extends CustomComponent implements Stylable {
         cssText += this.stylingParsed[key].cssGenText + "\n";
       }
     }
-    if (this.dependent instanceof CustomComponent) {
-      return `
-      @layer ${this.dependent.layerName}, ${this.layerName};\n        
-      @layer ${this.layerName} { 
-        ${cssText} 
-      }\n`;
-    }
-    return `@layer ${this.layerName} {${cssText}}\n`;
+    return cssText;
+    // if (this.dependent instanceof CustomComponent) {
+    //   const parentLayername = this.config.layername;
+    //   // return `
+    //   // @layer ${this.dependent.layerName}, ${this.layerName};\n
+    //   // @layer ${this.layerName} {
+    //   //   ${cssText}
+    //   // }\n`;
+    // }
+    // return `@layer ${this.layerName} {${cssText}}\n`;
   }
 
   //TODO：三方组件支持自定义LayerName

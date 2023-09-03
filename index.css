@@ -1,9 +1,0 @@
-@layer Button.tsx-Button-dXKEbU;
-
-@layer AntdButton.tsx-BaseButton-ggJrXK;
-
-.css-elTJue{background:red}
-@layer Button.tsx-Button-dXKEbU {.baseStyle-gmqXFB{color:red}.variants-shape-square-iydAuT{border-radius:0}
-.variants-shape-round-gmZOLP{border-radius:9999px}
-}
-@layer AntdButton.tsx-BaseButton-ggJrXK {.baseStyle-bBlhx{background:yellow}}

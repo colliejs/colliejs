@@ -69,9 +69,8 @@ describe("styledHostComponent", () => {
     `);
 
     expect(c.getCssText()).toMatchInlineSnapshot(`
-      "@layer styledComponent_test_ts-Button-bpDyiB {.baseStyle-Button-elTJue{background:red}.variants-static-shape-round-hECRKn{border-radius:50%}
+      ".baseStyle-Button-elTJue{background:red}.variants-static-shape-round-hECRKn{border-radius:50%}
       .variants-static-shape-rect-iydAuT{border-radius:0}
-      }
       "
     `);
 
@@ -109,15 +108,9 @@ describe("3rdComponent", () => {
     expect(c.layerName).toMatchInlineSnapshot(
       `"styledComponent_test_ts-MyButton-bVmnfB"`
     );
-    expect(c.getCssText()).toMatchInlineSnapshot(`
-      "
-            @layer Button_tsx-Button-eYfSKb, styledComponent_test_ts-MyButton-bVmnfB;
-              
-            @layer styledComponent_test_ts-MyButton-bVmnfB { 
-              .baseStyle-MyButton-CRGDB{background:red;position:absolute;left:100px;right:;top:20px;bottom:} 
-            }
-      "
-    `);
+    expect(c.getCssText()).toMatchInlineSnapshot(
+      `".baseStyle-MyButton-CRGDB{background:red;position:absolute;left:100px;right:;top:20px;bottom:}"`
+    );
     expect(c.cssLayerDep()).toMatchInlineSnapshot(`
           {
             "styledComponent_test_ts-MyButton-bVmnfB": "Button_tsx-Button-eYfSKb",

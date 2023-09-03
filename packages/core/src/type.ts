@@ -40,5 +40,6 @@ export type Config = {
   theme?: Record<string, any>;
   themeMap: Record<string, any>;
   styledElementProp?: string;
+  layername: string;
 };
 

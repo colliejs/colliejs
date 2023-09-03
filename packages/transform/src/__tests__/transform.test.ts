@@ -48,10 +48,12 @@ describe("test cases", () => {
         "cssLayerDep": {
           "moduleId2-Button-eoQCcI": "",
         },
-        "cssText": "@layer moduleId2-Button-eoQCcI {.baseStyle-Button-elTJue{background:red}.variants-static-shape-round-hECRKn{border-radius:50%}.variants-static-shape-rect-iydAuT{border-radius:0}
-      }
-
-      .css-kydkiA{color:blue}",
+        "styledComponentCssMap": {
+          "moduleId2-Button-eoQCcI": ".baseStyle-Button-elTJue{background:red}.variants-static-shape-round-hECRKn{border-radius:50%}
+      .variants-static-shape-rect-iydAuT{border-radius:0}
+      ",
+        },
+        "styledElementCssTexts": ".css-kydkiA{color:blue}",
       }
     `);
   });
@@ -77,15 +79,11 @@ describe("test cases", () => {
           "moduleId2-Button-eoQCcI": "",
           "moduleId2-MyButton-jjHfgw": "moduleId2-Button-eoQCcI",
         },
-        "cssText": "@layer moduleId2-Button-eoQCcI {.baseStyle-Button-elTJue{background:red}}
-
-            @layer moduleId2-Button-eoQCcI, moduleId2-MyButton-jjHfgw;
-              
-            @layer moduleId2-MyButton-jjHfgw { 
-              .baseStyle-MyButton-kQvslT{background:blue} 
-            }
-
-      .css-kydkiA{color:blue}",
+        "styledComponentCssMap": {
+          "moduleId2-Button-eoQCcI": ".baseStyle-Button-elTJue{background:red}",
+          "moduleId2-MyButton-jjHfgw": ".baseStyle-MyButton-kQvslT{background:blue}",
+        },
+        "styledElementCssTexts": ".css-kydkiA{color:blue}",
       }
     `);
   });
@@ -109,7 +107,8 @@ describe("test cases", () => {
               </Button>;
       };",
         "cssLayerDep": {},
-        "cssText": ".css-dhzjXW{display:flex}",
+        "styledComponentCssMap": {},
+        "styledElementCssTexts": ".css-dhzjXW{display:flex}",
       }
     `);
   });

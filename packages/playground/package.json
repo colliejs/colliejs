@@ -1,18 +1,13 @@
 {
-  "name": "@colliejs/playground",
-  "version": "1.0.44",
+  "name": "x",
+  "version": "1.0.8",
   "description": "awesesome",
   "type": "module",
+  "scripts": {},
   "private": true,
-  "scripts": {
-    "test": "jest"
-  },
   "keywords": [],
   "author": "colliedog1001@gmail.com",
   "license": "MIT",
-  "devDependencies": {
-    "@colliejs/react": "workspace:^"
-  },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "organize-imports-cli",
@@ -21,10 +16,6 @@
     ]
   },
   "types": "./dist/index.d.ts",
-  "dependencies": {
-    "@colliejs/rollup": "workspace:^",
-    "@colliejs/vite": "workspace:^"
-  },
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
@@ -34,5 +25,8 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.9"
   }
 }

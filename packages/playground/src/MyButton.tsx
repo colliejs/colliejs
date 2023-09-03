@@ -1,14 +1,14 @@
-import { abs } from '@unstyled-ui/css';
-import { styled } from '@colliejs/react';
-import { Button } from './Button';
+import { abs } from "@unstyled-ui/css";
+import { styled } from "@colliejs/react";
+import { Button } from "./Button";
 const width = 200;
 const height = 40;
 
 const MyButton = styled(Button, {
-  // background: 'orange',
   w: width,
   height: height,
-  border: '3px solid orange',
+  backgroundColor: "red",
+
 
   variants: {
     shape: {
@@ -25,6 +25,6 @@ const MyButton = styled(Button, {
       },
     },
   },
-} );
+});
 
 export default MyButton;

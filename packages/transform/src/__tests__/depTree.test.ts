@@ -1,19 +1,24 @@
-const Tree = require('@nindaff/ascii-tree').default;
-import _ from 'lodash';
-import { getDepPaths, makeDepTree } from '../depTree';
+const Tree = require("@nindaff/ascii-tree").default;
+import _ from "lodash";
+import {
+  DepNode,
+  getDepPaths,
+  getLayerTextFromPath,
+  makeDepTree,
+} from "../depTree";
 
 export const printAsciiTree = (root: any) => {
   const t = new Tree({ root });
   return t.render();
 };
 
-describe('test cases', () => {
-  it('makeDepTree', () => {
+describe("test cases", () => {
+  it("makeDepTree", () => {
     const depObj = {
-      Button: 'button',
-      AButton: 'Button',
-      Title: 'Text',
-      Text: 'p',
+      Button: "button",
+      AButton: "Button",
+      Title: "Text",
+      Text: "p",
     };
 
     const res = makeDepTree(depObj);
@@ -32,16 +37,16 @@ describe('test cases', () => {
       Title  "
     `);
   });
-  it('getDepPath', () => {
+  it("getDepPath", () => {
     const depObj = {
-      Button: 'button',
-      AButton: 'Button',
-      Title: 'Text',
-      Text: 'p',
+      Button: "button",
+      AButton: "Button",
+      Title: "Text",
+      Text: "p",
     };
     const res = getDepPaths(depObj);
     expect(res.length).toBe(2);
-    expect(res.map(p => p.map(e => _.pick(e, ['name', 'parentName']))))
+    expect(res.map(p => p.map(e => _.pick(e, ["name", "parentName"]))))
       .toMatchInlineSnapshot(`
       [
         [
@@ -65,6 +70,31 @@ describe('test cases', () => {
           },
         ],
       ]
+    `);
+  });
+  it("getLayerTextFromPath", () => {
+    const path: any[] = [
+      {
+        name: "AButton",
+        parentName: "Button",
+      },
+      {
+        name: "Button",
+        parentName: "button",
+      },
+    ];
+    const allStyledComponentCssMap = {
+      AButton: ".abutton {color:red}",
+      Button: ".button {color:blue}",
+    };
+    const res = getLayerTextFromPath(path, allStyledComponentCssMap);
+    expect(res).toMatchInlineSnapshot(`
+      "@layer AButton {
+          .abutton {color:red}
+          @layer Button {
+            .button {color:blue}    
+          }
+        }"
     `);
   });
 });

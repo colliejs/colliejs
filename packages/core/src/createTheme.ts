@@ -8,7 +8,6 @@ export const createTheme = (config: Config) => {
   const theme = config.theme;
   //   const themeObject = {};
   const cssProps: string[] = [];
-
   for (const scale in theme) {
     // themeObject[scale] = {};
 

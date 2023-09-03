@@ -1,0 +1,12 @@
+@layer SpeciButton_tsx-SpecialButton-gBBvNm {
+    .baseStyle-SpecialButton-lordNs{background-color:yellow}
+    @layer MyButton_tsx-MyButton-cjEnLX {
+    .baseStyle-MyButton-kbaBOx{width:200px;height:40px;background-color:red}.variants-static-shape-square-iydAuT{border-radius:0}
+.variants-static-shape-round-iBAKKK{border-radius:92299px}
+.variants-dynamic-shape-dlbLfd{border-radius:var(--variants-dynamic-shape)}
+
+    @layer Button_tsx-Button-bwSERP {
+      .baseStyle-Button-egXiPE{border:none;color:white;background-color:blue;box-shadow:0 0 0 10px rgba(0, 0, 0, 0.3)}    
+    }
+  }
+  }
