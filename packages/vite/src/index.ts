@@ -67,8 +67,8 @@ const collie = (option: VitePluginOptions): Plugin => {
   const {
     include,
     exclude,
-    styledElementCssFile = "styled-element.css",
-    styledComponentCssFile = "styled-component.css",
+    styledElementCssFile = "src/styled-element.css",
+    styledComponentCssFile = "src/styled-component.css",
     index = "src/index.ts",
     styledConfig = defaultConfig,
   } = option || {};
