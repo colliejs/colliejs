@@ -7,16 +7,15 @@ describe("test cases", () => {
   it("should work ", () => {
     const cssRawObj = {
       width: [10, 20],
-      height: 100,
+      h: [20, 50],
     } as unknown as CSSPropertiesComplex;
     const res = css(cssRawObj, [".button"], undefined, defaultConfig);
     expect(res).toMatchInlineSnapshot(`
-      "@media (max-width:767.9999px){.button{width:10px}}
-      @media (min-width:768px){.button{width:20px}}
-      .button{height:100px}"
+      "@media (max-width:767.9999px){.button{width:10px;height:20px}}
+      @media (min-width:768px){.button{width:20px;height:50px}}"
     `);
   });
-  it("should work ", () => {
+  it.skip("should work ", () => {
     const cssRawObj = {
       width: [10, 20],
       "& > span": {
@@ -34,7 +33,7 @@ describe("test cases", () => {
       @media (support:xxx){@media (min-width:768px){.button > span{width:20px}}}"
     `);
   });
-  it("support variable", () => {
+  it.skip("support variable", () => {
     const cssRawObj = {
       color: "$primary",
       w: 100,

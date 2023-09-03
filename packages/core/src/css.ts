@@ -1,4 +1,5 @@
 import { CSSPropertiesComplex, Config } from "./type";
+import _ from "lodash";
 //@ts-ignore
 import { toCssRules } from "./utils/toCssRules";
 /**
@@ -53,11 +54,11 @@ export const convertCssObjToMediaQuery = (
   cssObj: CSSPropertiesComplex,
   breakpoints: readonly number[]
 ) => {
-  const res = {} as CSSPropertiesComplex;
+  let res = {} as CSSPropertiesComplex;
   Object.keys(cssObj).forEach(key => {
     const value = cssObj[key];
     if (Array.isArray(value)) {
-      Object.assign(res, arraySyntax(key, value, breakpoints));
+      res = _.merge(res, arraySyntax(key, value, breakpoints));
     } else if (typeof value === "object" && value) {
       res[key] = convertCssObjToMediaQuery(value, breakpoints);
     } else {
@@ -76,6 +77,7 @@ export const css = (
   const newCssObj = config.breakpoints
     ? convertCssObjToMediaQuery(cssObj, config.breakpoints!)
     : cssObj;
+  console.log(newCssObj);
   let res = "";
   toCssRules(newCssObj, selectors, conditions, config, (cssText: string) => {
     res += cssText + "\n";
