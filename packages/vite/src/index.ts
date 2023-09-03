@@ -14,6 +14,7 @@ import fs from "node:fs";
 import { createRequire } from "node:module";
 import path from "path";
 import { Plugin } from "vite";
+import { config } from "node:process";
 
 global.require = global.require || createRequire(import.meta.url);
 
@@ -57,10 +58,14 @@ const writeStyledElementCssTexts = (
 const writeStyledComponentCssTexts = (
   allCssLayerDeps: Record<LayerName, LayerName>,
   allStyledComponentCssMap: Record<LayerName, string>,
-  cssFilename: string
+  cssFilename: string,
+  styledConfig: Config
 ) => {
   const cssText = getCssText(allCssLayerDeps, allStyledComponentCssMap);
-  writeCssText(cssText, cssFilename);
+  const finalCssText = `@layer ${styledConfig.layername} {
+    ${cssText}
+  }`;
+  writeCssText(finalCssText, cssFilename);
 };
 
 const collie = (option: VitePluginOptions): Plugin => {
@@ -115,7 +120,8 @@ const collie = (option: VitePluginOptions): Plugin => {
         writeStyledComponentCssTexts(
           allCssLayerDeps,
           allStyledComponentCssMap,
-          styledComponentCssFile
+          styledComponentCssFile,
+          styledConfig
         );
       }
       return {
