@@ -1,4 +1,4 @@
-# styled
+# colliejs
 
 type-safe css-in-js library with zero run time, support multiple variants and dynamic variants
 
