@@ -24,7 +24,7 @@ export const getImportDeclarations = (ast: t.Program) => {
   return importDecls;
 };
 const isRelative = (path: string) =>
-  path.startsWith("./") || path.startsWith("../");
+  path.startsWith(".") || path.startsWith("..");
 const isAbs = (path: string) => path.startsWith("/");
 const isFile = (file: PathLike) =>
   existsSync(file) && fs.statSync(file).isFile();
@@ -133,7 +133,12 @@ const doImportDecl = (
       moduleId = require.resolve(moduleId, { paths: [curDir] });
     }
   } catch (e) {
-    log.error(e.message, "resolve.sync:moduleId=%s,curFile=%s", moduleId, curFile);
+    log.error(
+      e.message,
+      "resolve.sync:moduleId=%s,curFile=%s",
+      moduleId,
+      curFile
+    );
     console.log(JSON.stringify(importDecl, null, 2));
   }
 
