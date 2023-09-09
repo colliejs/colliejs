@@ -30,10 +30,11 @@ global.window = {
 type VitePluginOptions = {
   include?: FilterPattern;
   exclude?: FilterPattern;
-  index?: string;
   styledElementCssFile?: string;
   styledComponentCssFile?: string;
   styledConfig?: Config;
+  alias: Record<string, string>;
+  root: string;
 };
 type LayerName = string;
 
@@ -74,8 +75,9 @@ const collie = (option: VitePluginOptions): Plugin => {
     exclude,
     styledElementCssFile = "public/styled-element.css",
     styledComponentCssFile = "public/styled-component.css",
-    index = "src/index.ts",
     styledConfig = defaultConfig,
+    alias = {},
+    root = process.cwd(),
   } = option || {};
   const filter = createFilter(include, exclude);
   const allCssLayerDeps = {};
@@ -115,7 +117,8 @@ const collie = (option: VitePluginOptions): Plugin => {
       const imports = getImports(
         parseCode(_code).program,
         path.dirname(url),
-        viteConfig.resolve.alias
+        alias,
+        root
       );
       let { code, styledComponentCssMap, styledElementCssTexts, cssLayerDep } =
         transform(_code, url, imports, styledConfig);
