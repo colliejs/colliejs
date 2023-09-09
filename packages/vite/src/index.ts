@@ -33,8 +33,8 @@ type VitePluginOptions = {
   styledElementCssFile?: string;
   styledComponentCssFile?: string;
   styledConfig?: Config;
-  alias: Record<string, string>;
-  root: string;
+  alias?: Record<string, string>;
+  root?: string;
 };
 type LayerName = string;
 

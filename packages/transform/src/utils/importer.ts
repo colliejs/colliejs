@@ -28,41 +28,59 @@ const isRelative = (path: string) =>
 const isAbs = (path: string) => path.startsWith("/");
 const isFile = (file: PathLike) =>
   existsSync(file) && fs.statSync(file).isFile();
+const isDir = (file: PathLike) =>
+  existsSync(file) && fs.statSync(file).isDirectory();
 
-const getFileFromRelativePath = (file: string, extension: string[]) => {
-  if (isFile(file)) {
-    return file;
+const getIndex = (path: PathLike, exts: string[]) => {
+  assert(isDir(path), "path must be a dir");
+  for (const ext of exts) {
+    const file = `${path}/index${ext}`;
+    if (isFile(file)) {
+      return file;
+    }
+  }
+};
+
+const getFileFromRelativePath = (path: string, extension: string[]) => {
+  if (isFile(path)) {
+    return path;
+  }
+  if (isDir(path)) {
+    getIndex(path, extension);
   }
   for (const ex of extension) {
     assert(ex.startsWith("."), "extension must start with .");
-    const file1 = file + ex;
+    const file1 = path + ex;
     if (isFile(file1)) {
       return file1;
     }
   }
 };
 const getFileFromAbsPath = (
-  moduleId: string,
+  pathLike: string,
   extension: string[],
   root = process.cwd()
 ) => {
-  assert(moduleId.startsWith("/"), "absolute path must start with /");
-  if (isFile(moduleId)) {
-    return moduleId;
+  assert(pathLike.startsWith("/"), "absolute path must start with /");
+  if (isFile(pathLike)) {
+    return pathLike;
+  }
+  if (isDir(pathLike)) {
+    getIndex(pathLike, extension);
   }
   for (const ex of extension) {
     assert(ex.startsWith("."), "extension must start with .");
     // absolute path of whole filesystem
-    const file1 = moduleId + ex;
+    const file1 = pathLike + ex;
     if (isFile(file1)) {
       return file1;
     }
-    const file2 = path.join(root, moduleId) + ex;
+    const file2 = path.join(root, pathLike) + ex;
     if (isFile(file2)) {
       return file2;
     }
   }
-  log.error("MODULE NOT FOUND", "moduleId=%s,root=%s", moduleId, root);
+  log.error("MODULE NOT FOUND", "moduleId=%s,root=%s", pathLike, root);
   // return moduleId;
   throw new Error("MODULE NOT FOUND");
 };
