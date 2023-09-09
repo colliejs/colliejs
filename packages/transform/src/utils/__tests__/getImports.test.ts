@@ -122,4 +122,27 @@ describe("test cases", () => {
     `
     );
   });
+  it("index", () => {
+    const source = `
+    import {toHash} from '@src/utils/__tests__/fixtures';
+    `;
+    const ast = parseCode(source);
+    const modulePath = __dirname;
+    const importers = getImports(
+      ast.program,
+      modulePath,
+      { "@src": "/src" },
+      process.cwd() + "/packages/transform"
+    );
+    expect(importers).toMatchInlineSnapshot(
+      `
+      {
+        "toHash": {
+          "importedName": "toHash",
+          "moduleId": "/Users/che3vinci/code/personal/colliejs/packages/transform/src/utils/__tests__/fixtures/index.ts",
+        },
+      }
+    `
+    );
+  });
 });

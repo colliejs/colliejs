@@ -31,30 +31,36 @@ const isFile = (file: PathLike) =>
 const isDir = (file: PathLike) =>
   existsSync(file) && fs.statSync(file).isDirectory();
 
-const getIndex = (path: PathLike, exts: string[]) => {
-  assert(isDir(path), "path must be a dir");
-  for (const ext of exts) {
-    const file = `${path}/index${ext}`;
-    if (isFile(file)) {
-      return file;
-    }
+const getIndex = (path: PathLike, ext: string) => {
+  // assert(isDir(path), "path must be a dir");
+  if (!isDir(path)) {
+    return;
+  }
+  const file = `${path}/index${ext}`;
+  if (isFile(file)) {
+    return file;
   }
 };
 
-const getFileFromRelativePath = (path: string, extension: string[]) => {
-  if (isFile(path)) {
-    return path;
+const getFileFromRelativePath = (absPath: string, exts: string[]) => {
+  if (isFile(absPath)) {
+    return absPath;
   }
-  if (isDir(path)) {
-    getIndex(path, extension);
-  }
-  for (const ex of extension) {
+
+  for (const ex of exts) {
     assert(ex.startsWith("."), "extension must start with .");
-    const file1 = path + ex;
+    const file1 = absPath + ex;
     if (isFile(file1)) {
       return file1;
     }
+
+    const file2 = getIndex(absPath, ex);
+    if (isDir(absPath) && file2) {
+      return file2;
+    }
   }
+  log.error("MODULE NOT FOUND", "moduleId=%s", absPath, exts);
+  throw new Error("MODULE NOT FOUND");
 };
 const getFileFromAbsPath = (
   pathLike: string,
@@ -65,9 +71,7 @@ const getFileFromAbsPath = (
   if (isFile(pathLike)) {
     return pathLike;
   }
-  if (isDir(pathLike)) {
-    getIndex(pathLike, extension);
-  }
+
   for (const ex of extension) {
     assert(ex.startsWith("."), "extension must start with .");
     // absolute path of whole filesystem
@@ -75,9 +79,16 @@ const getFileFromAbsPath = (
     if (isFile(file1)) {
       return file1;
     }
-    const file2 = path.join(root, pathLike) + ex;
+
+    const prefix = path.join(root, pathLike);
+    const file2 = prefix + ex;
     if (isFile(file2)) {
       return file2;
+    }
+
+    const file3 = getIndex(prefix, ex);
+    if (isDir(prefix) && file3) {
+      return file3;
     }
   }
   log.error("MODULE NOT FOUND", "moduleId=%s,root=%s", pathLike, root);
