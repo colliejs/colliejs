@@ -99,16 +99,17 @@ const getFileFromAbsPath = (
 /**
  * NOTE：如果moduleId的后缀是没有指定的。这里有可能会出错。应该去坚持并自动补齐后缀
  * @param importDecl
- * @param modulePath
+ * @param curFile
  * @returns
  */
 const doImportDecl = (
   importDecl: t.ImportDeclaration,
-  modulePath: string,
+  curFile: string,
   alias: Alias,
   extensions: string[],
   root: string
 ) => {
+  const curDir = path.dirname(curFile);
   const ModuleIdByName: ImportsByName = {};
   const matches = Object.keys(alias);
   let moduleId = importDecl.source.value;
@@ -123,22 +124,17 @@ const doImportDecl = (
     if (isRelative(moduleId)) {
       //there is Bug if using require.resolve
       moduleId = getFileFromRelativePath(
-        path.resolve(modulePath, moduleId),
+        path.resolve(curDir, moduleId),
         extensions
       );
     } else if (isAbs(moduleId)) {
       moduleId = getFileFromAbsPath(moduleId, extensions, root);
     } else {
-      moduleId = require.resolve(moduleId, { paths: [modulePath] });
+      moduleId = require.resolve(moduleId, { paths: [curDir] });
     }
   } catch (e) {
-    console.log(e.message);
-    log.error(
-      "resolve",
-      "resolve.sync:moduleId=%s,path=%s",
-      moduleId,
-      modulePath
-    );
+    log.error(e.message, "resolve.sync:moduleId=%s,curFile=%s", moduleId, curFile);
+    console.log(JSON.stringify(importDecl, null, 2));
   }
 
   importDecl.specifiers.forEach(specifier => {
@@ -168,7 +164,7 @@ const doImportDecl = (
 const cwd = process.cwd();
 export const getImports = (
   program: t.Program,
-  modulePath: string,
+  curFile: string,
   alias: Alias = {},
   root = cwd,
   extensions: string[] = [".tsx", ".ts", ".js", ".jsx", ".cjs", ".mjs"]
@@ -176,7 +172,7 @@ export const getImports = (
   const ModuleIdByName: ImportsByName = {};
   const importDecls = getImportDeclarations(program);
   importDecls.forEach(decl => {
-    const res = doImportDecl(decl, modulePath, alias, extensions, root);
+    const res = doImportDecl(decl, curFile, alias, extensions, root);
     Object.assign(ModuleIdByName, res);
   });
   return ModuleIdByName;

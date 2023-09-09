@@ -19,7 +19,7 @@ const prepareStyledComponent = (sourcecode: string) => {
   return new StyledComponent(
     styledCompDeclPath,
     __filename,
-    getImportFromSource(sourcecode, __dirname),
+    getImportFromSource(sourcecode, __filename),
     defaultConfig
   );
 };

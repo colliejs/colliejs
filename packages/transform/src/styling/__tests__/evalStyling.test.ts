@@ -7,7 +7,7 @@ import { removeTypeAnnotation } from "../../utils/removeType";
 
 const evalObjectString = (sourcecode: string) => {
   const fileAst = parseCode(sourcecode);
-  const imports = getImports(fileAst.program, __dirname);
+  const imports = getImports(fileAst.program, __filename);
   let res;
   traverse(fileAst, {
     ObjectExpression(path) {

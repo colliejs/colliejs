@@ -10,7 +10,7 @@ import * as t from "@babel/types";
 
 const evalObjectString = (code: string) => {
   const fileAst = parseCode(code);
-  const imports = getImports(fileAst.program, __dirname);
+  const imports = getImports(fileAst.program, __filename);
 };
 
 describe("test cases", () => {

@@ -14,7 +14,7 @@ import {
 
 const transform = (sourceCode: string, n = 0) => {
   const path = getPathOfJSXElement(sourceCode);
-  const moduleIdByName = getImportFromSource(sourceCode, __dirname);
+  const moduleIdByName = getImportFromSource(sourceCode, __filename);
   const ele = new StyledElement(path, moduleIdByName, defaultConfig);
   const res = ele.transform();
   return {

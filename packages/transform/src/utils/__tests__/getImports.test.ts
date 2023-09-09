@@ -9,9 +9,9 @@ describe("test cases", () => {
         import {RedButton as BeautifulButton} from './fixtures/Button';
     `;
     const ast = parseCode(source);
-    const modulePath = __dirname;
+    const curFile = __filename;
     const home = process.env.HOME;
-    expect(getImports(ast.program, modulePath)).toMatchInlineSnapshot(`
+    expect(getImports(ast.program, curFile)).toMatchInlineSnapshot(`
       {
         "BeautifulButton": {
           "importedName": "RedButton",
@@ -38,8 +38,8 @@ describe("test cases", () => {
     import hello from './fixtures/hello';
 `;
     const ast = parseCode(source);
-    const modulePath = __dirname;
-    const importers = getImports(ast.program, modulePath, {});
+    const curFile = __filename;
+    const importers = getImports(ast.program, curFile, {});
     const home = process.env.HOME;
     expect(importers).toMatchInlineSnapshot(`
       {
@@ -58,8 +58,8 @@ describe("test cases", () => {
     import {Button} from '@fixtures/Button';
     `;
     const ast = parseCode(source);
-    const modulePath = __dirname;
-    const importers = getImports(ast.program, modulePath, {
+    const curFile = __filename;
+    const importers = getImports(ast.program, curFile, {
       "@fixtures": "/fixtures",
     });
     const home = process.env.HOME;
@@ -82,8 +82,8 @@ describe("test cases", () => {
     import {toHash} from '@colliejs/core';
     `;
     const ast = parseCode(source);
-    const modulePath = __dirname;
-    const importers = getImports(ast.program, modulePath, {});
+    const curFile = __filename;
+    const importers = getImports(ast.program, curFile, {});
     const home = process.env.HOME;
     expect(importers).toMatchInlineSnapshot(
       `
@@ -104,10 +104,10 @@ describe("test cases", () => {
     import {toHash} from '@src/utils/__tests__/fixtures/abs';
     `;
     const ast = parseCode(source);
-    const modulePath = __dirname;
+    const curFile = __filename;
     const importers = getImports(
       ast.program,
-      modulePath,
+      curFile,
       { "@src": "/src" },
       process.cwd() + "/packages/transform"
     );
@@ -127,10 +127,10 @@ describe("test cases", () => {
     import {toHash} from '@src/utils/__tests__/fixtures';
     `;
     const ast = parseCode(source);
-    const modulePath = __dirname;
+    const curFile = __filename;
     const importers = getImports(
       ast.program,
-      modulePath,
+      curFile,
       { "@src": "/src" },
       process.cwd() + "/packages/transform"
     );
@@ -140,6 +140,29 @@ describe("test cases", () => {
         "toHash": {
           "importedName": "toHash",
           "moduleId": "/Users/che3vinci/code/personal/colliejs/packages/transform/src/utils/__tests__/fixtures/index.ts",
+        },
+      }
+    `
+    );
+  });
+  it("..", () => {
+    const source = `
+    import {fnUtils} from '..';
+    `;
+    const ast = parseCode(source);
+    const curFile = __filename;
+    const importers = getImports(
+      ast.program,
+      curFile,
+      {},
+      process.cwd() + "/packages/transform"
+    );
+    expect(importers).toMatchInlineSnapshot(
+      `
+      {
+        "fnUtils": {
+          "importedName": "fnUtils",
+          "moduleId": "/Users/che3vinci/code/personal/colliejs/packages/transform/src/utils/index.ts",
         },
       }
     `

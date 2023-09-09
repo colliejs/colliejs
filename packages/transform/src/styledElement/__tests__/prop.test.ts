@@ -76,7 +76,7 @@ describe("props", () => {
     };
     <Button css={{color:'red',...innerBoxStyle}} >hello</Button>`;
     const path = getPathOfJSXElement(source);
-    const imports = getImports(parseCode(source).program, __dirname);
+    const imports = getImports(parseCode(source).program, __filename);
     const v = evalValueOfProp(path, "css", imports);
     expect(v).toMatchInlineSnapshot(`
       {
@@ -99,7 +99,7 @@ describe("props", () => {
     innerBoxStyle={background:'red'}
       `;
     const path = getPathOfJSXElement(source);
-    const imports = getImports(parseCode(source).program, __dirname);
+    const imports = getImports(parseCode(source).program, __filename);
 
     expect(path.get("openingElement").get("attributes").length).toBe(1);
     const v = evalValueOfProp(path, "css", imports);

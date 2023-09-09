@@ -27,7 +27,7 @@ export const getPathOfStyledComponentDecl = (source: string) => {
   });
   return path;
 };
-export const getImportFromSource = (source: string,modlePath:string) => {
+export const getImportFromSource = (source: string,curFile:string) => {
   const file = parseCode(source);
-  return getImports(file.program, modlePath);
+  return getImports(file.program, curFile);
 };

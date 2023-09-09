@@ -21,7 +21,7 @@ import { VariableDeclaration } from "@babel/types";
  */
 export const transform = (
   source: string,
-  moduleId: string,
+  curFile: string,
   config: Config,
   alias = {},
   root = process.cwd()
@@ -43,17 +43,17 @@ export const transform = (
       if (Object.keys(modulesByName).length === 0) {
         modulesByName = getImports(
           parseCode(source).program,
-          dirname(moduleId),
+          curFile,
           alias,
           root
         );
       }
-      modulesByName
+      modulesByName;
 
       removeTypeAnnotation(path);
       const styledComponent = new StyledComponent(
         path,
-        moduleId,
+        curFile,
         modulesByName,
         config
       );
@@ -72,7 +72,7 @@ export const transform = (
       if (Object.keys(modulesByName).length === 0) {
         modulesByName = getImports(
           parseCode(source).program,
-          dirname(moduleId),
+          curFile,
           alias,
           root
         );

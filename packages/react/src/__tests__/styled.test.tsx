@@ -19,7 +19,7 @@ const transform = (source: string, n: number = 0) => {
   console.log("parseCodeAndGetBodyN", parseCodeAndGetBodyN);
   const ast = parseCodeAndGetBodyN(source, n);
   const fileAst = parseCode(source);
-  const imports = getImports(fileAst.program, __dirname);
+  const imports = getImports(fileAst.program, __filename);
   let path;
   traverse(fileAst, {
     VariableDeclaration(p) {
