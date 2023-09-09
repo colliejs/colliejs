@@ -1,9 +1,12 @@
 {
-  "name": "x",
+  "name": "@colliejs/playground",
   "version": "1.0.9",
   "description": "awesesome",
   "type": "module",
-  "scripts": {},
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
   "private": true,
   "keywords": [],
   "author": "colliedog1001@gmail.com",
@@ -27,6 +30,12 @@
     "access": "public"
   },
   "dependencies": {
-    "dayjs": "^1.11.9"
+    "@colliejs/react": "workspace:^1.0.50",
+    "@colliejs/vite": "workspace:^1.0.53",
+    "@rollup/plugin-commonjs": "^24.1.0",
+    "@rollup/plugin-node-resolve": "^15.1.0",
+    "@vitejs/plugin-react": "^2.2.0",
+    "dayjs": "^1.11.9",
+    "vite-plugin-inspect": "^0.7.28"
   }
 }

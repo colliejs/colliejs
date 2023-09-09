@@ -61,6 +61,7 @@ const config = {
     "npmlog",
     "dayjs",
     /@colliejs\//,
+    /@c3\//,
     /@babel\//,
     /@rollup\//,
     /node:/,

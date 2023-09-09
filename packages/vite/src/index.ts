@@ -14,8 +14,9 @@ import log from "npmlog";
 import fs from "node:fs";
 import { createRequire } from "node:module";
 import path from "path";
-import { Plugin, ResolvedConfig, UserConfig } from "vite";
+import { HtmlTagDescriptor, Plugin, ResolvedConfig, UserConfig } from "vite";
 import { config } from "node:process";
+import type { OutputBundle } from "rollup";
 
 global.require = global.require || createRequire(import.meta.url);
 
@@ -27,12 +28,32 @@ global.window = {
     },
   },
 };
+const styledElementCssFile = "styled-element.css";
+const styledComponentCssFile = "styled-component.css";
+const serve = {
+  href: {
+    styledElementCssFile: `/src/${styledElementCssFile}`,
+    styledComponentCssFile: `/src/${styledComponentCssFile}`,
+  },
+  disk: {
+    styledElementCssFile: `src/${styledElementCssFile}`,
+    styledComponentCssFile: `src/${styledComponentCssFile}`,
+  },
+};
+const build = {
+  href: {
+    styledElementCssFile: `/${styledElementCssFile}`,
+    styledComponentCssFile: `/${styledComponentCssFile}`,
+  },
+  disk: {
+    styledElementCssFile: `dist/${styledElementCssFile}`,
+    styledComponentCssFile: `dist/${styledComponentCssFile}`,
+  },
+};
 
 type VitePluginOptions = {
   include?: FilterPattern;
   exclude?: FilterPattern;
-  styledElementCssFile?: string;
-  styledComponentCssFile?: string;
   styledConfig?: Config;
   alias?: Alias;
   root?: string;
@@ -74,8 +95,6 @@ const collie = (option: VitePluginOptions): Plugin => {
   const {
     include,
     exclude,
-    styledElementCssFile = "public/styled-element.css",
-    styledComponentCssFile = "public/styled-component.css",
     styledConfig = defaultConfig,
     alias = {},
     root = process.cwd(),
@@ -124,21 +143,69 @@ const collie = (option: VitePluginOptions): Plugin => {
       } = transform(code, url, styledConfig, alias, root);
 
       allStyledElementCssMap[url] = styledElementCssTexts;
-      writeStyledElementCssTexts(allStyledElementCssMap, styledElementCssFile);
+      const isServe = viteConfig.command === "serve";
+      isServe &&
+        writeStyledElementCssTexts(
+          allStyledElementCssMap,
+          serve.disk.styledElementCssFile
+        );
       if (Object.keys(styledComponentCssMap).length) {
         Object.assign(allCssLayerDeps, cssLayerDep);
         Object.assign(allStyledComponentCssMap, styledComponentCssMap);
-        writeStyledComponentCssTexts(
-          allCssLayerDeps,
-          allStyledComponentCssMap,
-          styledComponentCssFile,
-          styledConfig
-        );
+        isServe &&
+          writeStyledComponentCssTexts(
+            allCssLayerDeps,
+            allStyledComponentCssMap,
+            serve.disk.styledComponentCssFile,
+            styledConfig
+          );
       }
       return {
         code: transformedCode,
-        map: { mappings: "" }, // a sourcemap is optional
+        map: { mappings: "" },
       };
+    },
+    async generateBundle(...args) {
+      console.log("option,bundle", args);
+      writeStyledElementCssTexts(
+        allStyledElementCssMap,
+        build.disk.styledElementCssFile
+      );
+      writeStyledComponentCssTexts(
+        allCssLayerDeps,
+        allStyledComponentCssMap,
+        build.disk.styledComponentCssFile,
+        styledConfig
+      );
+    },
+    async transformIndexHtml(html) {
+      const getLinkTag = (href: string): HtmlTagDescriptor => ({
+        tag: "link",
+        attrs: {
+          rel: "stylesheet",
+          href: href,
+        },
+        injectTo: 'body-prepend',
+      });
+
+      console.log("transformIndexHtml");
+      if (viteConfig.command === "serve") {
+        return {
+          html,
+          tags: [
+            getLinkTag(serve.href.styledElementCssFile),
+            getLinkTag(serve.href.styledComponentCssFile),
+          ],
+        };
+      } else {
+        return {
+          html,
+          tags: [
+            getLinkTag(build.href.styledElementCssFile),
+            getLinkTag(build.href.styledComponentCssFile),
+          ],
+        };
+      }
     },
   };
 };
