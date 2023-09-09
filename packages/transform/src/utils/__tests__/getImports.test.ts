@@ -98,4 +98,28 @@ describe("test cases", () => {
     const { toHash } = require(importers["toHash"].moduleId);
     expect(toHash({ a: 1 })).toBe("fRCpkX");
   });
+
+  it("absolute path", () => {
+    const source = `
+    import {toHash} from '@src/utils/__tests__/fixtures/abs';
+    `;
+    const ast = parseCode(source);
+    const modulePath = __dirname;
+    const importers = getImports(
+      ast.program,
+      modulePath,
+      { "@src": "/src" },
+      process.cwd() + "/packages/transform"
+    );
+    expect(importers).toMatchInlineSnapshot(
+      `
+      {
+        "toHash": {
+          "importedName": "toHash",
+          "moduleId": "/Users/che3vinci/code/personal/colliejs/packages/transform/src/utils/__tests__/fixtures/abs.ts",
+        },
+      }
+    `
+    );
+  });
 });

@@ -2,11 +2,13 @@ import { FONT_REG, IMG_REG, VIDEO_REG } from "./../const";
 import { getName } from "./getName";
 import * as t from "@babel/types";
 import path from "path";
-import fs from "node:fs";
+import fs, { existsSync } from "node:fs";
 import resolve from "resolve";
 import log from "npmlog";
 import { Alias, ImportsByName } from "./types";
 import { createRequire } from "module";
+import { assert } from "@c3/utils";
+import { PathLike } from "fs";
 //@ts-ignore
 if (!global.__JEST__) {
   global.require = global.require || createRequire(import.meta.url);
@@ -23,6 +25,47 @@ export const getImportDeclarations = (ast: t.Program) => {
 };
 const isRelative = (path: string) =>
   path.startsWith("./") || path.startsWith("../");
+const isAbs = (path: string) => path.startsWith("/");
+const isFile = (file: PathLike) =>
+  existsSync(file) && fs.statSync(file).isFile();
+
+const getFileFromRelativePath = (file: string, extension: string[]) => {
+  if (isFile(file)) {
+    return file;
+  }
+  for (const ex of extension) {
+    assert(ex.startsWith("."), "extension must start with .");
+    const file1 = file + ex;
+    if (isFile(file1)) {
+      return file1;
+    }
+  }
+};
+const getFileFromAbsPath = (
+  moduleId: string,
+  extension: string[],
+  root = process.cwd()
+) => {
+  assert(moduleId.startsWith("/"), "absolute path must start with /");
+  if (isFile(moduleId)) {
+    return moduleId;
+  }
+  for (const ex of extension) {
+    assert(ex.startsWith("."), "extension must start with .");
+    // absolute path of whole filesystem
+    const file1 = moduleId + ex;
+    if (isFile(file1)) {
+      return file1;
+    }
+    const file2 = path.join(root, moduleId) + ex;
+    if (isFile(file2)) {
+      return file2;
+    }
+  }
+  log.error("MODULE NOT FOUND", "moduleId=%s,root=%s", moduleId, root);
+  // return moduleId;
+  throw new Error("MODULE NOT FOUND");
+};
 
 /**
  * NOTE：如果moduleId的后缀是没有指定的。这里有可能会出错。应该去坚持并自动补齐后缀
@@ -35,7 +78,7 @@ const doImportDecl = (
   modulePath: string,
   alias: Alias,
   extensions: string[],
-  preserveSymlinks = false
+  root: string
 ) => {
   const ModuleIdByName: ImportsByName = {};
   const matches = Object.keys(alias);
@@ -48,16 +91,17 @@ const doImportDecl = (
   });
 
   try {
-    // if (isRelative(moduleId)) {
-    // moduleId = resolve.sync(moduleId, {
-    //   basedir: modulePath,
-    //   extensions,
-    //   paths: [],
-    //   preserveSymlinks,
-    // });
-    // // } else {
-    moduleId = require.resolve(moduleId, { paths: [modulePath] });
-    // }
+    if (isRelative(moduleId)) {
+      //there is Bug if using require.resolve
+      moduleId = getFileFromRelativePath(
+        path.resolve(modulePath, moduleId),
+        extensions
+      );
+    } else if (isAbs(moduleId)) {
+      moduleId = getFileFromAbsPath(moduleId, extensions, root);
+    } else {
+      moduleId = require.resolve(moduleId, { paths: [modulePath] });
+    }
   } catch (e) {
     console.log(e.message);
     log.error(
@@ -92,24 +136,18 @@ const doImportDecl = (
   });
   return ModuleIdByName;
 };
-
+const cwd = process.cwd();
 export const getImports = (
   program: t.Program,
   modulePath: string,
   alias: Alias = {},
-  extensions: string[] = [".tsx", ".ts", ".js", ".jsx", ".cjs", ".mjs"],
-  preserveSymlinks = false
+  root = cwd,
+  extensions: string[] = [".tsx", ".ts", ".js", ".jsx", ".cjs", ".mjs"]
 ) => {
   const ModuleIdByName: ImportsByName = {};
   const importDecls = getImportDeclarations(program);
   importDecls.forEach(decl => {
-    const res = doImportDecl(
-      decl,
-      modulePath,
-      alias,
-      extensions,
-      preserveSymlinks
-    );
+    const res = doImportDecl(decl, modulePath, alias, extensions, root);
     Object.assign(ModuleIdByName, res);
   });
   return ModuleIdByName;
