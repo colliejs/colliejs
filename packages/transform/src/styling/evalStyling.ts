@@ -3,7 +3,7 @@ import * as t from "@babel/types";
 import { ImportsByName, generate } from "../utils";
 import { evalExpText } from "../utils/eval/evalText";
 import { getCtxOf } from "../utils/eval/getCtx";
-import { assert } from "node:console";
+import { assert } from "@c3/utils";
 
 export const evalStyling = (
   path: NodePath<t.ObjectExpression>,

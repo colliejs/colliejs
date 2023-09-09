@@ -2,9 +2,12 @@ import { removeTypeAnnotation } from "./utils/removeType";
 import { StyledElement } from "./styledElement";
 import { Config } from "@colliejs/core";
 import { parseCode } from "./parse";
+import { dirname } from "node:path";
 import {
+  Alias,
   ImportsByName,
   generate,
+  getImports,
   isStyledComponentDecl,
   isStyledElement,
   traverse,
@@ -15,22 +18,19 @@ import { VariableDeclaration } from "@babel/types";
 
 /**
  * NOTE: the module should be convert commonjs first
- * @param source
- * @param moduleId
- * @param modulesByName
- * @param config
- * @returns
  */
 export const transform = (
   source: string,
   moduleId: string,
-  modulesByName: ImportsByName,
-  config: Config
+  config: Config,
+  alias = {},
+  root = process.cwd()
 ) => {
   const fileAst = parseCode(source);
   let styledComponentCssMap = {};
   let styledElementCssTexts = "";
   const cssLayerDep: Record<string, string> = {};
+  let modulesByName = {};
 
   traverse(fileAst, {
     //===========================================================
@@ -40,6 +40,16 @@ export const transform = (
       if (!isStyledComponentDecl(path.node)) {
         return;
       }
+      if (Object.keys(modulesByName).length === 0) {
+        modulesByName = getImports(
+          parseCode(source).program,
+          dirname(moduleId),
+          alias,
+          root
+        );
+      }
+      modulesByName
+
       removeTypeAnnotation(path);
       const styledComponent = new StyledComponent(
         path,
@@ -49,15 +59,23 @@ export const transform = (
       );
       const { cssText } = styledComponent.transform();
       styledComponentCssMap[styledComponent.layerName] = cssText;
-      // cssTexts += cssText + "\n";
       Object.assign(cssLayerDep, styledComponent.cssLayerDep());
     },
+
     //===========================================================
     // 2.transform styled element
     //===========================================================
     JSXElement(path) {
       if (!isStyledElement(path, config.styledElementProp)) {
         return;
+      }
+      if (Object.keys(modulesByName).length === 0) {
+        modulesByName = getImports(
+          parseCode(source).program,
+          dirname(moduleId),
+          alias,
+          root
+        );
       }
       removeTypeAnnotation(path);
       const styledElement = new StyledElement(path, modulesByName, config);

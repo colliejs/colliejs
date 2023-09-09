@@ -1,6 +1,6 @@
 import { NodePath } from "@babel/traverse";
 import * as t from "@babel/types";
-import { assert } from "console";
+import { assert } from "@c3/utils";
 
 export function isPropExisted(
   jsxPath: NodePath<t.JSXElement>,
@@ -38,7 +38,7 @@ export const getValExpOfAttr = (
   name: string
 ): t.Expression => {
   const attr = getAttr(path, name);
-  assert(attr, "attr.node is null", { attr });
+  assert(!!attr, "attr.node is null", { attr });
   const val = attr.node.value;
   if (!val) {
     // return t.isLiteral(true);

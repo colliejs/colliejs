@@ -21,7 +21,7 @@ describe("test cases", () => {
         return <Button css={{color:'blue'}}></Button>
     }
     `;
-    const res = transform(code, "moduleId2", {}, defaultConfig);
+    const res = transform(code, "moduleId2", defaultConfig);
     expect(res.code).toMatchInlineSnapshot(`
       "const Button = styled('button', "baseStyle-Button-elTJue", {
         "variants-static-shape-round": "variants-static-shape-round-hECRKn",
@@ -67,7 +67,7 @@ describe("test cases", () => {
         return <MyButton css={{color:'blue'}}></MyButton>
     }
     `;
-    const res = transform(code, "moduleId2", {}, defaultConfig);
+    const res = transform(code, "moduleId2", defaultConfig);
     expect(res).toMatchInlineSnapshot(`
       {
         "code": "const Button = styled('button', "baseStyle-Button-elTJue", {}, {});
@@ -96,7 +96,7 @@ describe("test cases", () => {
         </Button>
       }
     `;
-    expect(transform(code, "moduleId2", {}, defaultConfig))
+    expect(transform(code, "moduleId2", defaultConfig))
       .toMatchInlineSnapshot(`
       {
         "code": "const MyButton = props => {

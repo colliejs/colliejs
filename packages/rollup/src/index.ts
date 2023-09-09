@@ -1,6 +1,7 @@
 import { parse } from "@babel/parser";
 import { Config, createTheme, defaultConfig } from "@colliejs/core";
 import {
+  Alias,
   getCssText,
   getDepPaths,
   getImports,
@@ -16,6 +17,8 @@ type Option = {
   include?: FilterPattern;
   exclude?: FilterPattern;
   styledConfig?: Config;
+  alias?: Alias;
+  root?: string;
 };
 const allStyledComponentCssMap = {};
 type LayerName = string;
@@ -30,37 +33,14 @@ const writeThemeText = (styledConfig, cssFilename) => {
   });
 };
 
-// const writeCssText = (cssText: string, cssFilename: string) => {
-//   fs.mkdirSync(path.dirname(cssFilename), { recursive: true });
-//   fs.writeFileSync(cssFilename, cssText, {
-//     encoding: "utf-8",
-//     flag: "w",
-//   });
-// };
-
-// const writeStyledElementCssTexts = (
-//   styledElementCssMap: object,
-//   cssFilename: string
-// ) => {
-//   const cssText = Object.values(styledElementCssMap).join("\n");
-//   writeCssText(cssText, cssFilename);
-// };
-
-// const writeStyledComponentCssTexts = (
-//   allCssLayerDeps: Record<LayerName, LayerName>,
-//   allStyledComponentCssMap: Record<LayerName, string>,
-//   cssFilename: string
-// ) => {
-//   const cssText = getCssText(allCssLayerDeps, allStyledComponentCssMap);
-//   writeCssText(cssText, cssFilename);
-// };
-
 const collie = (option?: Option): Plugin => {
   const {
     outDir = "dist/",
     include,
     exclude,
     styledConfig = defaultConfig,
+    alias = {},
+    root = process.cwd(),
   } = option || {};
   const allStyledElementCssMap = {};
   const allCssLayerDeps = {};
@@ -71,21 +51,19 @@ const collie = (option?: Option): Plugin => {
   return {
     name: "collie", // this name will show up in warnings and errors
 
-    async transform(_code, id) {
+    async transform(code, id) {
       const REGEX_JS = /\.[tj]sx?$/;
 
       if (!REGEX_JS.test(id) || !filter(id) || id.includes("node_modules")) {
-        return { code: _code };
+        return { code: code };
       }
 
-      const program = parse(_code, {
-        sourceType: "module",
-        plugins: ["jsx", "typescript"],
-      }).program;
-
-      const imports = getImports(program, path.dirname(id));
-      let { code, styledElementCssTexts, styledComponentCssMap, cssLayerDep } =
-        transform(_code, id, imports, styledConfig);
+      let {
+        code: codeTransformed,
+        styledElementCssTexts,
+        styledComponentCssMap,
+        cssLayerDep,
+      } = transform(code, id, styledConfig, alias, root);
       //===========================================================
       // 处理styledElementCssTexts
       //===========================================================
@@ -97,7 +75,7 @@ const collie = (option?: Option): Plugin => {
       Object.assign(allCssLayerDeps, cssLayerDep);
       Object.assign(allStyledComponentCssMap, styledComponentCssMap);
       return {
-        code: code,
+        code: codeTransformed,
         map: { mappings: "" }, // a sourcemap is optional
       };
     },

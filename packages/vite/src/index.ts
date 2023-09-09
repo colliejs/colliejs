@@ -6,6 +6,7 @@ import {
   getLayerTextFromPath,
   getCssText,
   transform,
+  Alias,
 } from "@colliejs/transform";
 import { FilterPattern, createFilter } from "@rollup/pluginutils";
 import log from "npmlog";
@@ -33,7 +34,7 @@ type VitePluginOptions = {
   styledElementCssFile?: string;
   styledComponentCssFile?: string;
   styledConfig?: Config;
-  alias?: Record<string, string>;
+  alias?: Alias;
   root?: string;
 };
 type LayerName = string;
@@ -91,7 +92,7 @@ const collie = (option: VitePluginOptions): Plugin => {
     configResolved(resolvedConfig) {
       viteConfig = resolvedConfig;
     },
-    async transform(_code, url) {
+    async transform(code, url) {
       if (
         url.includes("node_modules") ||
         !filter(url) ||
@@ -114,14 +115,13 @@ const collie = (option: VitePluginOptions): Plugin => {
       //===========================================================
       // 普通文件
       //===========================================================
-      const imports = getImports(
-        parseCode(_code).program,
-        path.dirname(url),
-        alias,
-        root
-      );
-      let { code, styledComponentCssMap, styledElementCssTexts, cssLayerDep } =
-        transform(_code, url, imports, styledConfig);
+
+      let {
+        code: transformedCode,
+        styledComponentCssMap,
+        styledElementCssTexts,
+        cssLayerDep,
+      } = transform(code, url, styledConfig, alias, root);
 
       allStyledElementCssMap[url] = styledElementCssTexts;
       writeStyledElementCssTexts(allStyledElementCssMap, styledElementCssFile);
@@ -136,7 +136,7 @@ const collie = (option: VitePluginOptions): Plugin => {
         );
       }
       return {
-        code: code,
+        code: transformedCode,
         map: { mappings: "" }, // a sourcemap is optional
       };
     },

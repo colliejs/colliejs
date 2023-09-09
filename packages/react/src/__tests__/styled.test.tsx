@@ -267,7 +267,7 @@ describe("render StyledComponent", () => {
       {}
     );
     const code = `<Link css={{ background: "red" }} />`;
-    const res = transform_(code, "module-id", {}, defaultConfig);
+    const res = transform_(code, "module-id", defaultConfig);
     const className = res.code.match(/className="(.*)"/)?.[1];
     const t = React.createElement(Link, {
       className: className,
