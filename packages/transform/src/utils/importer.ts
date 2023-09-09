@@ -5,20 +5,21 @@ import path from "path";
 import fs from "node:fs";
 import resolve from "resolve";
 import log from "npmlog";
-import { ImportsByName } from "./types";
+import { Alias, ImportsByName } from "./types";
 import { createRequire } from "module";
 //@ts-ignore
 if (!global.__JEST__) {
   global.require = global.require || createRequire(import.meta.url);
 }
+
 export const getImportDeclarations = (ast: t.Program) => {
-  const importers: t.ImportDeclaration[] = [];
+  const importDecls: t.ImportDeclaration[] = [];
   ast.body.forEach(node => {
     if (t.isImportDeclaration(node)) {
-      importers.push(node);
+      importDecls.push(node);
     }
   });
-  return importers;
+  return importDecls;
 };
 const isRelative = (path: string) =>
   path.startsWith("./") || path.startsWith("../");
@@ -29,21 +30,36 @@ const isRelative = (path: string) =>
  * @param modulePath
  * @returns
  */
-export const doImportDecl = (
+const doImportDecl = (
   importDecl: t.ImportDeclaration,
   modulePath: string,
-  extensions: string[]
+  alias: Alias,
+  extensions: string[],
+  preserveSymlinks = false
 ) => {
   const ModuleIdByName: ImportsByName = {};
+  const matches = Object.keys(alias);
   let moduleId = importDecl.source.value;
+  matches.forEach(match => {
+    if (moduleId.startsWith(match)) {
+      const reg = new RegExp(`^${match}`);
+      moduleId = moduleId.replace(reg, alias[match]);
+    }
+  });
 
   try {
-    if (isRelative(moduleId)) {
-      moduleId = resolve.sync(moduleId, { basedir: modulePath, extensions });
-    } else {
-      moduleId = require.resolve(moduleId, { paths: [modulePath] });
-    }
+    // if (isRelative(moduleId)) {
+    // moduleId = resolve.sync(moduleId, {
+    //   basedir: modulePath,
+    //   extensions,
+    //   paths: [],
+    //   preserveSymlinks,
+    // });
+    // // } else {
+    moduleId = require.resolve(moduleId, { paths: [modulePath] });
+    // }
   } catch (e) {
+    console.log(e.message);
     log.error(
       "resolve",
       "resolve.sync:moduleId=%s,path=%s",
@@ -80,12 +96,20 @@ export const doImportDecl = (
 export const getImports = (
   program: t.Program,
   modulePath: string,
-  extensions: string[] = [".tsx", ".ts", ".js", ".jsx", ".cjs", ".mjs"]
+  alias: Alias = {},
+  extensions: string[] = [".tsx", ".ts", ".js", ".jsx", ".cjs", ".mjs"],
+  preserveSymlinks = false
 ) => {
   const ModuleIdByName: ImportsByName = {};
   const importDecls = getImportDeclarations(program);
   importDecls.forEach(decl => {
-    const res = doImportDecl(decl, modulePath, extensions);
+    const res = doImportDecl(
+      decl,
+      modulePath,
+      alias,
+      extensions,
+      preserveSymlinks
+    );
     Object.assign(ModuleIdByName, res);
   });
   return ModuleIdByName;

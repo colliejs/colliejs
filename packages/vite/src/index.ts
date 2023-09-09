@@ -13,7 +13,7 @@ import log from "npmlog";
 import fs from "node:fs";
 import { createRequire } from "node:module";
 import path from "path";
-import { Plugin } from "vite";
+import { Plugin, ResolvedConfig, UserConfig } from "vite";
 import { config } from "node:process";
 
 global.require = global.require || createRequire(import.meta.url);
@@ -72,8 +72,8 @@ const collie = (option: VitePluginOptions): Plugin => {
   const {
     include,
     exclude,
-    styledElementCssFile = "src/styled-element.css",
-    styledComponentCssFile = "src/styled-component.css",
+    styledElementCssFile = "public/styled-element.css",
+    styledComponentCssFile = "public/styled-component.css",
     index = "src/index.ts",
     styledConfig = defaultConfig,
   } = option || {};
@@ -81,10 +81,14 @@ const collie = (option: VitePluginOptions): Plugin => {
   const allCssLayerDeps = {};
   const allStyledElementCssMap = {};
   const allStyledComponentCssMap = {};
+  let viteConfig: ResolvedConfig;
 
   return {
     name: "collie",
     enforce: "pre",
+    configResolved(resolvedConfig) {
+      viteConfig = resolvedConfig;
+    },
     async transform(_code, url) {
       if (
         url.includes("node_modules") ||
@@ -108,7 +112,11 @@ const collie = (option: VitePluginOptions): Plugin => {
       //===========================================================
       // 普通文件
       //===========================================================
-      const imports = getImports(parseCode(_code).program, path.dirname(url));
+      const imports = getImports(
+        parseCode(_code).program,
+        path.dirname(url),
+        viteConfig.resolve.alias
+      );
       let { code, styledComponentCssMap, styledElementCssTexts, cssLayerDep } =
         transform(_code, url, imports, styledConfig);
 

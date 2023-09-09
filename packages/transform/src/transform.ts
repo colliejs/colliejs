@@ -13,6 +13,14 @@ import { StyledComponent } from "./styledComponent";
 import { NodePath } from "@babel/traverse";
 import { VariableDeclaration } from "@babel/types";
 
+/**
+ * NOTE: the module should be convert commonjs first
+ * @param source
+ * @param moduleId
+ * @param modulesByName
+ * @param config
+ * @returns
+ */
 export const transform = (
   source: string,
   moduleId: string,

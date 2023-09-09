@@ -5,7 +5,6 @@ describe("test cases", () => {
     const source = `
         import _ from 'lodash';
         import {stripUnit} from 'polished';
-        import * as t from '@colliejs/core';
         import {Button} from './fixtures/Button';
         import {RedButton as BeautifulButton} from './fixtures/Button';
     `;
@@ -30,20 +29,17 @@ describe("test cases", () => {
           "importedName": "stripUnit",
           "moduleId": "${home}/code/personal/colliejs/node_modules/.pnpm/polished@4.2.2/node_modules/polished/dist/polished.cjs.js",
         },
-        "t": {
-          "importedName": "*",
-          "moduleId": "${home}/code/personal/colliejs/packages/core/dist/index.cjs",
-        },
       }
     `);
   });
+
   it("get default export", () => {
     const source = `
     import hello from './fixtures/hello';
 `;
     const ast = parseCode(source);
     const modulePath = __dirname;
-    const importers = getImports(ast.program, modulePath);
+    const importers = getImports(ast.program, modulePath, {});
     const home = process.env.HOME;
     expect(importers).toMatchInlineSnapshot(`
       {
@@ -55,5 +51,51 @@ describe("test cases", () => {
     `);
     const x = require(importers["hello"].moduleId);
     expect(x.default).toEqual("hello,world");
+  });
+
+  it("alias", () => {
+    const source = `
+    import {Button} from '@fixtures/Button';
+    `;
+    const ast = parseCode(source);
+    const modulePath = __dirname;
+    const importers = getImports(ast.program, modulePath, {
+      "@fixtures": "/fixtures",
+    });
+    const home = process.env.HOME;
+    expect(importers).toMatchInlineSnapshot(
+      `
+      {
+        "Button": {
+          "importedName": "Button",
+          "moduleId": "/fixtures/Button",
+        },
+      }
+    `
+    );
+    // const x = require(importers["Button"].moduleId);
+    // expect(x.default).toBe("");
+  });
+
+  it("packages", () => {
+    const source = `
+    import {toHash} from '@colliejs/core';
+    `;
+    const ast = parseCode(source);
+    const modulePath = __dirname;
+    const importers = getImports(ast.program, modulePath, {});
+    const home = process.env.HOME;
+    expect(importers).toMatchInlineSnapshot(
+      `
+      {
+        "toHash": {
+          "importedName": "toHash",
+          "moduleId": "/Users/che3vinci/code/personal/colliejs/packages/core/dist/index.cjs",
+        },
+      }
+    `
+    );
+    const { toHash } = require(importers["toHash"].moduleId);
+    expect(toHash({ a: 1 })).toBe("fRCpkX");
   });
 });

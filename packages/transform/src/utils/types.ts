@@ -11,3 +11,5 @@ export type ImportsByName = Record<
   string,
   { moduleId: string; importedName: string }
 >;
+
+export type Alias = { [find: string]: string };
