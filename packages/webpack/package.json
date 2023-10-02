@@ -1,0 +1,44 @@
+{
+  "name": "@colliejs/webpack",
+  "version": "1.0.0",
+  "description": "awesesome",
+  "type": "module",
+  "scripts": {
+    "build": " rollup -c rollup.config.js && pnpm type ",
+    "buildOnly": "rollup -c rollup.config.js",
+    "clean": "rm -rf dist  ",
+    "reset": "pnpm clean && rm -rf node_modules && pnpm install",
+    "type": "tsc --project . --paths null --emitDeclarationOnly --declaration",
+    "watchtype": "tsc --project . --watch"
+  },
+  "types": "./dist/index.d.ts",
+  "keywords": [],
+  "author": "colliedog1001@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "@colliejs/core": "workspace:^",
+    "@colliejs/react": "workspace:^",
+    "@colliejs/transform": "workspace:^",
+    "loader-utils": "^3.2.1",
+    "schema-utils": "^4.2.0",
+    "webpack": "^5.88.2"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "organize-imports-cli",
+      "prettier --write",
+      "eslint --cache --fix"
+    ]
+  },
+  "gitHead": "27b6889c4e336e4f58c20d23c710aa6ede398968",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./css": "./dist/index.css"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
