@@ -1,6 +1,6 @@
 {
   "name": "@colliejs/webpack",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "awesesome",
   "type": "module",
   "scripts": {
@@ -35,8 +35,7 @@
     ".": {
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
-    },
-    "./css": "./dist/index.css"
+    }
   },
   "publishConfig": {
     "access": "public"
