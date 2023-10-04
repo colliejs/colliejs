@@ -1,2 +1,2 @@
-export { collieJsLoader } from "./loader";
-export { CollieJsWebpackPlugin } from "./plugin";
+export { collieWebpackLoader } from "./loader";
+export { CollieWebpackPlugin } from "./plugin";

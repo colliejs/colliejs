@@ -18,7 +18,7 @@ const schema = {
  * @returns 
  */
 
-export function collieJsLoader(code: string) {
+export function collieWebpackLoader(code: string) {
   const options = this.getOptions();
   const { styledConfig, alias, root } = options;
 
