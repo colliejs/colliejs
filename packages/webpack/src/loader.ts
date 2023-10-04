@@ -1,26 +1,34 @@
-import { transform } from "@colliejs/transform";
+import { transform, Alias } from "@colliejs/transform";
 import { urlToRequest } from "loader-utils";
+import { Config, defaultConfig } from "@colliejs/core";
+import {
+  LoaderContext,
+  LoaderDefinition,
+  LoaderDefinitionFunction,
+} from "webpack";
 
-const schema = {
-  type: "object",
-  properties: {
-    test: {
-      type: "string",
-    },
-  },
-};
 /**
  * 
  * @param code   styledConfig?: Config;
   alias?: Alias;
   root?: string;
-
  * @returns 
  */
-
-export function collieWebpackLoader(code: string) {
+type LoaderOption = {
+  styledConfig?: Config;
+  alias?: Alias;
+  root?: string;
+};
+export function collieWebpackLoader(
+  this: LoaderContext<LoaderOption>,
+  code: string
+) {
   const options = this.getOptions();
-  const { styledConfig, alias, root } = options;
+  const {
+    styledConfig = defaultConfig,
+    alias = {},
+    root = process.cwd(),
+  } = options;
 
   const url = urlToRequest(this.resourcePath);
   console.log("===>url", url);
@@ -34,4 +42,3 @@ export function collieWebpackLoader(code: string) {
 
   return transformedCode;
 }
-

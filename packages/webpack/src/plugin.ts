@@ -1,12 +1,6 @@
 import {
   Compilation,
   Compiler,
-  Configuration,
-  EntryNormalized,
-  LoaderContext,
-  NormalModule,
-  Stats,
-  webpack,
 } from "webpack";
 import fs from "node:fs";
 import path from "node:path";
