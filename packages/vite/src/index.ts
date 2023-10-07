@@ -1,4 +1,4 @@
-import { Config, defaultConfig, createTheme } from "@colliejs/core";
+import { Config, defaultConfig, createTheme, toHash } from "@colliejs/core";
 import {
   getDepPaths,
   getImports,
@@ -103,6 +103,7 @@ const collie = (option: VitePluginOptions): Plugin => {
   const allCssLayerDeps = {};
   const allStyledElementCssMap = {};
   const allStyledComponentCssMap = {};
+  const fileHashMap = {};
   let viteConfig: ResolvedConfig;
 
   return {
@@ -177,6 +178,8 @@ const collie = (option: VitePluginOptions): Plugin => {
         build.disk.styledComponentCssFile,
         styledConfig
       );
+      fileHashMap[styledElementCssFile] = toHash(allStyledElementCssMap);
+      fileHashMap[styledComponentCssFile] = toHash(allStyledComponentCssMap);
     },
     async transformIndexHtml(html) {
       const getLinkTag = (href: string): HtmlTagDescriptor => ({
@@ -185,7 +188,7 @@ const collie = (option: VitePluginOptions): Plugin => {
           rel: "stylesheet",
           href: href,
         },
-        injectTo: 'body-prepend',
+        injectTo: "body-prepend",
       });
 
       console.log("transformIndexHtml");
@@ -201,8 +204,12 @@ const collie = (option: VitePluginOptions): Plugin => {
         return {
           html,
           tags: [
-            getLinkTag(build.href.styledElementCssFile),
-            getLinkTag(build.href.styledComponentCssFile),
+            getLinkTag(
+              `${build.href.styledElementCssFile}?hash=${fileHashMap[styledElementCssFile]}`
+            ),
+            getLinkTag(
+              `${build.href.styledComponentCssFile}?hash=${fileHashMap[styledComponentCssFile]}`
+            ),
           ],
         };
       }

@@ -9,6 +9,7 @@ const config = {
     "loader-utils",
     "webpack",
     "schema-utils",
+    "fast-safe-stringify",
   ],
 };
 export default config;
