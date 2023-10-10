@@ -30,24 +30,29 @@ global.window = {
 };
 const styledElementCssFile = "styled-element.css";
 const styledComponentCssFile = "styled-component.css";
+const styledThemeCssFile = "style.theme.css";
 const serve = {
   href: {
     styledElementCssFile: `/src/${styledElementCssFile}`,
     styledComponentCssFile: `/src/${styledComponentCssFile}`,
+    styledThemeCssFile: `/src/${styledThemeCssFile}`,
   },
   disk: {
     styledElementCssFile: `src/${styledElementCssFile}`,
     styledComponentCssFile: `src/${styledComponentCssFile}`,
+    styledThemeCssFile: `src/${styledThemeCssFile}`,
   },
 };
 const build = {
   href: {
     styledElementCssFile: `/${styledElementCssFile}`,
     styledComponentCssFile: `/${styledComponentCssFile}`,
+    styledThemeCssFile: `/${styledThemeCssFile}`,
   },
   disk: {
     styledElementCssFile: `dist/${styledElementCssFile}`,
     styledComponentCssFile: `dist/${styledComponentCssFile}`,
+    styledThemeCssFile: `dist/${styledThemeCssFile}`,
   },
 };
 
@@ -90,6 +95,13 @@ const writeStyledComponentCssTexts = (
   }`;
   writeCssText(finalCssText, cssFilename);
 };
+const writeStyledThemeCssTexts = (
+  styledConfig: Config,
+  cssFileName: string
+) => {
+  const cssText = createTheme(styledConfig);
+  writeCssText(cssText, cssFileName);
+};
 
 const collie = (option: VitePluginOptions): Plugin => {
   const {
@@ -125,10 +137,7 @@ const collie = (option: VitePluginOptions): Plugin => {
       // collie.config.js配置文件变动后，重新生成theme 样式文件
       //===========================================================
       if (/collie\.config\.(ts|js|cjs)/.test(url)) {
-        const cssText = createTheme(styledConfig);
-        const cssFilename = "collie.config.css";
-        writeCssText(cssText, cssFilename);
-
+        writeStyledThemeCssTexts(styledConfig, serve.disk.styledThemeCssFile);
         return UNCHANGED;
       }
 
@@ -178,8 +187,10 @@ const collie = (option: VitePluginOptions): Plugin => {
         build.disk.styledComponentCssFile,
         styledConfig
       );
+      writeStyledThemeCssTexts(styledConfig, build.disk.styledThemeCssFile);
       fileHashMap[styledElementCssFile] = toHash(allStyledElementCssMap);
       fileHashMap[styledComponentCssFile] = toHash(allStyledComponentCssMap);
+      fileHashMap[styledThemeCssFile] = toHash(JSON.stringify(styledConfig));
     },
     async transformIndexHtml(html) {
       const getLinkTag = (href: string): HtmlTagDescriptor => ({
@@ -198,6 +209,7 @@ const collie = (option: VitePluginOptions): Plugin => {
           tags: [
             getLinkTag(serve.href.styledElementCssFile),
             getLinkTag(serve.href.styledComponentCssFile),
+            getLinkTag(serve.href.styledThemeCssFile),
           ],
         };
       } else {
@@ -209,6 +221,9 @@ const collie = (option: VitePluginOptions): Plugin => {
             ),
             getLinkTag(
               `${build.href.styledComponentCssFile}?hash=${fileHashMap[styledComponentCssFile]}`
+            ),
+            getLinkTag(
+              `${build.href.styledThemeCssFile}?hash=${fileHashMap[styledThemeCssFile]}`
             ),
           ],
         };
