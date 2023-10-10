@@ -30,7 +30,7 @@ global.window = {
 };
 const styledElementCssFile = "styled-element.css";
 const styledComponentCssFile = "styled-component.css";
-const styledThemeCssFile = "style.theme.css";
+const styledThemeCssFile = "styled-theme.css";
 const serve = {
   href: {
     styledElementCssFile: `/src/${styledElementCssFile}`,
