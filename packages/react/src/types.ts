@@ -14,7 +14,7 @@ export { Util, CSSUtil, Stitches };
 // import { defaultConfig } from "@colliejs/core";
 import { ConfigType, DefaultThemeMap } from "./types/config";
 import { JSXElement } from "@babel/types";
-export type IntrinsicElementsKeys = keyof JSX.IntrinsicElements;
+export type IntrinsicElementsKeys = keyof JSX.IntrinsicElements | (string & {});
 export type HTMLTags = keyof HTMLElementTagNameMap;
 type IsHostComponent<T> = T extends IntrinsicElementsKeys ? true : false;
 
