@@ -60,12 +60,16 @@ export type _Config = {
   themeMap: {};
   utils: {};
 };
-export type MyCss<T extends _Config> = CSSUtil.CSS<
+export type _MyCss<T extends _Config> = CSSUtil.CSS<
   T["media"],
   T["theme"],
   T["themeMap"],
   T["utils"]
 >;
+export type MyCss<T extends _Config> = {
+  [K in keyof _MyCss<T>]: _MyCss<T>[K] | _MyCss<T>[K][];
+};
+
 //===========================================================
 // ExtractPropsFromStyling
 //===========================================================
@@ -213,7 +217,7 @@ type x221 = Prop["css"];
 type x3 = Prop["onClick"];
 type x4 = JSX.IntrinsicElements["div"]["onClick"];
 const Image = styled(
-  'span',
+  "span",
   {
     variants: {
       shape: {
