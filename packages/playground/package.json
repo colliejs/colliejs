@@ -1,6 +1,6 @@
 {
   "name": "@colliejs/playground",
-  "version": "1.0.145",
+  "version": "1.0.146",
   "description": "awesesome",
   "type": "module",
   "scripts": {
@@ -30,8 +30,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@colliejs/react": "workspace:^1.0.50",
-    "@colliejs/vite": "workspace:^1.0.57",
+    "@colliejs/react": "workspace:^1.0.51",
+    "@colliejs/vite": "workspace:^1.0.58",
     "@rollup/plugin-commonjs": "^24.1.0",
     "@rollup/plugin-node-resolve": "^15.1.0",
     "@vitejs/plugin-react": "^2.2.0",
