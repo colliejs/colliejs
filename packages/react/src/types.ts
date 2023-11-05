@@ -63,7 +63,7 @@ export type _Config = {
   media: {};
   theme: {};
   themeMap: {};
-  breakpoints?: number[];
+  breakpoints?: readonly number[];
   utils: {};
 };
 export type _MyCss<T extends _Config> = CSSUtil.CSS<
