@@ -228,10 +228,10 @@ importers:
   packages/playground:
     dependencies:
       "@colliejs/react":
-        specifier: workspace:^1.0.53
+        specifier: workspace:^1.0.54
         version: link:../react
       "@colliejs/vite":
-        specifier: workspace:^1.0.60
+        specifier: workspace:^1.0.61
         version: link:../vite
       "@rollup/plugin-commonjs":
         specifier: ^24.1.0
