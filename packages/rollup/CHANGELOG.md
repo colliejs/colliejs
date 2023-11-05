@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.54](https://github.com/colliejs/colliejs/compare/@colliejs/rollup@1.0.53...@colliejs/rollup@1.0.54) (2023-11-05)
+
+**Note:** Version bump only for package @colliejs/rollup
+
 ## [1.0.53](https://github.com/colliejs/colliejs/compare/@colliejs/rollup@1.0.52...@colliejs/rollup@1.0.53) (2023-10-26)
 
 **Note:** Version bump only for package @colliejs/rollup

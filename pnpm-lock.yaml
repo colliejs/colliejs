@@ -1,5 +1,9 @@
 lockfileVersion: "6.0"
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 importers:
   .:
     dependencies:
@@ -224,10 +228,10 @@ importers:
   packages/playground:
     dependencies:
       "@colliejs/react":
-        specifier: workspace:^1.0.52
+        specifier: workspace:^1.0.53
         version: link:../react
       "@colliejs/vite":
-        specifier: workspace:^1.0.59
+        specifier: workspace:^1.0.60
         version: link:../vite
       "@rollup/plugin-commonjs":
         specifier: ^24.1.0

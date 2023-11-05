@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.16](https://github.com/colliejs/colliejs/compare/@colliejs/core@1.0.15...@colliejs/core@1.0.16) (2023-11-05)
+
+### Features
+
+- add dynamic for variants ([5ad9001](https://github.com/colliejs/colliejs/commit/5ad9001064fb43bf1190f317562f361275e0dc8a))
+
 ## [1.0.15](https://github.com/colliejs/colliejs/compare/@colliejs/core@1.0.14...@colliejs/core@1.0.15) (2023-09-03)
 
 **Note:** Version bump only for package @colliejs/core

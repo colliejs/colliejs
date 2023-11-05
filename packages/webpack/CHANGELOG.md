@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.8](https://github.com/colliejs/colliejs/compare/@colliejs/webpack@1.0.7...@colliejs/webpack@1.0.8) (2023-11-05)
+
+**Note:** Version bump only for package @colliejs/webpack
+
 ## [1.0.7](https://github.com/colliejs/colliejs/compare/@colliejs/webpack@1.0.6...@colliejs/webpack@1.0.7) (2023-10-26)
 
 **Note:** Version bump only for package @colliejs/webpack
