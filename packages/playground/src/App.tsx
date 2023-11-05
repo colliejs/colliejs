@@ -12,8 +12,9 @@ export default function App() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-      <Button>Button</Button>
+      <Button size="big">Button</Button>
       <MyButton shape={"round"}> MyButton</MyButton>
+      <MyButton shape={[12]}> MyButton</MyButton>
       <br />
       <SpecialButton shape={"round"}>SpecialButton1</SpecialButton>
       <SpecialButton2 shape={"round"}>SpecialButton2</SpecialButton2>

@@ -9,7 +9,7 @@ import {
   transform as transform_,
 } from "@colliejs/transform";
 
-import { styled } from "../styled";
+import { styled } from "../index";
 import TestRenderer from "react-test-renderer";
 import React, { AnchorHTMLAttributes, HTMLAttributes } from "react";
 import traverse_ from "@babel/traverse";
@@ -131,6 +131,58 @@ describe("render StyledComponent", () => {
       </div>
     `);
   });
+
+  it("render StyledComponent width dynamic variant with propery key", () => {
+    const Text = styled(
+      "div",
+      "",
+      {
+        "variants-dynamic-shape-borderRadius":
+          "variants-dynamic-shape-borderRadius-dlbLfd",
+      },
+      {}
+    );
+    const comp = TestRenderer.create(<Text shape={2}>hello</Text>);
+    expect(comp.toJSON()).toMatchInlineSnapshot(`
+      <div
+        className="  variants-dynamic-shape-borderRadius-dlbLfd"
+        style={
+          {
+            "--variants-dynamic-shape": "2px",
+          }
+        }
+      >
+        hello
+      </div>
+    `);
+  });
+
+  it("render StyledComponent width dynamic variant support all device", () => {
+    const Text = styled(
+      "div",
+      "",
+      {
+        "variants-dynamic-shape-borderRadius-at":
+          "variants-dynamic-shape-borderRadius-dlbLfd",
+      },
+      {}
+    );
+    const comp = TestRenderer.create(<Text shape={2}>hello</Text>);
+    expect(comp.toJSON()).toMatchInlineSnapshot(`
+      <div
+        className="  variants-dynamic-shape-borderRadius-dlbLfd"
+        style={
+          {
+            "--variants-dynamic-shape-at320": "2px",
+            "--variants-dynamic-shape-at768": "2px",
+          }
+        }
+      >
+        hello
+      </div>
+    `);
+  });
+
   it("styled function width as option", () => {
     const Comp = styled("div", "baseStyle-gmqXFB", {}, {}, { as: "a" });
     const comp = TestRenderer.create(<Comp />);

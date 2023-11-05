@@ -11,7 +11,7 @@ export const defaultConfig = {
     pc: "(min-width: 1024px)",
     mobile: "(max-width: 1023.999px)",
   },
-  breakpoints: [768],
+  breakpoints: [320, 768],
   theme: {
     colors: {},
   },

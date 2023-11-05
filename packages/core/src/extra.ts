@@ -1,11 +1,16 @@
 //@ts-ignore
+import { type } from "os";
+import {
+  CSSPropertiesComplex,
+  DynamicVariantFnName,
+  DynamicVariantKey,
+  ReadOnlyDynamicVariantVariable,
+  ReadOnlyDynamicVariantVariableValue,
+  StaticVariantKey,
+  VariantName,
+  VariantValue,
+} from "./type";
 import { toCamelCase } from "./utils/toCamelCase";
-
-export type VariantName = string;
-export type VariantValue = string | number;
-
-export type StaticVariantKey = `variants-static-${VariantName}-${VariantValue}`;
-export type DynamicVariantKey = `variants-dynamic-${VariantName}`;
 
 export const getStaticVariantKey = (
   variantName: VariantName,
@@ -16,7 +21,46 @@ export const getStaticVariantKey = (
   )}`;
 };
 export const getDynamicVariantKey = (
-  variantName: VariantName
+  variantName: VariantName,
+  fnName?: DynamicVariantFnName
 ): DynamicVariantKey => {
-  return `variants-dynamic-${toCamelCase(variantName)}`;
+  if (!fnName || typeof fnName !== "string") {
+    return `variants-dynamic-${toCamelCase(variantName)}`;
+  }
+  const cssPropKey = fnName.replace(/dynamic_?|_at$/g, "");
+  if (!cssPropKey) {
+    return `variants-dynamic-${toCamelCase(variantName)}`;
+  }
+  if (/_at$/.test(fnName)) {
+    return `variants-dynamic-${toCamelCase(variantName)}-${toCamelCase(
+      cssPropKey
+    )}-at`;
+  }
+  return `variants-dynamic-${toCamelCase(variantName)}-${toCamelCase(
+    cssPropKey
+  )}`;
+};
+
+//因为variable只在当前元素生效，所以不需要加上其他限制
+export const getDynamicVariable = (
+  variantName: VariantName,
+  breakpointName?: string | number
+): ReadOnlyDynamicVariantVariable => {
+  if (!breakpointName) {
+    return `--variants-dynamic-${toCamelCase(variantName)}` as const;
+  }
+  return `--variants-dynamic-${toCamelCase(
+    variantName
+  )}-at${breakpointName}` as const;
+};
+
+export const getDynamicVariableValue = (
+  variantName: VariantName,
+  breakpointName?: string | number
+): ReadOnlyDynamicVariantVariableValue => {
+  return `var(${getDynamicVariable(variantName, breakpointName)})`;
+};
+
+export const isSupportBreak = (fnName: string) => {
+  return /_at$/.test(fnName);
 };

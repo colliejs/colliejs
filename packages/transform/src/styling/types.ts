@@ -1,5 +1,6 @@
 import {
   CSSPropertiesComplex,
+  DynamicVariantFn,
   DynamicVariantKey,
   StaticVariantKey,
   VariantName,
@@ -12,9 +13,11 @@ export type CSSInfo = {
   className: string; //被渲染的原数的className。当前元素的className
 };
 
+
+
 export type DynamicVariant = {
   className: string;
-  fn: (x: `var(--variants-dynamic-${string})`) => CSSPropertiesComplex;
+  fn: DynamicVariantFn;
 };
 
 export type VariantParsed = {

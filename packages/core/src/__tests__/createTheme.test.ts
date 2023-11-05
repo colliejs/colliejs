@@ -9,7 +9,6 @@ describe("test cases", () => {
         colors: { primary: "blue", secondary: "white", positiveColor: "blue" },
       },
     });
-    x;
     expect(x).toMatchInlineSnapshot(
       `":root{--co-colors-primary:blue;--co-colors-secondary:white;--co-colors-positiveColor:blue}"`
     );

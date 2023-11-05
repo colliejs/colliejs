@@ -1,21 +1,20 @@
 import { CSSPropertiesComplex } from "../type";
-import { arraySyntax } from "./../css";
-import { css } from "../css";
+import { css } from "./../css";
 import { defaultConfig } from "../config";
 
 describe("test cases", () => {
   it("should work ", () => {
     const cssRawObj = {
       width: [10, 20],
-      h: [20, 50],
+      h: [20, "var(--xs-height)"],
     } as unknown as CSSPropertiesComplex;
     const res = css(cssRawObj, [".button"], undefined, defaultConfig);
     expect(res).toMatchInlineSnapshot(`
-      "@media (max-width:767.9999px){.button{width:10px;height:20px}}
-      @media (min-width:768px){.button{width:20px;height:50px}}"
+      "@media (min-width:320px){.button{width:10px;height:20px}}
+      @media (min-width:768px){.button{width:20px;height:var(--xs-height)}}"
     `);
   });
-  it.skip("should work ", () => {
+  it("should work ", () => {
     const cssRawObj = {
       width: [10, 20],
       "& > span": {
@@ -25,15 +24,15 @@ describe("test cases", () => {
     } as unknown as CSSPropertiesComplex;
     const res = css(cssRawObj, [".button"], [], defaultConfig);
     expect(res).toMatchInlineSnapshot(`
-      "@media (max-width:767.9999px){.button{width:10px}}
+      "@media (min-width:320px){.button{width:10px}}
       @media (min-width:768px){.button{width:20px}}
-      @media (max-width:767.9999px){.button > span{width:10px}}
+      @media (min-width:320px){.button > span{width:10px}}
       @media (min-width:768px){.button > span{width:20px}}
-      @media (support:xxx){@media (max-width:767.9999px){.button > span{width:10px}}}
+      @media (support:xxx){@media (min-width:320px){.button > span{width:10px}}}
       @media (support:xxx){@media (min-width:768px){.button > span{width:20px}}}"
     `);
   });
-  it.skip("support variable", () => {
+  it("support variable", () => {
     const cssRawObj = {
       color: "$primary",
       w: 100,

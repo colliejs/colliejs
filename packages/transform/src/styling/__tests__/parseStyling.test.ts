@@ -122,7 +122,6 @@ describe("parseStyleObj", () => {
       ],
     };
     const res = parseStyling(styleObj, defaultConfig);
-    res;
     expect(res).toMatchInlineSnapshot(`
       {
         "baseStyle": {
@@ -149,6 +148,46 @@ describe("parseStyleObj", () => {
           "cssGenText": ".variants-static-type-primary-gmqXFB{color:red}",
           "cssRawObj": {
             "color": "red",
+          },
+        },
+      }
+    `);
+  });
+  it("dynamic function with css propery name", () => {
+    const styleObj: Styling = {
+      variants: {
+        size1: {
+          dynamic_width: x => ({ width: x }),
+        },
+        size: {
+          dynamic_width_at: x => ({ width: x }),
+        },
+      },
+    };
+    const res = parseStyling(styleObj, defaultConfig, "prefix");
+    expect(res).toMatchInlineSnapshot(`
+      {
+        "baseStyle": {
+          "className": "baseStyle-prefix-PJLV",
+          "cssGenText": "",
+          "cssRawObj": {},
+        },
+        "variants-dynamic-size-width-at": {
+          "className": "variants-dynamic-size-width-at-cUqJtr",
+          "cssGenText": "@media (min-width:320px){.variants-dynamic-size-width-at-cUqJtr{width:var(--variants-dynamic-size-at320)}}
+      @media (min-width:768px){.variants-dynamic-size-width-at-cUqJtr{width:var(--variants-dynamic-size-at768)}}",
+          "cssRawObj": {
+            "width": [
+              "var(--variants-dynamic-size-at320)",
+              "var(--variants-dynamic-size-at768)",
+            ],
+          },
+        },
+        "variants-dynamic-size1-width": {
+          "className": "variants-dynamic-size1-width-iFYilI",
+          "cssGenText": ".variants-dynamic-size1-width-iFYilI{width:var(--variants-dynamic-size1)}",
+          "cssRawObj": {
+            "width": "var(--variants-dynamic-size1)",
           },
         },
       }

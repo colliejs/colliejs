@@ -2,9 +2,13 @@ import {
   CSSPropertiesComplex,
   Config,
   css,
+  getDynamicVariableValue,
   getDynamicVariantKey,
   getStaticVariantKey,
   toHash,
+  ReadOnlyDynamicVariantVariableValue,
+  DynamicVariantFnName,
+  DynamicVariantFn,
 } from "@colliejs/core";
 import _ from "lodash";
 import {
@@ -14,6 +18,8 @@ import {
   VariantDeclBlock,
   VariantParsed,
 } from "./types";
+import { s } from "@c3/utils";
+import { isSupportBreak } from "@colliejs/core";
 
 export type Props = { [k: string]: any };
 
@@ -40,17 +46,30 @@ export const parseStyling = (
   const variants = styling["variants"];
   for (const variantName in variants) {
     const variantDeclBlock: VariantDeclBlock = variants[variantName];
-
     for (const variantValue in variantDeclBlock) {
-      const isDynamic = variantValue === "dynamic";
-      const dynamicVariantKey = getDynamicVariantKey(variantName);
-      const staticVariantKey = getStaticVariantKey(variantName, variantValue);
-      let cssObj = variantDeclBlock[variantValue];
-      if (typeof cssObj === "function") {
-        cssObj = cssObj(`var(--${dynamicVariantKey})`);
+      let variantKey: string;
+      let cssObj = {} as CSSPropertiesComplex;
+      let cssObjOrDynamicFn = variantDeclBlock[variantValue];
+      const isDynamicVariantFn = typeof cssObjOrDynamicFn === "function";
+      if (isDynamicVariantFn) {
+        const dynFn = cssObjOrDynamicFn as DynamicVariantFn;
+        variantValue
+        variantKey = getDynamicVariantKey(
+          variantName,
+          variantValue as DynamicVariantFnName
+        );
+        const supportBreaksPoints = isSupportBreak(variantValue);
+        if (supportBreaksPoints) {
+          cssObj = dynFn(
+            config.breakpoints.map(e => getDynamicVariableValue(variantName, e))
+          );
+        } else {
+          cssObj = dynFn(getDynamicVariableValue(variantName));
+        }
+      } else {
+        variantKey = getStaticVariantKey(variantName, variantValue);
+        cssObj = cssObjOrDynamicFn as CSSPropertiesComplex;
       }
-      const variantKey = isDynamic ? dynamicVariantKey : staticVariantKey;
-
       const className = `${variantKey}-${toHash(cssObj)}`;
       res[variantKey] = {
         cssGenText: css(cssObj, [`.${className}`], [], config),

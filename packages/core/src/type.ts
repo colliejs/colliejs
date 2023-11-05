@@ -43,3 +43,39 @@ export type Config = {
   layername: string;
 };
 
+export type ClassNameLiteral = string;
+export type VariantName = string;
+export type VariantValue = string | number;
+export type CSSPropKey = string;
+
+export type StaticVariantKey = `variants-static-${VariantName}-${VariantValue}`;
+
+//以后再静态编译时自动设置CSSPropKey
+export type DynamicVariantKey =
+  | `variants-dynamic-${VariantName}` //不支持breakpoints
+  | `variants-dynamic-${VariantName}-${CSSPropKey}` //不支持breakpoints
+  | `variants-dynamic-${VariantName}-at` //支持breakpoints
+  | `variants-dynamic-${VariantName}-${CSSPropKey}-at`; //支持breakpoints
+
+export type BreakpointName = `at${string}`;
+
+export type ReadOnlyDynamicVariantVariable =
+  | `--variants-dynamic-${string}`
+  | `--variants-dynamic-${string}-${BreakpointName}`;
+
+export type ReadOnlyDynamicVariantVariableValue =
+  | `var(--variants-dynamic-${string})`
+  | `var(--variants-dynamic-${string}-${BreakpointName})`;
+
+//函数名的结构
+//dynamic_${CSSPropKey}_at
+export type DynamicVariantFnName =
+  | `dynamic`
+  | `dynamic_${CSSPropKey}`
+  | `dynamic_at`
+  | `dynamic_${CSSPropKey}_at`;
+export type DynamicVariantFn = (
+  cssVariableValue:
+    | ReadOnlyDynamicVariantVariableValue
+    | ReadOnlyDynamicVariantVariableValue[]
+) => CSSPropertiesComplex;

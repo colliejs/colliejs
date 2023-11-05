@@ -13,7 +13,10 @@ describe("test cases", () => {
                 },
                 rect:{
                     borderRadius: 0,
-                }
+                },
+                dynamic:x=>({
+                    borderRadius:x
+                })
             }
         }
     });
@@ -25,7 +28,8 @@ describe("test cases", () => {
     expect(res.code).toMatchInlineSnapshot(`
       "const Button = styled('button', "baseStyle-Button-elTJue", {
         "variants-static-shape-round": "variants-static-shape-round-hECRKn",
-        "variants-static-shape-rect": "variants-static-shape-rect-iydAuT"
+        "variants-static-shape-rect": "variants-static-shape-rect-iydAuT",
+        "variants-dynamic-shape": "variants-dynamic-shape-dlbLfd"
       }, {});
       export const App = () => {
         return <Button className="css-kydkiA"></Button>;
@@ -40,7 +44,8 @@ describe("test cases", () => {
       {
         "code": "const Button = styled('button', "baseStyle-Button-elTJue", {
         "variants-static-shape-round": "variants-static-shape-round-hECRKn",
-        "variants-static-shape-rect": "variants-static-shape-rect-iydAuT"
+        "variants-static-shape-rect": "variants-static-shape-rect-iydAuT",
+        "variants-dynamic-shape": "variants-dynamic-shape-dlbLfd"
       }, {});
       export const App = () => {
         return <Button className="css-kydkiA"></Button>;
@@ -51,6 +56,7 @@ describe("test cases", () => {
         "styledComponentCssMap": {
           "moduleId2-Button-eoQCcI": ".baseStyle-Button-elTJue{background:red}.variants-static-shape-round-hECRKn{border-radius:50%}
       .variants-static-shape-rect-iydAuT{border-radius:0}
+      .variants-dynamic-shape-dlbLfd{border-radius:var(--variants-dynamic-shape)}
       ",
         },
         "styledElementCssTexts": ".css-kydkiA{color:blue}",
@@ -96,8 +102,7 @@ describe("test cases", () => {
         </Button>
       }
     `;
-    expect(transform(code, "moduleId2", defaultConfig))
-      .toMatchInlineSnapshot(`
+    expect(transform(code, "moduleId2", defaultConfig)).toMatchInlineSnapshot(`
       {
         "code": "const MyButton = props => {
         const {

@@ -4,10 +4,12 @@
     @layer MyButton_tsx-MyButton-cjEnLX {
     .baseStyle-MyButton-kbaBOx{width:200px;height:40px;background-color:red}.variants-static-shape-square-iydAuT{border-radius:0}
 .variants-static-shape-round-iBAKKK{border-radius:92299px}
-.variants-dynamic-shape-dlbLfd{border-radius:var(--variants-dynamic-shape)}
+@media (min-width:320px){.variants-dynamic-shape-borderRadius-at-DpjnB{border-radius:var(--variants-dynamic-shape-at320)}}
+@media (min-width:768px){.variants-dynamic-shape-borderRadius-at-DpjnB{border-radius:var(--variants-dynamic-shape-at768)}}
 
     @layer Button_tsx-Button-bwSERP {
-      .baseStyle-Button-egXiPE{border:none;color:white;background-color:blue;box-shadow:0 0 0 10px rgba(0, 0, 0, 0.3)}    
+      .baseStyle-Button-iYNnSi{border:none;color:white;background-color:yellow;box-shadow:0 0 0 10px rgba(0, 0, 0, 0.3)}.variants-static-size-big-ctMkZK{width:200px;height:40px}
+    
     }
   }
   }

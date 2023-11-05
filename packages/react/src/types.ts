@@ -14,7 +14,12 @@ export { Util, CSSUtil, Stitches };
 // import { defaultConfig } from "@colliejs/core";
 import { ConfigType, DefaultThemeMap } from "./types/config";
 import { JSXElement } from "@babel/types";
-export type IntrinsicElementsKeys = keyof JSX.IntrinsicElements | (string & {});
+import {
+  DynamicVariantFnName,
+  ReadOnlyDynamicVariantVariableValue,
+} from "@colliejs/core";
+// export type IntrinsicElementsKeys = keyof JSX.IntrinsicElements | (string & {});
+export type IntrinsicElementsKeys = keyof JSX.IntrinsicElements;
 export type HTMLTags = keyof HTMLElementTagNameMap;
 type IsHostComponent<T> = T extends IntrinsicElementsKeys ? true : false;
 
@@ -58,6 +63,7 @@ export type _Config = {
   media: {};
   theme: {};
   themeMap: {};
+  breakpoints?: number[];
   utils: {};
 };
 export type _MyCss<T extends _Config> = CSSUtil.CSS<
@@ -73,29 +79,56 @@ export type MyCss<T extends _Config> = {
 //===========================================================
 // ExtractPropsFromStyling
 //===========================================================
-type DynamicFnPara<T extends string> = `var(--variants-dynamic-${T})`;
 export type DynamicFn<T extends string, C extends _Config> = (
-  x: DynamicFnPara<T>
+  x: ReadOnlyDynamicVariantVariableValue | ReadOnlyDynamicVariantVariableValue[]
 ) => MyCss<C>;
 
 export type MyStyling<C extends _Config> = MyCss<C> & {
   variants?: {
-    [key in string]: Partial<
-      Record<"dynamic" | (string & {}), MyCss<C> | DynamicFn<key, C>>
-    >;
+    [key in string]: {
+      [V in DynamicVariantFnName | (string & {})]?:
+        | DynamicFn<key, C>
+        | MyCss<C>;
+    };
   };
   compoundVariants?: any;
   defaultVariants?: any;
 };
+// 判断K1和K2是否有交集，如果有返回true,否则返回false
+export type Intersection<K1, K2> = K1 & K2 extends never ? false : true;
 
 export type ExtractPropsFromStyling<
   T extends { variants?: { [name: string]: unknown } }
 > = {
-  [K in keyof T["variants"]]?: keyof T["variants"][K] extends "dynamic"
-    ? string | number
-    : Util.Widen<keyof T["variants"][K]>;
+  [K in keyof T["variants"]]?: Intersection<
+    keyof T["variants"][K],
+    DynamicVariantFnName
+  > extends true
+    ? //TODO: | Util.Widen<Omit<keyof T["variants"][K], DynamicVariantFnName>>
+      | ((Util.Widen<keyof T["variants"][K]> | (string & {})) | number)
+        | (
+            | (Util.Widen<keyof T["variants"][K]> | (string & {}))
+            | number
+            | undefined
+          )[]
+    : Util.Widen<keyof T["variants"][K]> | Util.Widen<keyof T["variants"][K]>[];
 };
 
+type o = {
+  k: "a" | "b" | (string & {});
+};
+type o1<t extends o["k"]> = "1";
+type x = o1<"a2">;
+type T = {
+  variants: { shape: { round: {}; dynamic: () => {} } };
+};
+type T1 = {
+  variants: { shape: { round: {} } };
+};
+// type t1 = T1["variants"]["shape"];
+// type x1 = ExtractPropsFromStyling<T>;
+// type x11 = "xxx" extends x1["shape"] ? true : false;
+// type x2 = ExtractPropsFromStyling<T1>;
 //===========================================================
 // MyStyledComponent
 //TODO: 处理variants覆盖的情况
@@ -206,6 +239,9 @@ const Box = styled("div", {
     shape: {
       circle: {
         borderRadius: "50%",
+      },
+      dynamic: x => {
+        return {};
       },
     },
   },

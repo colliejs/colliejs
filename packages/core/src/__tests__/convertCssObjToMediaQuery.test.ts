@@ -1,5 +1,5 @@
+import { convertCssObjToMediaQuery } from "../arraySyntax";
 import { defaultConfig } from "../config";
-import { convertCssObjToMediaQuery } from "../css";
 import { CSSPropertiesComplex } from "../type";
 
 describe("convertCssObjToMediaQuery", () => {
@@ -9,10 +9,10 @@ describe("convertCssObjToMediaQuery", () => {
       height: [20, 40],
       color: "white",
     };
-    const res = convertCssObjToMediaQuery(cssObj, defaultConfig.breakpoints!);
+    const res = convertCssObjToMediaQuery(cssObj, [320, 768]);
     expect(res).toMatchInlineSnapshot(`
       {
-        "@media (max-width:767.9999px)": {
+        "@media (min-width:320px)": {
           "height": 20,
           "width": 10,
         },
@@ -32,18 +32,18 @@ describe("convertCssObjToMediaQuery", () => {
         "@media (support:xxx)": { width: [10, 20] },
       },
     } as unknown as CSSPropertiesComplex;
-    const res = convertCssObjToMediaQuery(cssObj, defaultConfig.breakpoints!);
+    const res = convertCssObjToMediaQuery(cssObj, [320, 768]);
     expect(res).toMatchInlineSnapshot(`
       {
         "& > span": {
-          "@media (max-width:767.9999px)": {
+          "@media (min-width:320px)": {
             "width": 10,
           },
           "@media (min-width:768px)": {
             "width": 20,
           },
           "@media (support:xxx)": {
-            "@media (max-width:767.9999px)": {
+            "@media (min-width:320px)": {
               "width": 10,
             },
             "@media (min-width:768px)": {
@@ -51,7 +51,7 @@ describe("convertCssObjToMediaQuery", () => {
             },
           },
         },
-        "@media (max-width:767.9999px)": {
+        "@media (min-width:320px)": {
           "width": 10,
         },
         "@media (min-width:768px)": {
