@@ -78,6 +78,7 @@ export type MyCss<T extends _Config> = {
 
 //===========================================================
 // ExtractPropsFromStyling
+// - DynamicFn:根据不同函数名，参数类型不同
 //===========================================================
 export type DynamicFn<T extends string, C extends _Config> = (
   x: ReadOnlyDynamicVariantVariableValue | ReadOnlyDynamicVariantVariableValue[]
