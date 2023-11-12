@@ -19,7 +19,7 @@ type LoaderOption = {
   alias?: Alias;
   root?: string;
 };
-export function collieWebpackLoader(
+export default function collieWebpackLoader(
   this: LoaderContext<LoaderOption>,
   code: string
 ) {

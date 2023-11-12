@@ -42,7 +42,7 @@ const writeStyledComponentCssTexts = (
   writeCssText(finalCssText, cssFilename);
 };
 
-export class CollieWebpackPlugin {
+export default class CollieWebpackPlugin {
   private outputDir: string = process.cwd();
 
   apply(compiler: Compiler) {
@@ -70,7 +70,7 @@ export class CollieWebpackPlugin {
         //@ts-ignore
         const url = module.resource || "";
         //TODO:t
-        if (/.tsx?/.test(url)) {
+        if (/.[tj]sx?/.test(url)) {
           const code = fs.readFileSync(url, "utf-8");
           let { styledElementCssTexts, cssLayerDep, styledComponentCssMap } =
             transform(code, url, defaultConfig);

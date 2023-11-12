@@ -24,7 +24,7 @@ const Button = styled("button", {
   _after:{ // after pseudo element
     background: "$primary",
     h:'100%'.
-    w: [10,4],
+    w: [10, 4],
     ...absYCenter({righ: 10}),
   }
   variants: {

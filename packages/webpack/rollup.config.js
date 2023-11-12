@@ -4,6 +4,10 @@ import rollupConfig from "../../scripts/rollup.config.js";
  */
 const config = {
   ...rollupConfig,
+  input: ["src/loader.ts", "src/plugin.ts"],
+  output: {
+    dir: "dist",
+  },
   external: [
     ...rollupConfig["external"],
     "loader-utils",
