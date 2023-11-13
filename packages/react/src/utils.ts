@@ -1,5 +1,6 @@
 import { unitProps } from "@colliejs/core";
-import { isNil } from "@c3/utils";
+export const isNil = x => x === null || x === undefined;
+export const toArray = x => Array.isArray(x) ? x : [x];
 
 export const isObject = (x: unknown): x is object =>
   typeof x === "object" && x !== null;

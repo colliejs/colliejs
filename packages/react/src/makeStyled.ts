@@ -9,8 +9,7 @@ import {
 import _ from "lodash";
 import React, { ElementType, ForwardRefRenderFunction } from "react";
 import { MakeStyled, _Config } from "./types";
-import { getCSSValue, isObject, isString } from "./utils";
-import { toArray } from "@c3/utils";
+import { getCSSValue, isObject, isString, toArray } from "./utils";
 
 export type StyledOption<
   P extends BaseStyledComponentProps,

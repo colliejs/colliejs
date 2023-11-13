@@ -4,7 +4,7 @@ console.log("styled", styled);
 const Button = styled("button", {
   w: 100,
   h: 40,
-  background: "White",
+  background: "red",
 });
 
 const App: React.FC = props => {

@@ -1,7 +1,4 @@
-import {
-  Compilation,
-  Compiler,
-} from "webpack";
+import { Compilation, Compiler } from "webpack";
 import fs from "node:fs";
 import path from "node:path";
 const safeStringify = require("fast-safe-stringify");
@@ -69,8 +66,8 @@ export default class CollieWebpackPlugin {
       compilation.hooks.buildModule.tap(PLUGIN_NAME, module => {
         //@ts-ignore
         const url = module.resource || "";
-        //TODO:t
-        if (/.[tj]sx?/.test(url)) {
+        if (/\.[tj]sx?$/.test(url) && !/node_modules/.test(url)) {
+          console.log("===>url", url);
           const code = fs.readFileSync(url, "utf-8");
           let { styledElementCssTexts, cssLayerDep, styledComponentCssMap } =
             transform(code, url, defaultConfig);
@@ -82,4 +79,3 @@ export default class CollieWebpackPlugin {
     });
   }
 }
-
