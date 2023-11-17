@@ -2,12 +2,19 @@ import rollupConfig from "../../scripts/rollup.config.js";
 /**
  * @type {import('rollup').RollupOptions}
  */
-const config = {
+const loaderConfig = {
   ...rollupConfig,
-  input: ["src/loader.ts", "src/plugin.ts"],
-  output: {
-    dir: "dist",
-  },
+  input: "src/loader.ts",
+  output: [
+    {
+      file: "dist/loader.mjs",
+      format: "es",
+    },
+    {
+      file: "dist/loader.cjs",
+      format: "cjs",
+    },
+  ],
   external: [
     ...rollupConfig["external"],
     "loader-utils",
@@ -16,4 +23,25 @@ const config = {
     "fast-safe-stringify",
   ],
 };
-export default config;
+const pluginConfig = {
+  ...rollupConfig,
+  input: "src/plugin.ts",
+  output: [
+    {
+      file: "dist/plugin.mjs",
+      format: "es",
+    },
+    {
+      file: "dist/plugin.cjs",
+      format: "cjs",
+    },
+  ],
+  external: [
+    ...rollupConfig["external"],
+    "loader-utils",
+    "webpack",
+    "schema-utils",
+    "fast-safe-stringify",
+  ],
+};
+export { loaderConfig, pluginConfig };

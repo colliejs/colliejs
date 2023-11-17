@@ -42,6 +42,9 @@ const writeStyledComponentCssTexts = (
 export default class CollieWebpackPlugin {
   private outputDir: string = process.cwd();
 
+  constructor(options) {
+    console.log("options", options);
+  }
   apply(compiler: Compiler) {
     const { webpack } = compiler;
     const { RawSource } = webpack.sources;

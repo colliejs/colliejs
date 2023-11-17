@@ -4,8 +4,8 @@
   "description": "awesesome",
   "type": "module",
   "scripts": {
-    "build": " rollup -c rollup.config.js && pnpm type ",
-    "buildOnly": "rollup -c rollup.config.js",
+    "build": " node ./build.js && pnpm type ",
+    "buildOnly": "node ./build.js",
     "clean": "rm -rf dist  ",
     "reset": "pnpm clean && rm -rf node_modules && pnpm install",
     "type": "tsc --project . --paths null --emitDeclarationOnly --declaration",
@@ -33,10 +33,12 @@
   "gitHead": "27b6889c4e336e4f58c20d23c710aa6ede398968",
   "exports": {
     "./plugin": {
-      "import": "./dist/plugin.js"
+      "require": "./dist/plugin.cjs",
+      "import": "./dist/plugin.mjs"
     },
     "./loader": {
-      "import": "./dist/loader.js"
+      "require": "./dist/loader.cjs",
+      "import": "./dist/loader.mjs"
     }
   },
   "publishConfig": {
