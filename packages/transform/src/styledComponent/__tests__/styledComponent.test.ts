@@ -20,7 +20,10 @@ const prepareStyledComponent = (sourcecode: string) => {
     styledCompDeclPath,
     __filename,
     getImportFromSource(sourcecode, __filename),
-    defaultConfig
+    defaultConfig,
+    {},
+    process.cwd(),
+    true
   );
 };
 
@@ -206,3 +209,4 @@ describe("compoundVariants", () => {
     `);
   });
 });
+

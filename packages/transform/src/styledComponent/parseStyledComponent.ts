@@ -19,7 +19,59 @@ export type StyledDataType = {
   styling: Styling;
 };
 
-//TODO: multiple declarator
+export const getStyledComponentName = (
+  path: NodePath<t.VariableDeclaration>
+) => {
+  //TODO: support multiple declarator
+  return (path.node.declarations[0].id as t.Identifier)?.name;
+};
+export const getStyledDependent = (
+  path: NodePath<t.VariableDeclaration>,
+  moduleIdByName: ImportsByName,
+  moduleId: string
+) => {
+  let dependent;
+  const { init, id } = path.node.declarations[0]; ////TODO: multiple declarator
+  if (!init || !isStyledCallExpression(init)) {
+    throw new Error("not a styledComponentDecl");
+  }
+  const { arguments: _arguments } = init;
+  let exp = _arguments[0];
+  let type = exp.type;
+  if (_.isObject(exp) && t.isTSAsExpression(exp)) {
+    exp = (exp as t.TSAsExpression).expression;
+    type = exp.type;
+  }
+  switch (type) {
+    case "StringLiteral":
+      assert(t.isStringLiteral(exp), "exp should be StringLiteral");
+      dependent = new HostComponent(ComponentId.make(moduleId, exp.value));
+      break;
+    case "Identifier":
+      assert(t.isIdentifier(exp), "exp should be StringLiteral");
+      //NOTE:默认认为是一个customeComponent.如果是一个styledComponent，
+      //那么会在后期被替换为styledComponent
+      const componentName = exp.name;
+      dependent = new CustomComponent(
+        ComponentId.make(
+          moduleIdByName[componentName]?.moduleId || moduleId,
+          componentName
+        )
+      );
+      break;
+    default:
+      log.error(
+        "Unknown element type,use Identifier",
+        generate(path.node).code,
+        "type",
+        type
+      );
+      throw new Error("Unknown element type");
+  }
+  return dependent;
+};
+
+//TODO: support multiple declarator
 export const parseStyledComponentDeclaration = (
   path: NodePath<t.VariableDeclaration>,
   moduleIdByName: ImportsByName,
@@ -45,40 +97,7 @@ export const parseStyledComponentDeclaration = (
   //===========================================================
   // 2. get result.dependent
   //===========================================================
-  let exp = _arguments[0];
-  let type = exp.type;
-  if (_.isObject(exp) && t.isTSAsExpression(exp)) {
-    exp = (exp as t.TSAsExpression).expression;
-    type = exp.type;
-  }
-  switch (type) {
-    case "StringLiteral":
-      assert(t.isStringLiteral(exp), "exp should be StringLiteral");
-      result.dependent = new HostComponent(
-        ComponentId.make(moduleId, exp.value)
-      );
-      break;
-    case "Identifier":
-      assert(t.isIdentifier(exp), "exp should be StringLiteral");
-      //NOTE:默认认为是一个customeComponent.如果是一个styledComponent，
-      //那么会在后期被替换为styledComponent
-      const componentName = exp.name;
-      result.dependent = new CustomComponent(
-        ComponentId.make(
-          moduleIdByName[componentName]?.moduleId || moduleId,
-          componentName
-        )
-      );
-      break;
-    default:
-      log.error(
-        "Unknown element type,use Identifier",
-        generate(path.node).code,
-        "type",
-        type
-      );
-      throw new Error("Unknown element type");
-  }
+  result.dependent = getStyledDependent(path, moduleIdByName, moduleId);
 
   //===========================================================
   // 3.parse styledObject to get styling

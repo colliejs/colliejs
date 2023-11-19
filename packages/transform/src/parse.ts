@@ -1,4 +1,4 @@
-import { parse } from "@babel/parser";
+import { ParseResult, parse } from "@babel/parser";
 
 export const parseCode = (code: string) => {
   const ast = parse(code, {
@@ -7,10 +7,3 @@ export const parseCode = (code: string) => {
   });
   return ast;
 };
-/**
- *   return parse(x, {
-    allowReturnOutsideFunction: true,
-    plugins: ['jsx', 'typescript'],
-    sourceType: 'module',
-  }).program.body[n] as any;
- */

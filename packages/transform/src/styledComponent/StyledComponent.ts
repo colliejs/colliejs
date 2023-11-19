@@ -8,23 +8,32 @@ import { parseStyling } from "../styling/styling";
 import { Styling, StylingParsed } from "../styling/types";
 
 import { buildObjectExpression, isStyledComponentDecl } from "../utils/index";
-import { ImportsByName, Stylable, StyledComponentDecl } from "../utils/types";
+import {
+  Alias,
+  ImportsByName,
+  Stylable,
+  StyledComponentDecl,
+} from "../utils/types";
 import { parseStyledComponentDeclaration as parseStyledComponentDecl } from "./parseStyledComponent";
 import { NodePath } from "@babel/traverse";
 import { ComponentId } from "../component/componentId";
-import { config } from "node:process";
+import { findLayerDeps } from "./findDeps";
 
 export class StyledComponent extends CustomComponent implements Stylable {
   stylingParsed: StylingParsed;
   dependent: CustomComponent | HostComponent;
   styling: Styling;
   config: Config;
+  layerDeps: string[];
 
   constructor(
     public path: NodePath<t.VariableDeclaration>,
     moduleId: string,
     moduleIdByName: ImportsByName,
-    config: Config
+    config: Config,
+    alias: Alias = {},
+    root: string = process.cwd(),
+    getDeps = false
   ) {
     if (!isStyledComponentDecl) {
       log.error("not a styledComponentDecl", "ast", path);
@@ -34,9 +43,13 @@ export class StyledComponent extends CustomComponent implements Stylable {
     const { styledComponentName, dependent, styling } =
       parseStyledComponentDecl(path, moduleIdByName, moduleId);
     super(new ComponentId(moduleId, styledComponentName));
+
     this.stylingParsed = parseStyling(styling, config, styledComponentName);
     this.dependent = dependent;
     this.styling = styling;
+    if (getDeps) {
+      this.layerDeps = findLayerDeps(this, alias, root);
+    }
   }
 
   getCssText() {
@@ -53,27 +66,26 @@ export class StyledComponent extends CustomComponent implements Stylable {
         cssText += this.stylingParsed[key].cssGenText + "\n";
       }
     }
-    return cssText;
-    // if (this.dependent instanceof CustomComponent) {
-    //   const parentLayername = this.config.layername;
-    //   // return `
-    //   // @layer ${this.dependent.layerName}, ${this.layerName};\n
-    //   // @layer ${this.layerName} {
-    //   //   ${cssText}
-    //   // }\n`;
-    // }
-    // return `@layer ${this.layerName} {${cssText}}\n`;
+    // return cssText;
+    if (this.dependent instanceof CustomComponent) {
+      return `
+      @layer ${this.layerDeps.reverse().join(",")}, ${this.layerName};\n
+      @layer ${this.layerName} {
+        ${cssText}
+      }\n`;
+    }
+    return `@layer ${this.layerName} {${cssText}}\n`;
   }
 
   //TODO：三方组件支持自定义LayerName
-  cssLayerDep() {
-    return {
-      [this.layerName]:
-        this.dependent instanceof CustomComponent
-          ? this.dependent.layerName
-          : "", //HostComponent没有LayerName
-    };
-  }
+  // cssLayerDep() {
+  //   return {
+  //     [this.layerName]:
+  //       this.dependent instanceof CustomComponent
+  //         ? this.dependent.layerName
+  //         : "", //HostComponent没有LayerName
+  //   };
+  // }
   /**
    * @description
    * @example

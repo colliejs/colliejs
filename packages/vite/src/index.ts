@@ -28,6 +28,7 @@ global.window = {
     },
   },
 };
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const styledElementCssFile = "styled-element.css";
 const styledComponentCssFile = "styled-component.css";
 const styledThemeCssFile = "styled-theme.css";
@@ -112,10 +113,6 @@ const collie = (option: VitePluginOptions): Plugin => {
     root = process.cwd(),
   } = option || {};
   const filter = createFilter(include, exclude);
-  const allCssLayerDeps = {};
-  const allStyledElementCssMap = {};
-  const allStyledComponentCssMap = {};
-  const fileHashMap = {};
   let viteConfig: ResolvedConfig;
 
   return {
@@ -147,88 +144,79 @@ const collie = (option: VitePluginOptions): Plugin => {
 
       let {
         code: transformedCode,
-        styledComponentCssMap,
         styledElementCssTexts,
-        cssLayerDep,
+        styledComponentCssTexts,
       } = transform(code, url, styledConfig, alias, root);
-
-      allStyledElementCssMap[url] = styledElementCssTexts;
-      const isServe = viteConfig.command === "serve";
-      isServe &&
-        writeStyledElementCssTexts(
-          allStyledElementCssMap,
-          serve.disk.styledElementCssFile
-        );
-      if (Object.keys(styledComponentCssMap).length) {
-        Object.assign(allCssLayerDeps, cssLayerDep);
-        Object.assign(allStyledComponentCssMap, styledComponentCssMap);
-        isServe &&
-          writeStyledComponentCssTexts(
-            allCssLayerDeps,
-            allStyledComponentCssMap,
-            serve.disk.styledComponentCssFile,
-            styledConfig
-          );
+      const prefix = path.resolve(__dirname, "collie-cache");
+      if (!fs.existsSync(prefix)) {
+        fs.mkdirSync(prefix);
       }
+      const cssFile = `${prefix}/${path.basename(url)}-${toHash(url)}.css`;
+      fs.writeFileSync(
+        cssFile,
+        styledElementCssTexts + "\n" + styledComponentCssTexts,
+        { encoding: "utf-8" }
+      );
+
       return {
-        code: transformedCode,
+        code: `import "${cssFile}"; ${transformedCode}`,
         map: { mappings: "" },
       };
     },
-    async generateBundle(...args) {
-      console.log("option,bundle", args);
-      writeStyledElementCssTexts(
-        allStyledElementCssMap,
-        build.disk.styledElementCssFile
-      );
-      writeStyledComponentCssTexts(
-        allCssLayerDeps,
-        allStyledComponentCssMap,
-        build.disk.styledComponentCssFile,
-        styledConfig
-      );
-      writeStyledThemeCssTexts(styledConfig, build.disk.styledThemeCssFile);
-      fileHashMap[styledElementCssFile] = toHash(allStyledElementCssMap);
-      fileHashMap[styledComponentCssFile] = toHash(allStyledComponentCssMap);
-      fileHashMap[styledThemeCssFile] = toHash(JSON.stringify(styledConfig));
-    },
-    async transformIndexHtml(html) {
-      const getLinkTag = (href: string): HtmlTagDescriptor => ({
-        tag: "link",
-        attrs: {
-          rel: "stylesheet",
-          href: href,
-        },
-        injectTo: "body-prepend",
-      });
+    // async generateBundle(...args) {
+    //   console.log("option,bundle", args);
+    //   writeStyledElementCssTexts(
+    //     allStyledElementCssMap,
+    //     build.disk.styledElementCssFile
+    //   );
+    //   writeStyledComponentCssTexts(
+    //     allCssLayerDeps,
+    //     allStyledComponentCssMap,
+    //     build.disk.styledComponentCssFile,
+    //     styledConfig
+    //   );
+    //   writeStyledThemeCssTexts(styledConfig, build.disk.styledThemeCssFile);
+    //   fileHashMap[styledElementCssFile] = toHash(allStyledElementCssMap);
+    //   fileHashMap[styledComponentCssFile] = toHash(allStyledComponentCssMap);
+    //   fileHashMap[styledThemeCssFile] = toHash(JSON.stringify(styledConfig));
+    // },
+    // async transformIndexHtml(html) {
+    //   const getLinkTag = (href: string): HtmlTagDescriptor => ({
+    //     tag: "link",
+    //     attrs: {
+    //       rel: "stylesheet",
+    //       href: href,
+    //     },
+    //     injectTo: "body-prepend",
+    //   });
 
-      console.log("transformIndexHtml");
-      if (viteConfig.command === "serve") {
-        return {
-          html,
-          tags: [
-            getLinkTag(serve.href.styledElementCssFile),
-            getLinkTag(serve.href.styledComponentCssFile),
-            getLinkTag(serve.href.styledThemeCssFile),
-          ],
-        };
-      } else {
-        return {
-          html,
-          tags: [
-            getLinkTag(
-              `${build.href.styledElementCssFile}?hash=${fileHashMap[styledElementCssFile]}`
-            ),
-            getLinkTag(
-              `${build.href.styledComponentCssFile}?hash=${fileHashMap[styledComponentCssFile]}`
-            ),
-            getLinkTag(
-              `${build.href.styledThemeCssFile}?hash=${fileHashMap[styledThemeCssFile]}`
-            ),
-          ],
-        };
-      }
-    },
+    //   console.log("transformIndexHtml");
+    //   if (viteConfig.command === "serve") {
+    //     return {
+    //       html,
+    //       tags: [
+    //         getLinkTag(serve.href.styledElementCssFile),
+    //         getLinkTag(serve.href.styledComponentCssFile),
+    //         getLinkTag(serve.href.styledThemeCssFile),
+    //       ],
+    //     };
+    //   } else {
+    //     return {
+    //       html,
+    //       tags: [
+    //         getLinkTag(
+    //           `${build.href.styledElementCssFile}?hash=${fileHashMap[styledElementCssFile]}`
+    //         ),
+    //         getLinkTag(
+    //           `${build.href.styledComponentCssFile}?hash=${fileHashMap[styledComponentCssFile]}`
+    //         ),
+    //         getLinkTag(
+    //           `${build.href.styledThemeCssFile}?hash=${fileHashMap[styledThemeCssFile]}`
+    //         ),
+    //       ],
+    //     };
+    //   }
+    // },
   };
 };
 export default collie;

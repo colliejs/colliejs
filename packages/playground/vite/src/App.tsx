@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import MyButton from "./MyButton";
 import { SpecialButton, SpecialButton2 } from "./SpeciButton";
 import { Button } from "./Button";
+import React from "react";
+import CssButton from "./CssButton";
 
 export default function App() {
   const [count, setCount] = useState(0);
@@ -17,7 +19,8 @@ export default function App() {
       <MyButton shape={[12]}> MyButton</MyButton>
       <br />
       <SpecialButton shape={"round"}>SpecialButton1</SpecialButton>
-      <SpecialButton2 shape={"round"}>SpecialButton2</SpecialButton2>
+      <br />
+      <CssButton></CssButton>
     </div>
   );
 }

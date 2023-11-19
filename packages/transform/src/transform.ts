@@ -1,20 +1,15 @@
-import { removeTypeAnnotation } from "./utils/removeType";
-import { StyledElement } from "./styledElement";
 import { Config } from "@colliejs/core";
 import { parseCode } from "./parse";
-import { dirname } from "node:path";
+import { StyledComponent } from "./styledComponent";
+import { StyledElement } from "./styledElement";
 import {
-  Alias,
-  ImportsByName,
   generate,
   getImports,
   isStyledComponentDecl,
   isStyledElement,
   traverse,
 } from "./utils";
-import { StyledComponent } from "./styledComponent";
-import { NodePath } from "@babel/traverse";
-import { VariableDeclaration } from "@babel/types";
+import { removeTypeAnnotation } from "./utils/removeType";
 
 /**
  * NOTE: the module should be convert commonjs first
@@ -27,9 +22,10 @@ export const transform = (
   root = process.cwd()
 ) => {
   const fileAst = parseCode(source);
-  let styledComponentCssMap = {};
+  // let styledComponentCssMap = {};
+  let styledComponentCssTexts = "";
   let styledElementCssTexts = "";
-  const cssLayerDep: Record<string, string> = {};
+  // const cssLayerDepsMap: Record<string, string> = {};
   let modulesByName = {};
 
   traverse(fileAst, {
@@ -41,12 +37,7 @@ export const transform = (
         return;
       }
       if (Object.keys(modulesByName).length === 0) {
-        modulesByName = getImports(
-          parseCode(source).program,
-          curFile,
-          alias,
-          root
-        );
+        modulesByName = getImports(fileAst.program, curFile, alias, root);
       }
       modulesByName;
 
@@ -55,11 +46,15 @@ export const transform = (
         path,
         curFile,
         modulesByName,
-        config
+        config,
+        alias,
+        root,
+        true
       );
       const { cssText } = styledComponent.transform();
-      styledComponentCssMap[styledComponent.layerName] = cssText;
-      Object.assign(cssLayerDep, styledComponent.cssLayerDep());
+      styledComponentCssTexts += cssText + "\n";
+      // styledComponentCssMap[styledComponent.layerName] = cssText;
+      // Object.assign(cssLayerDepsMap, styledComponent.cssLayerDep());
     },
 
     //===========================================================
@@ -92,7 +87,8 @@ export const transform = (
   return {
     code,
     styledElementCssTexts: styledElementCssTexts.trim().replace("\n", ""),
-    cssLayerDep,
-    styledComponentCssMap,
+    styledComponentCssTexts: styledComponentCssTexts.trim().replace("\n", ""),
+    // cssLayerDep: cssLayerDepsMap,
+    // styledComponentCssMap,
   };
 };
