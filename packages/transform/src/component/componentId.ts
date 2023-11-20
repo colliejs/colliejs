@@ -3,13 +3,13 @@ import { toHash } from "@colliejs/core";
 import path from "node:path";
 
 //===========================================================
-// ComponentId通过module 和 componentName来定位一个StyledComponent和CustomComponent.
+// ComponentId通过moduleId 和 componentName来定位一个StyledComponent和CustomComponent.
 // HostComponent不需要定位
 //===========================================================
 
 export class ComponentId {
   constructor(
-    public moduleId: string | undefined,
+    public moduleId: string ,
     public componentName: string
   ) {}
   static make(moduleId: string, componentName: string) {

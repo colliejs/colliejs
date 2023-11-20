@@ -1,17 +1,15 @@
 import React from "react";
-import { styled } from "@colliejs/react";
-console.log("styled", styled);
-const Button = styled("button", {
-  w: 100,
-  h: 40,
-  background: "red",
-});
+import { Button } from "./components/Button";
+import { MyButton } from "./components/MyButton";
+import { AntdButton } from "./components/AntdButton";
 
 const App: React.FC = props => {
   const { ...restProps } = props;
   return (
     <div {...restProps}>
       <Button onClick={() => alert("hello")}>Hello</Button>
+      <MyButton>myButton</MyButton>
+      <AntdButton>AntdButton</AntdButton>
     </div>
   );
 };

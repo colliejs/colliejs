@@ -36,7 +36,7 @@
       "require": "./dist/plugin.cjs",
       "import": "./dist/plugin.mjs"
     },
-    "./loader": {
+    ".": {
       "require": "./dist/loader.cjs",
       "import": "./dist/loader.mjs"
     }

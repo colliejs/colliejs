@@ -18,7 +18,9 @@
   "dependencies": {
     "@colliejs/core": "workspace:^",
     "@colliejs/react": "workspace:^",
-    "@colliejs/transform": "workspace:^"
+    "@colliejs/shared": "workspace:^",
+    "@colliejs/transform": "workspace:^",
+    "lodash": "^4.17.21"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

@@ -30,6 +30,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@colliejs/core": "workspace:^",
     "@colliejs/react": "workspace:^1.0.54",
     "@colliejs/vite": "workspace:^1.0.61",
     "@rollup/plugin-commonjs": "^24.1.0",

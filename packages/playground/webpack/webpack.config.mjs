@@ -1,11 +1,12 @@
 import path from "node:path";
 import HtmlWebpackPlugin from "html-webpack-plugin";
-import collieWebpackLoader from "@colliejs/webpack/loader";
-import CollieWebpackPlugin from "@colliejs/webpack/plugin";
+import collieWebpackLoader from "@colliejs/webpack";
+// import CollieWebpackPlugin from "@colliejs/webpack/plugin";
+import MiniCssExtractPlugin from "mini-css-extract-plugin";
+
 import { fileURLToPath } from "url";
-import { dirname } from "path";
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __dirname = path.dirname(__filename);
 /**
  * @type {import("webpack").Configuration}
  */
@@ -16,13 +17,15 @@ export default {
     filename: "bundle.js",
   },
   resolve: {
-    extensions: [".tsx", ".ts", ".mjs", ".jsx",'.js'],
+    extensions: [".tsx", ".ts", ".mjs", ".jsx", ".js"],
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(".", "index.htm"),
     }),
-    new CollieWebpackPlugin(),
+    new MiniCssExtractPlugin({ filename: "collie.css" }),
+
+    // new CollieWebpackPlugin(),
   ],
   module: {
     rules: [
@@ -55,13 +58,21 @@ export default {
           {
             loader: path.resolve(
               __dirname,
-              "./node_modules/@colliejs/webpack/dist/loader.js"
+              "./node_modules/@colliejs/webpack/dist/loader.mjs"
             ),
             options: {},
           },
         ],
       },
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+          },
+          "css-loader",
+        ],
+      },
     ],
   },
-
 };

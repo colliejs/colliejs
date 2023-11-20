@@ -15,9 +15,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <link rel="stylesheet" href="/_next/styled-component.css" />
-      <link rel="stylesheet" href="/_next/styled-element.css" />
-      <link rel="stylesheet" href="/_next/styled-theme.css" />
       <body className={inter.className}>{children}</body>
     </html>
   );
