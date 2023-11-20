@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.0.150 (2023-11-20)
+
+### Bug Fixes
+
+- add example ([c16fa97](https://github.com/colliejs/colliejs/commit/c16fa97b4f51510343561b9b5df3e9c043416d8c))
+- findDeps ([f091ba0](https://github.com/colliejs/colliejs/commit/f091ba08dea6a4ef3d50d427f894673d18d9ad63))
+
+### Features
+
+- coollie ([04b4e45](https://github.com/colliejs/colliejs/commit/04b4e45830697fe6ddbecea5571eff3b74309802))
+- enforce ([f634b10](https://github.com/colliejs/colliejs/commit/f634b109e942ecd6db3bf8844d35fb42babe43b0))
+
 ## [1.0.149](https://github.com/colliejs/colliejs/compare/@colliejs/playground@1.0.148...@colliejs/playground@1.0.149) (2023-11-05)
 
 **Note:** Version bump only for package @colliejs/playground

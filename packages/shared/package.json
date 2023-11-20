@@ -1,6 +1,6 @@
 {
   "name": "@colliejs/shared",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "foo",
   "type": "module",
   "scripts": {
@@ -15,7 +15,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {},
   "gitHead": "27b6889c4e336e4f58c20d23c710aa6ede398968",
   "exports": {
     ".": {
