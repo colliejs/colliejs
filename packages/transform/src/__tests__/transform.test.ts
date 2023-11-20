@@ -1,5 +1,6 @@
 import { defaultConfig } from "@colliejs/core";
 import { transform } from "../transform";
+import path from "node:path";
 
 describe("test cases", () => {
   it("StyledComponent ", () => {
@@ -24,7 +25,11 @@ describe("test cases", () => {
         return <Button css={{color:'blue'}}></Button>
     }
     `;
-    const res = transform(code, "moduleId2", defaultConfig);
+    const res = transform(
+      code,
+      path.resolve(__dirname, "./depTree.test.ts"),
+      defaultConfig
+    );
     expect(res.code).toMatchInlineSnapshot(`
       "const Button = styled('button', "baseStyle-Button-elTJue", {
         "variants-static-shape-round": "variants-static-shape-round-hECRKn",
@@ -35,11 +40,7 @@ describe("test cases", () => {
         return <Button className="css-kydkiA"></Button>;
       };"
     `);
-    expect(res.cssLayerDep).toMatchInlineSnapshot(`
-      {
-        "moduleId2-Button-eoQCcI": "",
-      }
-    `);
+
     expect(res).toMatchInlineSnapshot(`
       {
         "code": "const Button = styled('button', "baseStyle-Button-elTJue", {
@@ -50,15 +51,9 @@ describe("test cases", () => {
       export const App = () => {
         return <Button className="css-kydkiA"></Button>;
       };",
-        "cssLayerDep": {
-          "moduleId2-Button-eoQCcI": "",
-        },
-        "styledComponentCssMap": {
-          "moduleId2-Button-eoQCcI": ".baseStyle-Button-elTJue{background:red}.variants-static-shape-round-hECRKn{border-radius:50%}
-      .variants-static-shape-rect-iydAuT{border-radius:0}
+        "styledComponentCssTexts": "@layer depTree_test_ts-Button-koVSLF {.baseStyle-Button-elTJue{background:red}.variants-static-shape-round-hECRKn{border-radius:50%}.variants-static-shape-rect-iydAuT{border-radius:0}
       .variants-dynamic-shape-dlbLfd{border-radius:var(--variants-dynamic-shape)}
-      ",
-        },
+      }",
         "styledElementCssTexts": ".css-kydkiA{color:blue}",
       }
     `);
@@ -73,7 +68,12 @@ describe("test cases", () => {
         return <MyButton css={{color:'blue'}}></MyButton>
     }
     `;
-    const res = transform(code, "moduleId2", defaultConfig);
+    const res = transform(
+      code,
+      path.resolve(__dirname, "./depTree.test.ts"),
+      defaultConfig,
+      false
+    );
     expect(res).toMatchInlineSnapshot(`
       {
         "code": "const Button = styled('button', "baseStyle-Button-elTJue", {}, {});
@@ -81,14 +81,13 @@ describe("test cases", () => {
       export const App = () => {
         return <MyButton className="css-kydkiA"></MyButton>;
       };",
-        "cssLayerDep": {
-          "moduleId2-Button-eoQCcI": "",
-          "moduleId2-MyButton-jjHfgw": "moduleId2-Button-eoQCcI",
-        },
-        "styledComponentCssMap": {
-          "moduleId2-Button-eoQCcI": ".baseStyle-Button-elTJue{background:red}",
-          "moduleId2-MyButton-jjHfgw": ".baseStyle-MyButton-kQvslT{background:blue}",
-        },
+        "styledComponentCssTexts": "@layer depTree_test_ts-Button-koVSLF {.baseStyle-Button-elTJue{background:red}}
+
+            @layer , depTree_test_ts-MyButton-leUzrZ;
+
+            @layer depTree_test_ts-MyButton-leUzrZ {
+              .baseStyle-MyButton-kQvslT{background:blue}
+            }",
         "styledElementCssTexts": ".css-kydkiA{color:blue}",
       }
     `);
@@ -111,8 +110,7 @@ describe("test cases", () => {
         return <Button className={" css-dhzjXW " + className}>        
               </Button>;
       };",
-        "cssLayerDep": {},
-        "styledComponentCssMap": {},
+        "styledComponentCssTexts": "",
         "styledElementCssTexts": ".css-dhzjXW{display:flex}",
       }
     `);

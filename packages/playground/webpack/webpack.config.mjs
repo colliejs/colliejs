@@ -5,9 +5,8 @@ import collieWebpackLoader from "@colliejs/webpack";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 
 import { fileURLToPath } from "url";
-import { dirname } from "path";
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __dirname = path.dirname(__filename);
 /**
  * @type {import("webpack").Configuration}
  */
@@ -59,7 +58,7 @@ export default {
           {
             loader: path.resolve(
               __dirname,
-              "./node_modules/@colliejs/webpack/dist/loader.js"
+              "./node_modules/@colliejs/webpack/dist/loader.mjs"
             ),
             options: {},
           },

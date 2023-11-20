@@ -1,16 +1,10 @@
-import { parse } from "@babel/parser";
 import { Config, createTheme, defaultConfig } from "@colliejs/core";
-import {
-  Alias,
-  getCssText,
-  getDepPaths,
-  getImports,
-  transform,
-} from "@colliejs/transform";
+import { Alias, transform } from "@colliejs/transform";
 import { FilterPattern, createFilter } from "@rollup/pluginutils";
 import fs from "node:fs";
 import path from "node:path";
 import { type Plugin } from "rollup";
+import { writeFile } from "@colliejs/shared";
 
 type Option = {
   outDir: string;
@@ -20,17 +14,9 @@ type Option = {
   alias?: Alias;
   root?: string;
 };
-const allStyledComponentCssMap = {};
-type LayerName = string;
 const writeThemeText = (styledConfig, cssFilename) => {
   const cssText = createTheme(styledConfig);
-  if (!fs.existsSync(cssFilename)) {
-    fs.mkdirSync(path.dirname(cssFilename), { recursive: true });
-  }
-  fs.writeFileSync(cssFilename, cssText, {
-    encoding: "utf-8",
-    flag: "w",
-  });
+  writeFile(cssFilename, cssText);
 };
 
 const collie = (option?: Option): Plugin => {
@@ -43,14 +29,10 @@ const collie = (option?: Option): Plugin => {
     root = process.cwd(),
   } = option || {};
   const allStyledElementCssMap = {};
-  const allCssLayerDeps = {};
   const allStyledComponentCssMap = {};
-
   const filter = createFilter(include, exclude);
-
   return {
-    name: "collie", // this name will show up in warnings and errors
-
+    name: "collie",
     async transform(code, id) {
       const REGEX_JS = /\.[tj]sx?$/;
 
@@ -61,19 +43,12 @@ const collie = (option?: Option): Plugin => {
       let {
         code: codeTransformed,
         styledElementCssTexts,
-        styledComponentCssMap,
-        cssLayerDep,
+        styledComponentCssTexts,
       } = transform(code, id, styledConfig, alias, root);
-      //===========================================================
-      // 处理styledElementCssTexts
-      //===========================================================
-      allStyledElementCssMap[id] = styledElementCssTexts;
 
-      //===========================================================
-      // 处理allStyledComponentCssMap
-      //===========================================================
-      Object.assign(allCssLayerDeps, cssLayerDep);
-      Object.assign(allStyledComponentCssMap, styledComponentCssMap);
+      allStyledElementCssMap[id] = styledElementCssTexts;
+      allStyledComponentCssMap[id] = styledComponentCssTexts;
+
       return {
         code: codeTransformed,
         map: { mappings: "" }, // a sourcemap is optional
@@ -81,23 +56,13 @@ const collie = (option?: Option): Plugin => {
     },
 
     generateBundle(options, bundle) {
-      const themeFileName = path.resolve(outDir, "theme.css");
-      writeThemeText(styledConfig, themeFileName);
-
+      writeThemeText(styledConfig, path.resolve(outDir, "theme.css"));
       const cssFilename = path.resolve(outDir, "index.css");
-      const cssText = getCssText(allCssLayerDeps, allStyledComponentCssMap);
 
-      //ignore empty layer
-      if (cssText.replace(/[\n\s]/g, "") === "") return;
-
-      if (!fs.existsSync(cssFilename)) {
-        fs.mkdirSync(path.dirname(cssFilename), { recursive: true });
-      }
-
-      fs.writeFileSync(cssFilename, cssText, {
-        encoding: "utf-8",
-        flag: "w",
-      });
+      writeFile(
+        cssFilename,
+        Object.values(allStyledComponentCssMap).join("\n")
+      );
       fs.writeFileSync(
         cssFilename,
         Object.values(allStyledElementCssMap).join("\n"),

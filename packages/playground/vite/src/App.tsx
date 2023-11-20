@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import MyButton from "./MyButton";
-import { SpecialButton, SpecialButton2 } from "./SpeciButton";
-import { Button } from "./Button";
+import MyButton from "./components/MyButton";
+import { SpecialButton } from "./components/SpeciButton";
+import { Button } from "./components/Button";
 import React from "react";
-import CssButton from "./CssButton";
+import CssButton from "./components/CssButton";
+import { ThemeButton } from "./components/ThemeButton";
 
 export default function App() {
   const [count, setCount] = useState(0);
@@ -21,6 +22,7 @@ export default function App() {
       <SpecialButton shape={"round"}>SpecialButton1</SpecialButton>
       <br />
       <CssButton></CssButton>
+      <ThemeButton>ThemeButton</ThemeButton>
     </div>
   );
 }

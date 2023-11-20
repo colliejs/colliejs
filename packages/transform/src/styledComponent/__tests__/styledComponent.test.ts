@@ -72,8 +72,9 @@ describe("styledHostComponent", () => {
     `);
 
     expect(c.getCssText()).toMatchInlineSnapshot(`
-      ".baseStyle-Button-elTJue{background:red}.variants-static-shape-round-hECRKn{border-radius:50%}
+      "@layer styledComponent_test_ts-Button-bpDyiB {.baseStyle-Button-elTJue{background:red}.variants-static-shape-round-hECRKn{border-radius:50%}
       .variants-static-shape-rect-iydAuT{border-radius:0}
+      }
       "
     `);
 
@@ -105,20 +106,20 @@ describe("3rdComponent", () => {
       `;
     const c = prepareStyledComponent(code);
 
-    const cwd = process.cwd();
     expect(c.id.componentName).toBe("MyButton");
 
     expect(c.layerName).toMatchInlineSnapshot(
       `"styledComponent_test_ts-MyButton-bVmnfB"`
     );
-    expect(c.getCssText()).toMatchInlineSnapshot(
-      `".baseStyle-MyButton-CRGDB{background:red;position:absolute;left:100px;right:;top:20px;bottom:}"`
-    );
-    expect(c.cssLayerDep()).toMatchInlineSnapshot(`
-          {
-            "styledComponent_test_ts-MyButton-bVmnfB": "Button_tsx-Button-eYfSKb",
-          }
-      `);
+    expect(c.getCssText()).toMatchInlineSnapshot(`
+      "
+            @layer , styledComponent_test_ts-MyButton-bVmnfB;
+
+            @layer styledComponent_test_ts-MyButton-bVmnfB {
+              .baseStyle-MyButton-CRGDB{background:red;position:absolute;left:100px;right:;top:20px;bottom:}
+            }
+      "
+    `);
   });
   it("My layerName is calculated by moduleId and className", () => {
     const code = `
@@ -209,4 +210,3 @@ describe("compoundVariants", () => {
     `);
   });
 });
-

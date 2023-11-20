@@ -1,5 +1,4 @@
 const path = require("path");
-const CollieWebpackPlugin = require("@colliejs/webpack/plugin");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -10,11 +9,10 @@ const nextConfig = {
     config.module.rules.push({
       loader: path.resolve(
         __dirname,
-        "./node_modules/@colliejs/webpack/dist/loader.cjs"
+        "./node_modules/@colliejs/webpack/dist/loader.mjs"
       ),
       options: {},
     });
-    config.plugins.push(new CollieWebpackPlugin());
     return config;
   },
 };

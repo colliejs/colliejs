@@ -39,7 +39,6 @@ export const transform = (
       if (Object.keys(modulesByName).length === 0) {
         modulesByName = getImports(fileAst.program, curFile, alias, root);
       }
-      modulesByName;
 
       removeTypeAnnotation(path);
       const styledComponent = new StyledComponent(
