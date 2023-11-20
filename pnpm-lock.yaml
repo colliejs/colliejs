@@ -229,7 +229,7 @@ importers:
   packages/playground/nextjs:
     dependencies:
       '@colliejs/react':
-        specifier: workspace:^1.0.54
+        specifier: workspace:^
         version: link:../../react
       '@colliejs/webpack':
         specifier: workspace:^1.0.9
@@ -434,6 +434,9 @@ importers:
       '@colliejs/react':
         specifier: workspace:^
         version: link:../react
+      '@colliejs/shared':
+        specifier: workspace:^
+        version: link:../shared
       '@colliejs/transform':
         specifier: workspace:^
         version: link:../transform

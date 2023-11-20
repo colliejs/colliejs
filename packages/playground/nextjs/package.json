@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@colliejs/react": "workspace:^1.0.54",
+    "@colliejs/react": "workspace:^",
     "@colliejs/webpack": "workspace:^1.0.9",
     "next": "14.0.2",
     "react": "^18",
