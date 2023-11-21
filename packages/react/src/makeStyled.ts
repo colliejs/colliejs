@@ -132,6 +132,7 @@ export const makeStyled = <_MyConfig extends _Config>(config: _MyConfig) => {
             /variants-dynamic-(.*?)-(?<cssPropKey>.*)?/
           );
 
+          //cssPropKey是可能不存在的
           const cssPropKey = match?.groups?.cssPropKey.replace(/-.*/, "");
 
           const isSupportBreakpoint = dynamicVariantKey.includes("-at");
