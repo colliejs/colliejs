@@ -1,6 +1,6 @@
 {
   "name": "@colliejs/vite-demo",
-  "version": "1.0.152",
+  "version": "1.0.153",
   "description": "awesesome",
   "type": "module",
   "scripts": {
@@ -31,8 +31,8 @@
   },
   "dependencies": {
     "@colliejs/core": "workspace:^",
-    "@colliejs/react": "workspace:^1.0.57",
-    "@colliejs/vite": "workspace:^1.0.64",
+    "@colliejs/react": "workspace:^1.0.58",
+    "@colliejs/vite": "workspace:^1.0.65",
     "@rollup/plugin-commonjs": "^24.1.0",
     "@rollup/plugin-node-resolve": "^15.1.0",
     "@vitejs/plugin-react": "^2.2.0",
