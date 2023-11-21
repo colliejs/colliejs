@@ -53,7 +53,6 @@ export const parseStyling = (
       const isDynamicVariantFn = typeof cssObjOrDynamicFn === "function";
       if (isDynamicVariantFn) {
         const dynFn = cssObjOrDynamicFn as DynamicVariantFn;
-        variantValue
         variantKey = getDynamicVariantKey(
           variantName,
           variantValue as DynamicVariantFnName

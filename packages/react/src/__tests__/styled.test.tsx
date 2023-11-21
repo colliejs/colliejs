@@ -139,15 +139,21 @@ describe("render StyledComponent", () => {
       {
         "variants-dynamic-shape-borderRadius":
           "variants-dynamic-shape-borderRadius-dlbLfd",
+        "variants-dynamic-fx-xx": "variants-dynamic-fx-xx-dlbLfd",
       },
       {}
     );
-    const comp = TestRenderer.create(<Text shape={2}>hello</Text>);
+    const comp = TestRenderer.create(
+      <Text shape={2} fx="center">
+        hello
+      </Text>
+    );
     expect(comp.toJSON()).toMatchInlineSnapshot(`
       <div
-        className="  variants-dynamic-shape-borderRadius-dlbLfd"
+        className="  variants-dynamic-shape-borderRadius-dlbLfd variants-dynamic-fx-xx-dlbLfd"
         style={
           {
+            "--variants-dynamic-fx": "center",
             "--variants-dynamic-shape": "2px",
           }
         }

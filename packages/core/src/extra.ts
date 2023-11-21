@@ -21,20 +21,24 @@ export const getStaticVariantKey = (
   )}`;
 };
 export const getDynamicVariantKey = (
-  variantName: VariantName,
+  variantName: VariantName, //'shape'
   fnName?: DynamicVariantFnName
 ): DynamicVariantKey => {
   if (!fnName || typeof fnName !== "string") {
     return `variants-dynamic-${toCamelCase(variantName)}`;
   }
-  const cssPropKey = fnName.replace(/dynamic_?|_at$/g, "");
-  if (!cssPropKey) {
-    return `variants-dynamic-${toCamelCase(variantName)}`;
-  }
+  const cssPropKey = fnName.replace(/_?at$|dynamic_?/g, "");
+
   if (/_at$/.test(fnName)) {
+    if (!cssPropKey) {
+      return `variants-dynamic-${toCamelCase(variantName)}-at`;
+    }
     return `variants-dynamic-${toCamelCase(variantName)}-${toCamelCase(
       cssPropKey
     )}-at`;
+  }
+  if (!cssPropKey) {
+    return `variants-dynamic-${toCamelCase(variantName)}`;
   }
   return `variants-dynamic-${toCamelCase(variantName)}-${toCamelCase(
     cssPropKey
