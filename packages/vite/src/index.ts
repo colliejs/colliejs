@@ -47,7 +47,7 @@ const collie = (option: VitePluginOptions): Plugin => {
     styledConfig = defaultConfig,
     alias = {},
     root = process.cwd(),
-    entry,
+    entry = "src/index.tsx",
   } = option || {};
   const filter = createFilter(include, exclude);
   let viteConfig: ResolvedConfig;
