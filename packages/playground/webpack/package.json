@@ -3,6 +3,7 @@
   "version": "1.0.10",
   "description": "awesesome",
   "type": "module",
+  "private": true,
   "scripts": {
     "build": " webpack --config webpack.config.mjs",
     "clean": "rm -rf dist  ",
