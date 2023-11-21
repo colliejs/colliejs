@@ -107,6 +107,7 @@ export const makeStyled = <_MyConfig extends _Config>(config: _MyConfig) => {
         const staticVariantKey = getStaticVariantKey(prop, valOfProp);
         const isStaticVariantKey =
           staticVariantKey in __generatedClassNameByVariantsMap;
+
         if (isStaticVariantKey && isObject(valOfProp)) {
           throw new Error(
             "variant value must be string or number.because  it is used as css variable value. "
@@ -123,6 +124,13 @@ export const makeStyled = <_MyConfig extends _Config>(config: _MyConfig) => {
           const dynamicVariantKey = variantsKeys.find(e =>
             e.startsWith(`variants-dynamic-${prop}`)
           );
+          if (!dynamicVariantKey) {
+            console.error(
+              `dynamicVariantKey not found for prop:${prop},valOfProp:${valOfProp}.maybe it is not dynamic`
+            );
+            continue;
+          }
+
           outputClassNames.push(
             __generatedClassNameByVariantsMap[dynamicVariantKey]
           );
