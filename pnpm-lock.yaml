@@ -271,7 +271,7 @@ importers:
         specifier: workspace:^1.0.59
         version: link:../../react
       "@colliejs/vite":
-        specifier: workspace:^1.0.66
+        specifier: workspace:^1.0.67
         version: link:../../vite
       "@rollup/plugin-commonjs":
         specifier: ^24.1.0
