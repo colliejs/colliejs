@@ -72,7 +72,7 @@ describe("styledHostComponent", () => {
     `);
 
     expect(c.getCssText()).toMatchInlineSnapshot(`
-      "@layer styledComponent_test_ts-Button-bpDyiB {.baseStyle-Button-elTJue{background:red}.variants-static-shape-round-hECRKn{border-radius:50%}
+      "@layer app.styledComponent_test_ts-Button-bpDyiB {.baseStyle-Button-elTJue{background:red}.variants-static-shape-round-hECRKn{border-radius:50%}
       .variants-static-shape-rect-iydAuT{border-radius:0}
       }
       "
@@ -113,9 +113,8 @@ describe("3rdComponent", () => {
     );
     expect(c.getCssText()).toMatchInlineSnapshot(`
       "
-            @layer , styledComponent_test_ts-MyButton-bVmnfB;
-
-            @layer styledComponent_test_ts-MyButton-bVmnfB {
+            @layer , app.styledComponent_test_ts-MyButton-bVmnfB;
+            @layer app.styledComponent_test_ts-MyButton-bVmnfB {
               .baseStyle-MyButton-CRGDB{background:red;position:absolute;left:100px;right:;top:20px;bottom:}
             }
       "

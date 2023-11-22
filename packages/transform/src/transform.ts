@@ -22,10 +22,8 @@ export const transform = (
   root = process.cwd()
 ) => {
   const fileAst = parseCode(source);
-  // let styledComponentCssMap = {};
   let styledComponentCssTexts = "";
   let styledElementCssTexts = "";
-  // const cssLayerDepsMap: Record<string, string> = {};
   let modulesByName = {};
 
   traverse(fileAst, {
@@ -52,8 +50,6 @@ export const transform = (
       );
       const { cssText } = styledComponent.transform();
       styledComponentCssTexts += cssText + "\n";
-      // styledComponentCssMap[styledComponent.layerName] = cssText;
-      // Object.assign(cssLayerDepsMap, styledComponent.cssLayerDep());
     },
 
     //===========================================================
@@ -85,9 +81,7 @@ export const transform = (
 
   return {
     code,
-    styledElementCssTexts: styledElementCssTexts.trim().replace("\n", ""),
-    styledComponentCssTexts: styledComponentCssTexts.trim().replace("\n", ""),
-    // cssLayerDep: cssLayerDepsMap,
-    // styledComponentCssMap,
+    styledElementCssTexts,
+    styledComponentCssTexts,
   };
 };

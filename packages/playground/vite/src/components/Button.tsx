@@ -2,7 +2,7 @@ import { styled } from "@colliejs/react";
 
 export const Button = styled("button", {
   border: "none",
-  color: "blue",
+  color: "red",
   fontSize: 28,
   backgroundColor: "yellow",
   boxShadow: "0 0 0 10px rgba(0, 0, 0, 0.3)",

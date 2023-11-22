@@ -23,14 +23,13 @@ export class StyledComponent extends CustomComponent implements Stylable {
   stylingParsed: StylingParsed;
   dependent: CustomComponent | HostComponent;
   styling: Styling;
-  config: Config;
   layerDeps: string[];
 
   constructor(
     public path: NodePath<t.VariableDeclaration>,
     moduleId: string,
     moduleIdByName: ImportsByName,
-    config: Config,
+    public config: Config,
     alias: Alias = {},
     root: string = process.cwd(),
     getDeps = false
@@ -66,15 +65,20 @@ export class StyledComponent extends CustomComponent implements Stylable {
         cssText += this.stylingParsed[key].cssGenText + "\n";
       }
     }
-    // return cssText;
+    const thisLayerName = this.config.layername
+      ? `${this.config.layername}.${this.layerName}`
+      : this.layerName;
     if (this.dependent instanceof CustomComponent) {
       return `
-      @layer ${this.layerDeps.reverse().join(",")}, ${this.layerName};\n
-      @layer ${this.layerName} {
+      @layer ${this.layerDeps
+        .reverse()
+        .map(e => (this.config.layername ? `${this.config.layername}.${e}` : e))
+        .join(",")}, ${thisLayerName};
+      @layer ${thisLayerName} {
         ${cssText}
       }\n`;
     }
-    return `@layer ${this.layerName} {${cssText}}\n`;
+    return `@layer ${thisLayerName} {${cssText}}\n`;
   }
 
   //TODO：三方组件支持自定义LayerName
