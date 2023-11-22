@@ -29,6 +29,11 @@ type VitePluginOptions = {
   entry: string;
 };
 type LayerName = string;
+const getCssFileName = (url: string) => {
+  const prefix = path.resolve(__dirname, "collie-cache");
+  const lastSeg = path.dirname(url).split("/").pop();
+  return `${prefix}/${lastSeg}-${path.basename(url)}-${toHash(url)}.css`;
+};
 
 const UNCHANGED = null;
 
@@ -88,8 +93,7 @@ const collie = (option: VitePluginOptions): Plugin => {
         styledElementCssTexts,
         styledComponentCssTexts,
       } = transform(code, url, styledConfig, alias, root);
-      const prefix = path.resolve(__dirname, "collie-cache");
-      const cssFile = `${prefix}/${path.basename(url)}-${toHash(url)}.css`;
+      const cssFile = getCssFileName(url);
       const content = styledElementCssTexts + "\n" + styledComponentCssTexts;
       writeFile(cssFile, content);
 

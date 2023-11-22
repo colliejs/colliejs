@@ -1,0 +1,1 @@
+[] render(<App/>) 不支持rende函数，不识别
