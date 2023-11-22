@@ -3,7 +3,7 @@ import { Alias, transform } from "@colliejs/transform";
 import { FilterPattern, createFilter } from "@rollup/pluginutils";
 import log from "npmlog";
 
-import { writeFile } from "@colliejs/shared";
+import { writeFile, getCssFileName } from "@colliejs/shared";
 import { createRequire } from "node:module";
 import path from "path";
 import { Plugin, ResolvedConfig } from "vite";
@@ -29,11 +29,6 @@ type VitePluginOptions = {
   entry: string;
 };
 type LayerName = string;
-const getCssFileName = (url: string) => {
-  const prefix = path.resolve(__dirname, "collie-cache");
-  const lastSeg = path.dirname(url).split("/").pop();
-  return `${prefix}/${lastSeg}-${path.basename(url)}-${toHash(url)}.css`;
-};
 
 const UNCHANGED = null;
 
@@ -93,7 +88,8 @@ const collie = (option: VitePluginOptions): Plugin => {
         styledElementCssTexts,
         styledComponentCssTexts,
       } = transform(code, url, styledConfig, alias, root);
-      const cssFile = getCssFileName(url);
+      const getCssFileByBaseDir = getCssFileName(url);
+      const cssFile = getCssFileByBaseDir(__dirname);
       const content = styledElementCssTexts + "\n" + styledComponentCssTexts;
       writeFile(cssFile, content);
 
