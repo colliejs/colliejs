@@ -89,7 +89,7 @@ const collie = (option: VitePluginOptions): Plugin => {
         styledComponentCssTexts,
       } = transform(code, url, styledConfig, alias, root);
       const getCssFileByBaseDir = getCssFileName(url);
-      const cssFile = getCssFileByBaseDir(__dirname);
+      const cssFile = getCssFileByBaseDir(root);
       const content = styledElementCssTexts + "\n" + styledComponentCssTexts;
       writeFile(cssFile, content);
 

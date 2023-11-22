@@ -3,7 +3,7 @@ import { toHash } from "./toHash";
 export const getCssFileName = (url: string, enableTimeStampe = false) => {
   const lastSeg = path.dirname(url).split("/").pop();
   return (baseDir: string) => {
-    const prefix = path.resolve(baseDir, "collie-cache");
+    const prefix = path.resolve(baseDir, ".collie");
     const newUrl = `${prefix}/${lastSeg}-${path.basename(url)}-${toHash(
       url
     )}.css`;

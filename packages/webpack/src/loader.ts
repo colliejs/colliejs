@@ -6,7 +6,7 @@ import { FilterPattern, createFilter } from "@rollup/pluginutils";
 import fs from "node:fs";
 import path from "node:path";
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
-import { writeFile } from "@colliejs/shared";
+import { getCssFileName, writeFile } from "@colliejs/shared";
 const jsFileReg = /\.[cm]?[tj]sx?$/;
 
 type LoaderOption = {
@@ -40,8 +40,8 @@ export default function collieWebpackLoader(
     styledComponentCssTexts,
     styledElementCssTexts,
   } = transform(code, url, styledConfig, alias, root);
-  const prefix = path.resolve(__dirname, "collie-cache");
-  const cssFile = `${prefix}/${path.basename(url)}-${toHash(url)}.css`;
+  const getByPrefix = getCssFileName(url, false);
+  const cssFile = getByPrefix(root);
   writeFile(cssFile, styledElementCssTexts + "\n" + styledComponentCssTexts);
 
   return `import "${cssFile}"; ${transformedCode}`;

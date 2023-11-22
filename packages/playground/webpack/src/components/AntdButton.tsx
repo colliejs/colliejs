@@ -1,6 +1,6 @@
 import { Button } from "antd";
 import { styled } from "@colliejs/react";
 export const AntdButton = styled(Button, {
-  background: "pink",
+  background: "yellow",
   color: "white",
 });
