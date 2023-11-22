@@ -88,11 +88,13 @@ const collie = (option: VitePluginOptions): Plugin => {
         styledElementCssTexts,
         styledComponentCssTexts,
       } = transform(code, url, styledConfig, alias, root);
-      const getCssFileByBaseDir = getCssFileName(url);
-      const cssFile = getCssFileByBaseDir(root);
+      const cssFile = getCssFileName(url)(root);
       const content = styledElementCssTexts + "\n" + styledComponentCssTexts;
+      const hasContent = content.replace(/\s/g, "").length > 0;
+      if(!hasContent){
+        return UNCHANGED;
+      }
       writeFile(cssFile, content);
-
       return {
         code: `import "${cssFile}"; ${transformedCode}`,
         map: { mappings: "" },

@@ -40,9 +40,12 @@ export default function collieWebpackLoader(
     styledComponentCssTexts,
     styledElementCssTexts,
   } = transform(code, url, styledConfig, alias, root);
-  const getByPrefix = getCssFileName(url, false);
-  const cssFile = getByPrefix(root);
-  writeFile(cssFile, styledElementCssTexts + "\n" + styledComponentCssTexts);
-
+  const content = styledElementCssTexts + "\n" + styledComponentCssTexts;
+  const hasMeaningContent = content.replace(/\s/g, "").length > 0;
+  if (!hasMeaningContent) {
+    return code;
+  }
+  const cssFile = getCssFileName(url)(root);
+  writeFile(cssFile, content);
   return `import "${cssFile}"; ${transformedCode}`;
 }
