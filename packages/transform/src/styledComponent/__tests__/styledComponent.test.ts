@@ -72,7 +72,7 @@ describe("styledHostComponent", () => {
     `);
 
     expect(c.getCssText()).toMatchInlineSnapshot(`
-      "@layer app.styledComponent_test_ts-Button-bpDyiB {.baseStyle-Button-elTJue{background:red}.variants-static-shape-round-hECRKn{border-radius:50%}
+      "@layer app.styledComponentTestTs-Button-1f9ulld {.baseStyle-Button-elTJue{background:red}.variants-static-shape-round-hECRKn{border-radius:50%}
       .variants-static-shape-rect-iydAuT{border-radius:0}
       }
       "
@@ -109,12 +109,12 @@ describe("3rdComponent", () => {
     expect(c.id.componentName).toBe("MyButton");
 
     expect(c.layerName).toMatchInlineSnapshot(
-      `"styledComponent_test_ts-MyButton-bVmnfB"`
+      `"styledComponentTestTs-MyButton-1ah2k0t"`
     );
     expect(c.getCssText()).toMatchInlineSnapshot(`
       "
-            @layer , app.styledComponent_test_ts-MyButton-bVmnfB;
-            @layer app.styledComponent_test_ts-MyButton-bVmnfB {
+            @layer , app.styledComponentTestTs-MyButton-1ah2k0t;
+            @layer app.styledComponentTestTs-MyButton-1ah2k0t {
               .baseStyle-MyButton-CRGDB{background:red;position:absolute;left:100px;right:;top:20px;bottom:}
             }
       "
@@ -131,8 +131,8 @@ describe("3rdComponent", () => {
       `;
     const myButton = prepareStyledComponent(code);
     expect(myButton.id.uniqName).toEqual(myButton.layerName);
-    expect(myButton.id.uniqName).toEqual(
-      "styledComponent_test_ts-MyButton-bVmnfB"
+    expect(myButton.id.uniqName).toMatchInlineSnapshot(
+      `"styledComponentTestTs-MyButton-1ah2k0t"`
     );
   });
 });

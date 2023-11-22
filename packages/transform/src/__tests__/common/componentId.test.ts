@@ -4,7 +4,7 @@ describe("test cases", () => {
   it("should work ", () => {
     const componentId = new ComponentId("Button.tsx", "Button");
     expect(componentId.uniqName).toMatchInlineSnapshot(
-      `"Button_tsx-Button-cmhSRm"`
+      `"ButtonTsx-Button-d0u57m"`
     );
   });
 });

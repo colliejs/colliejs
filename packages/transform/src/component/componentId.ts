@@ -1,17 +1,13 @@
 import { REG_HOST_COMPONENT } from "../component/HostComponent";
-import { toHash } from "@colliejs/core";
 import path from "node:path";
-
+import { toCamelCase, toHash } from "@c3/utils";
 //===========================================================
 // ComponentId通过moduleId 和 componentName来定位一个StyledComponent和CustomComponent.
 // HostComponent不需要定位
 //===========================================================
 
 export class ComponentId {
-  constructor(
-    public moduleId: string ,
-    public componentName: string
-  ) {}
+  constructor(public moduleId: string, public componentName: string) {}
   static make(moduleId: string, componentName: string) {
     return new ComponentId(moduleId, componentName);
   }
@@ -22,16 +18,17 @@ export class ComponentId {
     return this.componentName;
   }
   toHash() {
-    return toHash({ path: this.toString() });
+    return toHash(this.toString());
   }
 
   //===========================================================
   // Button.tsx-Button-xxxx
   //===========================================================
   get uniqName() {
-    return `${path.basename(this.moduleId || "").replace(/\./g, "_")}-${
-      this.componentName
-    }-${this.toHash()}`;
+    const baseName = toCamelCase(
+      path.basename(this.moduleId || "").replace(/\./g, "-")
+    );
+    return `${baseName}-${this.componentName}-${this.toHash()}`;
   }
 
   isEqual(componentId: ComponentId) {

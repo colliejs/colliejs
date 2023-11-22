@@ -51,7 +51,7 @@ describe("test cases", () => {
       export const App = () => {
         return <Button className="css-kydkiA"></Button>;
       };",
-        "styledComponentCssTexts": "@layer app.depTree_test_ts-Button-koVSLF {.baseStyle-Button-elTJue{background:red}.variants-static-shape-round-hECRKn{border-radius:50%}
+        "styledComponentCssTexts": "@layer app.depTreeTestTs-Button-17gsmmh {.baseStyle-Button-elTJue{background:red}.variants-static-shape-round-hECRKn{border-radius:50%}
       .variants-static-shape-rect-iydAuT{border-radius:0}
       .variants-dynamic-shape-dlbLfd{border-radius:var(--variants-dynamic-shape)}
       }
@@ -85,11 +85,11 @@ describe("test cases", () => {
       export const App = () => {
         return <MyButton className="css-kydkiA"></MyButton>;
       };",
-        "styledComponentCssTexts": "@layer app.depTree_test_ts-Button-koVSLF {.baseStyle-Button-elTJue{background:red}}
+        "styledComponentCssTexts": "@layer app.depTreeTestTs-Button-17gsmmh {.baseStyle-Button-elTJue{background:red}}
 
 
-            @layer , app.depTree_test_ts-MyButton-leUzrZ;
-            @layer app.depTree_test_ts-MyButton-leUzrZ {
+            @layer , app.depTreeTestTs-MyButton-249u39;
+            @layer app.depTreeTestTs-MyButton-249u39 {
               .baseStyle-MyButton-kQvslT{background:blue}
             }
 

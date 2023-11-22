@@ -1,5 +1,5 @@
 import path from "node:path";
-import { toHash } from "./toHash";
+import { toHash } from "@c3/utils";
 export const getCssFileName = (url: string, enableTimeStampe = false) => {
   const lastSeg = path.dirname(url).split("/").pop();
   return (baseDir: string) => {
