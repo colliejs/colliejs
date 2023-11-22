@@ -231,7 +231,7 @@ importers:
         specifier: workspace:^
         version: link:../../react
       "@colliejs/webpack":
-        specifier: workspace:^1.0.18
+        specifier: workspace:^1.0.19
         version: link:../../webpack
       next:
         specifier: 14.0.2
@@ -271,7 +271,7 @@ importers:
         specifier: workspace:^1.0.60
         version: link:../../react
       "@colliejs/vite":
-        specifier: workspace:^1.0.71
+        specifier: workspace:^1.0.72
         version: link:../../vite
       "@rollup/plugin-commonjs":
         specifier: ^24.1.0
