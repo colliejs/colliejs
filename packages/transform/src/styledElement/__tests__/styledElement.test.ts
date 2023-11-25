@@ -67,12 +67,12 @@ describe("test cases", () => {
       `"<Button className={" css-gmqXFB " + props.className}>login</Button>"`
     );
   });
-  it.skip("className will be combined if existed className is in restProps", () => {
+  it.skip("className will be combined if existed className is in restProps. 不支持。需要用户手动处理", () => {
     const sourceCode = ` <Button css={{color:'red'}} {...restProps}>login</Button>    `;
     const { code } = transform(sourceCode);
 
     expect(code).toMatchInlineSnapshot(
-      `"<Button className={" css-gmqXFB " + restProps.className}>login</Button>"`
+      `"<Button {...restProps} className={" css-gmqXFB " + restProps.className}>login</Button>"`
     );
   });
   it("css props with variable", () => {

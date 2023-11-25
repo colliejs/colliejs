@@ -58,4 +58,4 @@ const App = (props)=> {
 
 # Principle
 
-- transform the styled object to css text file at the building time
+- transform the styled object to css text file at the build time

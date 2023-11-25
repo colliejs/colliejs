@@ -28,6 +28,19 @@ export const getAttr = (path: NodePath<t.JSXElement>, prop: string) => {
     });
   return ret;
 };
+export const getSpreadAttr = (path: NodePath<t.JSXElement>) => {
+  let ret: t.JSXSpreadAttribute;
+  path
+    .get("openingElement")
+    .get("attributes")
+    .forEach(attr => {
+      if (attr.isJSXSpreadAttribute()) {
+        ret = attr.node;
+      }
+    });
+  return ret;
+};
+export const isClassNameInSpreadAttr = (path: NodePath<t.JSXElement>) => {};
 
 export const delAttr = (path: NodePath<t.JSXElement>, prop: string) => {
   getAttr(path, prop).remove();
