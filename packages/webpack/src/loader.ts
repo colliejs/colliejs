@@ -49,3 +49,4 @@ export default function collieWebpackLoader(
   writeFile(cssFile, content);
   return `import "${cssFile}"; ${transformedCode}`;
 }
+

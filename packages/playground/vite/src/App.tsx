@@ -5,6 +5,9 @@ import { Button } from "./components/Button";
 import React from "react";
 import CssButton from "./components/CssButton";
 import { ThemeButton } from "./components/ThemeButton";
+import ResponsiveButton from "./components/ResponsiveButton";
+export const pxToVw = (px: number, refWidth: number) =>
+  `${(px / refWidth) * 100}vw`;
 
 export default function App() {
   const [count, setCount] = useState(0);
@@ -23,6 +26,13 @@ export default function App() {
       <br />
       <CssButton></CssButton>
       <ThemeButton>ThemeButton</ThemeButton>
+      <ResponsiveButton>ResponsiveButton1</ResponsiveButton>
+      <ResponsiveButton x={["300px", "600px"]}>
+        ResponsiveButton2 dynamic 
+      </ResponsiveButton>
+      <ResponsiveButton x={[pxToVw(300, 375), "600px"]}>
+        ResponsiveButton use vw
+      </ResponsiveButton>
     </div>
   );
 }

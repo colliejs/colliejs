@@ -7,10 +7,7 @@ const nextConfig = {
       config.resolve.fallback.fs = false;
     }
     config.module.rules.push({
-      loader: path.resolve(
-        __dirname,
-        "./node_modules/@colliejs/webpack/dist/loader.mjs"
-      ),
+      loader: '@colliejs/webpack',
       options: {},
     });
     return config;

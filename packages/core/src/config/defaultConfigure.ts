@@ -16,5 +16,5 @@ export const defaultConfig = {
   },
   utils: utils,
   styledElementProp: "css",
-  layername: "app",
+  layername: "",
 } as const satisfies Config;

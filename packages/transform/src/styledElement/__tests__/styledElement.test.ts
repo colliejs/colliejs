@@ -51,12 +51,28 @@ describe("test cases", () => {
       }
     `);
   });
-  it("className will be combined", () => {
+  it("className will be combined if existed className is string", () => {
     const sourceCode = ` <Button className="a" css={{color:'red'}}>login</Button>    `;
     const { code } = transform(sourceCode);
 
     expect(code).toMatchInlineSnapshot(
       `"<Button className={" css-gmqXFB " + "a"}>login</Button>"`
+    );
+  });
+  it("className will be combined if existed className is a dynamic variable", () => {
+    const sourceCode = ` <Button className={props.className} css={{color:'red'}}>login</Button>    `;
+    const { code } = transform(sourceCode);
+
+    expect(code).toMatchInlineSnapshot(
+      `"<Button className={" css-gmqXFB " + props.className}>login</Button>"`
+    );
+  });
+  it.skip("className will be combined if existed className is in restProps", () => {
+    const sourceCode = ` <Button css={{color:'red'}} {...restProps}>login</Button>    `;
+    const { code } = transform(sourceCode);
+
+    expect(code).toMatchInlineSnapshot(
+      `"<Button className={" css-gmqXFB " + restProps.className}>login</Button>"`
     );
   });
   it("css props with variable", () => {

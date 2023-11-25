@@ -35,7 +35,8 @@
   "exports": {
     "./plugin": {
       "require": "./dist/plugin.cjs",
-      "import": "./dist/plugin.mjs"
+      "import": "./dist/plugin.mjs",
+      "types": "./dist/index.d.ts"
     },
     ".": {
       "require": "./dist/loader.cjs",

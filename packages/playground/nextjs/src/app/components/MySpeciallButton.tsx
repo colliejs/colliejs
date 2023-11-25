@@ -7,4 +7,5 @@ export const MySpecialButton = styled(MyButton, {
   background: "pink",
   fontSize: 30,
   borderRadius: 10,
+  color:'red'
 });
