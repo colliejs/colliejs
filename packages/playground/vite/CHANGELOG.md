@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.162](https://github.com/colliejs/colliejs/compare/@colliejs/vite-demo@1.0.161...@colliejs/vite-demo@1.0.162) (2023-11-25)
+
+**Note:** Version bump only for package @colliejs/vite-demo
+
 ## [1.0.161](https://github.com/colliejs/colliejs/compare/@colliejs/vite-demo@1.0.160...@colliejs/vite-demo@1.0.161) (2023-11-22)
 
 **Note:** Version bump only for package @colliejs/vite-demo

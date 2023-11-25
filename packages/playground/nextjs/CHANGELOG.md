@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.12](https://github.com/colliejs/colliejs/compare/@colliejs/nextjs-demo@0.1.11...@colliejs/nextjs-demo@0.1.12) (2023-11-25)
+
+**Note:** Version bump only for package @colliejs/nextjs-demo
+
 ## [0.1.11](https://github.com/colliejs/colliejs/compare/@colliejs/nextjs-demo@0.1.10...@colliejs/nextjs-demo@0.1.11) (2023-11-22)
 
 **Note:** Version bump only for package @colliejs/nextjs-demo
