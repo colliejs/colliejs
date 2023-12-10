@@ -35,8 +35,7 @@ export type CSS<
   // nested at-rule css styles
   {
     [K in Util.Prefixed<"@", keyof Media>]?: CSS<Media, Theme, ThemeMap, Utils>;
-  } & // known property styles
-  {
+  } & { // known property styles
     [K in keyof CSSProperties]?:
       | ValueByPropertyName<K>
       | TokenByPropertyName<K, Theme, ThemeMap>
@@ -44,8 +43,7 @@ export type CSS<
       | ThemeUtil.ScaleValue
       | Util.Index
       | undefined;
-  } & // known utility styles
-  {
+  } & { // known utility styles
     [K in keyof Utils as K extends keyof CSSProperties
       ? never
       : K]?: Utils[K] extends (arg: infer P) => any
@@ -84,15 +82,13 @@ export type CSS<
               : never)
           | P
       : never;
-  } & // known theme styles
-  {
+  } & { // known theme styles
     [K in keyof ThemeMap as K extends keyof CSSProperties
       ? never
       : K extends keyof Utils
       ? never
       : K]?: Native.Globals | Util.Index | undefined;
-  } & // unknown css declaration styles
-  {
+  } & { // unknown css declaration styles
     /** Unknown property. */
     [K: string]:
       | number
@@ -101,7 +97,6 @@ export type CSS<
       | {}
       | undefined;
   };
-  
 
 /** Unique symbol used to reference a property value. */
 export declare const $$PropertyValue: unique symbol;

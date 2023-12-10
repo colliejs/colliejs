@@ -48,9 +48,8 @@ export type _Config = {
   breakpoints?: readonly number[];
   utils: {};
 };
-export type _MyCss<T extends _Config> = CSS<T>;
 export type MyCss<T extends _Config> = {
-  [K in keyof _MyCss<T>]: _MyCss<T>[K] | _MyCss<T>[K][];
+  [K in keyof CSS<T>]: CSS<T>[K] | CSS<T>[K][];
 };
 
 //===========================================================

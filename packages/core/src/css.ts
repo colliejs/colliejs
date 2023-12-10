@@ -1,8 +1,8 @@
 import { CSSPropertiesComplex, Config } from "./type";
 import _ from "lodash";
 import { toCssRules } from "./utils/toCssRules.js";
-import { convertCssObjToMediaQuery } from "./arraySyntax";
 import { toHash } from "./utils/toHash.js";
+import { convertCssObjToMediaQuery } from "./convert";
 
 export const css = (
   cssObj: CSSPropertiesComplex,
@@ -10,10 +10,7 @@ export const css = (
   conditions = [],
   config: Config
 ): string => {
-  const newCssObj = config.breakpoints
-    ? convertCssObjToMediaQuery(cssObj, config.breakpoints!)
-    : cssObj;
-
+  const newCssObj = convertCssObjToMediaQuery(cssObj, config.breakpoints!);
   let res = "";
   toCssRules(newCssObj, selectors, conditions, config, (cssText: string) => {
     res += cssText + "\n";

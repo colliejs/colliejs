@@ -13,7 +13,7 @@ import { CSSPropertiesComplex } from "./type";
 export const arraySyntax = (
   propertyKey: string,
   valueInArray: any[],
-  breakpoints: readonly number[]
+  breakpoints: readonly number[] = []
 ): Record<`@media ${string}`, object> => {
   const mediaQueries = breakpoints
     .map((bk, index) => {
@@ -28,32 +28,6 @@ export const arraySyntax = (
   return mediaQueries.reduce((acc, cur) => ({ ...acc, ...cur }), {});
 };
 
-/**
- *
- * @param cssObj: {width:[10,20],height:[20,40],color:"white"}
- * @param breakpoints: [768]
- * @returns:{
- *  '@media (min-width:breakpoints[0])':{width:10,height:20},
- *  '@media (min-width:(breakpoints[0]+1)px)':{width:20,height:40},
- *   color:"white"
- * }
- */
-
-export const convertCssObjToMediaQuery = (
-  cssObj: CSSPropertiesComplex,
-  breakpoints: readonly number[]
-) => {
-  let res = {} as CSSPropertiesComplex;
-  Object.keys(cssObj).forEach(key => {
-    const value = cssObj[key];
-    if (Array.isArray(value)) {
-      res = _.merge(res, arraySyntax(key, value, breakpoints));
-    } else if (typeof value === "object" && value) {
-      res[key] = convertCssObjToMediaQuery(value, breakpoints);
-    } else {
-      res[key] = value;
-    }
-  });
-  //TODO: 保证breakpoint小的排在前面，否则样式会被覆盖
-  return res;
+export const isArraySyntax = (value: any) => {
+  return Array.isArray(value) && value.length > 0;
 };

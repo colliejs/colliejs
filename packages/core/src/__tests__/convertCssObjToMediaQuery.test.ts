@@ -1,9 +1,9 @@
-import { convertCssObjToMediaQuery } from "../arraySyntax";
 import { defaultConfig } from "../config";
+import { convertCssObjToMediaQuery } from "../convert";
 import { CSSPropertiesComplex } from "../type";
 
 describe("convertCssObjToMediaQuery", () => {
-  it("should work ", () => {
+  it("work for array syntax ", () => {
     const cssObj: any = {
       width: [10, 20],
       height: [20, 40],
@@ -57,6 +57,34 @@ describe("convertCssObjToMediaQuery", () => {
         "@media (min-width:768px)": {
           "width": 20,
         },
+      }
+    `);
+  });
+  it("should work for object syntax", () => {
+    const cssObj: any = {
+      width: { "@phone": 10, "@pad": 20 },
+      height: { "@phone": 20, "@pad": 40 },
+      p: [10, 20],
+      color: "white",
+    };
+    const res = convertCssObjToMediaQuery(cssObj, [320, 768]);
+    expect(res).toMatchInlineSnapshot(`
+      {
+        "@media (min-width:320px)": {
+          "p": 10,
+        },
+        "@media (min-width:768px)": {
+          "p": 20,
+        },
+        "@pad": {
+          "height": 40,
+          "width": 20,
+        },
+        "@phone": {
+          "height": 20,
+          "width": 10,
+        },
+        "color": "white",
       }
     `);
   });
