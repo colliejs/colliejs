@@ -28,7 +28,7 @@ export const collieConfig = _.merge(defaultConfig, {
       "box-shadow-medium": "0 6px 20px rgb(0 0 0 / 20%)",
       "box-shadow-large": "0 15px 50px rgb(0 0 0 / 30%)",
     },
-
+    
     fonts: {
       //===========================================================
       // font family

@@ -1,17 +1,12 @@
-import { CSSProperties } from "../type";
-
-// export type RCSSProperties = {
-//   // [k in keyof CSSProperties]?: CSSProperties[k] | CSSProperties[k][];
-//   [k in keyof CSSProperties]?: CSSProperties[k]
-// };
-export type RCSSProperties = CSSProperties;
+import { CSSProperties } from "react";
+import { ConfigType } from "../types/config";
 
 export type Typography = {
-  fontSize: RCSSProperties["fontSize"];
-  fontWeight: RCSSProperties["fontWeight"];
-  lineHeight?: RCSSProperties["lineHeight"];
-  letterSpacing?: RCSSProperties["letterSpacing"];
-  fontFamily?: RCSSProperties["fontFamily"];
+  fontSize: CSSProperties["fontSize"];
+  fontWeight: CSSProperties["fontWeight"];
+  lineHeight?: CSSProperties["lineHeight"];
+  letterSpacing?: CSSProperties["letterSpacing"];
+  fontFamily?: CSSProperties["fontFamily"];
 };
 
 export type Animation = Pick<
@@ -36,55 +31,46 @@ export type Transition = Pick<
 const pseudoElements = ["before", "after", "first-letter", "first-line"];
 const pseudoClasses = ["hover", "focus", "active", "focus-within", "disabled"];
 
-export const utils = {
-  w: (w: RCSSProperties["width"]) => ({ width: w }),
-  h: (h: RCSSProperties["height"]) => ({ height: h }),
-  minW: (minW: RCSSProperties["minWidth"]) => ({ minWidth: minW }),
-  minH: (minH: RCSSProperties["minHeight"]) => ({ minHeight: minH }),
-  maxW: (maxW: RCSSProperties["maxWidth"]) => ({ maxWidth: maxW }),
-  maxH: (maxH: RCSSProperties["maxHeight"]) => ({ maxHeight: maxH }),
-
-  //typo
-  typo: (value: Typography) => {
-    const hl =
-      typeof value.lineHeight === "number" && value.lineHeight > 5
-        ? `${value.lineHeight}px`
-        : value.lineHeight;
-    return { ...value, lineHeight: hl };
-  },
+export const utils: ConfigType.Utils<{}> = {
+  w: (w: CSSProperties["width"]) => ({ width: w }),
+  h: (h: CSSProperties["height"]) => ({ height: h }),
+  minW: (minW: CSSProperties["minWidth"]) => ({ minWidth: minW }),
+  minH: (minH: CSSProperties["minHeight"]) => ({ minHeight: minH }),
+  maxW: (maxW: CSSProperties["maxWidth"]) => ({ maxWidth: maxW }),
+  maxH: (maxH: CSSProperties["maxHeight"]) => ({ maxHeight: maxH }),
 
   //margin
-  m: (m: RCSSProperties["margin"]) => ({ margin: m }),
-  mt: (m: RCSSProperties["marginTop"]) => ({ marginTop: m }),
-  mr: (m: RCSSProperties["marginRight"]) => ({ marginRight: m }),
-  mb: (m: RCSSProperties["paddingBottom"]) => ({ marginBottom: m }),
-  ml: (m: RCSSProperties["marginLeft"]) => ({ marginLeft: m }),
-  mx: (mx: RCSSProperties["marginLeft"]) => ({
+  m: (m: CSSProperties["margin"]) => ({ margin: m }),
+  mt: (m: CSSProperties["marginTop"]) => ({ marginTop: m }),
+  mr: (m: CSSProperties["marginRight"]) => ({ marginRight: m }),
+  mb: (m: CSSProperties["paddingBottom"]) => ({ marginBottom: m }),
+  ml: (m: CSSProperties["marginLeft"]) => ({ marginLeft: m }),
+  mx: (mx: CSSProperties["marginLeft"]) => ({
     marginLeft: mx,
     marginRight: mx,
   }),
-  my: (my: RCSSProperties["marginTop"]) => ({
+  my: (my: CSSProperties["marginTop"]) => ({
     marginTop: my,
     marginBottom: my,
   }),
 
   //padding
-  p: (m: RCSSProperties["padding"]) => ({ padding: m }),
-  pt: (m: RCSSProperties["paddingTop"]) => ({ paddingTop: m }),
-  pr: (m: RCSSProperties["paddingRight"]) => ({ paddingRight: m }),
-  pb: (m: RCSSProperties["paddingBottom"]) => ({ paddingBottom: m }),
-  pl: (m: RCSSProperties["paddingLeft"]) => ({ paddingLeft: m }),
-  px: (px: RCSSProperties["paddingLeft"]) => ({
+  p: (m: CSSProperties["padding"]) => ({ padding: m }),
+  pt: (m: CSSProperties["paddingTop"]) => ({ paddingTop: m }),
+  pr: (m: CSSProperties["paddingRight"]) => ({ paddingRight: m }),
+  pb: (m: CSSProperties["paddingBottom"]) => ({ paddingBottom: m }),
+  pl: (m: CSSProperties["paddingLeft"]) => ({ paddingLeft: m }),
+  px: (px: CSSProperties["paddingLeft"]) => ({
     paddingLeft: px,
     paddingRight: px,
   }),
-  py: (py: RCSSProperties["paddingTop"]) => ({
+  py: (py: CSSProperties["paddingTop"]) => ({
     paddingTop: py,
     paddingBottom: py,
   }),
 
   //others shortcuts
-  bg: (bg: RCSSProperties["background"]) => ({ background: bg }),
+  bg: (bg: CSSProperties["background"]) => ({ background: bg }),
 
   anime: (options: Animation) => ({
     animationFillMode: "forwards",
@@ -96,7 +82,7 @@ export const utils = {
   ...pseudoElements.reduce(
     (acc, pseudo: string) => ({
       ...acc,
-      [`_${pseudo}`]: (css: RCSSProperties) => ({
+      [`_${pseudo}`]: (css: CSSProperties) => ({
         [`&::${pseudo}`]: {
           content: "",
           position: "absolute",
@@ -112,7 +98,7 @@ export const utils = {
   ...pseudoClasses.reduce(
     (acc, pseudo: string) => ({
       ...acc,
-      [`_${pseudo}`]: (css: RCSSProperties) => ({ [`&:${pseudo}`]: css }),
+      [`_${pseudo}`]: (css: CSSProperties) => ({ [`&:${pseudo}`]: css }),
     }),
     {}
   ),

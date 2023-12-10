@@ -1,19 +1,8 @@
-import React, {
-  CSSProperties,
-  ElementType,
-  PropsWithoutRef,
-  RefAttributes,
-} from "react";
-import { type Styling } from "@colliejs/transform";
-// import type * as Config from "./types/config";
-import type * as CSSUtil from "./types/css-util";
-// import type * as StyledComponentX from "./types/styled-component";
-import * as Util from "./types/util";
-import Stitches, { RemoveIndex } from "./types/stitches";
-export { Util, CSSUtil, Stitches };
-// import { defaultConfig } from "@colliejs/core";
-import { ConfigType, DefaultThemeMap } from "./types/config";
-import { JSXElement } from "@babel/types";
+import React, { PropsWithoutRef, RefAttributes } from "react";
+
+import type { CSS, DefaultThemeMap, Util } from "@colliejs/core";
+import type { ConfigType } from "@colliejs/core/config";
+
 import {
   DynamicVariantFnName,
   ReadOnlyDynamicVariantVariableValue,
@@ -32,13 +21,6 @@ type Union<A, B> = {
     ? B[K]
     : never;
 };
-
-type A = { a: number; b?: number; c: boolean };
-type B = { a: string; d?: string };
-type K23 = Union<A, B>;
-type K22 = A["b"];
-
-// const x:A={a:1,b:undefined,c:2}
 
 export type StyledOption<Props, InnerAs extends IntrinsicElementsKeys> = {
   as?: InnerAs | undefined;
@@ -66,12 +48,7 @@ export type _Config = {
   breakpoints?: readonly number[];
   utils: {};
 };
-export type _MyCss<T extends _Config> = CSSUtil.CSS<
-  T["media"],
-  T["theme"],
-  T["themeMap"],
-  T["utils"]
->;
+export type _MyCss<T extends _Config> = CSS<T>;
 export type MyCss<T extends _Config> = {
   [K in keyof _MyCss<T>]: _MyCss<T>[K] | _MyCss<T>[K][];
 };

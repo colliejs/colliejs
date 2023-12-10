@@ -4,7 +4,7 @@
   "description": "foo",
   "type": "module",
   "scripts": {
-    "build": "rollup -c rollup.config.js && pnpm type ",
+    "build": "rollup -c rollup.config.js && pnpm type && cp -rf src/types dist/",
     "buildOnly": "rollup -c rollup.config.js",
     "clean": "rm -rf dist  ",
     "reset": "pnpm clean && rm -rf node_modules && pnpm install",
@@ -26,7 +26,9 @@
       "require": "./dist/index.cjs",
       "types": "./dist/index.d.ts"
     },
-    "./css": "./dist/index.css"
+    "./config": {
+      "types": "./dist/types/config.d.ts"
+    }
   },
   "publishConfig": {
     "access": "public"

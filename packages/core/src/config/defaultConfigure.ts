@@ -2,7 +2,7 @@ import { Config } from "../type";
 import { defaultThemeMap } from "./defaultThemeMap";
 import { utils } from "./util";
 
-export const defaultConfig = {
+export const defaultConfig: Config = {
   prefix: "co",
   themeMap: defaultThemeMap,
   media: {
@@ -14,7 +14,7 @@ export const defaultConfig = {
   theme: {
     colors: {},
   },
-  utils: utils,
+  utils,
   styledElementProp: "css",
   layername: "",
-} as const satisfies Config;
+};

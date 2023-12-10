@@ -1,16 +1,7 @@
 type Selector = string;
-import * as CSS from "csstype";
+import type { CSSProperties } from "./types";
+import type { ConfigType } from "./types/config";
 
-export interface CSSProperties extends CSS.Properties<string | number> {
-  /**
-   * The index signature was removed to enable closed typing for style
-   * using CSSType. You're able to use type assertion or module augmentation
-   * to add properties or an index signature of your own.
-   *
-   * For examples and more information, visit:
-   * https://github.com/frenic/csstype#what-should-i-do-when-i-get-type-errors
-   */
-}
 type ConfigUtils = {
   [customPropertyName: string]: (p: any) => CSSPropertiesComplex;
 };
@@ -32,13 +23,19 @@ export type CSSPropertiesComplex = CSSProperties &
   ConditionRule;
 //   & SelectorRule;
 
-export type Config = {
-  utils?: ConfigUtils;
+export type Config<
+  Media = {},
+  ThemeMap = {},
+  Theme = {},
+  Utils = {},
+  Prefix = string
+> = {
+  media?: ConfigType.Media<Media>;
+  prefix: ConfigType.Prefix<Prefix>;
+  theme?: ConfigType.Theme<Theme>;
+  themeMap: ConfigType.ThemeMap<ThemeMap>;
+  utils?: ConfigType.Utils<Utils>;
   breakpoints?: readonly number[];
-  media?: Record<string, string>; //to remove
-  prefix: string;
-  theme?: Record<string, any>;
-  themeMap: Record<string, any>;
   styledElementProp?: string;
   layername: string;
 };
