@@ -1,16 +1,16 @@
-import { CSSPropertiesComplex, Config } from "./type";
+import { CSSObject, BaseConfig } from "./type";
 import _ from "lodash";
-import { toCssRules } from "./utils/toCssRules.js";
+import { toCssRules } from "./utils/toCssRules";
 import { toHash } from "./utils/toHash.js";
 import { convertCssObjToMediaQuery } from "./convert";
 
-export const css = (
-  cssObj: CSSPropertiesComplex,
+export const css = <C extends BaseConfig>(
+  cssObj: CSSObject<C>,
   selectors = [".my-class-name"],
   conditions = [],
-  config: Config
+  config: C
 ): string => {
-  const newCssObj = convertCssObjToMediaQuery(cssObj, config.breakpoints!);
+  const newCssObj = convertCssObjToMediaQuery(cssObj, config.breakpoints || []);
   let res = "";
   toCssRules(newCssObj, selectors, conditions, config, (cssText: string) => {
     res += cssText + "\n";
@@ -18,7 +18,9 @@ export const css = (
   return res.slice(0, -1);
 };
 
-export const cx = (cssObj: CSSPropertiesComplex, config: Config) => {
-  const className = toHash(cssObj);
-  return { className, cssText: css(cssObj, [`.${className}`], [], config) };
+export const makeCss = <Config extends BaseConfig>(config: Config) => {
+  return (cssObj: CSSObject<Config>) => {
+    const className = toHash(cssObj);
+    return { className, cssText: css(cssObj, [`.${className}`], [], config) };
+  };
 };

@@ -1,4 +1,4 @@
-import { Config, CSSPropertiesComplex } from "@colliejs/core";
+import type { BaseConfig, CSSObject } from "@colliejs/core";
 import * as t from "@babel/types";
 import log from "npmlog";
 import {
@@ -16,8 +16,8 @@ import { CSSInfo } from "../styling/types";
 import _ from "lodash";
 import { NodePath } from "@babel/traverse";
 
-export class StyledElement implements Stylable {
-  cssProp: CSSInfo;
+export class StyledElement<Config extends BaseConfig> implements Stylable {
+  cssProp: CSSInfo<Config>;
 
   constructor(
     private path: NodePath<t.JSXElement>,
@@ -32,7 +32,7 @@ export class StyledElement implements Stylable {
       path,
       config.styledElementProp || "css",
       importsByName
-    ) as CSSPropertiesComplex;
+    ) as CSSObject<Config>;
     if (!_.isObject(css)) {
       log.error("css prop must be a object", css);
       throw new Error("css prop must be a object");
@@ -57,7 +57,7 @@ export class StyledElement implements Stylable {
           t.jSXExpressionContainer(
             t.binaryExpression(
               "+",
-              t.stringLiteral(` ${this.cssProp.className} `),//NOTE:这里必须要有个空格来分开className
+              t.stringLiteral(` ${this.cssProp.className} `), //NOTE:这里必须要有个空格来分开className
               getValExpOfAttr(this.path, "className")
             )
           )

@@ -1,6 +1,6 @@
 
 import * as t from "@babel/types";
-import { Config } from "@colliejs/core";
+import { BaseConfig } from "@colliejs/core";
 import { StyledComponentDecl } from "../utils";
 
 export const isStyledCallExpression = (

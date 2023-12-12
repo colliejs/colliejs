@@ -1,10 +1,10 @@
 //@ts-nocheck
-import { Config } from "./type";
+import { BaseConfig } from "./type";
 import { toTailDashed } from "./utils/toTailDashed.js";
 import { toTokenizedValue } from "./utils/toTokenizedValue.js";
 
-/** Returns a function that applies a theme and returns tokens of that theme. */
-export const createTheme = (config: Config) => {
+/** Returns returns tokens of that theme. */
+export const createTheme = (config: BaseConfig) => {
   const theme = config.theme;
   //   const themeObject = {};
   const cssProps: string[] = [];

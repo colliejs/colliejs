@@ -1,8 +1,8 @@
 import path from "node:path";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import collieWebpackLoader from "@colliejs/webpack";
-// import CollieWebpackPlugin from "@colliejs/webpack/plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
+import { defaultConfig } from "@colliejs/react";
 
 import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
@@ -60,7 +60,9 @@ export default {
               __dirname,
               "./node_modules/@colliejs/webpack/dist/loader.mjs"
             ),
-            options: {},
+            options: {
+              styledConfig: defaultConfig,
+            },
           },
         ],
       },

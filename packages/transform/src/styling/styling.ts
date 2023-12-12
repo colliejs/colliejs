@@ -1,14 +1,13 @@
 import {
-  CSSPropertiesComplex,
-  Config,
+  type BaseConfig,
   css,
   getDynamicVariableValue,
   getDynamicVariantKey,
   getStaticVariantKey,
   toHash,
-  ReadOnlyDynamicVariantVariableValue,
   DynamicVariantFnName,
   DynamicVariantFn,
+  CSSObject,
 } from "@colliejs/core";
 import _ from "lodash";
 import {
@@ -18,7 +17,6 @@ import {
   VariantDeclBlock,
   VariantParsed,
 } from "./types";
-import { s } from "@c3/utils";
 import { isSupportBreak } from "@colliejs/core";
 
 export type Props = { [k: string]: any };
@@ -34,21 +32,21 @@ export const getBaseStyleSelector = (prefix: string, hash: string) => {
   return `baseStyle-${hash}`;
 };
 
-export const parseStyling = (
-  styling: Styling,
+export const parseStyling = <Config extends BaseConfig>(
+  styling: Styling<Config>,
   config: Config,
   baseStylePrefix = ""
-): StylingParsed => {
-  const res = {} as StylingParsed;
+): StylingParsed<Config> => {
+  const res = {} as StylingParsed<Config>;
   //===========================================================
   // 1.处理variants
   //===========================================================
   const variants = styling["variants"];
   for (const variantName in variants) {
-    const variantDeclBlock: VariantDeclBlock = variants[variantName];
+    const variantDeclBlock: VariantDeclBlock<Config> = variants[variantName];
     for (const variantValue in variantDeclBlock) {
       let variantKey: string;
-      let cssObj = {} as CSSPropertiesComplex;
+      let cssObj = {} as CSSObject<Config>;
       let cssObjOrDynamicFn = variantDeclBlock[variantValue];
       const isDynamicVariantFn = typeof cssObjOrDynamicFn === "function";
       if (isDynamicVariantFn) {
@@ -60,14 +58,16 @@ export const parseStyling = (
         const supportBreaksPoints = isSupportBreak(variantValue);
         if (supportBreaksPoints) {
           cssObj = dynFn(
-            config.breakpoints.map(e => getDynamicVariableValue(variantName, e))
+            config.breakpoints?.map(e =>
+              getDynamicVariableValue(variantName, e)
+            )
           );
         } else {
           cssObj = dynFn(getDynamicVariableValue(variantName));
         }
       } else {
         variantKey = getStaticVariantKey(variantName, variantValue);
-        cssObj = cssObjOrDynamicFn as CSSPropertiesComplex;
+        cssObj = cssObjOrDynamicFn as CSSObject<Config>;
       }
       const className = `${variantKey}-${toHash(cssObj)}`;
       res[variantKey] = {
@@ -83,6 +83,7 @@ export const parseStyling = (
   const compoundVariants = styling["compoundVariants"] || [];
   for (const cv of compoundVariants) {
     const cssObj = cv.css;
+    //@ts-ignore
     const name = Object.entries(cv)
       .filter(([k, v]) => k !== "css")
       .map(([k, v]) => `${k}-${v}`)
@@ -106,7 +107,7 @@ export const parseStyling = (
   const baseStyleCssObject = _.pick(
     styling,
     keys.filter(key => !["variants", "compoundVariants"].includes(key))
-  );
+  ) as CSSObject<Config>;
   const baseStyleSelector = getBaseStyleSelector(
     baseStylePrefix,
     toHash(baseStyleCssObject)
@@ -129,15 +130,15 @@ export const parseStyling = (
  * @param componentName
  * @returns
  */
-export const parseCssProp = (
-  cssPropObj: CSSPropertiesComplex,
+export const parseCssProp = <Config extends BaseConfig>(
+  cssPropObj: CSSObject<Config>,
   config: Config
-): CSSInfo => {
+): CSSInfo<Config> => {
   const empty = Object.keys(cssPropObj).length === 0;
   if (empty) {
     return {
       cssGenText: "",
-      cssRawObj: {},
+      cssRawObj: {} as CSSObject<Config>,
       className: "",
     };
   }

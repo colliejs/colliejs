@@ -1,8 +1,8 @@
-import { Config } from "../type";
 import { defaultThemeMap } from "./defaultThemeMap";
 import { utils } from "./util";
+import { BaseConfig } from "@colliejs/core";
 
-export const defaultConfig: Config = {
+export const defaultConfig = {
   prefix: "co",
   themeMap: defaultThemeMap,
   media: {
@@ -17,4 +17,4 @@ export const defaultConfig: Config = {
   utils,
   styledElementProp: "css",
   layername: "",
-};
+} as const satisfies BaseConfig;

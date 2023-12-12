@@ -1,50 +1,50 @@
-import {
-  CSSPropertiesComplex,
+import type {
   DynamicVariantFn,
   DynamicVariantKey,
   StaticVariantKey,
   VariantName,
+  CSSObject,
+  BaseConfig,
   VariantValue,
 } from "@colliejs/core";
 
-export type CSSInfo = {
-  cssRawObj: CSSPropertiesComplex;
+export type CSSInfo<Config extends BaseConfig> = {
+  cssRawObj: CSSObject<Config>;
   cssGenText: string;
   className: string; //被渲染的原数的className。当前元素的className
 };
-
-
 
 export type DynamicVariant = {
   className: string;
   fn: DynamicVariantFn;
 };
 
-export type VariantParsed = {
+export type VariantParsed<Config extends BaseConfig> = {
   [k in
     | StaticVariantKey
     | DynamicVariantKey
-    | `compoundVariants-${string}`]: CSSInfo;
+    | `compoundVariants-${string}`]: CSSInfo<Config>;
 };
-export type StylingParsed = {
-  baseStyle: CSSInfo;
-} & VariantParsed;
+export type StylingParsed<Config extends BaseConfig> = {
+  baseStyle: CSSInfo<Config>;
+} & VariantParsed<Config>;
 
-export type VariantDeclBlock = Record<
+export type VariantDeclBlock<Config extends BaseConfig> = Record<
   VariantValue,
-  CSSPropertiesComplex | DynamicVariant["fn"]
+  CSSObject<Config> | DynamicVariant["fn"]
 >;
-export type Variants = Record<VariantName, VariantDeclBlock>;
+export type Variants<Config extends BaseConfig> = Record<VariantName, VariantDeclBlock<Config>>;
 
-export type CompoundVariants<S extends Styling> = ({
-  [Name in keyof S["variants"]]?: S["variants"][Name];
+export type CompoundVariants<Config extends BaseConfig> = ({
+  [Name in keyof Styling<Config>["variants"]]?: Styling<Config>["variants"][Name];
 } & {
-  css: CSSPropertiesComplex;
+  css: CSSObject<Config>;
 })[];
 
-export type Styling = CSSPropertiesComplex & {
-  variants?: Variants;
-  compoundVariants: CompoundVariants<Styling>; //TODO:
+//it is StyledObject
+export type Styling<Config extends BaseConfig> = CSSObject<Config> & {
+  variants?: Variants<Config>;
+  compoundVariants: CompoundVariants<Config>; //TODO:
   // defaultVariants: Record<VariantName, string>;//不可能是函数作为默认值
   [x: string]: any;
 };

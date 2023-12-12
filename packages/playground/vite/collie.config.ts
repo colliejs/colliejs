@@ -1,6 +1,7 @@
-import { defaultConfig } from "@colliejs/core";
-import _ from "lodash";
-export const collieConfig = _.merge(defaultConfig, {
+import { BaseConfig } from "@colliejs/core";
+import { defaultConfig } from "@colliejs/react";
+export const collieConfig = {
+  ...defaultConfig,
   theme: {
     colors: {
       white01: "rgba(255,255,255,0.1)",
@@ -28,13 +29,15 @@ export const collieConfig = _.merge(defaultConfig, {
       "box-shadow-medium": "0 6px 20px rgb(0 0 0 / 20%)",
       "box-shadow-large": "0 15px 50px rgb(0 0 0 / 30%)",
     },
-    
+
     fonts: {
       //===========================================================
       // font family
       //===========================================================
-      "font-family": "Figtree,Roboto,Rubik,Noto Kufi Arabic,Noto Sans JP,sans-serif",
-      "title-font-family": "Poppins,Roboto,Rubik,Noto Kufi Arabic,Noto Sans JP,sans-serif",
+      "font-family":
+        "Figtree,Roboto,Rubik,Noto Kufi Arabic,Noto Sans JP,sans-serif",
+      "title-font-family":
+        "Poppins,Roboto,Rubik,Noto Kufi Arabic,Noto Sans JP,sans-serif",
 
       "smoothing-webkit": "antialiased",
       "smoothing-moz": "grayscale",
@@ -129,5 +132,4 @@ export const collieConfig = _.merge(defaultConfig, {
       max: "999",
     },
   },
-
-});
+} as const satisfies BaseConfig;

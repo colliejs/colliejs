@@ -1,4 +1,4 @@
-import { Config, createTheme, defaultConfig, toHash } from "@colliejs/core";
+import { BaseConfig, createTheme, toHash } from "@colliejs/core";
 import { Alias, transform } from "@colliejs/transform";
 import { FilterPattern, createFilter } from "@rollup/pluginutils";
 import log from "npmlog";
@@ -20,7 +20,7 @@ global.window = {
 };
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
-type VitePluginOptions = {
+type VitePluginOptions<Config extends BaseConfig> = {
   include?: FilterPattern;
   exclude?: FilterPattern;
   styledConfig?: Config;
@@ -32,7 +32,7 @@ type LayerName = string;
 
 const UNCHANGED = null;
 
-const writeStyledThemeCssTexts = (
+const writeStyledThemeCssTexts = <Config extends BaseConfig>(
   styledConfig: Config,
   cssFileName: string
 ) => {
@@ -40,11 +40,13 @@ const writeStyledThemeCssTexts = (
   writeFile(cssFileName, cssText);
 };
 
-const collie = (option: VitePluginOptions): Plugin => {
+const collie = <Config extends BaseConfig>(
+  option: VitePluginOptions<Config>
+): Plugin => {
   const {
     include,
     exclude,
-    styledConfig = defaultConfig,
+    styledConfig,
     alias = {},
     root = process.cwd(),
     entry = "src/index.tsx",

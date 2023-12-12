@@ -12,11 +12,12 @@ import { StyledComponent } from "./StyledComponent";
 import { getPathOfStyling } from "./getNodePathOfStyling";
 import { assert } from "@c3/utils";
 import { ComponentId } from "../component/componentId";
+import type { BaseConfig } from "@colliejs/core";
 
-export type StyledDataType = {
+export type StyledDataType<Config extends BaseConfig> = {
   styledComponentName: string;
-  dependent: CustomComponent | StyledComponent | HostComponent;
-  styling: Styling;
+  dependent: CustomComponent | StyledComponent<Config> | HostComponent;
+  styling: Styling<Config>;
 };
 
 export const getStyledComponentName = (
@@ -72,17 +73,17 @@ export const getStyledDependent = (
 };
 
 //TODO: support multiple declarator
-export const parseStyledComponentDeclaration = (
+export const parseStyledComponentDeclaration = <Config extends BaseConfig>(
   path: NodePath<t.VariableDeclaration>,
   moduleIdByName: ImportsByName,
   moduleId: string
-): StyledDataType => {
+): StyledDataType<Config> => {
   const { init, id } = path.node.declarations[0]; ////TODO: multiple declarator
   if (!init || !isStyledCallExpression(init)) {
     throw new Error("not a styledComponentDecl");
   }
 
-  const result = {} as StyledDataType;
+  const result = {} as StyledDataType<Config>;
   const { arguments: _arguments } = init;
   //===========================================================
   // 1. get styledComponentName

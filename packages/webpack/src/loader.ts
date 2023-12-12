@@ -1,29 +1,30 @@
-import { Config, defaultConfig, toHash } from "@colliejs/core";
+import { BaseConfig, toHash } from "@colliejs/core";
 import { Alias, transform } from "@colliejs/transform";
 import { LoaderContext } from "webpack";
-
 import { FilterPattern, createFilter } from "@rollup/pluginutils";
-import fs from "node:fs";
 import path from "node:path";
-const __dirname = path.dirname(new URL(import.meta.url).pathname);
 import { getCssFileName, writeFile } from "@colliejs/shared";
+
+
+
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const jsFileReg = /\.[cm]?[tj]sx?$/;
 
-type LoaderOption = {
-  styledConfig?: Config;
+type LoaderOption<Config extends BaseConfig> = {
+  styledConfig: Config;
   alias?: Alias;
   root?: string;
   include?: FilterPattern;
   exclude?: FilterPattern;
 };
-export default function collieWebpackLoader(
-  this: LoaderContext<LoaderOption>,
+export default function collieWebpackLoader<Config extends BaseConfig>(
+  this: LoaderContext<LoaderOption<Config>>,
   code: string
 ) {
   const options = this.getOptions();
 
   const {
-    styledConfig = defaultConfig,
+    styledConfig ,
     alias = {},
     root = process.cwd(),
     include,
@@ -49,4 +50,3 @@ export default function collieWebpackLoader(
   writeFile(cssFile, content);
   return `import "${cssFile}"; ${transformedCode}`;
 }
-

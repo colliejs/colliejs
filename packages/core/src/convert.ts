@@ -1,8 +1,9 @@
 import _ from "lodash";
 import { arraySyntax, isArraySyntax } from "./arraySyntax";
-import { CSSPropertiesComplex } from "./type";
 import { isObjectSyntax, objectSyntax } from "./objectSyntax";
-
+import { CSSObject } from "./type";
+import { BaseConfig } from "./type";
+import { CSS } from "./types/index";
 /**
  *
  * @param cssObj: {width:[10,20],height:[20,40],color:"white"}
@@ -13,11 +14,11 @@ import { isObjectSyntax, objectSyntax } from "./objectSyntax";
  *   color:"white"
  * }
  */
-export const convertCssObjToMediaQuery = (
-  cssObj: CSSPropertiesComplex,
+export const convertCssObjToMediaQuery = <Config extends BaseConfig>(
+  cssObj: CSSObject<Config>,
   breakpoints: readonly number[]
-) => {
-  let res = {} as CSSPropertiesComplex;
+): CSS<Config> => {
+  let res = {} ;
   Object.keys(cssObj).forEach(key => {
     const value = cssObj[key];
     if (isArraySyntax(value)) {

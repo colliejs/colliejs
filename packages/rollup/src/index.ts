@@ -1,4 +1,4 @@
-import { Config, createTheme, defaultConfig } from "@colliejs/core";
+import { BaseConfig, createTheme } from "@colliejs/core";
 import { Alias, transform } from "@colliejs/transform";
 import { FilterPattern, createFilter } from "@rollup/pluginutils";
 import fs from "node:fs";
@@ -6,11 +6,11 @@ import path from "node:path";
 import { type Plugin } from "rollup";
 import { writeFile } from "@colliejs/shared";
 
-type Option = {
+type Option<Config extends BaseConfig> = {
   outDir: string;
   include?: FilterPattern;
   exclude?: FilterPattern;
-  styledConfig?: Config;
+  styledConfig: Config;
   alias?: Alias;
   root?: string;
 };
@@ -19,12 +19,12 @@ const writeThemeText = (styledConfig, cssFilename) => {
   writeFile(cssFilename, cssText);
 };
 
-const collie = (option?: Option): Plugin => {
+const collie = <Config extends BaseConfig>(option?: Option<Config>): Plugin => {
   const {
     outDir = "dist/",
     include,
     exclude,
-    styledConfig = defaultConfig,
+    styledConfig ,
     alias = {},
     root = process.cwd(),
   } = option || {};

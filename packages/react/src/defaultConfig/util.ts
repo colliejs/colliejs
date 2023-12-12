@@ -1,5 +1,5 @@
 import { CSSProperties } from "react";
-import { ConfigType } from "../types/config";
+import type { Utils } from "@colliejs/core";
 
 export type Typography = {
   fontSize: CSSProperties["fontSize"];
@@ -31,7 +31,7 @@ export type Transition = Pick<
 const pseudoElements = ["before", "after", "first-letter", "first-line"];
 const pseudoClasses = ["hover", "focus", "active", "focus-within", "disabled"];
 
-export const utils: ConfigType.Utils<{}> = {
+export const utils: Utils = {
   w: (w: CSSProperties["width"]) => ({ width: w }),
   h: (h: CSSProperties["height"]) => ({ height: h }),
   minW: (minW: CSSProperties["minWidth"]) => ({ minWidth: minW }),

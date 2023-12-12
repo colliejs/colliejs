@@ -1,5 +1,4 @@
 import _ from "lodash";
-import { CSSPropertiesComplex } from "./type";
 
 /**
  * @param propertyKey: "width"
@@ -28,6 +27,6 @@ export const arraySyntax = (
   return mediaQueries.reduce((acc, cur) => ({ ...acc, ...cur }), {});
 };
 
-export const isArraySyntax = (value: any) => {
+export const isArraySyntax = (value: any): value is any[] => {
   return Array.isArray(value) && value.length > 0;
 };

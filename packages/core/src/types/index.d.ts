@@ -1,10 +1,17 @@
 import type Stitches from "./stitches";
 
+export type * from "./config";
+// export type * from "./css-util";
+export type * from "./stitches";
+export type * from "./styled-component";
+export type * from "./theme";
+export type * from "./util";
+
 import type * as BaseConfig from "./config";
 import type * as CSSUtil from "./css-util";
 import type * as StyledComponent from "./styled-component";
 import type * as Util from "./util";
-export type { CSSUtil, BaseConfig, Util };
+export type { CSSUtil };
 
 export { $$PropertyValue, $$ScaleValue, $$ThemeValue } from "./css-util";
 export type CreateStitches = BaseConfig.CreateStitches;
@@ -19,11 +26,6 @@ export type CSS<
     theme?: {};
     themeMap?: {};
     utils?: {};
-  } = {
-    media: {};
-    theme: {};
-    themeMap: {};
-    utils: {};
   }
 > = CSSUtil.CSS<
   Config["media"],

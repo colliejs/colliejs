@@ -1,45 +1,37 @@
-type Selector = string;
-import type { CSSProperties } from "./types";
-import type { ConfigType } from "./types/config";
+import type { CSSProperties, Theme } from "./types";
+import { CSS } from "./types";
 
-type ConfigUtils = {
-  [customPropertyName: string]: (p: any) => CSSPropertiesComplex;
-};
-
-// type ConditionRule = Record<`@${string}`, CSSPropertiesComplex>;
-type ConditionRule = Partial<{
-  [key: `@${string}`]: CSSPropertiesComplex;
-}>;
-
-// type SelectorRule = Record<Selector, CSSPropertiesComplex>;
-type SelectorRule = Partial<{ [key: Selector]: CSSPropertiesComplex }>;
-
-type CustomPropertyRule = {
-  [key in keyof ConfigUtils]?: any;
-};
-
-export type CSSPropertiesComplex = CSSProperties &
-  CustomPropertyRule &
-  ConditionRule;
-//   & SelectorRule;
-
-export type Config<
-  Media = {},
-  ThemeMap = {},
-  Theme = {},
-  Utils = {},
-  Prefix = string
-> = {
-  media?: ConfigType.Media<Media>;
-  prefix: ConfigType.Prefix<Prefix>;
-  theme?: ConfigType.Theme<Theme>;
-  themeMap: ConfigType.ThemeMap<ThemeMap>;
-  utils?: ConfigType.Utils<Utils>;
+//===========================================================
+// BaseConfig Type,not the Actual Type
+//===========================================================
+export type BaseConfig = {
+  prefix?: string;
+  media?: object;
+  theme?: Theme;
+  themeMap?: object;
+  utils?: {
+    [key: string]: (value: any) => CSSProperties | any; //CSSObject<Config>
+  };
+  //additions
   breakpoints?: readonly number[];
   styledElementProp?: string;
   layername: string;
 };
 
+//===========================================================
+// used by function css()
+//===========================================================
+export type CSSObject<Config extends BaseConfig> = {
+  [K in keyof CSS<Config>]: CSS<Config>[K] | CSS<Config>[K][];
+};
+
+export type DynamicFn<T extends string, Config extends BaseConfig> = (
+  x: ReadOnlyDynamicVariantVariableValue | ReadOnlyDynamicVariantVariableValue[]
+) => CSSObject<Config>;
+
+//===========================================================
+//
+//===========================================================
 export type ClassNameLiteral = string;
 export type VariantName = string;
 export type VariantValue = string | number;
@@ -71,8 +63,8 @@ export type DynamicVariantFnName =
   | `dynamic_at` //TODO:去掉
   | `dynamic_${CSSPropKey}` //携带css属性(CSSPropKey)是为了可以省略掉px单位
   | `dynamic_${CSSPropKey}_at`;
-export type DynamicVariantFn = (
+export type DynamicVariantFn = <Cfg extends BaseConfig>(
   cssVariableValue:
     | ReadOnlyDynamicVariantVariableValue
     | ReadOnlyDynamicVariantVariableValue[]
-) => CSSPropertiesComplex;
+) => CSSObject<Cfg>;

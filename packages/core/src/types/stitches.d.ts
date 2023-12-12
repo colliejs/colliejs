@@ -65,40 +65,40 @@ export default interface Stitches<
       name: string;
     };
   };
-  // createTheme: {
-  //   <
-  //     Argument0 extends
-  //       | string
-  //       | ({
-  //           [Scale in keyof Theme]?: {
-  //             [Token in keyof Theme[Scale]]?: boolean | number | string;
-  //           };
-  //         } & {
-  //           [scale in string]: {
-  //             [token in number | string]: boolean | number | string;
-  //           };
-  //         }),
-  //     Argument1 extends
-  //       | string
-  //       | ({
-  //           [Scale in keyof Theme]?: {
-  //             [Token in keyof Theme[Scale]]?: boolean | number | string;
-  //           };
-  //         } & {
-  //           [scale in string]: {
-  //             [token in number | string]: boolean | number | string;
-  //           };
-  //         })
-  //   >(
-  //     nameOrScalesArg0: Argument0,
-  //     nameOrScalesArg1?: Argument1
-  //   ): string & {
-  //     className: string;
-  //     selector: string;
-  //   } & (Argument0 extends string
-  //       ? ThemeTokens<Argument1, Prefix>
-  //       : ThemeTokens<Argument0, Prefix>);
-  // };
+  createTheme: {
+    <
+      Argument0 extends
+        | string
+        | ({
+            [Scale in keyof Theme]?: {
+              [Token in keyof Theme[Scale]]?: boolean | number | string;
+            };
+          } & {
+            [scale in string]: {
+              [token in number | string]: boolean | number | string;
+            };
+          }),
+      Argument1 extends
+        | string
+        | ({
+            [Scale in keyof Theme]?: {
+              [Token in keyof Theme[Scale]]?: boolean | number | string;
+            };
+          } & {
+            [scale in string]: {
+              [token in number | string]: boolean | number | string;
+            };
+          })
+    >(
+      nameOrScalesArg0: Argument0,
+      nameOrScalesArg1?: Argument1
+    ): string & {
+      className: string;
+      selector: string;
+    } & (Argument0 extends string
+        ? ThemeTokens<Argument1, Prefix>
+        : ThemeTokens<Argument0, Prefix>);
+  };
   theme: string & {
     className: string;
     selector: string;
@@ -130,8 +130,7 @@ export default interface Stitches<
       CSS = CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
     >(
       ...composers: {
-        [K in keyof Composers]: // Strings, React Components, and Functions can be skipped over
-        string extends Composers[K]
+        [K in keyof Composers]: string extends Composers[K] // Strings, React Components, and Functions can be skipped over
           ? Composers[K]
           : Composers[K] extends
               | string
@@ -207,8 +206,7 @@ export default interface Stitches<
     >(
       type: Type,
       ...composers: {
-        [K in keyof Composers]: // Strings, React Components, and Functions can be skipped over
-        string extends Composers[K]
+        [K in keyof Composers]: string extends Composers[K] // Strings, React Components, and Functions can be skipped over
           ? Composers[K]
           : Composers[K] extends
               | string
@@ -279,3 +277,4 @@ type ThemeTokens<Values, Prefix> = {
     >;
   };
 };
+

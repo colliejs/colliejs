@@ -1,4 +1,4 @@
-import { Config } from "@colliejs/core";
+import type { BaseConfig } from "@colliejs/core";
 import { parseCode } from "./parse";
 import { StyledComponent } from "./styledComponent";
 import { StyledElement } from "./styledElement";
@@ -14,7 +14,7 @@ import { removeTypeAnnotation } from "./utils/removeType";
 /**
  * NOTE: the module should be convert commonjs first
  */
-export const transform = (
+export const transform = <Config extends BaseConfig>(
   source: string,
   curFile: string,
   config: Config,

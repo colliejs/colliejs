@@ -1,5 +1,6 @@
 import { defaultConfig } from "../../config/defaultConfigure";
-import { Config, toCssRules } from "../toCssRules";
+import { toCssRules } from "../toCssRules";
+import { BaseConfig } from "../../type";
 
 describe("test cases", () => {
   it(" property with util ", () => {

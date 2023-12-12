@@ -1,4 +1,5 @@
 import {
+  BaseConfig,
   ClassNameLiteral,
   DynamicVariantKey,
   StaticVariantKey,
@@ -8,7 +9,7 @@ import {
 } from "@colliejs/core";
 import _ from "lodash";
 import React, { ElementType, ForwardRefRenderFunction } from "react";
-import { MakeStyled, _Config } from "./types";
+import { MakeStyled } from "./types";
 import { getCSSValue, isObject, isString, toArray } from "./utils";
 
 export type StyledOption<
@@ -29,7 +30,7 @@ export type BaseStyledComponentProps = {
   ref?: any;
 };
 
-export const makeStyled = <_MyConfig extends _Config>(config: _MyConfig) => {
+export const makeStyled = <Config extends BaseConfig>(config: Config) => {
   /**
    * runtime版本的styled（编译器生成的版本）
    *
@@ -100,6 +101,7 @@ export const makeStyled = <_MyConfig extends _Config>(config: _MyConfig) => {
         }
         isStaticVariantExistedForProp &&
           (propsWithStaticVariant[prop] = valOfProp);
+        // @ts-ignore
         restPropsWithoutVariant[prop] = undefined;
         //编译时variants
 
@@ -132,7 +134,9 @@ export const makeStyled = <_MyConfig extends _Config>(config: _MyConfig) => {
           }
 
           outputClassNames.push(
-            __generatedClassNameByVariantsMap[dynamicVariantKey]
+            __generatedClassNameByVariantsMap[
+              dynamicVariantKey as DynamicVariantKey
+            ]
           );
 
           // const cssPropKey
@@ -146,7 +150,7 @@ export const makeStyled = <_MyConfig extends _Config>(config: _MyConfig) => {
           const isSupportBreakpoint = dynamicVariantKey.includes("-at");
           if (isSupportBreakpoint) {
             const newValOfProp = toArray(valOfProp);
-            config.breakpoints.forEach((e, idx) => {
+            config.breakpoints?.forEach((e, idx) => {
               style[getDynamicVariable(prop, e)] = getCSSValue(
                 cssPropKey,
                 newValOfProp[idx] ?? newValOfProp[newValOfProp.length - 1]
@@ -174,7 +178,7 @@ export const makeStyled = <_MyConfig extends _Config>(config: _MyConfig) => {
         }, "compoundVariants-");
       if (compoundVariantKey in __generatedClassNameByCompoundVariantsMap) {
         outputClassNames.push(
-          __generatedClassNameByCompoundVariantsMap[compoundVariantKey]
+          __generatedClassNameByCompoundVariantsMap[compoundVariantKey as any]
         );
       }
 
@@ -259,5 +263,5 @@ export const makeStyled = <_MyConfig extends _Config>(config: _MyConfig) => {
     //@ts-ignore
     StyledComponent.__isStyledComponent = true;
     return StyledComponent;
-  } as unknown as MakeStyled<_MyConfig>;
+  } as unknown as MakeStyled<Config>;
 };

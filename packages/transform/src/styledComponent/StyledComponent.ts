@@ -1,5 +1,5 @@
 import * as t from "@babel/types";
-import { Config, StaticVariantKey } from "@colliejs/core";
+import type { BaseConfig, StaticVariantKey } from "@colliejs/core";
 import log from "npmlog";
 import { Component } from "../component/Component";
 import CustomComponent from "../component/CustomComponent";
@@ -19,10 +19,13 @@ import { NodePath } from "@babel/traverse";
 import { ComponentId } from "../component/componentId";
 import { findLayerDeps } from "./findDeps";
 
-export class StyledComponent extends CustomComponent implements Stylable {
-  stylingParsed: StylingParsed;
+export class StyledComponent<Config extends BaseConfig>
+  extends CustomComponent
+  implements Stylable
+{
+  stylingParsed: StylingParsed<Config>;
   dependent: CustomComponent | HostComponent;
-  styling: Styling;
+  styling: Styling<Config>;
   layerDeps: string[];
 
   constructor(
@@ -40,12 +43,12 @@ export class StyledComponent extends CustomComponent implements Stylable {
     }
 
     const { styledComponentName, dependent, styling } =
-      parseStyledComponentDecl(path, moduleIdByName, moduleId);
+      parseStyledComponentDecl<Config>(path, moduleIdByName, moduleId);
     super(new ComponentId(moduleId, styledComponentName));
 
+    this.styling = styling;
     this.stylingParsed = parseStyling(styling, config, styledComponentName);
     this.dependent = dependent;
-    this.styling = styling;
     if (getDeps) {
       this.layerDeps = findLayerDeps(this, alias, root);
     }

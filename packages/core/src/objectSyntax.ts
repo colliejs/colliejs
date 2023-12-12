@@ -1,4 +1,4 @@
-import { CSS } from "./types";
+import { CSS, CSSProperties } from "./types";
 
 /**
  * @description
@@ -7,11 +7,11 @@ import { CSS } from "./types";
  * @param value: { "@phone": 10, "@pad": 20 }
  * @returns :{'@phone':{width:10},'@pad':{width:20}}
  */
-export const objectSyntax = <T extends keyof CSS>(
-  propertyName: T,
-  value: { [key: `@${string}`]: CSS[T] }
+export const objectSyntax = (
+  propertyName: string,
+  value: { [key: `@${string}`]: any }
 ) => {
-  const res = {} as { [key: `@${string}`]: CSS[T] };
+  const res = {} as { [key: `@${string}`]: any };
   const conditions = Object.keys(value);
   conditions.forEach(condition => {
     res[condition] = { [propertyName]: value[condition] };

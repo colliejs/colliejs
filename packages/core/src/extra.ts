@@ -1,7 +1,4 @@
-//@ts-ignore
-import { type } from "os";
 import {
-  CSSPropertiesComplex,
   DynamicVariantFnName,
   DynamicVariantKey,
   ReadOnlyDynamicVariantVariable,

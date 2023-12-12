@@ -1,5 +1,4 @@
 import * as t from "@babel/types";
-import { Config } from "@colliejs/core";
 import { traverse } from "../utils/module";
 import { isPropExisted } from "./prop";
 import { StyledComponentDecl } from "../utils/types";

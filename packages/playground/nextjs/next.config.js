@@ -1,4 +1,5 @@
 const path = require("path");
+const defaultConfig = require("@colliejs/react").defaultConfig;
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -8,7 +9,9 @@ const nextConfig = {
     }
     config.module.rules.push({
       loader: '@colliejs/webpack',
-      options: {},
+      options: {
+        styledConfig: defaultConfig,
+      },
     });
     return config;
   },
