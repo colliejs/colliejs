@@ -1,7 +1,3 @@
-import { makeStyled } from "./makeStyled";
-import { defaultConfig } from "./defaultConfig";
-export { makeStyled };
-
-export const styled = makeStyled(defaultConfig);
-export { defaultConfig };
+export { makeStyled } from "./makeStyled";
+export { defaultConfig } from "@colliejs/core";
 export type * from "./types";

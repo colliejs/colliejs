@@ -20,8 +20,8 @@ export default function App() {
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
       <Button size="big">Button</Button>
 
-      <MyButton shape={"round"}> MyButton</MyButton>
-      <MyButton shape={[12]}> MyButton</MyButton>
+      <MyButton shape={"round"}> MyButton-1</MyButton>
+      <MyButton shape={[12]}> MyButton-2</MyButton>
       <br />
       <SpecialButton shape={"round"}>SpecialButton1</SpecialButton>
       <br />

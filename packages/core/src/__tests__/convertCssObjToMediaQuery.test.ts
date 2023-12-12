@@ -1,6 +1,5 @@
-import { defaultConfig } from "../config";
+import { BaseConfig, CSSObject, defaultConfig } from "../";
 import { convertCssObjToMediaQuery } from "../convert";
-import { CSSPropertiesComplex } from "../type";
 
 describe("convertCssObjToMediaQuery", () => {
   it("work for array syntax ", () => {
@@ -31,7 +30,7 @@ describe("convertCssObjToMediaQuery", () => {
         width: [10, 20],
         "@media (support:xxx)": { width: [10, 20] },
       },
-    } as unknown as CSSPropertiesComplex;
+    } as unknown as CSSObject<BaseConfig>;
     const res = convertCssObjToMediaQuery(cssObj, [320, 768]);
     expect(res).toMatchInlineSnapshot(`
       {

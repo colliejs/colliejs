@@ -1,20 +1,13 @@
 import { defaultThemeMap } from "./defaultThemeMap";
 import { utils } from "./util";
-import { BaseConfig } from "@colliejs/core";
-
+import { BaseConfig } from "../type";
 export const defaultConfig = {
   prefix: "co",
   themeMap: defaultThemeMap,
-  media: {
-    phone: "(max-width: 767.999px)",
-    pad: "(min-width: 768px) and (max-width: 1023.999px)",
-    pc: "(min-width: 1024px)",
-  },
+  media: {},
   breakpoints: [320, 768],
-  theme: {
-    colors: {},
-  },
+  theme: {},
   utils,
   styledElementProp: "css",
-  layername: "",
+  layername: "app",
 } as const satisfies BaseConfig;

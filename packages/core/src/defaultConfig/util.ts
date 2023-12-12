@@ -1,37 +1,11 @@
-import { CSSProperties } from "react";
-import type { Utils } from "@colliejs/core";
+import type { BaseConfig } from "../type";
+import type {CSSProperties} from '../types'
 
-export type Typography = {
-  fontSize: CSSProperties["fontSize"];
-  fontWeight: CSSProperties["fontWeight"];
-  lineHeight?: CSSProperties["lineHeight"];
-  letterSpacing?: CSSProperties["letterSpacing"];
-  fontFamily?: CSSProperties["fontFamily"];
-};
-
-export type Animation = Pick<
-  CSSProperties,
-  | "animationName"
-  | "animationDelay"
-  | "animationDirection"
-  | "animationDuration"
-  | "animationIterationCount"
-  | "animationTimingFunction"
-  | "animationFillMode"
-  | "animationPlayState"
->;
-export type Transition = Pick<
-  CSSProperties,
-  | "transitionDelay"
-  | "transitionDuration"
-  | "transitionProperty"
-  | "transitionTimingFunction"
->;
 //Attention: don't include ::placeholder pseudo-element
 const pseudoElements = ["before", "after", "first-letter", "first-line"];
 const pseudoClasses = ["hover", "focus", "active", "focus-within", "disabled"];
 
-export const utils: Utils = {
+export const utils = {
   w: (w: CSSProperties["width"]) => ({ width: w }),
   h: (h: CSSProperties["height"]) => ({ height: h }),
   minW: (minW: CSSProperties["minWidth"]) => ({ minWidth: minW }),
@@ -72,12 +46,6 @@ export const utils: Utils = {
   //others shortcuts
   bg: (bg: CSSProperties["background"]) => ({ background: bg }),
 
-  anime: (options: Animation) => ({
-    animationFillMode: "forwards",
-    ...options,
-  }),
-  transi: (trans: Transition) => ({ ...trans }),
-
   //TODO: img/input dones't support pseudo elements
   ...pseudoElements.reduce(
     (acc, pseudo: string) => ({
@@ -102,4 +70,4 @@ export const utils: Utils = {
     }),
     {}
   ),
-};
+} as const satisfies BaseConfig["utils"];

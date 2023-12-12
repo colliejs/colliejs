@@ -7,16 +7,16 @@ export type * from "./styled-component";
 export type * from "./theme";
 export type * from "./util";
 
-import type * as BaseConfig from "./config";
+import type * as Config from "./config";
 import type * as CSSUtil from "./css-util";
 import type * as StyledComponent from "./styled-component";
 import type * as Util from "./util";
 export type { CSSUtil };
 
 export { $$PropertyValue, $$ScaleValue, $$ThemeValue } from "./css-util";
-export type CreateStitches = BaseConfig.CreateStitches;
+export type CreateStitches = Config.CreateStitches;
 export type CSSProperties = CSSUtil.CSSProperties;
-export type DefaultThemeMap = BaseConfig.DefaultThemeMap;
+export type DefaultThemeMap = Config.DefaultThemeMap;
 export type FontFace = CSSUtil.Native.AtRule.FontFace;
 
 /** Returns a Style interface from a configuration, leveraging the given media and style map. */

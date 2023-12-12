@@ -1,12 +1,11 @@
-import { defaultConfig } from "../config";
+import { CSSObject, defaultConfig } from "../";
 import { css } from "../css";
-import { CSSPropertiesComplex } from "../type";
 
 describe("toHash", () => {
   it("should work ", () => {
     const cssObj = {
       lineHeight: 1,
-    } as unknown as CSSPropertiesComplex;
+    } as unknown as CSSObject<any>;
     const res = css(cssObj, [".button"], undefined, defaultConfig);
     expect(res).toMatchInlineSnapshot(`".button{line-height:1}"`);
   });

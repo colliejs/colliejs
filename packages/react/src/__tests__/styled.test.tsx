@@ -1,4 +1,4 @@
-import { defaultConfig } from "@colliejs/core";
+import { defaultConfig, makeStyled } from "../";
 import generate from "@babel/generator";
 import * as t from "@babel/types";
 import {
@@ -9,10 +9,10 @@ import {
   transform as transform_,
 } from "@colliejs/transform";
 
-import { styled } from "../index";
 import TestRenderer from "react-test-renderer";
 import React, { AnchorHTMLAttributes, HTMLAttributes } from "react";
 import traverse_ from "@babel/traverse";
+const styled = makeStyled(defaultConfig);
 const traverse = traverse_.default || traverse_;
 
 const transform = (source: string, n: number = 0) => {

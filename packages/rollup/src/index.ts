@@ -1,4 +1,4 @@
-import { BaseConfig, createTheme } from "@colliejs/core";
+import { BaseConfig, createTheme, defaultConfig } from "@colliejs/core";
 import { Alias, transform } from "@colliejs/transform";
 import { FilterPattern, createFilter } from "@rollup/pluginutils";
 import fs from "node:fs";
@@ -10,7 +10,7 @@ type Option<Config extends BaseConfig> = {
   outDir: string;
   include?: FilterPattern;
   exclude?: FilterPattern;
-  styledConfig: Config;
+  styledConfig?: Config;
   alias?: Alias;
   root?: string;
 };
@@ -24,7 +24,7 @@ const collie = <Config extends BaseConfig>(option?: Option<Config>): Plugin => {
     outDir = "dist/",
     include,
     exclude,
-    styledConfig ,
+    styledConfig = defaultConfig,
     alias = {},
     root = process.cwd(),
   } = option || {};

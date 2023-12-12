@@ -1,4 +1,4 @@
-import { styled } from "@colliejs/react";
+import { styled } from "../styled";
 import { Button } from "./Button";
 import React from "react";
 const width = 200;

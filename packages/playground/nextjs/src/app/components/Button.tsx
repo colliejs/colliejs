@@ -1,6 +1,5 @@
 import React from "react";
-//@ts-ignore
-import { styled } from "@colliejs/react";
+import { styled } from "../styled";
 
 export const Button = styled("button", {
   background: "red",

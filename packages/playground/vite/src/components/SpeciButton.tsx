@@ -1,6 +1,5 @@
-import { styled } from "@colliejs/react";
+import { styled } from "../styled";
 import MyButton from "./MyButton";
-import React from "react";
 
 export const SpecialButton = styled(MyButton, {
   backgroundColor: "yellow",

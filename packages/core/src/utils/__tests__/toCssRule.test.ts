@@ -1,6 +1,6 @@
-import { defaultConfig } from "../../config/defaultConfigure";
 import { toCssRules } from "../toCssRules";
-import { BaseConfig } from "../../type";
+import { BaseConfig, CSSObject } from "../../type";
+import { defaultConfig } from "../../defaultConfig";
 
 describe("test cases", () => {
   it(" property with util ", () => {
@@ -21,7 +21,7 @@ describe("test cases", () => {
     const isRuleLike = (
       camelName: string,
       data: any,
-      config: Config,
+      config: any,
       selectors: string[]
     ) =>
       typeof data === "object" &&
@@ -126,7 +126,7 @@ describe("test cases", () => {
         "@media (max-width:968px)": 10,
         "@media (min-width:969px)": 20,
       },
-    };
+    } as any;
     let text = "";
     let callCount = 0;
     const res = toCssRules(cssObj, [".button"], [], defaultConfig, x => {

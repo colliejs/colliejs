@@ -1,13 +1,12 @@
-import { CSSPropertiesComplex } from "../type";
 import { css } from "./../css";
-import { defaultConfig } from "../config";
+import { BaseConfig, CSSObject, defaultConfig } from "../";
 
 describe("test cases", () => {
   it("should work ", () => {
     const cssRawObj = {
       width: [10, 20],
       h: [20, "var(--xs-height)"],
-    } as unknown as CSSPropertiesComplex;
+    } as unknown as CSSObject<BaseConfig>;
     const res = css(cssRawObj, [".button"], undefined, defaultConfig);
     expect(res).toMatchInlineSnapshot(`
       "@media (min-width:320px){.button{width:10px;height:20px}}
@@ -21,7 +20,7 @@ describe("test cases", () => {
         width: [10, 20],
         "@media (support:xxx)": { width: [10, 20] },
       },
-    } as unknown as CSSPropertiesComplex;
+    } as unknown as CSSObject<BaseConfig>;
     const res = css(cssRawObj, [".button"], [], defaultConfig);
     expect(res).toMatchInlineSnapshot(`
       "@media (min-width:320px){.button{width:10px}}
@@ -36,7 +35,7 @@ describe("test cases", () => {
     const cssRawObj = {
       color: "$primary",
       w: 100,
-    } as unknown as CSSPropertiesComplex;
+    } as unknown as CSSObject<BaseConfig>;
     const res = css(cssRawObj, [".button"], [], defaultConfig);
     expect(res).toMatchInlineSnapshot(
       `".button{color:var(--co-colors-primary);width:100px}"`

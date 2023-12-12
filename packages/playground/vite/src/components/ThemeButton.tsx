@@ -1,4 +1,4 @@
-import { styled } from "@colliejs/react";
+import { styled } from "../styled";
 
 export const ThemeButton = styled("button", {
   backgroundColor: "$black09",

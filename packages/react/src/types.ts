@@ -106,9 +106,9 @@ type AttrOfAs<T> = T extends IntrinsicElementsKeys
   : {};
 
 export type MyStyledComponentWithAs<
-  C extends BaseConfig,
+  Config extends BaseConfig,
   Type extends IntrinsicElementsKeys | React.ComponentType<any>,
-  Styling extends StyledObject<C>,
+  Styling extends StyledObject<Config>,
   As extends IntrinsicElementsKeys | undefined
 > = React.ForwardRefExoticComponent<
   PropsWithoutRef<
@@ -116,8 +116,8 @@ export type MyStyledComponentWithAs<
       As extends IntrinsicElementsKeys
         ? Assign<React.ComponentPropsWithoutRef<Type>, AttrOfAs<As>>
         : React.ComponentPropsWithoutRef<Type>,
-      ComposeVariant<C, Type, Styling> & {
-        css?: CSSObject<C>;
+      ComposeVariant<Config, Type, Styling> & {
+        css?: CSSObject<Config>;
         as?: IntrinsicElementsKeys;
       }
     >

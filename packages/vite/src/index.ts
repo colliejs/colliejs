@@ -1,4 +1,4 @@
-import { BaseConfig, createTheme, toHash } from "@colliejs/core";
+import { BaseConfig, createTheme, defaultConfig, toHash } from "@colliejs/core";
 import { Alias, transform } from "@colliejs/transform";
 import { FilterPattern, createFilter } from "@rollup/pluginutils";
 import log from "npmlog";
@@ -46,7 +46,7 @@ const collie = <Config extends BaseConfig>(
   const {
     include,
     exclude,
-    styledConfig,
+    styledConfig = defaultConfig,
     alias = {},
     root = process.cwd(),
     entry = "src/index.tsx",

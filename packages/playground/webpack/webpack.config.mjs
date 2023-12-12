@@ -30,7 +30,7 @@ export default {
   module: {
     rules: [
       {
-        test: /\.[tj]sx$/,
+        test: /\.[tj]sx?$/,
         exclude: /node_modules/,
         use: [
           {

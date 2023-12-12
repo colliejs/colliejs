@@ -1,5 +1,5 @@
-import { styled } from "@colliejs/react";
 import React from "react";
+import { styled } from "../styled";
 
 const ResponsiveButton = styled("button", {
   w: [200, 400, 600],
