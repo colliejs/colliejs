@@ -1,6 +1,18 @@
 # Change Log
 
-All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## [1.0.44](https://github.com/colliejs/colliejs/compare/@colliejs/transform@1.0.43...@colliejs/transform@1.0.44) (2023-12-13)
+
+
+### Features
+
+* add new files and update configurations ([d15b157](https://github.com/colliejs/colliejs/commit/d15b15764b15b6d57349b6e88c0b328e0f5f7be1))
+
+
+
+
 
 ## [1.0.43](https://github.com/colliejs/colliejs/compare/@colliejs/transform@1.0.42...@colliejs/transform@1.0.43) (2023-11-25)
 

@@ -1,6 +1,24 @@
 # Change Log
 
-All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## [1.0.63](https://github.com/colliejs/colliejs/compare/@colliejs/react@1.0.62...@colliejs/react@1.0.63) (2023-12-13)
+
+
+### Bug Fixes
+
+* type hints for styled function ([3a20653](https://github.com/colliejs/colliejs/commit/3a206537dc8da3a3518b22c13b20ebcaa97463a4))
+
+
+### Features
+
+* add new files and update configurations ([d15b157](https://github.com/colliejs/colliejs/commit/d15b15764b15b6d57349b6e88c0b328e0f5f7be1))
+* add object syntax ([5d2ce35](https://github.com/colliejs/colliejs/commit/5d2ce35bf34bc8bb7a83b1fcc92c380db870c44b))
+
+
+
+
 
 ## [1.0.62](https://github.com/colliejs/colliejs/compare/@colliejs/react@1.0.61...@colliejs/react@1.0.62) (2023-11-25)
 

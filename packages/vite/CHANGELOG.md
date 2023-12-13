@@ -1,6 +1,23 @@
 # Change Log
 
-All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## [1.0.75](https://github.com/colliejs/colliejs/compare/@colliejs/vite@1.0.74...@colliejs/vite@1.0.75) (2023-12-13)
+
+
+### Bug Fixes
+
+* type hints for styled function ([3a20653](https://github.com/colliejs/colliejs/commit/3a206537dc8da3a3518b22c13b20ebcaa97463a4))
+
+
+### Features
+
+* add new files and update configurations ([d15b157](https://github.com/colliejs/colliejs/commit/d15b15764b15b6d57349b6e88c0b328e0f5f7be1))
+
+
+
+
 
 ## [1.0.74](https://github.com/colliejs/colliejs/compare/@colliejs/vite@1.0.73...@colliejs/vite@1.0.74) (2023-11-25)
 
