@@ -6,13 +6,14 @@ import CustomComponent from "../component/CustomComponent";
 import { HostComponent } from "../component/HostComponent";
 import { evalStyling } from "../styling/evalStyling";
 import { type Styling } from "../styling/types";
-import { generate, isStyledCallExpression } from "../utils/index";
+import { generate } from "../utils/index";
 import { ImportsByName, StyledComponentDecl } from "../utils/types";
 import { StyledComponent } from "./StyledComponent";
 import { getPathOfStyling } from "./getNodePathOfStyling";
 import { assert } from "@c3/utils";
 import { ComponentId } from "../component/componentId";
 import type { BaseConfig } from "@colliejs/core";
+import { isStyledCallExpression } from "./isStyledCompDelc";
 
 export type StyledDataType<Config extends BaseConfig> = {
   styledComponentName: string;
@@ -26,14 +27,15 @@ export const getStyledComponentName = (
   //TODO: support multiple declarator
   return (path.node.declarations[0].id as t.Identifier)?.name;
 };
-export const getStyledDependent = (
+export const getStyledDependent = <Config extends BaseConfig>(
   path: NodePath<t.VariableDeclaration>,
   moduleIdByName: ImportsByName,
-  moduleId: string
+  moduleId: string,
+  config: Config
 ) => {
   let dependent;
   const { init, id } = path.node.declarations[0]; ////TODO: multiple declarator
-  if (!init || !isStyledCallExpression(init)) {
+  if (!init || !isStyledCallExpression(init, config)) {
     throw new Error("not a styledComponentDecl");
   }
   const { arguments: _arguments } = init;
@@ -76,10 +78,11 @@ export const getStyledDependent = (
 export const parseStyledComponentDeclaration = <Config extends BaseConfig>(
   path: NodePath<t.VariableDeclaration>,
   moduleIdByName: ImportsByName,
-  moduleId: string
+  moduleId: string,
+  config: Config
 ): StyledDataType<Config> => {
   const { init, id } = path.node.declarations[0]; ////TODO: multiple declarator
-  if (!init || !isStyledCallExpression(init)) {
+  if (!init || !isStyledCallExpression(init, config)) {
     throw new Error("not a styledComponentDecl");
   }
 
@@ -98,7 +101,7 @@ export const parseStyledComponentDeclaration = <Config extends BaseConfig>(
   //===========================================================
   // 2. get result.dependent
   //===========================================================
-  result.dependent = getStyledDependent(path, moduleIdByName, moduleId);
+  result.dependent = getStyledDependent(path, moduleIdByName, moduleId, config);
 
   //===========================================================
   // 3.parse styledObject to get styling

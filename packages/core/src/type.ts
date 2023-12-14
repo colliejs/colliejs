@@ -15,7 +15,8 @@ export type BaseConfig = {
   //additions
   breakpoints?: readonly number[];
   styledElementProp?: string;
-  layername: string;
+  styledFunctionName?: string;
+  layername?: string;
 };
 
 //===========================================================

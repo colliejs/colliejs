@@ -9,5 +9,6 @@ export const defaultConfig = {
   theme: {},
   utils,
   styledElementProp: "css",
+  styledFunctionName: "styled",
   layername: "app",
 } as const satisfies BaseConfig;

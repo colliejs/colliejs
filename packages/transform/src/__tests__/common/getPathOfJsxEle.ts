@@ -1,7 +1,9 @@
 import * as t from "@babel/types";
 import { parseCode } from "../../parse";
 import { traverse } from "../../utils/module";
-import { getImports, isStyledComponentDecl } from "../../utils";
+import { getImports } from "../../utils";
+import { isStyledComponentDecl } from "../../styledComponent/isStyledCompDelc";
+import { defaultConfig } from "@colliejs/core";
 
 export const getPathOfJSXElement = (source: string) => {
   const file = parseCode(source);
@@ -22,7 +24,7 @@ export const getPathOfStyledComponentDecl = (
   let path;
   traverse(file, {
     VariableDeclaration(ipath) {
-      if (isStyledComponentDecl(ipath.node)) {
+      if (isStyledComponentDecl(ipath.node, defaultConfig)) {
         if (componentName) {
           const name = (ipath.node.declarations[0].id as t.Identifier).name;
           if (name !== componentName) {

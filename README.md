@@ -13,8 +13,9 @@
 # Example
 
 ```jsx
-import { styled } from "@colliejs/react";
+import { makeStyled,defaultConfig } from "@colliejs/react";
 import {absYCenter} from '@collie-ui/css'
+const styled = makeStyled(defaultConfig);
 const Button = styled("button", {
   w: 100,
   h: 40,

@@ -2,14 +2,9 @@ import type { BaseConfig } from "@colliejs/core";
 import { parseCode } from "./parse";
 import { StyledComponent } from "./styledComponent";
 import { StyledElement } from "./styledElement";
-import {
-  generate,
-  getImports,
-  isStyledComponentDecl,
-  isStyledElement,
-  traverse,
-} from "./utils";
+import { generate, getImports, isStyledElement, traverse } from "./utils";
 import { removeTypeAnnotation } from "./utils/removeType";
+import { isStyledComponentDecl } from "./styledComponent/isStyledCompDelc";
 
 /**
  * NOTE: the module should be convert commonjs first
@@ -31,7 +26,7 @@ export const transform = <Config extends BaseConfig>(
     // 1.transform styled component
     //===========================================================
     VariableDeclaration(path) {
-      if (!isStyledComponentDecl(path.node)) {
+      if (!isStyledComponentDecl(path.node, config)) {
         return;
       }
       if (Object.keys(modulesByName).length === 0) {

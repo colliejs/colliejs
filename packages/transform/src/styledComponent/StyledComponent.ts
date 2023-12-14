@@ -7,7 +7,7 @@ import { HostComponent } from "../component/HostComponent";
 import { parseStyling } from "../styling/styling";
 import { Styling, StylingParsed } from "../styling/types";
 
-import { buildObjectExpression, isStyledComponentDecl } from "../utils/index";
+import { buildObjectExpression } from "../utils/index";
 import {
   Alias,
   ImportsByName,
@@ -18,6 +18,7 @@ import { parseStyledComponentDeclaration as parseStyledComponentDecl } from "./p
 import { NodePath } from "@babel/traverse";
 import { ComponentId } from "../component/componentId";
 import { findLayerDeps } from "./findDeps";
+import { isStyledComponentDecl } from "./isStyledCompDelc";
 
 export class StyledComponent<Config extends BaseConfig>
   extends CustomComponent
@@ -43,14 +44,14 @@ export class StyledComponent<Config extends BaseConfig>
     }
 
     const { styledComponentName, dependent, styling } =
-      parseStyledComponentDecl<Config>(path, moduleIdByName, moduleId);
+      parseStyledComponentDecl<Config>(path, moduleIdByName, moduleId, config);
     super(new ComponentId(moduleId, styledComponentName));
 
     this.styling = styling;
     this.stylingParsed = parseStyling(styling, config, styledComponentName);
     this.dependent = dependent;
     if (getDeps) {
-      this.layerDeps = findLayerDeps(this, alias, root);
+      this.layerDeps = findLayerDeps(this, alias, root, config);
     }
   }
 

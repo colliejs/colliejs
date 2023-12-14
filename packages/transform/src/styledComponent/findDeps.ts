@@ -9,6 +9,7 @@ import {
   parseStyledComponentDeclaration,
 } from "./parseStyledComponent";
 import { HostComponent } from "../component";
+import { BaseConfig } from "packages/core/dist";
 
 /**
  * @todo:增加缓存来减少重复parseFile
@@ -16,10 +17,11 @@ import { HostComponent } from "../component";
  * @param componentName
  * @returns
  */
-export const findDirectDep = (
+export const findDirectDep = <Config extends BaseConfig>(
   comp: CustomComponent,
   alias: Alias,
-  root: string
+  root: string,
+  config: Config
 ): HostComponent | CustomComponent | undefined => {
   const { moduleId, componentName } = comp.id;
   if (moduleId.includes("node_modules")) {
@@ -30,13 +32,13 @@ export const findDirectDep = (
   let dep;
   traverse(fileAst, {
     VariableDeclaration(path) {
-      if (!isStyledComponentDecl(path.node)) {
+      if (!isStyledComponentDecl(path.node, config)) {
         return;
       }
       const styledComponentName = getStyledComponentName(path);
       if (styledComponentName === componentName) {
         const imports = getImports(fileAst.program, moduleId, alias, root);
-        dep = getStyledDependent(path, imports, moduleId);
+        dep = getStyledDependent(path, imports, moduleId, config);
         path.stop();
       }
     },
@@ -44,21 +46,27 @@ export const findDirectDep = (
 
   return dep;
 };
-export const findDeps = (comp: CustomComponent, alias: Alias, root: string) => {
+export const findDeps = <Config extends BaseConfig>(
+  comp: CustomComponent,
+  alias: Alias,
+  root: string,
+  config: Config
+) => {
   const deps: CustomComponent[] = [];
-  const dep = findDirectDep(comp, alias, root);
+  const dep = findDirectDep(comp, alias, root, config);
   if (dep instanceof CustomComponent) {
     deps.push(dep);
-    const _deps = findDeps(dep, alias, root);
+    const _deps = findDeps(dep, alias, root, config);
     deps.push(..._deps);
   }
   return deps;
 };
-export const findLayerDeps = (
+export const findLayerDeps = <Config extends BaseConfig>(
   comp: CustomComponent,
   alias: Alias,
-  root: string
+  root: string,
+  config: Config
 ) => {
-  const deps = findDeps(comp, alias, root);
+  const deps = findDeps(comp, alias, root, config);
   return deps.map(e => e.layerName);
 };
