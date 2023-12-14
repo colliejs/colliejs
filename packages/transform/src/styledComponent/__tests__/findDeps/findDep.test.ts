@@ -29,7 +29,6 @@ describe("findDeps", () => {
       encoding: "utf-8",
     });
     const c = prepareStyledComponent(code, "MySpecialButton");
-    console.log(c.id, c.layerName, c.cssLayerDep);
     const deps = c.layerDeps;
     expect(deps).toMatchInlineSnapshot(`
       [

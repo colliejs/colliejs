@@ -9,8 +9,8 @@ run({
     
     await $`git.ts login --user colliejs`;
     await $`pnpm test`;
-    await $`git add .`;
-    await $`git commit -m "chore: release"`;
+    // await $`git add .`;
+    // await $`git commit -m "chore: release"`;
 
     await $`lerna version ${semver} --conventional-commits --no-commit-hooks -y`;
 
