@@ -18,14 +18,6 @@ export const createTheme = (config: BaseConfig) => {
         config.prefix,
         scale
       );
-
-      //   themeObject[scale][token] = new ThemeToken(
-      //     token,
-      //     propertyValue,
-      //     scale,
-      //     config.prefix
-      //   );
-
       cssProps.push(`${propertyName}:${propertyValue}`);
     }
   }

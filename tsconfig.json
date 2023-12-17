@@ -14,8 +14,8 @@
     "skipLibCheck": true,
     "incremental": true,
     "sourceMap": true,
-    "baseUrl": "./",
-    "lib": ["ESNext", "DOM"],
+    // "baseUrl": "./",
+    "lib": ["ESNext"],
     "declaration": true
     // "declarationMap": true
   },

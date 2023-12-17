@@ -1,6 +1,9 @@
 import * as t from "@babel/types";
 import { BaseConfig } from "@colliejs/core";
 import { StyledComponentDecl } from "../utils";
+import {styledFnName} from '../const'
+
+
 export const isStyledCallExpression = <Config extends BaseConfig>(
   exp: t.Expression,
   config: Config
@@ -8,7 +11,7 @@ export const isStyledCallExpression = <Config extends BaseConfig>(
   return (
     t.isCallExpression(exp) &&
     exp.callee.type === "Identifier" &&
-    exp.callee.name === (config.styledFunctionName || "styled")
+    exp.callee.name === styledFnName
   );
 };
 

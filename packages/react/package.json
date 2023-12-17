@@ -16,6 +16,7 @@
   "author": "colliedog1001@gmail.com",
   "license": "MIT",
   "dependencies": {
+    "@c3/css": "^2.0.1",
     "@colliejs/core": "workspace:^",
     "@colliejs/transform": "workspace:^"
   },

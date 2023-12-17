@@ -1,11 +1,11 @@
 import { NodePath } from "@babel/traverse";
 import * as t from "@babel/types";
-import { ImportsByName, generate } from "../utils";
-import { evalExpText } from "../utils/eval/evalText";
-import { getCtxOf } from "../utils/eval/getCtx";
 import { assert } from "@c3/utils";
+import { ImportsByName, generate } from "..";
+import { getCtxOf } from "./getCtx";
+import { evalExpText } from "./evalText";
 
-export const evalStyling = (
+export const evalObjectExp = (
   path: NodePath<t.ObjectExpression>,
   imports: ImportsByName
 ) => {

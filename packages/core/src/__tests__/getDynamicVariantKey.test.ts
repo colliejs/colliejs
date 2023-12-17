@@ -1,4 +1,4 @@
-import { getDynamicVariantKey } from "../extra";
+import { getDynamicVariantKey } from "../../../transform/src/variants";
 
 describe("toHash", () => {
 //   it("dynamic", () => {

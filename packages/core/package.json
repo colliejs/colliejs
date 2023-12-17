@@ -4,11 +4,11 @@
   "description": "foo",
   "type": "module",
   "scripts": {
-    "build": "rollup -c rollup.config.js && pnpm type && cp -rf src/types dist/",
+    "build": "rollup -c rollup.config.js && pnpm type ",
     "buildOnly": "rollup -c rollup.config.js",
     "clean": "rm -rf dist  ",
     "reset": "pnpm clean && rm -rf node_modules && pnpm install",
-    "type": "tsc --project . --paths null --emitDeclarationOnly --declaration",
+    "type": "cp -rf src/types dist/ && cp -rf src/type.ts dist/index.d.ts",
     "watchtype": "tsc --project . --watch"
   },
   "types": "./dist/index.d.ts",
@@ -29,5 +29,8 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "@c3/css": "^2.0.1"
   }
 }

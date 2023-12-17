@@ -1,29 +1,16 @@
-import {
-  type BaseConfig,
-  css,
-  getDynamicVariableValue,
-  getDynamicVariantKey,
-  getStaticVariantKey,
-  toHash,
-  DynamicVariantFnName,
-  DynamicVariantFn,
-  CSSObject,
-} from "@colliejs/core";
+import { type BaseConfig, css, CSSObject } from "@colliejs/core";
 import _ from "lodash";
+import { StyledObject, StyledObjectParsed, VariantDeclBlock } from "./types";
 import {
-  CSSInfo,
-  Styling,
-  StylingParsed,
-  VariantDeclBlock,
-  VariantParsed,
-} from "./types";
-import { isSupportBreak } from "@colliejs/core";
+  DynamicVariantFn,
+  getCSSVariableValue,
+  getCSSVariableValueByMedia,
+  getVariantKey,
+} from "./variants";
+import { toHash } from "@c3/utils";
+const toHashObject = (obj: any) => toHash(JSON.stringify(obj));
 
 export type Props = { [k: string]: any };
-
-//===========================================================================
-// function
-//===========================================================================
 
 export const getBaseStyleSelector = (prefix: string, hash: string) => {
   if (prefix) {
@@ -32,12 +19,12 @@ export const getBaseStyleSelector = (prefix: string, hash: string) => {
   return `baseStyle-${hash}`;
 };
 
-export const parseStyling = <Config extends BaseConfig>(
-  styling: Styling<Config>,
+export const convertStyledObject = <Config extends BaseConfig>(
+  styling: StyledObject<Config>,
   config: Config,
   baseStylePrefix = ""
-): StylingParsed<Config> => {
-  const res = {} as StylingParsed<Config>;
+): StyledObjectParsed<Config> => {
+  const res = {} as StyledObjectParsed<Config>;
   //===========================================================
   // 1.处理variants
   //===========================================================
@@ -45,36 +32,31 @@ export const parseStyling = <Config extends BaseConfig>(
   for (const variantName in variants) {
     const variantDeclBlock: VariantDeclBlock<Config> = variants[variantName];
     for (const variantValue in variantDeclBlock) {
-      let variantKey: string;
       let cssObj = {} as CSSObject<Config>;
       let cssObjOrDynamicFn = variantDeclBlock[variantValue];
       const isDynamicVariantFn = typeof cssObjOrDynamicFn === "function";
       if (isDynamicVariantFn) {
-        const dynFn = cssObjOrDynamicFn as DynamicVariantFn;
-        variantKey = getDynamicVariantKey(
-          variantName,
-          variantValue as DynamicVariantFnName
+        const variantKey = getVariantKey(variantName, variantValue, true);
+        cssObj = cssObjOrDynamicFn(
+          getCSSVariableValueByMedia(variantName, config)
         );
-        const supportBreaksPoints = isSupportBreak(variantValue);
-        if (supportBreaksPoints) {
-          cssObj = dynFn(
-            config.breakpoints?.map(e =>
-              getDynamicVariableValue(variantName, e)
-            )
-          );
-        } else {
-          cssObj = dynFn(getDynamicVariableValue(variantName));
-        }
+        const className = `${variantKey}-${toHashObject(cssObj)}`;
+        res[variantKey] = {
+          cssGenText: css(cssObj, [`.${className}`], [], config),
+          cssRawObj: cssObj,
+          className: className,
+          canWithoutPx: true,
+        };
       } else {
-        variantKey = getStaticVariantKey(variantName, variantValue);
+        const variantKey = getVariantKey(variantName, "dynamic", true);
         cssObj = cssObjOrDynamicFn as CSSObject<Config>;
+        const className = `${variantKey}-${toHashObject(cssObj)}`;
+        res[variantKey] = {
+          cssGenText: css(cssObj, [`.${className}`], [], config),
+          cssRawObj: cssObj,
+          className: className,
+        };
       }
-      const className = `${variantKey}-${toHash(cssObj)}`;
-      res[variantKey] = {
-        cssGenText: css(cssObj, [`.${className}`], [], config),
-        cssRawObj: cssObj,
-        className: className,
-      };
     }
   }
   //===========================================================
@@ -89,7 +71,7 @@ export const parseStyling = <Config extends BaseConfig>(
       .map(([k, v]) => `${k}-${v}`)
       .join("-");
     const variantsKey = `compoundVariants-${name}`;
-    const className = `${variantsKey}-${toHash(cssObj)}`;
+    const className = `${variantsKey}-${toHashObject(cssObj)}`;
     res[variantsKey] = {
       cssGenText: css(cssObj, [`.${className}`], [], config),
       cssRawObj: cssObj,
@@ -110,7 +92,7 @@ export const parseStyling = <Config extends BaseConfig>(
   ) as CSSObject<Config>;
   const baseStyleSelector = getBaseStyleSelector(
     baseStylePrefix,
-    toHash(baseStyleCssObject)
+    toHashObject(baseStyleCssObject)
   );
   res.baseStyle = {
     cssGenText: css(baseStyleCssObject, [`.${baseStyleSelector}`], [], config),
@@ -122,30 +104,4 @@ export const parseStyling = <Config extends BaseConfig>(
   // 返回结果
   //===========================================================
   return res;
-};
-
-/**
- * <Button css={{color:'red'}}></Button>
- * @param cssPropObj
- * @param componentName
- * @returns
- */
-export const parseCssProp = <Config extends BaseConfig>(
-  cssPropObj: CSSObject<Config>,
-  config: Config
-): CSSInfo<Config> => {
-  const empty = Object.keys(cssPropObj).length === 0;
-  if (empty) {
-    return {
-      cssGenText: "",
-      cssRawObj: {} as CSSObject<Config>,
-      className: "",
-    };
-  }
-  const className = `css-${toHash(cssPropObj)}`;
-  return {
-    cssGenText: css(cssPropObj, [`.${className}`], [], config),
-    cssRawObj: cssPropObj,
-    className,
-  };
 };

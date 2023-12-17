@@ -31,6 +31,6 @@ export const convertCssObjToMediaQuery = <Config extends BaseConfig>(
       res[key] = value;
     }
   });
-  //TODO: 保证breakpoint小的排在前面，否则样式会被覆盖
+  //TODO: 保证breakpoint小的排在前面，否则样式会被覆盖.（数组语法ok)
   return res;
 };

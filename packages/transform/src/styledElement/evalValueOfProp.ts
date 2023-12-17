@@ -1,12 +1,12 @@
 import { NodePath } from "@babel/traverse";
 import * as t from "@babel/types";
 import log from "npmlog";
-import { evalStyling } from "../styling";
 import { ImportsByName } from "../utils/types";
 import { getValOfProp } from "./getNodePathOfStyling";
 import { getAttr } from "./prop";
 import { evalIdentifer } from "../utils/eval/evalIdentifier";
 import { assert } from "@c3/utils";
+import { evalObjectExp } from "../utils/eval/evalObjectExp";
 
 export const evalValueOfProp = (
   path: NodePath<t.JSXElement>,
@@ -58,7 +58,7 @@ const _evalPropValue = (
         ipath,
         exp,
       });
-      return evalStyling(ipath, importsByName);
+      return evalObjectExp(ipath, importsByName);
     }
     case "StringLiteral":
     case "NumericLiteral":

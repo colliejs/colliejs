@@ -11,10 +11,11 @@ import {
 import { evalValueOfProp } from "./evalValueOfProp";
 
 import { ImportsByName, Stylable } from "../utils/types";
-import { parseCssProp } from "../styling/styling";
-import { CSSInfo } from "../styling/types";
 import _ from "lodash";
 import { NodePath } from "@babel/traverse";
+import { styledElementCssPropName } from "../const";
+import { convertCssProp } from "./convertCssProp";
+import { CSSInfo } from "../type";
 
 export class StyledElement<Config extends BaseConfig> implements Stylable {
   cssProp: CSSInfo<Config>;
@@ -30,14 +31,14 @@ export class StyledElement<Config extends BaseConfig> implements Stylable {
     }
     const css = evalValueOfProp(
       path,
-      config.styledElementProp || "css",
+      styledElementCssPropName,
       importsByName
     ) as CSSObject<Config>;
     if (!_.isObject(css)) {
       log.error("css prop must be a object", css);
       throw new Error("css prop must be a object");
     }
-    this.cssProp = parseCssProp(css, config);
+    this.cssProp = convertCssProp(css, config);
   }
 
   getCssText() {
@@ -75,7 +76,7 @@ export class StyledElement<Config extends BaseConfig> implements Stylable {
     //===========================================================
     // 处理CSS Props
     //===========================================================
-    const name = this.config.styledElementProp || "css";
+    const name = styledElementCssPropName;
     const hasCssProp = isPropExisted(this.path, name);
     if (hasCssProp) {
       delAttr(this.path, name);

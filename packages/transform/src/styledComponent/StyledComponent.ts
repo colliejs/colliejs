@@ -1,11 +1,11 @@
 import * as t from "@babel/types";
-import type { BaseConfig, StaticVariantKey } from "@colliejs/core";
+import type { BaseConfig } from "@colliejs/core";
 import log from "npmlog";
 import { Component } from "../component/Component";
 import CustomComponent from "../component/CustomComponent";
 import { HostComponent } from "../component/HostComponent";
-import { parseStyling } from "../styling/styling";
-import { Styling, StylingParsed } from "../styling/types";
+import { convertStyledObject } from "./styledObject/convertStyledObject";
+import type { DynamicClassNameMap } from "./type";
 
 import { buildObjectExpression } from "../utils/index";
 import {
@@ -19,14 +19,15 @@ import { NodePath } from "@babel/traverse";
 import { ComponentId } from "../component/componentId";
 import { findLayerDeps } from "./findDeps";
 import { isStyledComponentDecl } from "./isStyledCompDelc";
+import { StyledObjectParsed, StyledObject } from "./styledObject/types";
 
 export class StyledComponent<Config extends BaseConfig>
   extends CustomComponent
   implements Stylable
 {
-  stylingParsed: StylingParsed<Config>;
+  stylingParsed: StyledObjectParsed<Config>;
   dependent: CustomComponent | HostComponent;
-  styling: Styling<Config>;
+  styling: StyledObject<Config>;
   layerDeps: string[];
 
   constructor(
@@ -48,7 +49,11 @@ export class StyledComponent<Config extends BaseConfig>
     super(new ComponentId(moduleId, styledComponentName));
 
     this.styling = styling;
-    this.stylingParsed = parseStyling(styling, config, styledComponentName);
+    this.stylingParsed = convertStyledObject(
+      styling,
+      config,
+      styledComponentName
+    );
     this.dependent = dependent;
     if (getDeps) {
       this.layerDeps = findLayerDeps(this, alias, root, config);
@@ -105,21 +110,31 @@ export class StyledComponent<Config extends BaseConfig>
    *  const StyledButton = styled(
    *    button,
    *    __classNameOfBaseStyle，
-   *    __classNameOfVariant:Record<string, string>,
-   *    __classNameOfCompoundVariants，
+   *    __classNameOfStaticVariant:string[],
+   *    __classNameOfDynamicVariant:Record<string, {canWithoutPx:boolean}>,
+   *    __classNameOfCompoundVariants:string[]，
    *    option
    * )
    */
   transform() {
-    const classNameOfVariant: Record<string, string> = {};
+    const classNameOfStaticVariant: string[] = [];
+    const classNameOfDynamicVariant: DynamicClassNameMap = {};
     const classNamesOfCompoundVariants: Record<string, string> = {};
     for (const key of Object.keys(this.stylingParsed)) {
       //===========================================================
-      // 1.variants
+      // 1.1.static variants
       //===========================================================
-      if (key.startsWith("variants-")) {
-        classNameOfVariant[key] =
-          this.stylingParsed[key as StaticVariantKey].className;
+      if (key.startsWith("static-variants")) {
+        classNameOfStaticVariant.push(this.stylingParsed[key].className);
+      }
+      //===========================================================
+      // 1.2.dynamic variants
+      //===========================================================
+      if (key.startsWith("dynamic-variants")) {
+        const item = this.stylingParsed[key];
+        classNameOfDynamicVariant[item.className] = {
+          canWithoutPx: item.canWithoutPx,
+        };
       }
       //===========================================================
       // 2.compoundVariants
@@ -144,7 +159,7 @@ export class StyledComponent<Config extends BaseConfig>
       .arguments;
     args.splice(1, 1); //remove styling
     args.splice(1, 0, t.stringLiteral(classNameOfBaseStyle)); //add classNameOfBaseStyle
-    args.splice(2, 0, buildObjectExpression(classNameOfVariant)); //add classNameOfVariant
+    args.splice(2, 0, buildObjectExpression(classNameOfStaticVariant)); //add classNameOfStaticVariant
     args.splice(3, 0, buildObjectExpression(classNamesOfCompoundVariants)); //add classNamesOfCompoundVariants
 
     //5. return

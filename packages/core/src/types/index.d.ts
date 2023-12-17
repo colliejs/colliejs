@@ -1,10 +1,10 @@
-import type Stitches from "./stitches";
+// import type Stitches from "./stitches";
 
-export type * from "./config";
+// export type * from "./config";
 // export type * from "./css-util";
-export type * from "./stitches";
-export type * from "./styled-component";
-export type * from "./theme";
+// export type * from "./stitches";
+// export type * from "./styled-component";
+// export type * from "./theme";
 export type * from "./util";
 
 import type * as Config from "./config";

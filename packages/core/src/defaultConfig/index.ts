@@ -5,10 +5,7 @@ export const defaultConfig = {
   prefix: "co",
   themeMap: defaultThemeMap,
   media: {},
-  breakpoints: [320, 768],
   theme: {},
   utils,
-  styledElementProp: "css",
-  styledFunctionName: "styled",
   layername: "app",
 } as const satisfies BaseConfig;

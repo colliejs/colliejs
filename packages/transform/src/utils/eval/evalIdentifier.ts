@@ -5,7 +5,6 @@ import { assert } from "@c3/utils";
 import { getFileModuleImport } from "../importer";
 import { ImportsByName } from "../types";
 import { load } from "./require";
-import { evalExpText } from "./evalText";
 import { getCtxOf } from "./getCtx";
 import log from "npmlog";
 

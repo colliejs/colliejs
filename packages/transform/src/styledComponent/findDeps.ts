@@ -9,7 +9,7 @@ import {
   parseStyledComponentDeclaration,
 } from "./parseStyledComponent";
 import { HostComponent } from "../component";
-import { BaseConfig } from "packages/core/dist";
+import type { BaseConfig } from "@colliejs/core";
 
 /**
  * @todo:增加缓存来减少重复parseFile

@@ -6,6 +6,7 @@ import { generate, getImports, isStyledElement, traverse } from "./utils";
 import { removeTypeAnnotation } from "./utils/removeType";
 import { isStyledComponentDecl } from "./styledComponent/isStyledCompDelc";
 
+export const styledElementProp = "css";
 /**
  * NOTE: the module should be convert commonjs first
  */
@@ -51,7 +52,7 @@ export const transform = <Config extends BaseConfig>(
     // 2.transform styled element
     //===========================================================
     JSXElement(path) {
-      if (!isStyledElement(path, config.styledElementProp)) {
+      if (!isStyledElement(path, styledElementProp)) {
         return;
       }
       if (Object.keys(modulesByName).length === 0) {
