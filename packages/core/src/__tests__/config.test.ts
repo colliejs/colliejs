@@ -1,4 +1,5 @@
-import { CSSObject, defaultConfig } from "../";
+import type { CSSObject } from "../type";
+import { defaultConfig } from "../defaultConfig";
 import { css } from "../css";
 
 describe("toHash", () => {

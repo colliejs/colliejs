@@ -1,18 +1,17 @@
-import { BaseConfig } from "@colliejs/core";
+import type { BaseConfig } from "@colliejs/core";
 import _ from "lodash";
 import React, { ElementType, ForwardRefRenderFunction } from "react";
 import { MakeStyled } from "./types";
 import {
   getCSSValue,
+  getCSSVariable,
+  getCompoundVariantClassNameUsed,
+  getVariantClassNameFromCandidates,
   isObject,
   isString,
   toArray,
 } from "./utils";
-import {
-  getCSSVariable,
-  getVariantClassNameFromCandidates,
-  type VariantsType,
-} from "@colliejs/transform";
+import type { VariantsType } from "@colliejs/transform";
 
 export type StyledOption<
   P extends BaseStyledComponentProps,
@@ -46,7 +45,7 @@ export const makeStyled = <Config extends BaseConfig>(config: Config) => {
    *    "baseStyle-Button-elTJue",
    *       ["variants-shape-round-hECRKn",""variants-shape-rect-iydAuT""]
    *     {
-   *       "variants-shape-dynamic": {canWithoutPx:true}
+   *       "variants-shape-dynamic": {canAddPx:true}
    *     );
    *
    *
@@ -64,7 +63,7 @@ export const makeStyled = <Config extends BaseConfig>(config: Config) => {
     __generatedStaticClassNames: VariantsType["staticClassName"][] = [],
     __generatedDynamicClassNameMap: Record<
       VariantsType["dynamicClassName"],
-      { canWithoutPx: boolean }
+      { canAddPx: boolean }
     > = {},
     __generatedCompoundVariantClassNames: VariantsType["compoundClassName"][] = [],
     option: StyledOption<P1, As> = {}
@@ -82,71 +81,81 @@ export const makeStyled = <Config extends BaseConfig>(config: Config) => {
       //===========================================================
       const restPropsWithoutVariant = { ...restProps };
       const propsWithStaticVariant = {} as Record<string, any>;
-      const dynamicVariantsClasses = Object.keys(
+      const dynamicVariantsClassNamees = Object.keys(
         __generatedDynamicClassNameMap
       );
+      //===========================================================
+      // static and dynamic variants
+      //===========================================================
       for (const [prop, valOfProp] of Object.entries(restProps)) {
         const staticVariantClassName = getVariantClassNameFromCandidates(
           prop,
           valOfProp,
           __generatedStaticClassNames
         );
-        const isStaticVariant = !!staticVariantClassName;
-        const isDynamicVariant =
-          !isStaticVariant &&
-          dynamicVariantsClasses.some(e =>
+        const isStaticVariantProp = !!staticVariantClassName;
+        const isDynamicVariantProp =
+          !isStaticVariantProp &&
+          dynamicVariantsClassNamees.some(e =>
             e.startsWith(`variants-${prop}-dynamic`)
           );
-        if (!isStaticVariant && !isDynamicVariant) {
+        if (!isStaticVariantProp && !isDynamicVariantProp) {
           continue;
         }
-        isStaticVariant && (propsWithStaticVariant[prop] = valOfProp);
+        isStaticVariantProp && (propsWithStaticVariant[prop] = valOfProp);
         // @ts-ignore
         restPropsWithoutVariant[prop] = undefined;
-        if (isStaticVariant && isObject(valOfProp)) {
+        if (isStaticVariantProp && isObject(valOfProp)) {
           throw new Error(
             "variant value must be string or number.because  it is used as css variable value. "
           );
         }
 
-        if (isStaticVariant) {
+        if (isStaticVariantProp) {
           //静态variant
           outputClassNames.push(staticVariantClassName);
         } else {
-          //dynamic variant
+          //动态variant
           const className = getVariantClassNameFromCandidates(
             prop,
-            valOfProp,
+            "dynamic",
             Object.keys(__generatedDynamicClassNameMap)
           ) as VariantsType["dynamicClassName"];
           outputClassNames.push(className);
-          const newValOfProp = toArray(valOfProp);
-          config.breakpoints?.forEach((e, idx) => {
-            style[getCSSVariable(prop, e)] = getCSSValue(
-              newValOfProp[idx] ?? newValOfProp[newValOfProp.length - 1],
-              __generatedDynamicClassNameMap[className].canWithoutPx
-            );
-          });
+
+          const canAddPx =
+            __generatedDynamicClassNameMap[className].canAddPx;
+          if ((config.breakpoints?.length || 0) > 0) {
+            const newValueOfProp = toArray(valOfProp);
+            config.breakpoints?.forEach((e, idx) => {
+              style[getCSSVariable(prop, e)] = getCSSValue(
+                newValueOfProp[idx] ??
+                  newValueOfProp[newValueOfProp.length - 1],
+                canAddPx
+              );
+            });
+          } else {
+            if (Array.isArray(valOfProp)) {
+              throw new Error(
+                "can not use array as dynamic variant value when breakpoints is empty"
+              );
+            }
+            style[getCSSVariable(prop)] = getCSSValue(valOfProp, canAddPx);
+          }
         }
       }
       //===========================================================
-      // compoundVariants. FIXME: should 2x/3x/nx
+      // compoundVariants.
       //===========================================================
-      const compoundVariantKey = Object.entries(propsWithStaticVariant)
-        .map(([prop, val]) => {
-          return `${prop}-${val}`;
-        })
-        .reduce((acc, cur) => {
-          {
-            return `${acc}-${cur}`;
-          }
-        }, "compoundVariants-");
-      if (compoundVariantKey in __generatedCompoundVariantClassNames) {
-        outputClassNames.push(
-          __generatedCompoundVariantClassNames[compoundVariantKey as any]
-        );
-      }
+      const compoundClassNames = getCompoundVariantClassNameUsed(
+        __generatedCompoundVariantClassNames,
+        propsWithStaticVariant
+      );
+      outputClassNames.push(...compoundClassNames);
 
+      //===========================================================
+      // create forwardProps
+      //===========================================================
       const forwardProps = {
         className: outputClassNames.join(" "),
         ref,

@@ -1,41 +1,40 @@
-import { Background } from "./../../../../react/src/types/css.d";
-import { defaultConfig, CSSPropertiesComplex } from "@colliejs/core";
-import { parseStyling, Styling } from "../styling";
+import { config } from "../../../__tests__/common/config";
+import { convertStyledObject } from "../convertStyledObject";
 
 describe("parseStyleObj", () => {
   it("plain object ", () => {
-    const styleObj: Styling = {
+    const styleObj: StyledObject = {
       background: "red",
       lineHeight: 1,
       variants: {
         size: {
-          small: { width: "100px", span: { w: 50 } } as CSSPropertiesComplex,
+          small: { width: "100px", span: { w: 50 } },
           medium: { w: 200 },
         },
       },
     };
-    const res = parseStyling(styleObj, defaultConfig);
+    const res = convertStyledObject(styleObj, config);
     expect(res).toMatchInlineSnapshot(`
       {
         "baseStyle": {
-          "className": "baseStyle-lcviVg",
-          "cssGenText": ".baseStyle-lcviVg{background:red;line-height:1}",
+          "className": "baseStyle-1v6vumz",
+          "cssGenText": ".baseStyle-1v6vumz{background:red;line-height:1}",
           "cssRawObj": {
             "background": "red",
             "lineHeight": 1,
           },
         },
-        "variants-static-size-medium": {
-          "className": "variants-static-size-medium-cZffyS",
-          "cssGenText": ".variants-static-size-medium-cZffyS{width:200px}",
+        "static-variants-size-medium": {
+          "className": "variants-size-medium-1pcm56b",
+          "cssGenText": ".variants-size-medium-1pcm56b{width:200px}",
           "cssRawObj": {
             "w": 200,
           },
         },
-        "variants-static-size-small": {
-          "className": "variants-static-size-small-qoyAQ",
-          "cssGenText": ".variants-static-size-small-qoyAQ{width:100px}
-      .variants-static-size-small-qoyAQ span{width:50px}",
+        "static-variants-size-small": {
+          "className": "variants-size-small-4b43qv",
+          "cssGenText": ".variants-size-small-4b43qv{width:100px}
+      .variants-size-small-4b43qv span{width:50px}",
           "cssRawObj": {
             "span": {
               "w": 50,
@@ -47,26 +46,31 @@ describe("parseStyleObj", () => {
     `);
   });
   it("dynamic function without breakpoints", () => {
-    const styleObj: Styling = {
+    const styleObj: any = {
       variants: {
         gap: {
           dynamic: x => ({ gap: x }),
         },
       },
     };
-    const res = parseStyling(styleObj, defaultConfig, "prefix");
+    const res = convertStyledObject(styleObj, config, "prefix");
     expect(res).toMatchInlineSnapshot(`
       {
         "baseStyle": {
-          "className": "baseStyle-prefix-PJLV",
+          "className": "baseStyle-prefix-31e",
           "cssGenText": "",
           "cssRawObj": {},
         },
-        "variants-dynamic-gap": {
-          "className": "variants-dynamic-gap-icbYTO",
-          "cssGenText": ".variants-dynamic-gap-icbYTO{gap:var(--variants-dynamic-gap)}",
+        "dynamic-variants-gap": {
+          "canAddPx": true,
+          "className": "variants-gap-dynamic-1dnk4w",
+          "cssGenText": "@media (min-width:320px){.variants-gap-dynamic-1dnk4w{gap:var(--variants-gap-at320)}}
+      @media (min-width:768px){.variants-gap-dynamic-1dnk4w{gap:var(--variants-gap-at768)}}",
           "cssRawObj": {
-            "gap": "var(--variants-dynamic-gap)",
+            "gap": [
+              "var(--variants-gap-at320)",
+              "var(--variants-gap-at768)",
+            ],
           },
         },
       }
@@ -81,19 +85,24 @@ describe("parseStyleObj", () => {
         },
       },
     };
-    const res = parseStyling(styleObj, defaultConfig);
+    const res = convertStyledObject(styleObj, config);
     expect(res).toMatchInlineSnapshot(`
       {
         "baseStyle": {
-          "className": "baseStyle-PJLV",
+          "className": "baseStyle-31e",
           "cssGenText": "",
           "cssRawObj": {},
         },
-        "variants-dynamic-gap": {
-          "className": "variants-dynamic-gap-icbYTO",
-          "cssGenText": ".variants-dynamic-gap-icbYTO{gap:var(--variants-dynamic-gap)}",
+        "dynamic-variants-gap": {
+          "canAddPx": true,
+          "className": "variants-gap-dynamic-1dnk4w",
+          "cssGenText": "@media (min-width:320px){.variants-gap-dynamic-1dnk4w{gap:var(--variants-gap-at320)}}
+      @media (min-width:768px){.variants-gap-dynamic-1dnk4w{gap:var(--variants-gap-at768)}}",
           "cssRawObj": {
-            "gap": "var(--variants-dynamic-gap)",
+            "gap": [
+              "var(--variants-gap-at320)",
+              "var(--variants-gap-at768)",
+            ],
           },
         },
       }
@@ -121,31 +130,31 @@ describe("parseStyleObj", () => {
         },
       ],
     };
-    const res = parseStyling(styleObj, defaultConfig);
+    const res = convertStyledObject(styleObj, config);
     expect(res).toMatchInlineSnapshot(`
       {
         "baseStyle": {
-          "className": "baseStyle-PJLV",
+          "className": "baseStyle-31e",
           "cssGenText": "",
           "cssRawObj": {},
         },
         "compoundVariants-size-small-type-primary": {
-          "className": "compoundVariants-size-small-type-primary-elTJue",
-          "cssGenText": ".compoundVariants-size-small-type-primary-elTJue{background:red}",
+          "className": "compoundVariants-size-small-type-primary-16n2od3",
+          "cssGenText": ".compoundVariants-size-small-type-primary-16n2od3{background:red}",
           "cssRawObj": {
             "background": "red",
           },
         },
-        "variants-static-size-small": {
-          "className": "variants-static-size-small-iMBqpA",
-          "cssGenText": ".variants-static-size-small-iMBqpA{width:100px}",
+        "static-variants-size-small": {
+          "className": "variants-size-small-13jn9t5",
+          "cssGenText": ".variants-size-small-13jn9t5{width:100px}",
           "cssRawObj": {
             "width": "100px",
           },
         },
-        "variants-static-type-primary": {
-          "className": "variants-static-type-primary-gmqXFB",
-          "cssGenText": ".variants-static-type-primary-gmqXFB{color:red}",
+        "static-variants-type-primary": {
+          "className": "variants-type-primary-129ntb2",
+          "cssGenText": ".variants-type-primary-129ntb2{color:red}",
           "cssRawObj": {
             "color": "red",
           },
@@ -154,7 +163,7 @@ describe("parseStyleObj", () => {
     `);
   });
   it("dynamic function with css propery name(with breakpoint)", () => {
-    const styleObj: Styling = {
+    const styleObj: any = {
       variants: {
         size1: {
           dynamic_width: x => ({ width: x }),
@@ -164,59 +173,66 @@ describe("parseStyleObj", () => {
         },
       },
     };
-    const res = parseStyling(styleObj, defaultConfig, "prefix");
+    const res = convertStyledObject(styleObj, config, "prefix");
     expect(res).toMatchInlineSnapshot(`
       {
         "baseStyle": {
-          "className": "baseStyle-prefix-PJLV",
+          "className": "baseStyle-prefix-31e",
           "cssGenText": "",
           "cssRawObj": {},
         },
-        "variants-dynamic-size-width-at": {
-          "className": "variants-dynamic-size-width-at-cUqJtr",
-          "cssGenText": "@media (min-width:320px){.variants-dynamic-size-width-at-cUqJtr{width:var(--variants-dynamic-size-at320)}}
-      @media (min-width:768px){.variants-dynamic-size-width-at-cUqJtr{width:var(--variants-dynamic-size-at768)}}",
+        "dynamic-variants-size": {
+          "canAddPx": true,
+          "className": "variants-size-dynamic-ximlsg",
+          "cssGenText": "@media (min-width:320px){.variants-size-dynamic-ximlsg{width:var(--variants-size-at320)}}
+      @media (min-width:768px){.variants-size-dynamic-ximlsg{width:var(--variants-size-at768)}}",
           "cssRawObj": {
             "width": [
-              "var(--variants-dynamic-size-at320)",
-              "var(--variants-dynamic-size-at768)",
+              "var(--variants-size-at320)",
+              "var(--variants-size-at768)",
             ],
           },
         },
-        "variants-dynamic-size1-width": {
-          "className": "variants-dynamic-size1-width-iFYilI",
-          "cssGenText": ".variants-dynamic-size1-width-iFYilI{width:var(--variants-dynamic-size1)}",
+        "dynamic-variants-size1": {
+          "canAddPx": true,
+          "className": "variants-size1-dynamic-1iv7rh0",
+          "cssGenText": "@media (min-width:320px){.variants-size1-dynamic-1iv7rh0{width:var(--variants-size1-at320)}}
+      @media (min-width:768px){.variants-size1-dynamic-1iv7rh0{width:var(--variants-size1-at768)}}",
           "cssRawObj": {
-            "width": "var(--variants-dynamic-size1)",
+            "width": [
+              "var(--variants-size1-at320)",
+              "var(--variants-size1-at768)",
+            ],
           },
         },
       }
     `);
   });
   it("dynamic function with css propery name(with breakpoint)", () => {
-    const styleObj: Styling = {
+    const styleObj: any = {
       variants: {
         size: {
           dynamic_at: x => ({ width: x }),
         },
       },
     };
-    const res = parseStyling(styleObj, defaultConfig, "prefix");
+    const res = convertStyledObject(styleObj, config, "prefix");
     expect(res).toMatchInlineSnapshot(`
       {
         "baseStyle": {
-          "className": "baseStyle-prefix-PJLV",
+          "className": "baseStyle-prefix-31e",
           "cssGenText": "",
           "cssRawObj": {},
         },
-        "variants-dynamic-size-at": {
-          "className": "variants-dynamic-size-at-cUqJtr",
-          "cssGenText": "@media (min-width:320px){.variants-dynamic-size-at-cUqJtr{width:var(--variants-dynamic-size-at320)}}
-      @media (min-width:768px){.variants-dynamic-size-at-cUqJtr{width:var(--variants-dynamic-size-at768)}}",
+        "dynamic-variants-size": {
+          "canAddPx": true,
+          "className": "variants-size-dynamic-ximlsg",
+          "cssGenText": "@media (min-width:320px){.variants-size-dynamic-ximlsg{width:var(--variants-size-at320)}}
+      @media (min-width:768px){.variants-size-dynamic-ximlsg{width:var(--variants-size-at768)}}",
           "cssRawObj": {
             "width": [
-              "var(--variants-dynamic-size-at320)",
-              "var(--variants-dynamic-size-at768)",
+              "var(--variants-size-at320)",
+              "var(--variants-size-at768)",
             ],
           },
         },

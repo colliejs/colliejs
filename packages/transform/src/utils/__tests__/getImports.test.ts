@@ -1,4 +1,5 @@
-import { getImports, parseCode } from "../..";
+import { getImports } from "../importer";
+import { parseCode } from "../../parse";
 
 describe("test cases", () => {
   it("should work ", () => {
@@ -79,7 +80,7 @@ describe("test cases", () => {
 
   it("packages", () => {
     const source = `
-    import {toHash} from '@colliejs/core';
+    import {css} from '@colliejs/core';
     `;
     const ast = parseCode(source);
     const curFile = __filename;
@@ -88,15 +89,15 @@ describe("test cases", () => {
     expect(importers).toMatchInlineSnapshot(
       `
       {
-        "toHash": {
-          "importedName": "toHash",
+        "css": {
+          "importedName": "css",
           "moduleId": "/Users/che3vinci/code/personal/colliejs/packages/core/dist/index.cjs",
         },
       }
     `
     );
-    const { toHash } = require(importers["toHash"].moduleId);
-    expect(toHash({ a: 1 })).toBe("fRCpkX");
+    const { css } = require(importers["css"].moduleId);
+    expect(css).toBeDefined();
   });
 
   it("absolute path", () => {

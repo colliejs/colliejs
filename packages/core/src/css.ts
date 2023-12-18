@@ -9,7 +9,7 @@ export const css = <C extends BaseConfig>(
   conditions = [],
   config: C
 ): string => {
-  const newCssObj = convertCssObjToMediaQuery(cssObj, []);
+  const newCssObj = convertCssObjToMediaQuery(cssObj, config.breakpoints);
   let res = "";
   toCssRules(newCssObj, selectors, conditions, config, (cssText: string) => {
     res += cssText + "\n";

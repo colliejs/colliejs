@@ -1,5 +1,4 @@
-// export type * from "./types/index.d.ts";
-
 export { css } from "./css";
-export * from "./createTheme";
-export * from "./defaultConfig";
+export { createTheme } from "./createTheme";
+export { defaultConfig } from "./defaultConfig";
+export type * from './type'

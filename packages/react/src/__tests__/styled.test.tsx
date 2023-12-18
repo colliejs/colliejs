@@ -16,8 +16,6 @@ const styled = makeStyled(defaultConfig);
 const traverse = traverse_.default || traverse_;
 
 const transform = (source: string, n: number = 0) => {
-  console.log("parseCodeAndGetBodyN", parseCodeAndGetBodyN);
-  const ast = parseCodeAndGetBodyN(source, n);
   const fileAst = parseCode(source);
   const imports = getImports(fileAst.program, __filename);
   let path;
@@ -36,7 +34,7 @@ describe("compile styled function", () => {
     const source = `const Button = styled('button',{color:'red'})`;
     const x = transform(source);
     expect(x).toMatchInlineSnapshot(
-      `"const Button = styled('button', "baseStyle-Button-gmqXFB", {}, {});"`
+      `"const Button = styled('button', "baseStyle-Button-129ntb2", [], {}, []);"`
     );
   });
   it("with variant ", () => {
@@ -56,12 +54,9 @@ describe("compile styled function", () => {
       })
   `;
     const x = transform(source);
-    expect(x).toMatchInlineSnapshot(`
-      "const Button = styled('button', "baseStyle-Button-gmqXFB", {
-        "variants-static-shape-round": "variants-static-shape-round-hECRKn",
-        "variants-static-shape-rect": "variants-static-shape-rect-ehcAoa"
-      }, {});"
-    `);
+    expect(x).toMatchInlineSnapshot(
+      `"const Button = styled('button', "baseStyle-Button-129ntb2", ["variants-shape-round-jhqrc0", "variants-shape-rect-ptwk5x"], {}, []);"`
+    );
   });
   it("dynamic variant", () => {
     const source = `
@@ -89,11 +84,11 @@ describe("compile styled function", () => {
 `;
     const code = transform(source);
     expect(code).toMatchInlineSnapshot(`
-      "const Button = styled('button', "baseStyle-Button-gmqXFB", {
-        "variants-static-shape-round": "variants-static-shape-round-hECRKn",
-        "variants-dynamic-shape": "variants-dynamic-shape-dlbLfd",
-        "variants-static-big-true": "variants-static-big-true-euIQPz"
-      }, {});"
+      "const Button = styled('button', "baseStyle-Button-129ntb2", ["variants-shape-round-jhqrc0", "variants-big-true-1ja8ftc"], {
+        "variants-shape-dynamic-t61aqk": {
+          "canAddPx": true
+        }
+      }, []);"
     `);
   });
 });
@@ -103,19 +98,17 @@ describe("render StyledComponent", () => {
     const Text = styled(
       "div",
       "baseStyle-Text-xxxx",
-      {
-        "variants-static-shape-round": "variants-static-shape-round-hECRKn",
-        "variants-dynamic-width": "variants-dynamic-width-dBkvcz",
-      },
-      {}
+      ["variants-shape-round-efgha2"],
+      { "variants-width-dynamic-2ab23": { canAddPx: true } },
+      []
     );
     const comp = TestRenderer.create(<Text width={2}>hello</Text>);
     expect(comp.toJSON()).toMatchInlineSnapshot(`
       <div
-        className="baseStyle-Text-xxxx  variants-dynamic-width-dBkvcz"
+        className="baseStyle-Text-xxxx  variants-width-dynamic-2ab23"
         style={
           {
-            "--variants-dynamic-width": 2,
+            "--variants-width": "2px",
           }
         }
       >
@@ -125,36 +118,27 @@ describe("render StyledComponent", () => {
     const comp1 = TestRenderer.create(<Text shape={"round"}>hello</Text>);
     expect(comp1.toJSON()).toMatchInlineSnapshot(`
       <div
-        className="baseStyle-Text-xxxx  variants-static-shape-round-hECRKn"
+        className="baseStyle-Text-xxxx  variants-shape-round-efgha2"
       >
         hello
       </div>
     `);
   });
 
-  it("render StyledComponent width dynamic variant with propery key", () => {
-    const Text = styled(
-      "div",
-      "",
-      {
-        "variants-dynamic-shape-borderRadius":
-          "variants-dynamic-shape-borderRadius-dlbLfd",
-        "variants-dynamic-fx-xx": "variants-dynamic-fx-xx-dlbLfd",
-      },
-      {}
-    );
-    const comp = TestRenderer.create(
-      <Text shape={2} fx="center">
-        hello
-      </Text>
-    );
+  it("render StyledComponent width dynamic variant ", () => {
+    const styled = makeStyled({ ...defaultConfig, breakpoints: [320, 768] });
+
+    const Text = styled("div", "", [], {
+      "variants-shape-dynamic-2ab23": { canAddPx: true },
+    });
+    const comp = TestRenderer.create(<Text shape={[2, 3]}>hello</Text>);
     expect(comp.toJSON()).toMatchInlineSnapshot(`
       <div
-        className="  variants-dynamic-shape-borderRadius-dlbLfd variants-dynamic-fx-xx-dlbLfd"
+        className="  variants-shape-dynamic-2ab23"
         style={
           {
-            "--variants-dynamic-fx": "center",
-            "--variants-dynamic-shape": "2px",
+            "--variants-shape-at320": "2px",
+            "--variants-shape-at768": "3px",
           }
         }
       >
@@ -162,25 +146,38 @@ describe("render StyledComponent", () => {
       </div>
     `);
   });
+  it("render StyledComponent width dynamic variant support full devices ", () => {
+    const styled = makeStyled({ ...defaultConfig, breakpoints: [320, 768] });
 
-  it("render StyledComponent width dynamic variant support all device", () => {
-    const Text = styled(
-      "div",
-      "",
-      {
-        "variants-dynamic-shape-borderRadius-at":
-          "variants-dynamic-shape-borderRadius-dlbLfd",
-      },
-      {}
-    );
-    const comp = TestRenderer.create(<Text shape={2}>hello</Text>);
+    const Text = styled("div", "", [], {
+      "variants-shape-dynamic-2ab23": { canAddPx: true },
+    });
+    const comp = TestRenderer.create(<Text shape={3}>hello</Text>);
     expect(comp.toJSON()).toMatchInlineSnapshot(`
       <div
-        className="  variants-dynamic-shape-borderRadius-dlbLfd"
+        className="  variants-shape-dynamic-2ab23"
         style={
           {
-            "--variants-dynamic-shape-at320": "2px",
-            "--variants-dynamic-shape-at768": "2px",
+            "--variants-shape-at320": "3px",
+            "--variants-shape-at768": "3px",
+          }
+        }
+      >
+        hello
+      </div>
+    `);
+  });
+  it("render StyledComponent width dynamic variant canAddPx = false ", () => {
+    const Text = styled("div", "", [], {
+      "variants-shape-dynamic-2ab23": { canAddPx: false },
+    });
+    const comp = TestRenderer.create(<Text shape={3}>hello</Text>);
+    expect(comp.toJSON()).toMatchInlineSnapshot(`
+      <div
+        className="  variants-shape-dynamic-2ab23"
+        style={
+          {
+            "--variants-shape": 3,
           }
         }
       >
@@ -190,7 +187,7 @@ describe("render StyledComponent", () => {
   });
 
   it("styled function width as option", () => {
-    const Comp = styled("div", "baseStyle-gmqXFB", {}, {}, { as: "a" });
+    const Comp = styled("div", "baseStyle-gmqXFB", [], {}, [], { as: "a" });
     const comp = TestRenderer.create(<Comp />);
     expect(comp.toJSON()).toMatchInlineSnapshot(`
       <a
@@ -199,7 +196,9 @@ describe("render StyledComponent", () => {
     `);
   });
   it("web component should use `class` attributes", () => {
-    const Comp = styled("div", "baseStyle-gmqXFB", {}, {}, { as: "u-stack" });
+    const Comp = styled("div", "baseStyle-gmqXFB", [], {}, [], {
+      as: "u-stack",
+    });
     const comp = TestRenderer.create(<Comp />);
     expect(comp.toJSON()).toMatchInlineSnapshot(`
       <u-stack
@@ -209,7 +208,9 @@ describe("render StyledComponent", () => {
   });
 
   it("enable wrapper", () => {
-    const Comp = styled("div", "baseStyle-gmqXFB", {}, {}, { wrapper: "a" });
+    const Comp = styled("div", "baseStyle-gmqXFB", [], {}, [], {
+      wrapper: "a",
+    });
     const comp = TestRenderer.create(<Comp />);
     expect(comp.toJSON()).toMatchInlineSnapshot(`
       <a
@@ -224,7 +225,9 @@ describe("render StyledComponent", () => {
     const Button = props => {
       return <button>hello</button>;
     };
-    const Comp = styled(Button, "baseStyle-gmqXFB", {}, {}, { wrapper: "div" });
+    const Comp = styled(Button, "baseStyle-gmqXFB", [], {}, [], {
+      wrapper: "div",
+    });
     const comp = TestRenderer.create(<Comp />);
     expect(comp.toJSON()).toMatchInlineSnapshot(`
       <div
@@ -237,15 +240,9 @@ describe("render StyledComponent", () => {
     `);
   });
   it("native attr  ", () => {
-    const Comp = styled(
-      "a",
-      "baseStyle-gmqXFB",
-      {},
-      {},
-      {
-        attrs: { target: "_blank" },
-      }
-    );
+    const Comp = styled("a", "baseStyle-gmqXFB", [], {}, [], {
+      attrs: { target: "_blank" },
+    });
     const comp = TestRenderer.create(<Comp target="_self" round />);
     expect(comp.toJSON()).toMatchInlineSnapshot(`
       <a
@@ -263,15 +260,9 @@ describe("render StyledComponent", () => {
     `);
   });
   it("attrs for event ", () => {
-    const Link = styled(
-      "a",
-      "baseStyle-gmqXFB",
-      {},
-      {},
-      {
-        attrs: { onClick: () => {} },
-      }
-    );
+    const Link = styled("a", "baseStyle-gmqXFB", [], {}, [], {
+      attrs: { onClick: () => {} },
+    });
     const comp = TestRenderer.create(<Link />);
     expect(comp.toJSON()).toMatchInlineSnapshot(`
       <a
@@ -292,17 +283,13 @@ describe("render StyledComponent", () => {
     const InnerLink = styled(
       "a",
       "baseStyle-gmqXFB",
-      {
-        "variants-static-shape-round": "variants-static-shape-round-hECRKn",
-      },
+      ["variants-shape-round-hECRKn"],
       {}
     );
     const MyLink = styled(
       InnerLink,
       "baseStyle-xxxxx",
-      {
-        "variants-static-rect-true": "variants-static-rect-true-hECRKx",
-      },
+      ["variants-rect-true-hECRKx"],
       {}
     );
     const comp = TestRenderer.create(
@@ -310,7 +297,7 @@ describe("render StyledComponent", () => {
     );
     expect(comp.toJSON()).toMatchInlineSnapshot(`
       <a
-        className="baseStyle-gmqXFB baseStyle-xxxxx  variants-static-rect-true-hECRKx variants-static-shape-round-hECRKn"
+        className="baseStyle-gmqXFB baseStyle-xxxxx  variants-rect-true-hECRKx variants-shape-round-hECRKn"
         unexpectForward={true}
       />
     `);
@@ -319,22 +306,21 @@ describe("render StyledComponent", () => {
     const Link = styled(
       "a",
       "baseStyle-gmqXFB",
-      {
-        "variants-static-shape-round": "variants-static-shape-round-hECRKn",
-      },
+      ["variants-shape-round-hECRKn"],
       {}
     );
-    const code = `<Link css={{ background: "red" }} />`;
+    const code = `<Link css={{ background: "red" }}/>`;
     const res = transform_(code, "module-id", defaultConfig);
     const className = res.code.match(/className="(.*)"/)?.[1];
     const t = React.createElement(Link, {
       className: className,
+      shape: "round",
     });
 
     const comp = TestRenderer.create(t);
     expect(comp.toJSON()).toMatchInlineSnapshot(`
       <a
-        className="baseStyle-gmqXFB css-elTJue"
+        className="baseStyle-gmqXFB css-16n2od3 variants-shape-round-hECRKn"
       />
     `);
   });

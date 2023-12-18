@@ -2,7 +2,6 @@ import { toResolvedMediaQueryRanges } from '../toResolvedMediaQueryRanges';
 
 describe('test cases', () => {
   it('should work ', () => {
-    expect(0).toBe(0);
     const mediaQuery =
       '(min-width: 100px) and (max-width< 200px) and (height < 50px)';
     const resolvedMediaQuery = toResolvedMediaQueryRanges(mediaQuery);

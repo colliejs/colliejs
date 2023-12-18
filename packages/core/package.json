@@ -1,14 +1,14 @@
 {
   "name": "@colliejs/core",
   "version": "1.0.24",
-  "description": "foo",
+  "description": "@colliejs/core",
   "type": "module",
   "scripts": {
     "build": "rollup -c rollup.config.js && pnpm type ",
     "buildOnly": "rollup -c rollup.config.js",
     "clean": "rm -rf dist  ",
     "reset": "pnpm clean && rm -rf node_modules && pnpm install",
-    "type": "cp -rf src/types dist/ && cp -rf src/type.ts dist/index.d.ts",
+    "type": " tsc --project . --paths null --emitDeclarationOnly --declaration  ",
     "watchtype": "tsc --project . --watch"
   },
   "types": "./dist/index.d.ts",

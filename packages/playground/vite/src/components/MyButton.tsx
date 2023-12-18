@@ -17,7 +17,7 @@ const MyButton = styled(Button, {
       round: {
         borderRadius: 92299,
       },
-      dynamic_borderRadius_at: x => {
+      dynamic: x => {
         return {
           borderRadius: x,
         };

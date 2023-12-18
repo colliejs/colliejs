@@ -8,18 +8,19 @@ import { convertStyledObject } from "./styledObject/convertStyledObject";
 import type { DynamicClassNameMap } from "./type";
 
 import { buildObjectExpression } from "../utils/index";
-import {
-  ImportsByName,
-  Stylable,
-  StyledComponentDecl,
-} from "../utils/types";
+import { ImportsByName, Stylable, StyledComponentDecl } from "../utils/types";
 import { parseStyledComponentDeclaration as parseStyledComponentDecl } from "./parseStyledComponent";
 import { NodePath } from "@babel/traverse";
 import { ComponentId } from "../component/componentId";
 import { findLayerDeps } from "./findDeps";
 import { isStyledComponentDecl } from "./isStyledCompDelc";
 import { StyledObjectParsed, StyledObject } from "./styledObject/types";
-import { VariantsType } from "./styledObject/variants";
+import {
+  CompoundVariantKeyPrefix,
+  DynamicVariantKeyPrefix,
+  StaticVariantKeyPrefix,
+  VariantsType,
+} from "./styledObject/variants";
 import { Alias } from "../type";
 
 export class StyledComponent<Config extends BaseConfig>
@@ -66,12 +67,15 @@ export class StyledComponent<Config extends BaseConfig>
     //NOTE: should make sure the order
     const keys = Object.keys(this.stylingParsed);
     for (const key of keys) {
-      if (key.startsWith("variants-")) {
+      if (
+        key.startsWith(StaticVariantKeyPrefix) ||
+        key.startsWith(DynamicVariantKeyPrefix)
+      ) {
         cssText += this.stylingParsed[key].cssGenText + "\n";
       }
     }
     for (const key of keys) {
-      if (key.startsWith("compoundVariants-")) {
+      if (key.startsWith(CompoundVariantKeyPrefix)) {
         cssText += this.stylingParsed[key].cssGenText + "\n";
       }
     }
@@ -112,7 +116,7 @@ export class StyledComponent<Config extends BaseConfig>
    *    button,
    *    __classNameOfBaseStyle，
    *    __classNameOfStaticVariant:string[],
-   *    __classNameOfDynamicVariant:Record<string, {canWithoutPx:boolean}>,
+   *    __classNameOfDynamicVariant:Record<string, {canAddPx:boolean}>,
    *    __classNameOfCompoundVariants:string[]，
    *    option
    * )
@@ -135,7 +139,7 @@ export class StyledComponent<Config extends BaseConfig>
       if (key.startsWith("dynamic-variants")) {
         const item = this.stylingParsed[key as VariantsType["dynamicKey"]];
         classNameMapOfDynamicVariant[item.className] = {
-          canWithoutPx: item.canWithoutPx,
+          canAddPx: item.canAddPx,
         };
       }
       //===========================================================
@@ -162,7 +166,9 @@ export class StyledComponent<Config extends BaseConfig>
     args.splice(1, 1); //remove styling
     args.splice(1, 0, t.stringLiteral(classNameOfBaseStyle)); //add classNameOfBaseStyle
     args.splice(2, 0, buildObjectExpression(classNamesOfStaticVariant)); //add classNameOfStaticVariant
-    args.splice(3, 0, buildObjectExpression(classNamesOfCompoundVariants)); //add classNamesOfCompoundVariants
+    console.log(classNameMapOfDynamicVariant);
+    args.splice(3, 0, buildObjectExpression(classNameMapOfDynamicVariant)); //add classNameMapOfDynamicVariant
+    args.splice(4, 0, buildObjectExpression(classNamesOfCompoundVariants)); //add classNamesOfCompoundVariants
 
     //5. return
     return { cssText: this.getCssText(), path: this.path };

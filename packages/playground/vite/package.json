@@ -32,8 +32,9 @@
   },
   "dependencies": {
     "@colliejs/core": "workspace:^",
-    "@colliejs/react": "workspace:^1.0.66",
-    "@colliejs/vite": "workspace:^1.0.78",
+    "@colliejs/react": "workspace:^",
+    "@colliejs/transform": "workspace:^",
+    "@colliejs/vite": "workspace:^",
     "@rollup/plugin-commonjs": "^24.1.0",
     "@rollup/plugin-node-resolve": "^15.1.0",
     "@vitejs/plugin-react": "^2.2.0",

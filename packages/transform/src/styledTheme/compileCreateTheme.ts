@@ -8,8 +8,12 @@ export const compileCreateTheme = (
   imports: ImportsByName,
   prefix: string
 ) => {
+  if (!path.isCallExpression()) {
+    return;
+  }
   const objExpPath = path.get("arguments")?.[0];
   if (!t.isObjectExpression(objExpPath.node)) {
+    console.log('===>',objExpPath.node);
     throw new Error("createTheme's first argument should be an object");
   }
   const themeObject = evalObjectExp(

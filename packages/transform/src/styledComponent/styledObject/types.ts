@@ -13,7 +13,7 @@ export type StyledObjectParsed<Config extends BaseConfig> = {
   [k in VariantsType["staticKey"]]: CSSInfo<Config>;
 } & {
   [k in VariantsType["dynamicKey"]]: CSSInfo<Config> & {
-    canWithoutPx: boolean;
+    canAddPx: boolean;
   };
 } & {
   [k in VariantsType["compoundKey"]]: CSSInfo<Config>;

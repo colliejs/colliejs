@@ -21,11 +21,14 @@ export type VariantsType = {
 export type BreakpointName = `at${string}`;
 
 //一个variants下只有一个dynamic函数
-export type ReadOnlyCSSVariable = `--variants-${VariantName}-${BreakpointName}`;
-export type ReadOnlyCSSVariableValue = `var(${ReadOnlyCSSVariable})`;
+export type ReadOnlyCSSVariableBp =
+  `--variants-${VariantName}-${BreakpointName}`;
+export type ReadOnlyCSSVariable = `--variants-${VariantName}`;
 
+export type ReadOnlyCSSVariableValue = `var(${ReadOnlyCSSVariable})`;
+export type ReadOnlyCSSVariableValueBP = `var(${ReadOnlyCSSVariableBp})`;
 //函数名的结构
 export type DynamicVariantFnName = `dynamic`;
 export type DynamicVariantFn<Config extends BaseConfig> = (
-  cssVariableValue: ReadOnlyCSSVariableValue[]
+  cssVariableValue: ReadOnlyCSSVariableValue | ReadOnlyCSSVariableValueBP[]
 ) => CSSObject<Config>;

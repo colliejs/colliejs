@@ -3,11 +3,9 @@ import * as t from "@babel/types";
 import log from "npmlog";
 import {
   delAttr,
-  getJSXElementName,
   getAttr,
-  isPropExisted,
-  getValExpOfAttr,
-} from "../utils/index";
+  getValExpOfAttr,isPropExisted
+} from "./prop";
 import { evalValueOfProp } from "./evalValueOfProp";
 
 import { ImportsByName, Stylable } from "../utils/types";

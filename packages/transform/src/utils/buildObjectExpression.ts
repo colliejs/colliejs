@@ -3,7 +3,7 @@ import _ from "lodash";
 import log from "npmlog";
 
 /**
- * 支持数组
+ * 支持数组和对象
  * @param obj {a:2,}
  * @param replacer
  * @returns
@@ -38,6 +38,9 @@ export const buildObjectExpression = (
         case "number":
           value = t.numericLiteral(val);
           break;
+        case "boolean":
+          value = t.booleanLiteral(val);
+          break;
         case "object": {
           if (val === null) {
             continue;
@@ -49,7 +52,7 @@ export const buildObjectExpression = (
           continue;
         default:
           log.error("val=", typeof val);
-          throw new Error("not support type");
+          throw new Error(`not support type ${typeof val}`);
       }
     }
     if (t.isArrayExpression(exp)) {

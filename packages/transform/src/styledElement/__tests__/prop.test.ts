@@ -1,10 +1,7 @@
 import traverse from "@babel/traverse";
-import {
-  getAttr,
-  getImports,
-  isPropExisted,
-  parseCodeAndGetBodyN,
-} from "../../utils";
+import { getAttr, isPropExisted, parseCodeAndGetBodyN } from "../prop";
+
+import { getImports } from "../../utils";
 import { parseCode } from "../../parse";
 import { evalValueOfProp } from "../evalValueOfProp";
 import * as t from "@babel/types";

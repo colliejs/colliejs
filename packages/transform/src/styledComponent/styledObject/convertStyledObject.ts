@@ -2,14 +2,20 @@ import { type BaseConfig, css, CSSObject } from "@colliejs/core";
 import _ from "lodash";
 import { StyledObject, StyledObjectParsed, VariantDeclBlock } from "./types";
 import {
+  CompoundVariantKeyPrefix,
   DynamicVariantFn,
+  ReadOnlyCSSVariableValue,
+  ReadOnlyCSSVariableValueBP,
   VariantsType,
   getCSSVariableValue,
+  getVariantClassName,
+  getVariantClassNameFromCandidates,
   getVariantKey,
 } from "./variants";
 import { toHash } from "@c3/utils";
-const toHashObject = (obj: any) => toHash(JSON.stringify(obj));
+import {canAddPx} from './canAddPx'
 
+const toHashObject = (obj: any) => toHash(JSON.stringify(obj));
 export type Props = { [k: string]: any };
 
 export const getBaseStyleSelector = (prefix: string, hash: string) => {
@@ -32,31 +38,51 @@ export const convertStyledObject = <Config extends BaseConfig>(
   for (const variantName in variants) {
     const variantDeclBlock: VariantDeclBlock<Config> = variants[variantName];
     for (const variantValue in variantDeclBlock) {
-      let cssObj = {} as CSSObject<Config>;
+      // let cssObj = {} as CSSObject<Config>;
       let cssObjOrDynamicFn = variantDeclBlock[variantValue];
       const isDynamicVariantFn = typeof cssObjOrDynamicFn === "function";
       if (isDynamicVariantFn) {
-        const variantKey = getVariantKey(variantName, variantValue, true);
-        cssObj = (cssObjOrDynamicFn as DynamicVariantFn<Config>)(
-          config.breakpoints?.map((e: number) =>
-            getCSSVariableValue(variantName, e)
-          )
+        const variantKey = getVariantKey(variantName, "dynamic", true);
+        const cssVariable:
+          | ReadOnlyCSSVariableValue
+          | ReadOnlyCSSVariableValueBP[] =
+          config.breakpoints?.length > 0
+            ? config.breakpoints.map(
+                (e: number) =>
+                  getCSSVariableValue(
+                    variantName,
+                    e
+                  ) as ReadOnlyCSSVariableValueBP
+              )
+            : getCSSVariableValue(variantName);
+        const cssObj = (cssObjOrDynamicFn as DynamicVariantFn<Config>)(
+          cssVariable
         );
-        const className = `${variantKey}-${toHashObject(cssObj)}`;
+        const className = getVariantClassName(
+          variantName,
+          "dynamic",
+          toHashObject(cssObj),
+          true
+        );
         res[variantKey] = {
           cssGenText: css(cssObj, [`.${className}`], [], config),
           cssRawObj: cssObj,
           className: className,
-          canWithoutPx: true,
+          canAddPx: canAddPx(cssObj, config),
         };
       } else {
         const variantKey = getVariantKey(
           variantName,
-          "dynamic",
+          variantValue,
           false
         ) as VariantsType["staticKey"];
-        cssObj = cssObjOrDynamicFn as CSSObject<Config>;
-        const className = `${variantKey}-${toHashObject(cssObj)}`;
+        const cssObj = cssObjOrDynamicFn as CSSObject<Config>;
+        const className = getVariantClassName(
+          variantName,
+          variantValue,
+          toHashObject(cssObj),
+          false
+        );
         res[variantKey] = {
           cssGenText: css(cssObj, [`.${className}`], [], config),
           cssRawObj: cssObj,
@@ -72,11 +98,11 @@ export const convertStyledObject = <Config extends BaseConfig>(
   for (const cv of compoundVariants) {
     const cssObj = cv.css;
     //@ts-ignore
-    const name = Object.entries(cv)
+    const compoundName = Object.entries(cv)
       .filter(([k, v]) => k !== "css")
       .map(([k, v]) => `${k}-${v}`)
       .join("-");
-    const variantsKey = `compoundVariants-${name}`;
+    const variantsKey = `${CompoundVariantKeyPrefix}-${compoundName}`;
     const className = `${variantsKey}-${toHashObject(cssObj)}`;
     res[variantsKey] = {
       cssGenText: css(cssObj, [`.${className}`], [], config),
