@@ -25,7 +25,9 @@ export type VariantDeclBlock<Config extends BaseConfig> = Record<
 >;
 
 export type StyledObject<Config extends BaseConfig> = CSSObject<Config> & {
-  variants?: Record<VariantName, VariantDeclBlock<Config>>;
+  //FIXME:这里的variants类型太卡了
+  // variants?: Record<VariantName, VariantDeclBlock<Config>>;
+  variants?: {};
   compoundVariants: ({
     [Name in keyof StyledObject<Config>["variants"]]?: StyledObject<Config>["variants"][Name];
   } & {

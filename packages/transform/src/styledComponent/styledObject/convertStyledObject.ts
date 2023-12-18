@@ -3,8 +3,8 @@ import _ from "lodash";
 import { StyledObject, StyledObjectParsed, VariantDeclBlock } from "./types";
 import {
   DynamicVariantFn,
+  VariantsType,
   getCSSVariableValue,
-  getCSSVariableValueByMedia,
   getVariantKey,
 } from "./variants";
 import { toHash } from "@c3/utils";
@@ -37,8 +37,10 @@ export const convertStyledObject = <Config extends BaseConfig>(
       const isDynamicVariantFn = typeof cssObjOrDynamicFn === "function";
       if (isDynamicVariantFn) {
         const variantKey = getVariantKey(variantName, variantValue, true);
-        cssObj = cssObjOrDynamicFn(
-          getCSSVariableValueByMedia(variantName, config)
+        cssObj = (cssObjOrDynamicFn as DynamicVariantFn<Config>)(
+          config.breakpoints?.map((e: number) =>
+            getCSSVariableValue(variantName, e)
+          )
         );
         const className = `${variantKey}-${toHashObject(cssObj)}`;
         res[variantKey] = {
@@ -48,7 +50,11 @@ export const convertStyledObject = <Config extends BaseConfig>(
           canWithoutPx: true,
         };
       } else {
-        const variantKey = getVariantKey(variantName, "dynamic", true);
+        const variantKey = getVariantKey(
+          variantName,
+          "dynamic",
+          false
+        ) as VariantsType["staticKey"];
         cssObj = cssObjOrDynamicFn as CSSObject<Config>;
         const className = `${variantKey}-${toHashObject(cssObj)}`;
         res[variantKey] = {

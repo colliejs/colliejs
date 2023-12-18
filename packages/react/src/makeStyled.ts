@@ -1,11 +1,18 @@
-import {
-  BaseConfig,
- 
-} from "@colliejs/core";
+import { BaseConfig } from "@colliejs/core";
 import _ from "lodash";
 import React, { ElementType, ForwardRefRenderFunction } from "react";
 import { MakeStyled } from "./types";
-import { getCSSValue, isObject, isString, toArray } from "./utils";
+import {
+  getCSSValue,
+  isObject,
+  isString,
+  toArray,
+} from "./utils";
+import {
+  getCSSVariable,
+  getVariantClassNameFromCandidates,
+  type VariantsType,
+} from "@colliejs/transform";
 
 export type StyledOption<
   P extends BaseStyledComponentProps,
@@ -25,57 +32,49 @@ export type BaseStyledComponentProps = {
   ref?: any;
 };
 
+export const makeStyled = <Config extends BaseConfig>(config: Config) => {
   /**
    * runtime版本的styled（编译器生成的版本）
    *
    * @param component
    * @param __generatedClassNameOfBaseStyle：编译时生成的参数
-   * @param __generatedClassNameByStaticVariants:编译时生成的参数
-   * @param __generatedClassNameByCompoundVariantsMap:编译时生成的参数
+   * @param __generatedStaticClassNames:编译时生成的参数
+   * @param __generatedCompoundVariantClassNames:编译时生成的参数
    * @returns
    * @example
    *   const Button = styled('button',
    *    "baseStyle-Button-elTJue",
-   *    {
-   *       "variants-static-shape-round": "variants-static-shape-round-hECRKn",
-   *       "variants-static-shape-rect": "variants-static-shape-rect-iydAuT"
-   *       "variants-dynamic-shape-at": "variants-dynamic-shape-dlbLfd"
-   *     },
+   *       ["variants-shape-round-hECRKn",""variants-shape-rect-iydAuT""]
    *     {
-   *
-   *     }
+   *       "variants-shape-dynamic": {canWithoutPx:true}
    *     );
    *
    *
    *
    * @todo: 使用forwardRef
    */
-export const styled=<
-P1 extends BaseStyledComponentProps & P2,
-P2,
-As extends keyof JSX.IntrinsicElements,
-T = any
->(
+  return function styled<
+    P1 extends BaseStyledComponentProps & P2,
+    P2,
+    As extends keyof JSX.IntrinsicElements,
+    T = any
+  >(
     component: ElementType<P2>,
-    __generatedClassNameOfBaseStyle = "",
-    __generatedClassNameByStaticVariants:Static[] = [],
-    __generatedClassNameByDynamicVariants: Record<
-    ClassNameLiteral:{canWithoutPx:boolean}
-      
+    __generatedBaseStyleClassName = "",
+    __generatedStaticClassNames: VariantsType["staticClassName"][] = [],
+    __generatedDynamicClassNameMap: Record<
+      VariantsType["dynamicClassName"],
+      { canWithoutPx: boolean }
     > = {},
-    __generatedClassNameByCompoundVariantsMap: Record<
-      `compoundVariants-${string}`,
-      ClassNameLiteral
-    > = {},
-
+    __generatedCompoundVariantClassNames: VariantsType["compoundClassName"][] = [],
     option: StyledOption<P1, As> = {}
   ) {
     const render: ForwardRefRenderFunction<T, P1> = (props, ref) => {
       const { className, style = {}, as, ...restProps } = props;
 
       //查找variant对应的className
-      let outputClassNames: ClassNameLiteral[] = [
-        __generatedClassNameOfBaseStyle,
+      let outputClassNames: string[] = [
+        __generatedBaseStyleClassName,
         className || "",
       ];
       //===========================================================
@@ -83,72 +82,51 @@ T = any
       //===========================================================
       const restPropsWithoutVariant = { ...restProps };
       const propsWithStaticVariant = {} as Record<string, any>;
-      const variantsKeys = Object.keys(__generatedClassNameByStaticVariants);
+      const dynamicVariantsClasses = Object.keys(
+        __generatedDynamicClassNameMap
+      );
       for (const [prop, valOfProp] of Object.entries(restProps)) {
-        const isStaticVariantExistedForProp = variantsKeys.some(e =>
-          e.startsWith(`variants-static-${prop}-`)
+        const staticVariantClassName = getVariantClassNameFromCandidates(
+          prop,
+          valOfProp,
+          __generatedStaticClassNames
         );
-        const isDynamicVariantExistedForProp = variantsKeys.some(e =>
-          e.startsWith(`variants-dynamic-${prop}`)
-        );
-        if (!isStaticVariantExistedForProp && !isDynamicVariantExistedForProp) {
+        const isStaticVariant = !!staticVariantClassName;
+        const isDynamicVariant =
+          !isStaticVariant &&
+          dynamicVariantsClasses.some(e =>
+            e.startsWith(`variants-${prop}-dynamic`)
+          );
+        if (!isStaticVariant && !isDynamicVariant) {
           continue;
         }
-        isStaticVariantExistedForProp &&
-          (propsWithStaticVariant[prop] = valOfProp);
+        isStaticVariant && (propsWithStaticVariant[prop] = valOfProp);
         // @ts-ignore
         restPropsWithoutVariant[prop] = undefined;
-        //编译时variants
-
-        //字符串或者boolean
-        const staticVariantKey = getStaticVariantKey(prop, valOfProp);
-        const isStaticVariantKey =
-          staticVariantKey in __generatedClassNameByStaticVariants;
-
-        if (isStaticVariantKey && isObject(valOfProp)) {
+        if (isStaticVariant && isObject(valOfProp)) {
           throw new Error(
             "variant value must be string or number.because  it is used as css variable value. "
           );
         }
 
-        if (isStaticVariantKey) {
+        if (isStaticVariant) {
           //静态variant
-          outputClassNames.push(
-            __generatedClassNameByStaticVariants[staticVariantKey]
-          );
+          outputClassNames.push(staticVariantClassName);
         } else {
           //dynamic variant
-          const dynamicVariantKey = variantsKeys.find(e =>
-            e.startsWith(`variants-dynamic-${prop}`)
-          );
-          if (!dynamicVariantKey) {
-            console.error(
-              `dynamicVariantKey not found for prop:${prop},valOfProp:${valOfProp}.maybe it is not dynamic`
+          const className = getVariantClassNameFromCandidates(
+            prop,
+            valOfProp,
+            Object.keys(__generatedDynamicClassNameMap)
+          ) as VariantsType["dynamicClassName"];
+          outputClassNames.push(className);
+          const newValOfProp = toArray(valOfProp);
+          config.breakpoints?.forEach((e, idx) => {
+            style[getCSSVariable(prop, e)] = getCSSValue(
+              newValOfProp[idx] ?? newValOfProp[newValOfProp.length - 1],
+              __generatedDynamicClassNameMap[className].canWithoutPx
             );
-            continue;
-          }
-
-          outputClassNames.push(
-            __generatedClassNameByStaticVariants[
-              dynamicVariantKey as DynamicVariantKey
-            ]
-          );
-
-          // const cssPropKey
-          const match = dynamicVariantKey.match(
-            /variants-dynamic-(.*?)-(?<cssPropKey>.*)?/
-          );
-
-          //cssPropKey是可能不存在的
-
-            let newValOfProp = valOfProp ;
-            if(!isObject(valOfProp)){
-              newValOfProp = {'@all':valOfProp}
-            }
-            for ([mediaName,value] of Object.entries(newValOfProp)){
-              style[getCSSVariable(prop, mediaName)] = value;//TODO:检查是否支持pxProps
-              
-
+          });
         }
       }
       //===========================================================
@@ -163,9 +141,9 @@ T = any
             return `${acc}-${cur}`;
           }
         }, "compoundVariants-");
-      if (compoundVariantKey in __generatedClassNameByCompoundVariantsMap) {
+      if (compoundVariantKey in __generatedCompoundVariantClassNames) {
         outputClassNames.push(
-          __generatedClassNameByCompoundVariantsMap[compoundVariantKey as any]
+          __generatedCompoundVariantClassNames[compoundVariantKey as any]
         );
       }
 

@@ -1,3 +1,3 @@
-export { makeStyled } from "./styled";
+export { makeStyled } from "./makeStyled";
 export { defaultConfig } from "@colliejs/core";
 export type * from "./types";

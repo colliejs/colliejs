@@ -1,19 +1,9 @@
 import React, { PropsWithoutRef, RefAttributes } from "react";
 
-import type {
-  Assign,
-  BaseConfig,
-  Widen,
-  CSSObject,
-  DynamicFn,
-} from "@colliejs/core";
-import {
-  DynamicVariantFnName,
-  ReadOnlyDynamicVariantVariableValue,
-} from "@colliejs/core";
+import type { Assign, BaseConfig, Widen, CSSObject } from "@colliejs/core";
+import { DynamicVariantFnName, DynamicVariantFn } from "@colliejs/transform";
 // export type IntrinsicElementsKeys = keyof JSX.IntrinsicElements | (string & {});
 export type IntrinsicElementsKeys = keyof JSX.IntrinsicElements;
-export type HTMLTags = keyof HTMLElementTagNameMap;
 type IsHostComponent<T> = T extends IntrinsicElementsKeys ? true : false;
 
 export type Debug<T> = { [K in keyof T]: T[K] };
@@ -31,7 +21,7 @@ export type StyledObject<Cfg extends BaseConfig> = CSSObject<Cfg> & {
   variants?: {
     [key in string]: {
       [V in DynamicVariantFnName | (string & {})]?:
-        | DynamicFn<key, Cfg>
+        | DynamicVariantFn<Cfg>
         | CSSObject<Cfg>;
     };
   };
@@ -83,13 +73,13 @@ type ComposeVariant<
     };
 
 export type MyStyledComponentWithoutAs<
-  C extends BaseConfig,
+  Config extends BaseConfig,
   Type extends IntrinsicElementsKeys | React.ComponentType<any>,
-  Styling extends StyledObject<C>
+  Styling extends StyledObject<Config>
 > = React.ForwardRefExoticComponent<
   Type extends IntrinsicElementsKeys
     ? JSX.IntrinsicElements[Type] & {
-        css?: CSSObject<C>;
+        css?: CSSObject<Config>;
         as?: IntrinsicElementsKeys;
       } & ExtractPropsFromStyling<Styling> &
         RefAttributes<Type>
@@ -98,7 +88,7 @@ export type MyStyledComponentWithoutAs<
           React.ComponentPropsWithRef<Type>,
           keyof ExtractPropsFromStyling<Styling>
         >,
-        ComposeVariant<C, Type, Styling>
+        ComposeVariant<Config, Type, Styling>
       >
 >;
 type AttrOfAs<T> = T extends IntrinsicElementsKeys
@@ -125,14 +115,14 @@ export type MyStyledComponentWithAs<
     RefAttributes<
       As extends undefined
         ? Type extends IntrinsicElementsKeys
-          ? Type extends HTMLTags
-            ? HTMLElementTagNameMap[Type]
-            : HTMLElementTagNameMap["div"]
+          ? Type extends IntrinsicElementsKeys
+            ? Type
+            : "div"
           : React.ComponentProps<Type>["ref"]["current"]
         : As extends IntrinsicElementsKeys
-        ? As extends HTMLTags
-          ? HTMLElementTagNameMap[As]
-          : HTMLElementTagNameMap["div"]
+        ? As extends IntrinsicElementsKeys
+          ? As
+          : "div"
         : never
     >
 >;
@@ -147,7 +137,6 @@ export type MyStyledComponent<
   // ? MyStyledComponentWithoutAs<C, Type, Styling>
   MyStyledComponentWithAs<C, Type, Styling, As>;
 
-  
 //===========================================================
 // MakeStyled
 //===========================================================

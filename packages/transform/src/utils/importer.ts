@@ -5,10 +5,11 @@ import path from "path";
 import fs, { existsSync } from "node:fs";
 import resolve from "resolve";
 import log from "npmlog";
-import { Alias, ImportsByName } from "./types";
+import { ImportsByName } from "./types";
 import { createRequire } from "module";
 import { assert } from "@c3/utils";
 import { PathLike } from "fs";
+import { Alias } from "../type";
 //@ts-ignore
 if (!global.__JEST__) {
   global.require = global.require || createRequire(import.meta.url);

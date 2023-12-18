@@ -24,14 +24,8 @@ export type BreakpointName = `at${string}`;
 export type ReadOnlyCSSVariable = `--variants-${VariantName}-${BreakpointName}`;
 export type ReadOnlyCSSVariableValue = `var(${ReadOnlyCSSVariable})`;
 
-export type ReadOnlyCssValueByMedia<Media extends `@${string | number}`> = {
-  [k in Media]: ReadOnlyCSSVariableValue;
-};
-
 //函数名的结构
 export type DynamicVariantFnName = `dynamic`;
 export type DynamicVariantFn<Config extends BaseConfig> = (
-  cssVariableValue: ReadOnlyCssValueByMedia<
-    Prefixed<"@", keyof Config["media"]>
-  >
+  cssVariableValue: ReadOnlyCSSVariableValue[]
 ) => CSSObject<Config>;

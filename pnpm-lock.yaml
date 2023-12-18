@@ -368,9 +368,6 @@ importers:
 
   packages/react:
     dependencies:
-      '@c3/css':
-        specifier: ^2.0.1
-        version: 2.0.1
       '@colliejs/core':
         specifier: workspace:^
         version: link:../core

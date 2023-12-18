@@ -9,7 +9,6 @@ import type { DynamicClassNameMap } from "./type";
 
 import { buildObjectExpression } from "../utils/index";
 import {
-  Alias,
   ImportsByName,
   Stylable,
   StyledComponentDecl,
@@ -20,6 +19,8 @@ import { ComponentId } from "../component/componentId";
 import { findLayerDeps } from "./findDeps";
 import { isStyledComponentDecl } from "./isStyledCompDelc";
 import { StyledObjectParsed, StyledObject } from "./styledObject/types";
+import { VariantsType } from "./styledObject/variants";
+import { Alias } from "../type";
 
 export class StyledComponent<Config extends BaseConfig>
   extends CustomComponent
@@ -117,22 +118,23 @@ export class StyledComponent<Config extends BaseConfig>
    * )
    */
   transform() {
-    const classNameOfStaticVariant: string[] = [];
-    const classNameOfDynamicVariant: DynamicClassNameMap = {};
-    const classNamesOfCompoundVariants: Record<string, string> = {};
+    const classNamesOfStaticVariant: VariantsType["staticClassName"][] = [];
+    const classNameMapOfDynamicVariant: DynamicClassNameMap = {};
+    const classNamesOfCompoundVariants: VariantsType["compoundClassName"][] =
+      [];
     for (const key of Object.keys(this.stylingParsed)) {
       //===========================================================
       // 1.1.static variants
       //===========================================================
       if (key.startsWith("static-variants")) {
-        classNameOfStaticVariant.push(this.stylingParsed[key].className);
+        classNamesOfStaticVariant.push(this.stylingParsed[key].className);
       }
       //===========================================================
       // 1.2.dynamic variants
       //===========================================================
       if (key.startsWith("dynamic-variants")) {
-        const item = this.stylingParsed[key];
-        classNameOfDynamicVariant[item.className] = {
+        const item = this.stylingParsed[key as VariantsType["dynamicKey"]];
+        classNameMapOfDynamicVariant[item.className] = {
           canWithoutPx: item.canWithoutPx,
         };
       }
@@ -140,7 +142,7 @@ export class StyledComponent<Config extends BaseConfig>
       // 2.compoundVariants
       //===========================================================
       if (key.startsWith("compoundVariants")) {
-        classNamesOfCompoundVariants[key] = this.stylingParsed[key].className;
+        classNamesOfCompoundVariants.push(this.stylingParsed[key].className);
       }
     }
 
@@ -159,7 +161,7 @@ export class StyledComponent<Config extends BaseConfig>
       .arguments;
     args.splice(1, 1); //remove styling
     args.splice(1, 0, t.stringLiteral(classNameOfBaseStyle)); //add classNameOfBaseStyle
-    args.splice(2, 0, buildObjectExpression(classNameOfStaticVariant)); //add classNameOfStaticVariant
+    args.splice(2, 0, buildObjectExpression(classNamesOfStaticVariant)); //add classNameOfStaticVariant
     args.splice(3, 0, buildObjectExpression(classNamesOfCompoundVariants)); //add classNamesOfCompoundVariants
 
     //5. return

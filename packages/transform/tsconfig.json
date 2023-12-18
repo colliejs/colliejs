@@ -3,9 +3,6 @@
   "compilerOptions": {
     "outDir": "dist",
     "strict": false,
-    "extendedDiagnostics": true,    
-    "diagnostics": true
   },
   "include": ["src/index.ts"],
-  "exclude": ["node_modules", "dist", "src/**/*.spec.ts", "src/**/*.test.ts"]
 }

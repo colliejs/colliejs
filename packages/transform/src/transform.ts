@@ -5,6 +5,8 @@ import { StyledElement } from "./styledElement";
 import { generate, getImports, isStyledElement, traverse } from "./utils";
 import { removeTypeAnnotation } from "./utils/removeType";
 import { isStyledComponentDecl } from "./styledComponent/isStyledCompDelc";
+import { isCallCreateTheme } from "./styledTheme/isCallCreateTheme";
+import { compileCreateTheme } from "./styledTheme/compileCreateTheme";
 
 export const styledElementProp = "css";
 /**
@@ -20,6 +22,7 @@ export const transform = <Config extends BaseConfig>(
   const fileAst = parseCode(source);
   let styledComponentCssTexts = "";
   let styledElementCssTexts = "";
+  let styledThemeCssTexts = "";
   let modulesByName = {};
 
   traverse(fileAst, {
@@ -68,6 +71,23 @@ export const transform = <Config extends BaseConfig>(
       const { cssText } = styledElement.transform();
       styledElementCssTexts += cssText + "\n";
     },
+
+    ///===========================================================
+    // 3. transform styled Theme
+    //===========================================================
+    CallExpression(path) {
+      if (!isCallCreateTheme(path)) {
+        return;
+      }
+      if (Object.keys(modulesByName).length === 0) {
+        modulesByName = getImports(fileAst.program, curFile, alias, root);
+      }
+      styledThemeCssTexts = compileCreateTheme(
+        path,
+        modulesByName,
+        config.prefix
+      ).cssGenText;
+    },
   });
 
   //===========================================================
@@ -79,5 +99,6 @@ export const transform = <Config extends BaseConfig>(
     code,
     styledElementCssTexts,
     styledComponentCssTexts,
+    styledThemeCssTexts,
   };
 };
