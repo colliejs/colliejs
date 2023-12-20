@@ -1,5 +1,6 @@
 import { css } from "./../css";
-import { BaseConfig, CSSObject, defaultConfig } from "../";
+import { BaseConfig, CSSObject } from "../type";
+import { config } from "./stub/config";
 
 describe("test cases", () => {
   it("should work ", () => {
@@ -7,7 +8,7 @@ describe("test cases", () => {
       width: [10, 20],
       h: [20, "var(--xs-height)"],
     } as unknown as CSSObject<BaseConfig>;
-    const res = css(cssRawObj, [".button"], undefined, defaultConfig);
+    const res = css(cssRawObj, [".button"], undefined, config);
     expect(res).toMatchInlineSnapshot(`
       "@media (min-width:320px){.button{width:10px;height:20px}}
       @media (min-width:768px){.button{width:20px;height:var(--xs-height)}}"
@@ -21,7 +22,7 @@ describe("test cases", () => {
         "@media (support:xxx)": { width: [10, 20] },
       },
     } as unknown as CSSObject<BaseConfig>;
-    const res = css(cssRawObj, [".button"], [], defaultConfig);
+    const res = css(cssRawObj, [".button"], [], config);
     expect(res).toMatchInlineSnapshot(`
       "@media (min-width:320px){.button{width:10px}}
       @media (min-width:768px){.button{width:20px}}
@@ -36,7 +37,7 @@ describe("test cases", () => {
       color: "$primary",
       w: 100,
     } as unknown as CSSObject<BaseConfig>;
-    const res = css(cssRawObj, [".button"], [], defaultConfig);
+    const res = css(cssRawObj, [".button"], [], config);
     expect(res).toMatchInlineSnapshot(
       `".button{color:var(--co-colors-primary);width:100px}"`
     );

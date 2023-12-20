@@ -48,22 +48,22 @@ describe("styledHostComponent", () => {
     expect(c.stylingParsed).toMatchInlineSnapshot(`
       {
         "baseStyle": {
-          "className": "baseStyle-Button-elTJue",
-          "cssGenText": ".baseStyle-Button-elTJue{background:red}",
+          "className": "baseStyle-Button-16n2od3",
+          "cssGenText": ".baseStyle-Button-16n2od3{background:red}",
           "cssRawObj": {
             "background": "red",
           },
         },
-        "variants-static-shape-rect": {
-          "className": "variants-static-shape-rect-iydAuT",
-          "cssGenText": ".variants-static-shape-rect-iydAuT{border-radius:0}",
+        "static-variants-shape-rect": {
+          "className": "variants-shape-rect-4trf62",
+          "cssGenText": ".variants-shape-rect-4trf62{border-radius:0}",
           "cssRawObj": {
             "borderRadius": 0,
           },
         },
-        "variants-static-shape-round": {
-          "className": "variants-static-shape-round-hECRKn",
-          "cssGenText": ".variants-static-shape-round-hECRKn{border-radius:50%}",
+        "static-variants-shape-round": {
+          "className": "variants-shape-round-jhqrc0",
+          "cssGenText": ".variants-shape-round-jhqrc0{border-radius:50%}",
           "cssRawObj": {
             "borderRadius": "50%",
           },
@@ -72,8 +72,8 @@ describe("styledHostComponent", () => {
     `);
 
     expect(c.getCssText()).toMatchInlineSnapshot(`
-      "@layer app.styledComponentTestTs-Button-1f9ulld {.baseStyle-Button-elTJue{background:red}.variants-static-shape-round-hECRKn{border-radius:50%}
-      .variants-static-shape-rect-iydAuT{border-radius:0}
+      "@layer app.styledComponentTestTs-Button-1f9ulld {.baseStyle-Button-16n2od3{background:red}.variants-shape-round-jhqrc0{border-radius:50%}
+      .variants-shape-rect-4trf62{border-radius:0}
       }
       "
     `);
@@ -82,12 +82,9 @@ describe("styledHostComponent", () => {
      * transform
      */
     const { path } = c.transform();
-    expect(generate(path.node).code).toMatchInlineSnapshot(`
-      "const Button = styled('button', "baseStyle-Button-elTJue", {
-        "variants-static-shape-round": "variants-static-shape-round-hECRKn",
-        "variants-static-shape-rect": "variants-static-shape-rect-iydAuT"
-      }, {});"
-    `);
+    expect(generate(path.node).code).toMatchInlineSnapshot(
+      `"const Button = styled('button', "baseStyle-Button-16n2od3", ["variants-shape-round-jhqrc0", "variants-shape-rect-4trf62"], {}, []);"`
+    );
   });
 });
 //===========================================================================
@@ -115,7 +112,7 @@ describe("3rdComponent", () => {
       "
             @layer , app.styledComponentTestTs-MyButton-1ah2k0t;
             @layer app.styledComponentTestTs-MyButton-1ah2k0t {
-              .baseStyle-MyButton-CRGDB{background:red;position:absolute;left:100px;right:;top:20px;bottom:}
+              .baseStyle-MyButton-15ag2ji{background:red;position:absolute;left:100px;right:;top:20px;bottom:}
             }
       "
     `);
@@ -142,8 +139,8 @@ describe("dynamic variable transform", () => {
       const Button = styled('button', {
           variants:{
               shape:{
-                dynamic:function(){
-                  return {borderRadius:3};
+                dynamic:function(x){
+                  return {borderRadius:x};
                 }
               }
           }
@@ -155,9 +152,11 @@ describe("dynamic variable transform", () => {
 
     const astTransformed = c.transform();
     expect(generate(astTransformed.path.node).code).toMatchInlineSnapshot(`
-      "const Button = styled('button', "", {
-        "variants-dynamic-shape": "variants-dynamic-shape-kfXiog"
-      }, {});"
+      "const Button = styled('button', "", [], {
+        "variants-shape-dynamic-t61aqk": {
+          "canAddPx": true
+        }
+      }, []);"
     `);
   });
 
@@ -199,13 +198,8 @@ describe("compoundVariants", () => {
     `;
     const c = prepareStyledComponent(code);
     const astTransformed = c.transform();
-    expect(generate(astTransformed.path.node).code).toMatchInlineSnapshot(`
-      "const Button = styled('button', "baseStyle-Button-gmqXFB", {
-        "variants-static-shape-round": "variants-static-shape-round-PJLV",
-        "variants-static-size-big": "variants-static-size-big-PJLV"
-      }, {
-        "compoundVariants-shape-round-size-big": "compoundVariants-shape-round-size-big-elTJue"
-      });"
-    `);
+    expect(generate(astTransformed.path.node).code).toMatchInlineSnapshot(
+      `"const Button = styled('button', "baseStyle-Button-129ntb2", ["variants-shape-round-31e", "variants-size-big-31e"], {}, ["compoundVariants-shape-round-size-big-16n2od3"]);"`
+    );
   });
 });

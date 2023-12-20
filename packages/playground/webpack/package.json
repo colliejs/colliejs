@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "build": " webpack --config webpack.config.mjs",
+    "dev": "webpack serve --config webpack.config.mjs",
     "clean": "rm -rf dist  ",
     "reset": "pnpm clean && rm -rf node_modules && pnpm install",
     "type": "tsc --project . --paths null --emitDeclarationOnly --declaration",

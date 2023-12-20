@@ -18,28 +18,28 @@ describe("test cases", () => {
     });
   });
   it("isRuleLike", () => {
-    const isRuleLike = (
-      camelName: string,
-      data: any,
+    const isValueRuleLike = (
+      key: string,
+      value: any,
       config: any,
       selectors: string[]
     ) =>
-      typeof data === "object" &&
-      data &&
-      data.toString === Object.prototype.toString &&
-      (!config.utils[camelName] || !selectors.length);
+      typeof value === "object" &&
+      value &&
+      value.toString === Object.prototype.toString &&
+      (!config.utils[key] || !selectors.length);
     //属性不是util名，满足条件之一
-    expect(isRuleLike("width", { height: 10 }, defaultConfig, [])).toBe(true);
-    expect(isRuleLike("_after", { height: 10 }, defaultConfig, [])).toBe(true);
-    expect(isRuleLike("width", { height: 10 }, defaultConfig, ["e"])).toBe(
+    expect(isValueRuleLike("width", { height: 10 }, defaultConfig, [])).toBe(true);
+    expect(isValueRuleLike("_after", { height: 10 }, defaultConfig, [])).toBe(true);
+    expect(isValueRuleLike("width", { height: 10 }, defaultConfig, ["e"])).toBe(
       true
     );
-    expect(isRuleLike("width", 100, defaultConfig, ["e"])).not.toBe(true);
+    expect(isValueRuleLike("width", 100, defaultConfig, ["e"])).not.toBe(true);
 
     //如果属性是util名，则不能指定selector
-    expect(isRuleLike("_after", { width: 10 }, defaultConfig, [])).toBe(true);
+    expect(isValueRuleLike("_after", { width: 10 }, defaultConfig, [])).toBe(true);
     expect(
-      isRuleLike("_after", { width: 10 }, defaultConfig, ["selector"])
+      isValueRuleLike("_after", { width: 10 }, defaultConfig, ["selector"])
     ).not.toBe(true);
   });
 

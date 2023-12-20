@@ -1,9 +1,6 @@
-export * from "./component";
-export * from "./depTree";
-export * from "./parse";
-export * from "./styling";
 export * from "./transform";
+export * from "./styledComponent/styledObject/variants/index";
+export type { Alias } from "./type";
 export * from "./utils";
+export * from "./parse";
 export * from "./styledComponent";
-export * from "./styledElement";
-

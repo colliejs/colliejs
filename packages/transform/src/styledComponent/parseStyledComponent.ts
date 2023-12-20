@@ -4,8 +4,7 @@ import _ from "lodash";
 import log from "npmlog";
 import CustomComponent from "../component/CustomComponent";
 import { HostComponent } from "../component/HostComponent";
-import { evalStyling } from "../styling/evalStyling";
-import { type Styling } from "../styling/types";
+import { type StyledObject } from "./styledObject/types";
 import { generate } from "../utils/index";
 import { ImportsByName, StyledComponentDecl } from "../utils/types";
 import { StyledComponent } from "./StyledComponent";
@@ -14,11 +13,12 @@ import { assert } from "@c3/utils";
 import { ComponentId } from "../component/componentId";
 import type { BaseConfig } from "@colliejs/core";
 import { isStyledCallExpression } from "./isStyledCompDelc";
+import {evalObjectExp} from "../utils/eval/evalObjectExp";
 
 export type StyledDataType<Config extends BaseConfig> = {
   styledComponentName: string;
   dependent: CustomComponent | StyledComponent<Config> | HostComponent;
-  styling: Styling<Config>;
+  styling: StyledObject<Config>;
 };
 
 export const getStyledComponentName = (
@@ -104,7 +104,7 @@ export const parseStyledComponentDeclaration = <Config extends BaseConfig>(
   result.dependent = getStyledDependent(path, moduleIdByName, moduleId, config);
 
   //===========================================================
-  // 3.parse styledObject to get styling
+  // 3.parse styledObject to  
   //===========================================================
   let styling = _arguments[1];
   if (t.isTSAsExpression(styling)) {
@@ -113,7 +113,7 @@ export const parseStyledComponentDeclaration = <Config extends BaseConfig>(
   if (t.isObjectExpression(styling)) {
     const stylingPath = getPathOfStyling(path);
     assert(!!stylingPath, "stylingPath should not be null", { styling, path });
-    result.styling = evalStyling(stylingPath, moduleIdByName);
+    result.styling = evalObjectExp(stylingPath, moduleIdByName);
   } else {
     log.error("error:", "not support type", styling);
     throw new Error("not support variable as styledObject.in todo list");

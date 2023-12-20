@@ -1,4 +1,4 @@
-import { BaseConfig, createTheme, defaultConfig, toHash } from "@colliejs/core";
+import { BaseConfig, createTheme, defaultConfig } from "@colliejs/core";
 import { Alias, transform } from "@colliejs/transform";
 import { FilterPattern, createFilter } from "@rollup/pluginutils";
 import log from "npmlog";
@@ -36,7 +36,7 @@ const writeStyledThemeCssTexts = <Config extends BaseConfig>(
   styledConfig: Config,
   cssFileName: string
 ) => {
-  const cssText = createTheme(styledConfig);
+  const cssText = createTheme(styledConfig.prefix, styledConfig.theme);
   writeFile(cssFileName, cssText);
 };
 
@@ -89,6 +89,7 @@ const collie = <Config extends BaseConfig>(
         code: transformedCode,
         styledElementCssTexts,
         styledComponentCssTexts,
+        styledThemeCssTexts
       } = transform(code, url, styledConfig, alias, root);
       const cssFile = getCssFileName(url)(root);
       const content = styledElementCssTexts + "\n" + styledComponentCssTexts;

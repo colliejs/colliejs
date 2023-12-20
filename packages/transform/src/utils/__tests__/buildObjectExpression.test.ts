@@ -9,6 +9,9 @@ describe("build object expression", () => {
       size: {
         width: 1,
         background: "blue",
+        embed: {
+          color: "green",
+        },
       },
     };
     const res = buildObjectExpression(obj);
@@ -18,7 +21,10 @@ describe("build object expression", () => {
         "color": "red",
         "size": {
           "width": 1,
-          "background": "blue"
+          "background": "blue",
+          "embed": {
+            "color": "green"
+          }
         }
       }"
     `);

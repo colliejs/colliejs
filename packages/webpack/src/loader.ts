@@ -1,4 +1,4 @@
-import { BaseConfig, defaultConfig, toHash } from "@colliejs/core";
+import { BaseConfig, defaultConfig } from "@colliejs/core";
 import { Alias, transform } from "@colliejs/transform";
 import { LoaderContext } from "webpack";
 import { FilterPattern, createFilter } from "@rollup/pluginutils";

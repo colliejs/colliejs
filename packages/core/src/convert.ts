@@ -18,19 +18,18 @@ export const convertCssObjToMediaQuery = <Config extends BaseConfig>(
   cssObj: CSSObject<Config>,
   breakpoints: readonly number[]
 ): CSS<Config> => {
-  let res = {} ;
+  let res = {};
   Object.keys(cssObj).forEach(key => {
     const value = cssObj[key];
     if (isArraySyntax(value)) {
       res = _.merge(res, arraySyntax(key, value, breakpoints));
-    } else if (isObjectSyntax(value)) {
-      res = _.merge(res, objectSyntax(key, value));
+      // } else if (isObjectSyntax(value)) {
+      // res = _.merge(res, objectSyntax(key, value));
     } else if (typeof value === "object" && value) {
       res[key] = convertCssObjToMediaQuery(value, breakpoints);
     } else {
       res[key] = value;
     }
   });
-  //TODO: 保证breakpoint小的排在前面，否则样式会被覆盖
   return res;
 };

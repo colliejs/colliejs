@@ -1,11 +1,7 @@
-import { defaultConfig } from "@colliejs/core";
+import { config } from "../../__tests__/common/config";
 import { parseCode } from "../../parse";
-import {
-  generate,
-  isStyledElement,
-  parseCodeAndGetBodyN,
-  traverse,
-} from "../../utils";
+import { generate, parseCodeAndGetBodyN, traverse } from "../../utils";
+import { isStyledElement } from "../isStyledElement";
 import { StyledElement } from "../StyledElement";
 import {
   getImportFromSource,
@@ -15,7 +11,7 @@ import {
 const transform = (sourceCode: string, n = 0) => {
   const path = getPathOfJSXElement(sourceCode);
   const moduleIdByName = getImportFromSource(sourceCode, __filename);
-  const ele = new StyledElement(path, moduleIdByName, defaultConfig);
+  const ele = new StyledElement(path, moduleIdByName, config);
   const res = ele.transform();
   return {
     code: generate(path.node).code,
@@ -46,8 +42,8 @@ describe("test cases", () => {
     const res = transform(sourceCode);
     expect(res).toMatchInlineSnapshot(`
       {
-        "code": "<Button className="css-gmqXFB">login</Button>",
-        "cssText": ".css-gmqXFB{color:red}",
+        "code": "<Button className="css-129ntb2">login</Button>",
+        "cssText": ".css-129ntb2{color:red}",
       }
     `);
   });
@@ -56,7 +52,7 @@ describe("test cases", () => {
     const { code } = transform(sourceCode);
 
     expect(code).toMatchInlineSnapshot(
-      `"<Button className={" css-gmqXFB " + "a"}>login</Button>"`
+      `"<Button className={" css-129ntb2 " + "a"}>login</Button>"`
     );
   });
   it("className will be combined if existed className is a dynamic variable", () => {
@@ -64,7 +60,7 @@ describe("test cases", () => {
     const { code } = transform(sourceCode);
 
     expect(code).toMatchInlineSnapshot(
-      `"<Button className={" css-gmqXFB " + props.className}>login</Button>"`
+      `"<Button className={" css-129ntb2 " + props.className}>login</Button>"`
     );
   });
   it.skip("className will be combined if existed className is in restProps. 不支持。需要用户手动处理", () => {
@@ -83,8 +79,8 @@ describe("test cases", () => {
     const res = transform(sourceCode, 1);
     expect(res).toMatchInlineSnapshot(`
       {
-        "code": "<Button className="css-gmqXFB">login</Button>",
-        "cssText": ".css-gmqXFB{color:red}",
+        "code": "<Button className="css-129ntb2">login</Button>",
+        "cssText": ".css-129ntb2{color:red}",
       }
     `);
   });
@@ -99,8 +95,8 @@ describe("test cases", () => {
     const res = transform(sourceCode, 1);
     expect(res).toMatchInlineSnapshot(`
       {
-        "code": "<Button className="css-IdMHn">login</Button>",
-        "cssText": ".css-IdMHn{color:red;line-height:1}",
+        "code": "<Button className="css-157w1bo">login</Button>",
+        "cssText": ".css-157w1bo{color:red;line-height:1}",
       }
     `);
   });

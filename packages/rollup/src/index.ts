@@ -14,8 +14,11 @@ type Option<Config extends BaseConfig> = {
   alias?: Alias;
   root?: string;
 };
-const writeThemeText = (styledConfig, cssFilename) => {
-  const cssText = createTheme(styledConfig);
+const writeThemeText = <Config extends BaseConfig>(
+  styledConfig: Config,
+  cssFilename: string
+) => {
+  const cssText = createTheme(styledConfig.prefix, styledConfig.theme);
   writeFile(cssFilename, cssText);
 };
 

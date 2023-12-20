@@ -10,13 +10,14 @@
     "clean": "rm -rf dist  ",
     "reset": "pnpm clean && rm -rf node_modules && pnpm install",
     "type": "tsc --project . --paths null --emitDeclarationOnly --declaration",
-    "watchtype": "tsc --project . --watch"
+    "watchtype": "tsc --project . --watch "
   },
   "types": "./dist/index.d.ts",
   "keywords": [],
   "author": "colliedog1001@gmail.com",
   "license": "MIT",
   "dependencies": {
+    "@c3/css": "^2.0.1",
     "@colliejs/core": "workspace:^",
     "@types/jest": "^29.5.2",
     "lodash-es": "^4.17.21"

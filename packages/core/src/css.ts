@@ -1,7 +1,6 @@
 import { CSSObject, BaseConfig } from "./type";
-import _ from "lodash";
 import { toCssRules } from "./utils/toCssRules";
-import { toHash } from "./utils/toHash.js";
+import { toHash } from "@c3/utils";
 import { convertCssObjToMediaQuery } from "./convert";
 
 export const css = <C extends BaseConfig>(
@@ -10,7 +9,7 @@ export const css = <C extends BaseConfig>(
   conditions = [],
   config: C
 ): string => {
-  const newCssObj = convertCssObjToMediaQuery(cssObj, config.breakpoints || []);
+  const newCssObj = convertCssObjToMediaQuery(cssObj, config.breakpoints);
   let res = "";
   toCssRules(newCssObj, selectors, conditions, config, (cssText: string) => {
     res += cssText + "\n";
@@ -20,7 +19,7 @@ export const css = <C extends BaseConfig>(
 
 export const makeCss = <Config extends BaseConfig>(config: Config) => {
   return (cssObj: CSSObject<Config>) => {
-    const className = toHash(cssObj);
+    const className = toHash(JSON.stringify(cssObj));
     return { className, cssText: css(cssObj, [`.${className}`], [], config) };
   };
 };

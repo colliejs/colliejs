@@ -1,9 +1,9 @@
-import { traverse } from "../../utils/module";
-import { parseCode } from "../../parse";
-import { getImports, parseCodeAndGetBodyN } from "../../utils";
-import { evalStyling } from "../evalStyling";
+import { traverse } from "../../../utils/module";
+import { parseCode } from "../../../parse";
+import { getImports, parseCodeAndGetBodyN } from "../../../utils";
 import * as t from "@babel/types";
-import { removeTypeAnnotation } from "../../utils/removeType";
+import { removeTypeAnnotation } from "../../../utils/removeType";
+import { evalObjectExp } from "../../../utils/eval/evalObjectExp";
 
 const evalObjectString = (sourcecode: string) => {
   const fileAst = parseCode(sourcecode);
@@ -20,7 +20,7 @@ const evalObjectString = (sourcecode: string) => {
         )
       ) {
         console.log(path.node.type);
-        res = evalStyling(path, imports);
+        res = evalObjectExp(path, imports);
         path.stop();
       }
     },
@@ -58,7 +58,7 @@ describe("test cases", () => {
     const res = evalObjectString(code);
     expect(res).toMatchInlineSnapshot(`
       {
-        "backgroundImage": "url(/Users/che3vinci/code/personal/colliejs/packages/transform/src/styling/__tests__/fixtures/dog.jpeg)",
+        "backgroundImage": "url(/Users/che3vinci/code/personal/colliejs/packages/transform/src/styledComponent/styledObject/__tests__/fixtures/dog.jpeg)",
         "color": "red",
         "position": "fixed",
       }

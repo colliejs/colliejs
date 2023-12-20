@@ -1,14 +1,11 @@
 import { defaultThemeMap } from "./defaultThemeMap";
 import { utils } from "./util";
-import { BaseConfig } from "../type";
+import type { BaseConfig } from "../type";
 export const defaultConfig = {
-  prefix: "co",
+  prefix: "",
   themeMap: defaultThemeMap,
-  media: {},
-  breakpoints: [320, 768],
   theme: {},
+  breakpoints: [],
   utils,
-  styledElementProp: "css",
-  styledFunctionName: "styled",
   layername: "app",
 } as const satisfies BaseConfig;

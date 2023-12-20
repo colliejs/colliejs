@@ -44,17 +44,14 @@ describe("test cas2es", () => {
       import { jsx } from 'react/jsx-runtime';
       import { createRoot } from 'react-dom/client';
 
-      const BaseButton = styled('button', "baseStyle-BaseButton-bBlhx", {}, {});
+      const BaseButton = styled('button', "baseStyle-BaseButton-1sjqm9w", [], {}, []);
 
-      const Button = styled(BaseButton, "baseStyle-Button-gmqXFB", {
-        "variants-static-shape-square": "variants-static-shape-square-iydAuT",
-        "variants-static-shape-round": "variants-static-shape-round-gmZOLP"
-      }, {});
+      const Button = styled(BaseButton, "baseStyle-Button-129ntb2", ["variants-shape-square-4trf62", "variants-shape-round-q6q02o"], {}, []);
 
       function App() {
         return /*#__PURE__*/jsx(Button, {
           shape: "round",
-          className: "css-elTJue",
+          className: "css-16n2od3",
           children: "My button"
         });
       }

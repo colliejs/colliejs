@@ -8,6 +8,7 @@ import { toTailDashed } from "./toTailDashed.js";
 import { toTokenizedValue } from "./toTokenizedValue.js";
 import { BaseConfig } from "../type";
 import { CSS } from "../types/index";
+import { pxProps } from "@c3/css";
 
 /** Comma matcher outside rounded brackets. */
 const comma = /\s*,\s*(?![^()]*\))/;
@@ -16,13 +17,14 @@ const comma = /\s*,\s*(?![^()]*\))/;
 const toStringOfObject = Object.prototype.toString;
 
 export const toCssRules = <Config extends BaseConfig>(
-  style: CSS<Config>,
+  cssObject: CSS<Config>,
   selectors: string[],
   conditions: string[],
   config: Config,
   onCssText: (cssText: string) => any
 ) => {
   /**  CSSOM-compatible rule being created. */
+  // currentRule= [declarations, selectors, conditions]
   let currentRule: [string[], string[], string[]] | undefined = undefined;
 
   /** Last utility that was used, cached to prevent recursion. */
@@ -34,62 +36,69 @@ export const toCssRules = <Config extends BaseConfig>(
   /** Walks CSS styles and converts them into CSSOM-compatible rules. */
   const walk = (
     /**  Set of CSS styles */
-    style: CSS<Config>,
+    cssObject: CSS<Config>,
     /**  Selectors that define the elements to which a set of CSS styles apply. */
     selectors: string[],
     /**  Conditions that define the queries to which a set of CSS styles apply. */
     conditions: string[]
   ) => {
     /** @type {keyof style} Represents the left-side "name" for the property (the at-rule prelude, style-rule selector, or declaration name). */
-    let name: string;
+    let key: string; //keyof CSS<Config>;
 
     /** @type {style[keyof style]} Represents the right-side "data" for the property (the rule block, or declaration value). */
-    let data;
+    let value;
 
-    const each = (style: CSS<Config>) => {
-      for (name in style) {
-        /** Whether the current name represents an at-rule. */
-        const isAtRuleLike = name.charCodeAt(0) === 64;
+    const each = (cssObject: CSS<Config>) => {
+      for (key in cssObject) {
+        /** Whether the current name represents an at-rule.
+         * @ rule
+         * @supports (display: grid) {
+         *    display: grid;
+         * }
+         */
+        const isAtRuleLike = key.charCodeAt(0) === 64;
 
-        const datas =
-          isAtRuleLike && Array.isArray(style[name])
-            ? (style[name] as any[])
-            : [style[name]];
+        const values =
+          isAtRuleLike && Array.isArray(cssObject[key])
+            ? (cssObject[key] as any[])
+            : [cssObject[key]];
 
-        for (data of datas) {
-          const camelName = toCamelCase(name);
+        for (value of values) {
+          const keyInCamel = toCamelCase(key);
 
           /** Whether the current data represents a nesting rule, which is a plain object whose key is not already a util. */
           const isRuleLike =
-            typeof data === "object" &&
-            data &&
-            data.toString === toStringOfObject &&
-            (!config.utils[camelName] || !selectors.length);
+            typeof value === "object" &&
+            value &&
+            value.toString === toStringOfObject &&
+            (!config.utils[keyInCamel] || !selectors.length);
 
+          //1.
           // if the left-hand "name" matches a configured utility
           // conditionally transform the current data using the configured utility
-          if (camelName in (config.utils || {}) && !isRuleLike) {
-            const util = config.utils[camelName];
+          if (keyInCamel in (config.utils || {}) && !isRuleLike) {
+            const utilFn = config.utils[keyInCamel];
 
-            if (util !== lastUtil) {
-              lastUtil = util;
+            if (utilFn !== lastUtil) {
+              lastUtil = utilFn;
 
-              each(util(data)); //NOTE:return value of util is CSSObject
+              each(utilFn(value)); //NOTE:return value of util is CSSObject
 
               lastUtil = null;
 
               continue;
             }
           }
+          //2.
           // otherwise, if the left-hand "name" matches a configured polyfill
           // conditionally transform the current data using the polyfill
-          else if (camelName in toPolyfilledValue) {
-            const poly = toPolyfilledValue[camelName];
+          else if (keyInCamel in toPolyfilledValue) {
+            const poly = toPolyfilledValue[keyInCamel];
 
             if (poly !== lastPoly) {
               lastPoly = poly;
 
-              each(poly(data)); //TODO:utils 不支持@rule?
+              each(poly(value)); //TODO:utils 不支持@rule?
 
               lastPoly = null;
 
@@ -100,23 +109,23 @@ export const toCssRules = <Config extends BaseConfig>(
           // if the left-hand "name" matches a configured at-rule
           if (isAtRuleLike) {
             // transform the current name with the configured media at-rule prelude
-            name = toResolvedMediaQueryRanges(
-              name.slice(1) in config.media
-                ? "@media " + config.media[name.slice(1)]
-                : name
-            );
+            // name = toResolvedMediaQueryRanges(
+            //   name.slice(1) in (config.media || {})
+            //     ? "@media " + config.media?.[name.slice(1)]
+            //     : name
+            // );
           }
 
           if (isRuleLike) {
             /** Next conditions, which may include one new condition (if this is an at-rule). */
             const nextConditions = isAtRuleLike
-              ? conditions.concat(name)
+              ? conditions.concat(key)
               : [...conditions];
 
             /** Next selectors, which may include one new selector (if this is not an at-rule). */
             const nextSelections = isAtRuleLike
               ? [...selectors]
-              : toResolvedSelectors(selectors, name.split(comma));
+              : toResolvedSelectors(selectors, key.split(comma));
 
             if (currentRule !== undefined) {
               onCssText(toCssString(...currentRule));
@@ -124,45 +133,45 @@ export const toCssRules = <Config extends BaseConfig>(
 
             currentRule = undefined;
 
-            walk(data, nextSelections, nextConditions);
+            walk(value, nextSelections, nextConditions);
           } else {
             if (currentRule === undefined)
               currentRule = [[], selectors, conditions];
 
             /** CSS left-hand side value, which may be a specially-formatted custom property. */
-            name =
-              !isAtRuleLike && name.charCodeAt(0) === 36 //'$' sign
-                ? `--${toTailDashed(config.prefix)}${name
+            key =
+              !isAtRuleLike && key.charCodeAt(0) === 36 //'$' sign
+                ? `--${toTailDashed(config.prefix)}${key
                     .slice(1)
                     .replace(/\$/g, "-")}`
-                : name;
+                : key;
 
             /** CSS right-hand side value, which may be a specially-formatted custom property. */
-            data =
+            value =
               // preserve object-like data
               isRuleLike
-                ? data
+                ? value
                 : // replace specially-marked numeric property values with pixel versions
-                typeof data === "number"
-                ? data && camelName in unitProps
-                  ? String(data) + "px"
-                  : String(data)
+                typeof value === "number"
+                ? value && keyInCamel in pxProps
+                  ? String(value) + "px"
+                  : String(value)
                 : // replace tokens with stringified primitive values
                   toTokenizedValue(
-                    toSizingValue(camelName, data == null ? "" : data),
+                    toSizingValue(keyInCamel, value == null ? "" : value),
                     config.prefix,
-                    config.themeMap[camelName]
+                    config.themeMap[keyInCamel]
                   );
 
             currentRule[0].push(
-              `${isAtRuleLike ? `${name} ` : `${toHyphenCase(name)}:`}${data}`
+              `${isAtRuleLike ? `${key} ` : `${toHyphenCase(key)}:`}${value}`
             );
           }
         }
       }
     };
 
-    each(style);
+    each(cssObject);
 
     if (currentRule !== undefined) {
       onCssText(toCssString(...currentRule));
@@ -170,7 +179,7 @@ export const toCssRules = <Config extends BaseConfig>(
     currentRule = undefined;
   };
 
-  walk(style, selectors, conditions);
+  walk(cssObject, selectors, conditions);
 };
 
 export const toCssString = (
@@ -183,138 +192,3 @@ export const toCssString = (
   }${declarations.join(";")}${selectors.length ? `}` : ""}${Array(
     conditions.length ? conditions.length + 1 : 0
   ).join("}")}`;
-
-/** CSS Properties whose number value may safely be interpretted as a pixel. */
-export const unitProps = {
-  animationDelay: 1,
-  animationDuration: 1,
-  backgroundSize: 1,
-  blockSize: 1,
-  border: 1,
-  borderBlock: 1,
-  borderBlockEnd: 1,
-  borderBlockEndWidth: 1,
-  borderBlockStart: 1,
-  borderBlockStartWidth: 1,
-  borderBlockWidth: 1,
-  borderBottom: 1,
-  borderBottomLeftRadius: 1,
-  borderBottomRightRadius: 1,
-  borderBottomWidth: 1,
-  borderEndEndRadius: 1,
-  borderEndStartRadius: 1,
-  borderInlineEnd: 1,
-  borderInlineEndWidth: 1,
-  borderInlineStart: 1,
-  borderInlineStartWidth: 1,
-  borderInlineWidth: 1,
-  borderLeft: 1,
-  borderLeftWidth: 1,
-  borderRadius: 1,
-  borderRight: 1,
-  borderRightWidth: 1,
-  borderSpacing: 1,
-  borderStartEndRadius: 1,
-  borderStartStartRadius: 1,
-  borderTop: 1,
-  borderTopLeftRadius: 1,
-  borderTopRightRadius: 1,
-  borderTopWidth: 1,
-  borderWidth: 1,
-  bottom: 1,
-  columnGap: 1,
-  columnRule: 1,
-  columnRuleWidth: 1,
-  columnWidth: 1,
-  containIntrinsicSize: 1,
-  flexBasis: 1,
-  fontSize: 1,
-  gap: 1,
-  gridAutoColumns: 1,
-  gridAutoRows: 1,
-  gridTemplateColumns: 1,
-  gridTemplateRows: 1,
-  height: 1,
-  inlineSize: 1,
-  inset: 1,
-  insetBlock: 1,
-  insetBlockEnd: 1,
-  insetBlockStart: 1,
-  insetInline: 1,
-  insetInlineEnd: 1,
-  insetInlineStart: 1,
-  left: 1,
-  letterSpacing: 1,
-  margin: 1,
-  marginBlock: 1,
-  marginBlockEnd: 1,
-  marginBlockStart: 1,
-  marginBottom: 1,
-  marginInline: 1,
-  marginInlineEnd: 1,
-  marginInlineStart: 1,
-  marginLeft: 1,
-  marginRight: 1,
-  marginTop: 1,
-  maxBlockSize: 1,
-  maxHeight: 1,
-  maxInlineSize: 1,
-  maxWidth: 1,
-  minBlockSize: 1,
-  minHeight: 1,
-  minInlineSize: 1,
-  minWidth: 1,
-  offsetDistance: 1,
-  offsetRotate: 1,
-  outline: 1,
-  outlineOffset: 1,
-  outlineWidth: 1,
-  overflowClipMargin: 1,
-  padding: 1,
-  paddingBlock: 1,
-  paddingBlockEnd: 1,
-  paddingBlockStart: 1,
-  paddingBottom: 1,
-  paddingInline: 1,
-  paddingInlineEnd: 1,
-  paddingInlineStart: 1,
-  paddingLeft: 1,
-  paddingRight: 1,
-  paddingTop: 1,
-  perspective: 1,
-  right: 1,
-  rowGap: 1,
-  scrollMargin: 1,
-  scrollMarginBlock: 1,
-  scrollMarginBlockEnd: 1,
-  scrollMarginBlockStart: 1,
-  scrollMarginBottom: 1,
-  scrollMarginInline: 1,
-  scrollMarginInlineEnd: 1,
-  scrollMarginInlineStart: 1,
-  scrollMarginLeft: 1,
-  scrollMarginRight: 1,
-  scrollMarginTop: 1,
-  scrollPadding: 1,
-  scrollPaddingBlock: 1,
-  scrollPaddingBlockEnd: 1,
-  scrollPaddingBlockStart: 1,
-  scrollPaddingBottom: 1,
-  scrollPaddingInline: 1,
-  scrollPaddingInlineEnd: 1,
-  scrollPaddingInlineStart: 1,
-  scrollPaddingLeft: 1,
-  scrollPaddingRight: 1,
-  scrollPaddingTop: 1,
-  shapeMargin: 1,
-  textDecoration: 1,
-  textDecorationThickness: 1,
-  textIndent: 1,
-  textUnderlineOffset: 1,
-  top: 1,
-  transitionDelay: 1,
-  transitionDuration: 1,
-  verticalAlign: 1,
-  width: 1,
-  wordSpacing: 1,
-};

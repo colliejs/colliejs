@@ -3,6 +3,5 @@ import * as t from "@babel/types";
 import { evalExpText } from "./evalText";
 
 export const evalExpDirectly = (exp: t.Node, ctx: object) => {
-  const code = generate(exp).code;
-  return evalExpText(code, ctx);
+  return evalExpText(generate(exp).code, ctx);
 };

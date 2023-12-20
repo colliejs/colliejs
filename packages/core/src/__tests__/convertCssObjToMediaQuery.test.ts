@@ -1,4 +1,4 @@
-import { BaseConfig, CSSObject, defaultConfig } from "../";
+import { BaseConfig, CSSObject, defaultConfig } from "../type";
 import { convertCssObjToMediaQuery } from "../convert";
 
 describe("convertCssObjToMediaQuery", () => {
@@ -59,7 +59,7 @@ describe("convertCssObjToMediaQuery", () => {
       }
     `);
   });
-  it("should work for object syntax", () => {
+  it.skip("should work for object syntax[deprecated]", () => {
     const cssObj: any = {
       width: { "@phone": 10, "@pad": 20 },
       height: { "@phone": 20, "@pad": 40 },

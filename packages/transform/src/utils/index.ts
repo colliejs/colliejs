@@ -3,8 +3,6 @@ export * from './eval/require';
 export * from './importer';
 export * from './buildObjectExpression';
 export * from './parseCodeAndGetBody0';
-export * from '../styledElement/prop';
 export * from './typeName';
-export * from '../styledElement/isStyledElement';
 export * from './module';
 export * from './types';
