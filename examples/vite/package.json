@@ -1,0 +1,44 @@
+{
+  "name": "@colliejs/vite-demo",
+  "version": "1.0.165",
+  "description": "awesesome",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "private": true,
+  "keywords": [],
+  "author": "colliedog1001@gmail.com",
+  "license": "MIT",
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "organize-imports-cli",
+      "prettier --write",
+      "eslint --cache --fix"
+    ]
+  },
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./css": "./dist/index.css"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@colliejs/core": "workspace:^",
+    "@colliejs/react": "workspace:^",
+    "@colliejs/transform": "workspace:^",
+    "@colliejs/vite": "workspace:^",
+    "@rollup/plugin-commonjs": "^24.1.0",
+    "@rollup/plugin-node-resolve": "^15.1.0",
+    "@vitejs/plugin-react": "^2.2.0",
+    "dayjs": "^1.11.9",
+    "vite-plugin-inspect": "^0.7.28"
+  }
+}
