@@ -1,9 +1,21 @@
-import type { BaseConfig } from "../type";
-import type {CSSProperties} from '../types'
+import type { BaseConfig, UtilsFn } from "../type";
+import type { CSS, CSSProperties } from "../types";
+import type { CSSObject } from "../type";
 
 //Attention: don't include ::placeholder pseudo-element
-const pseudoElements = ["before", "after", "first-letter", "first-line"];
-const pseudoClasses = ["hover", "focus", "active", "focus-within", "disabled"];
+const pseudoElements = [
+  "before",
+  "after",
+  "first-letter",
+  "first-line",
+] as const;
+const pseudoClasses = [
+  "hover",
+  "focus",
+  "active",
+  "focus-within",
+  "disabled",
+] as const;
 
 export const utils = {
   w: (w: CSSProperties["width"]) => ({ width: w }),
@@ -46,7 +58,6 @@ export const utils = {
   //others shortcuts
   bg: (bg: CSSProperties["background"]) => ({ background: bg }),
 
-  //TODO: img/input dones't support pseudo elements
   ...pseudoElements.reduce(
     (acc, pseudo: string) => ({
       ...acc,
@@ -61,13 +72,25 @@ export const utils = {
         },
       }),
     }),
-    {}
+    {} as Record<`_${(typeof pseudoElements)[number]}`, UtilsFn>
   ),
   ...pseudoClasses.reduce(
-    (acc, pseudo: string) => ({
+    (acc, pseudo) => ({
       ...acc,
       [`_${pseudo}`]: (css: CSSProperties) => ({ [`&:${pseudo}`]: css }),
     }),
-    {}
+    {} as Record<`_${(typeof pseudoClasses)[number]}`, UtilsFn>
   ),
+
+  "@phone": (css: CSSProperties) => {
+    return { "@media (min-width: 240px)": css };
+  },
+
+  "@pad": (css: CSSProperties) => {
+    return { "@media (min-width: 768px)": css };
+  },
+  "@pc": (css: CSSProperties) => {
+    return { "@media (min-width: 1024px)": css };
+  },
+  
 } as const satisfies BaseConfig["utils"];

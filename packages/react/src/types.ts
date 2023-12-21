@@ -146,6 +146,6 @@ export type MakeStyled<Config extends BaseConfig> = <
   Option extends StyledOption<any, IntrinsicElementsKeys> = { as: undefined }
 >(
   type: Type,
-  styling: T,
+  styledObject: T,
   option?: Option
 ) => MyStyledComponent<Config, Type, T, Option["as"]>;

@@ -24,6 +24,7 @@
   "dependencies": {
     "@colliejs/react": "workspace:^",
     "@colliejs/vite": "workspace:^",
+    "@colliejs/core": "workspace:^",
     "@rollup/plugin-commonjs": "^24.1.0",
     "@rollup/plugin-node-resolve": "^15.1.0",
     "@vitejs/plugin-react": "^2.2.0",

@@ -4,13 +4,14 @@ export type { Prefixed, CSSProperties, Widen, Assign } from "./types";
 //===========================================================
 // BaseConfig Type,not the Actual Type
 //===========================================================
+export type UtilsFn = (value: any) => CSSProperties | any;
 export type BaseConfig = {
   prefix?: string;
   theme?: object;
-  breakpoints?: number[];
+  breakpoints?: readonly number[];
   themeMap?: object;
   utils?: {
-    [key: string]: (value: any) => CSSProperties | any; //CSSObject<Config>
+    [key: string]: UtilsFn
   };
   layername?: string;
 };

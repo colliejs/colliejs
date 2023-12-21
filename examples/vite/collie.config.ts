@@ -1,4 +1,3 @@
-import type { BaseConfig } from "@colliejs/core";
 import { defaultConfig } from "@colliejs/react";
 export const collieConfig = {
   ...defaultConfig,
@@ -133,4 +132,4 @@ export const collieConfig = {
       max: "999",
     },
   },
-} as const satisfies BaseConfig;
+} as const;
