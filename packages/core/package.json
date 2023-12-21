@@ -1,6 +1,6 @@
 {
   "name": "@colliejs/core",
-  "version": "1.0.25",
+  "version": "1.0.26",
   "description": "@colliejs/core",
   "type": "module",
   "scripts": {

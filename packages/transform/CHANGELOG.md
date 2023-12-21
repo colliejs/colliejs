@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.49](https://github.com/colliejs/colliejs/compare/@colliejs/transform@1.0.48...@colliejs/transform@1.0.49) (2023-12-21)
+
+### Features
+
+- add defaultVariants ([2671359](https://github.com/colliejs/colliejs/commit/2671359d31365f8039e5943d76169b501ab89f2f))
+
 ## [1.0.48](https://github.com/colliejs/colliejs/compare/@colliejs/transform@1.0.47...@colliejs/transform@1.0.48) (2023-12-20)
 
 **Note:** Version bump only for package @colliejs/transform

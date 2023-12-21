@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.80](https://github.com/colliejs/colliejs/compare/@colliejs/vite@1.0.79...@colliejs/vite@1.0.80) (2023-12-21)
+
+### Features
+
+- move example to external directory ([b780fd4](https://github.com/colliejs/colliejs/commit/b780fd4330258cd8b3c585735610534516d4fa61))
+
 ## [1.0.79](https://github.com/colliejs/colliejs/compare/@colliejs/vite@1.0.78...@colliejs/vite@1.0.79) (2023-12-20)
 
 **Note:** Version bump only for package @colliejs/vite
