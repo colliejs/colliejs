@@ -34,7 +34,7 @@ describe("compile styled function", () => {
     const source = `const Button = styled('button',{color:'red'})`;
     const x = transform(source);
     expect(x).toMatchInlineSnapshot(
-      `"const Button = styled('button', "baseStyle-Button-129ntb2", [], {}, []);"`
+      `"const Button = styled('button', "baseStyle-Button-129ntb2", [], {}, [], []);"`
     );
   });
   it("with variant ", () => {
@@ -55,7 +55,7 @@ describe("compile styled function", () => {
   `;
     const x = transform(source);
     expect(x).toMatchInlineSnapshot(
-      `"const Button = styled('button', "baseStyle-Button-129ntb2", ["variants-shape-round-jhqrc0", "variants-shape-rect-ptwk5x"], {}, []);"`
+      `"const Button = styled('button', "baseStyle-Button-129ntb2", ["variants-shape-round-jhqrc0", "variants-shape-rect-ptwk5x"], {}, [], []);"`
     );
   });
   it("dynamic variant", () => {
@@ -88,7 +88,7 @@ describe("compile styled function", () => {
         "variants-shape-dynamic-t61aqk": {
           "canAddPx": true
         }
-      }, []);"
+      }, [], []);"
     `);
   });
 });
@@ -187,7 +187,7 @@ describe("render StyledComponent", () => {
   });
 
   it("styled function width as option", () => {
-    const Comp = styled("div", "baseStyle-gmqXFB", [], {}, [], { as: "a" });
+    const Comp = styled("div", "baseStyle-gmqXFB", [], {}, [], [], { as: "a" });
     const comp = TestRenderer.create(<Comp />);
     expect(comp.toJSON()).toMatchInlineSnapshot(`
       <a
@@ -196,7 +196,7 @@ describe("render StyledComponent", () => {
     `);
   });
   it("web component should use `class` attributes", () => {
-    const Comp = styled("div", "baseStyle-gmqXFB", [], {}, [], {
+    const Comp = styled("div", "baseStyle-gmqXFB", [], {}, [], [], {
       as: "u-stack",
     });
     const comp = TestRenderer.create(<Comp />);
@@ -208,7 +208,7 @@ describe("render StyledComponent", () => {
   });
 
   it("enable wrapper", () => {
-    const Comp = styled("div", "baseStyle-gmqXFB", [], {}, [], {
+    const Comp = styled("div", "baseStyle-gmqXFB", [], {}, [], [], {
       wrapper: "a",
     });
     const comp = TestRenderer.create(<Comp />);
@@ -225,7 +225,7 @@ describe("render StyledComponent", () => {
     const Button = props => {
       return <button>hello</button>;
     };
-    const Comp = styled(Button, "baseStyle-gmqXFB", [], {}, [], {
+    const Comp = styled(Button, "baseStyle-gmqXFB", [], {}, [], [], {
       wrapper: "div",
     });
     const comp = TestRenderer.create(<Comp />);
@@ -240,7 +240,7 @@ describe("render StyledComponent", () => {
     `);
   });
   it("native attr  ", () => {
-    const Comp = styled("a", "baseStyle-gmqXFB", [], {}, [], {
+    const Comp = styled("a", "baseStyle-gmqXFB", [], {}, [], [], {
       attrs: { target: "_blank" },
     });
     const comp = TestRenderer.create(<Comp target="_self" round />);
@@ -260,7 +260,7 @@ describe("render StyledComponent", () => {
     `);
   });
   it("attrs for event ", () => {
-    const Link = styled("a", "baseStyle-gmqXFB", [], {}, [], {
+    const Link = styled("a", "baseStyle-gmqXFB", [], {}, [], [], {
       attrs: { onClick: () => {} },
     });
     const comp = TestRenderer.create(<Link />);

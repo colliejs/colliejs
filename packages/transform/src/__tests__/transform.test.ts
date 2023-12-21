@@ -37,7 +37,7 @@ describe("test cases", () => {
         "variants-shape-dynamic-16i60sc": {
           "canAddPx": true
         }
-      }, []);
+      }, [], []);
       export const App = () => {
         return <Button className="css-16d654z"></Button>;
       };"
@@ -50,7 +50,7 @@ describe("test cases", () => {
         "variants-shape-dynamic-16i60sc": {
           "canAddPx": true
         }
-      }, []);
+      }, [], []);
       export const App = () => {
         return <Button className="css-16d654z"></Button>;
       };",
@@ -103,7 +103,7 @@ describe("test cases", () => {
     );
     expect(res).toMatchInlineSnapshot(`
       {
-        "code": "const Button = styled('button', "", ["variants-shape-round-jhqrc0", "variants-size-big-1ja8ftc"], {}, ["compoundVariants-shape-round-size-big-13qnc0g"]);
+        "code": "const Button = styled('button', "", ["variants-shape-round-jhqrc0", "variants-size-big-1ja8ftc"], {}, ["compoundVariants-shape-round-size-big-13qnc0g"], []);
       export const App = () => {
         return <Button></Button>;
       };",
@@ -136,8 +136,8 @@ describe("test cases", () => {
     );
     expect(res).toMatchInlineSnapshot(`
       {
-        "code": "const Button = styled('button', "baseStyle-Button-16n2od3", [], {}, []);
-      const MyButton = styled(Button, "baseStyle-MyButton-zuqrxm", [], {}, []);
+        "code": "const Button = styled('button', "baseStyle-Button-16n2od3", [], {}, [], []);
+      const MyButton = styled(Button, "baseStyle-MyButton-zuqrxm", [], {}, [], []);
       export const App = () => {
         return <MyButton className="css-16d654z"></MyButton>;
       };",

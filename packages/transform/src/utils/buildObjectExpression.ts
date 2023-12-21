@@ -64,3 +64,5 @@ export const buildObjectExpression = (
   }
   return exp;
 };
+
+export const buildArrayExpression = buildObjectExpression;

@@ -66,6 +66,7 @@ export const makeStyled = <Config extends BaseConfig>(config: Config) => {
       { canAddPx: boolean }
     > = {},
     __generatedCompoundVariantClassNames: VariantsType["compoundClassName"][] = [],
+    __generatedDefaultVariantClassNames: string[] = [],
     option: StyledOption<P1, As> = {}
   ) {
     const render: ForwardRefRenderFunction<T, P1> = (props, ref) => {
@@ -123,8 +124,7 @@ export const makeStyled = <Config extends BaseConfig>(config: Config) => {
           ) as VariantsType["dynamicClassName"];
           outputClassNames.push(className);
 
-          const canAddPx =
-            __generatedDynamicClassNameMap[className].canAddPx;
+          const canAddPx = __generatedDynamicClassNameMap[className].canAddPx;
           if ((config.breakpoints?.length || 0) > 0) {
             const newValueOfProp = toArray(valOfProp);
             config.breakpoints?.forEach((e, idx) => {
@@ -144,6 +144,11 @@ export const makeStyled = <Config extends BaseConfig>(config: Config) => {
           }
         }
       }
+      //===========================================================
+      // defaultVariants
+      //===========================================================
+      outputClassNames.push(...__generatedDefaultVariantClassNames);
+
       //===========================================================
       // compoundVariants.
       //===========================================================

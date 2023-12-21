@@ -13,6 +13,7 @@ export type VariantsType = {
   staticKey: `static-variants-${VariantName}-${VariantValue}`;
   dynamicKey: `dynamic-variants-${VariantName}`;
   compoundKey: `compoundVariants-${string}`;
+  defaultVariantKey: `defaultVariants`;
   staticClassName: `variants-${VariantName}-${VariantValue}-${RandomString}`;
   dynamicClassName: `variants-${VariantName}-dynamic-${RandomString}`;
   compoundClassName: `compoundVariants-${string}`;

@@ -24,6 +24,11 @@ describe("parseStyleObj", () => {
             "lineHeight": 1,
           },
         },
+        "defaultVariants": {
+          "className": "",
+          "cssGenText": "",
+          "cssRawObj": {},
+        },
         "static-variants-size-medium": {
           "className": "variants-size-medium-1pcm56b",
           "cssGenText": ".variants-size-medium-1pcm56b{width:200px}",
@@ -57,7 +62,12 @@ describe("parseStyleObj", () => {
     expect(res).toMatchInlineSnapshot(`
       {
         "baseStyle": {
-          "className": "baseStyle-prefix-31e",
+          "className": "",
+          "cssGenText": "",
+          "cssRawObj": {},
+        },
+        "defaultVariants": {
+          "className": "",
           "cssGenText": "",
           "cssRawObj": {},
         },
@@ -89,7 +99,12 @@ describe("parseStyleObj", () => {
     expect(res).toMatchInlineSnapshot(`
       {
         "baseStyle": {
-          "className": "baseStyle-31e",
+          "className": "",
+          "cssGenText": "",
+          "cssRawObj": {},
+        },
+        "defaultVariants": {
+          "className": "",
           "cssGenText": "",
           "cssRawObj": {},
         },
@@ -134,7 +149,7 @@ describe("parseStyleObj", () => {
     expect(res).toMatchInlineSnapshot(`
       {
         "baseStyle": {
-          "className": "baseStyle-31e",
+          "className": "",
           "cssGenText": "",
           "cssRawObj": {},
         },
@@ -144,6 +159,11 @@ describe("parseStyleObj", () => {
           "cssRawObj": {
             "background": "red",
           },
+        },
+        "defaultVariants": {
+          "className": "",
+          "cssGenText": "",
+          "cssRawObj": {},
         },
         "static-variants-size-small": {
           "className": "variants-size-small-13jn9t5",
@@ -177,7 +197,12 @@ describe("parseStyleObj", () => {
     expect(res).toMatchInlineSnapshot(`
       {
         "baseStyle": {
-          "className": "baseStyle-prefix-31e",
+          "className": "",
+          "cssGenText": "",
+          "cssRawObj": {},
+        },
+        "defaultVariants": {
+          "className": "",
           "cssGenText": "",
           "cssRawObj": {},
         },
@@ -220,7 +245,12 @@ describe("parseStyleObj", () => {
     expect(res).toMatchInlineSnapshot(`
       {
         "baseStyle": {
-          "className": "baseStyle-prefix-31e",
+          "className": "",
+          "cssGenText": "",
+          "cssRawObj": {},
+        },
+        "defaultVariants": {
+          "className": "",
           "cssGenText": "",
           "cssRawObj": {},
         },
@@ -234,6 +264,52 @@ describe("parseStyleObj", () => {
               "var(--variants-size-at320)",
               "var(--variants-size-at768)",
             ],
+          },
+        },
+      }
+    `);
+  });
+
+  it("default variants", () => {
+    const styleObj: any = {
+      variants: {
+        size: {
+          small: { width: "100px" },
+        },
+        shape: {
+          circle: { borderRadius: "50%" },
+        },
+      },
+      defaultVariants: {
+        size: "small",
+        shape: "circle",
+      },
+    };
+    const res = convertStyledObject(styleObj, config, "prefix");
+    expect(res).toMatchInlineSnapshot(`
+      {
+        "baseStyle": {
+          "className": "",
+          "cssGenText": "",
+          "cssRawObj": {},
+        },
+        "defaultVariants": {
+          "className": "variants-size-small-13jn9t5 variants-shape-circle-jhqrc0",
+          "cssGenText": "",
+          "cssRawObj": {},
+        },
+        "static-variants-shape-circle": {
+          "className": "variants-shape-circle-jhqrc0",
+          "cssGenText": ".variants-shape-circle-jhqrc0{border-radius:50%}",
+          "cssRawObj": {
+            "borderRadius": "50%",
+          },
+        },
+        "static-variants-size-small": {
+          "className": "variants-size-small-13jn9t5",
+          "cssGenText": ".variants-size-small-13jn9t5{width:100px}",
+          "cssRawObj": {
+            "width": "100px",
           },
         },
       }

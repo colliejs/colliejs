@@ -8,6 +8,7 @@ import type {
 import { CSSInfo } from "../../type";
 
 export type StyledObjectParsed<Config extends BaseConfig> = {
+  defaultVariants: CSSInfo<Config>;
   baseStyle: CSSInfo<Config>;
 } & {
   [k in VariantsType["staticKey"]]: CSSInfo<Config>;
@@ -33,6 +34,6 @@ export type StyledObject<Config extends BaseConfig> = CSSObject<Config> & {
   } & {
     css: CSSObject<Config>;
   })[];
-  // defaultVariants: Record<VariantName, string>;//不可能是函数作为默认值
+  defaultVariants: Record<VariantName, string>; //不可能是函数作为默认值
   [x: string]: any;
 };

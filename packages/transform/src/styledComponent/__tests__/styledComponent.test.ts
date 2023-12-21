@@ -45,7 +45,7 @@ describe("styledHostComponent", () => {
         });`;
     const c = prepareStyledComponent(code);
     expect(c.id.componentName).toBe("Button");
-    expect(c.stylingParsed).toMatchInlineSnapshot(`
+    expect(c.styledObjectParsed).toMatchInlineSnapshot(`
       {
         "baseStyle": {
           "className": "baseStyle-Button-16n2od3",
@@ -53,6 +53,11 @@ describe("styledHostComponent", () => {
           "cssRawObj": {
             "background": "red",
           },
+        },
+        "defaultVariants": {
+          "className": "",
+          "cssGenText": "",
+          "cssRawObj": {},
         },
         "static-variants-shape-rect": {
           "className": "variants-shape-rect-4trf62",
@@ -83,7 +88,7 @@ describe("styledHostComponent", () => {
      */
     const { path } = c.transform();
     expect(generate(path.node).code).toMatchInlineSnapshot(
-      `"const Button = styled('button', "baseStyle-Button-16n2od3", ["variants-shape-round-jhqrc0", "variants-shape-rect-4trf62"], {}, []);"`
+      `"const Button = styled('button', "baseStyle-Button-16n2od3", ["variants-shape-round-jhqrc0", "variants-shape-rect-4trf62"], {}, [], []);"`
     );
   });
 });
@@ -156,7 +161,7 @@ describe("dynamic variable transform", () => {
         "variants-shape-dynamic-t61aqk": {
           "canAddPx": true
         }
-      }, []);"
+      }, [], []);"
     `);
   });
 
@@ -199,7 +204,7 @@ describe("compoundVariants", () => {
     const c = prepareStyledComponent(code);
     const astTransformed = c.transform();
     expect(generate(astTransformed.path.node).code).toMatchInlineSnapshot(
-      `"const Button = styled('button', "baseStyle-Button-129ntb2", ["variants-shape-round-31e", "variants-size-big-31e"], {}, ["compoundVariants-shape-round-size-big-16n2od3"]);"`
+      `"const Button = styled('button', "baseStyle-Button-129ntb2", ["variants-shape-round-31e", "variants-size-big-31e"], {}, ["compoundVariants-shape-round-size-big-16n2od3"], []);"`
     );
   });
 });

@@ -13,5 +13,19 @@ export const Button = styled("button", {
         height: 40,
       },
     },
+    type: {
+      primary: {
+        background: "blue",
+        color: "white",
+      },
+      secondary: {
+        background: "red",
+        color: "white",
+      },
+    },
+  },
+  defaultVariants: {
+    // size: "big",
+    type: "primary",
   },
 });

@@ -7,7 +7,7 @@ import { HostComponent } from "../component/HostComponent";
 import { convertStyledObject } from "./styledObject/convertStyledObject";
 import type { DynamicClassNameMap } from "./type";
 
-import { buildObjectExpression } from "../utils/index";
+import { buildArrayExpression, buildObjectExpression } from "../utils/index";
 import { ImportsByName, Stylable, StyledComponentDecl } from "../utils/types";
 import { parseStyledComponentDeclaration as parseStyledComponentDecl } from "./parseStyledComponent";
 import { NodePath } from "@babel/traverse";
@@ -27,7 +27,7 @@ export class StyledComponent<Config extends BaseConfig>
   extends CustomComponent
   implements Stylable
 {
-  stylingParsed: StyledObjectParsed<Config>;
+  styledObjectParsed: StyledObjectParsed<Config>;
   dependent: CustomComponent | HostComponent;
   styling: StyledObject<Config>;
   layerDeps: string[];
@@ -51,7 +51,7 @@ export class StyledComponent<Config extends BaseConfig>
     super(new ComponentId(moduleId, styledComponentName));
 
     this.styling = styling;
-    this.stylingParsed = convertStyledObject(
+    this.styledObjectParsed = convertStyledObject(
       styling,
       config,
       styledComponentName
@@ -63,20 +63,20 @@ export class StyledComponent<Config extends BaseConfig>
   }
 
   getCssText() {
-    let cssText = this.stylingParsed.baseStyle.cssGenText;
+    let cssText = this.styledObjectParsed.baseStyle.cssGenText;
     //NOTE: should make sure the order
-    const keys = Object.keys(this.stylingParsed);
+    const keys = Object.keys(this.styledObjectParsed);
     for (const key of keys) {
       if (
         key.startsWith(StaticVariantKeyPrefix) ||
         key.startsWith(DynamicVariantKeyPrefix)
       ) {
-        cssText += this.stylingParsed[key].cssGenText + "\n";
+        cssText += this.styledObjectParsed[key].cssGenText + "\n";
       }
     }
     for (const key of keys) {
       if (key.startsWith(CompoundVariantKeyPrefix)) {
-        cssText += this.stylingParsed[key].cssGenText + "\n";
+        cssText += this.styledObjectParsed[key].cssGenText + "\n";
       }
     }
     const thisLayerName = this.config.layername
@@ -118,6 +118,7 @@ export class StyledComponent<Config extends BaseConfig>
    *    __classNameOfStaticVariant:string[],
    *    __classNameOfDynamicVariant:Record<string, {canAddPx:boolean}>,
    *    __classNameOfCompoundVariants:string[]，
+   *    __classNameOfDefaultVariant:string[],
    *    option
    * )
    */
@@ -126,18 +127,19 @@ export class StyledComponent<Config extends BaseConfig>
     const classNameMapOfDynamicVariant: DynamicClassNameMap = {};
     const classNamesOfCompoundVariants: VariantsType["compoundClassName"][] =
       [];
-    for (const key of Object.keys(this.stylingParsed)) {
+    const classNamesOfDefaultVariant: string[] = [];
+    for (const key of Object.keys(this.styledObjectParsed)) {
       //===========================================================
       // 1.1.static variants
       //===========================================================
       if (key.startsWith("static-variants")) {
-        classNamesOfStaticVariant.push(this.stylingParsed[key].className);
+        classNamesOfStaticVariant.push(this.styledObjectParsed[key].className);
       }
       //===========================================================
       // 1.2.dynamic variants
       //===========================================================
       if (key.startsWith("dynamic-variants")) {
-        const item = this.stylingParsed[key as VariantsType["dynamicKey"]];
+        const item = this.styledObjectParsed[key as VariantsType["dynamicKey"]];
         classNameMapOfDynamicVariant[item.className] = {
           canAddPx: item.canAddPx,
         };
@@ -146,7 +148,9 @@ export class StyledComponent<Config extends BaseConfig>
       // 2.compoundVariants
       //===========================================================
       if (key.startsWith("compoundVariants")) {
-        classNamesOfCompoundVariants.push(this.stylingParsed[key].className);
+        classNamesOfCompoundVariants.push(
+          this.styledObjectParsed[key].className
+        );
       }
     }
 
@@ -154,21 +158,31 @@ export class StyledComponent<Config extends BaseConfig>
     // 3.classnameOfbaseStyle
     //===========================================================
     let classNameOfBaseStyle = "";
-    if (Object.keys(this.stylingParsed.baseStyle.cssRawObj).length !== 0) {
-      classNameOfBaseStyle = `${this.stylingParsed.baseStyle.className}`;
+    if (Object.keys(this.styledObjectParsed.baseStyle.cssRawObj).length !== 0) {
+      classNameOfBaseStyle = `${this.styledObjectParsed.baseStyle.className}`;
     }
 
     //===========================================================
-    // 4. replace styling to classNames
+    // 4.classNamesOfDefaultVariant
+    //===========================================================
+    classNamesOfDefaultVariant.push(
+      ...this.styledObjectParsed["defaultVariants"].className
+        .split(" ")
+        .filter(Boolean)
+    );
+
+    //===========================================================
+    // 5. replace styling to classNames
     //===========================================================
     const args = (this.path.node.declarations[0].init as t.CallExpression)
       .arguments;
     args.splice(1, 1); //remove styling
     args.splice(1, 0, t.stringLiteral(classNameOfBaseStyle)); //add classNameOfBaseStyle
-    args.splice(2, 0, buildObjectExpression(classNamesOfStaticVariant)); //add classNameOfStaticVariant
+    args.splice(2, 0, buildArrayExpression(classNamesOfStaticVariant)); //add classNameOfStaticVariant
     console.log(classNameMapOfDynamicVariant);
     args.splice(3, 0, buildObjectExpression(classNameMapOfDynamicVariant)); //add classNameMapOfDynamicVariant
-    args.splice(4, 0, buildObjectExpression(classNamesOfCompoundVariants)); //add classNamesOfCompoundVariants
+    args.splice(4, 0, buildArrayExpression(classNamesOfCompoundVariants)); //add classNamesOfCompoundVariants
+    args.splice(5, 0, buildArrayExpression(classNamesOfDefaultVariant)); //add classNamesOfDefaultVariant
 
     //5. return
     return { cssText: this.getCssText(), path: this.path };

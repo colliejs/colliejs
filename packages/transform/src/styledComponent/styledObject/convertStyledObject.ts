@@ -13,7 +13,7 @@ import {
   getVariantKey,
 } from "./variants";
 import { toHash } from "@c3/utils";
-import {canAddPx} from './canAddPx'
+import { canAddPx } from "./canAddPx";
 
 const toHashObject = (obj: any) => toHash(JSON.stringify(obj));
 export type Props = { [k: string]: any };
@@ -111,8 +111,19 @@ export const convertStyledObject = <Config extends BaseConfig>(
     };
   }
   //===========================================================
-  // 3.deal width default  value
+  // 3.deal with defaultVariant
   //===========================================================
+  const defaultVariants = styling["defaultVariants"] || {};
+  const classeNames = [];
+  for (const [variantName, variantValue] of Object.entries(defaultVariants)) {
+    const key = getVariantKey(variantName, variantValue, false);
+    classeNames.push(res[key].className);
+  }
+  res["defaultVariants"] = {
+    cssGenText: "",
+    cssRawObj: {} as CSSObject<Config>,
+    className: classeNames.join(" "),
+  };
 
   //===========================================================
   // 4.处理baseStyle
@@ -120,14 +131,18 @@ export const convertStyledObject = <Config extends BaseConfig>(
   const keys = Object.keys(styling);
   const baseStyleCssObject = _.pick(
     styling,
-    keys.filter(key => !["variants", "compoundVariants"].includes(key))
+    keys.filter(
+      key => !["variants", "compoundVariants", "defaultVariants"].includes(key)
+    )
   ) as CSSObject<Config>;
-  const baseStyleSelector = getBaseStyleSelector(
-    baseStylePrefix,
-    toHashObject(baseStyleCssObject)
-  );
+  const hasBaseStyle = Object.keys(baseStyleCssObject).length > 0;
+  const baseStyleSelector = hasBaseStyle
+    ? getBaseStyleSelector(baseStylePrefix, toHashObject(baseStyleCssObject))
+    : "";
   res.baseStyle = {
-    cssGenText: css(baseStyleCssObject, [`.${baseStyleSelector}`], [], config),
+    cssGenText: hasBaseStyle
+      ? css(baseStyleCssObject, [`.${baseStyleSelector}`], [], config)
+      : "",
     cssRawObj: baseStyleCssObject,
     className: baseStyleSelector,
   };
