@@ -1,4 +1,4 @@
-import rollupConfig from '../../scripts/rollup.config.js';
+import rollupConfig from "../../scripts/rollup.config.js";
 
 /**
  * @type {import('rollup').RollupOptions}
@@ -7,11 +7,13 @@ const config = {
   ...rollupConfig,
 
   external: [
-    'react',
-    'react-dom',
-    'react/jsx-runtime',
-    'react-dom/client',
-    'lodash',
+    ...rollupConfig.external,
+    "react",
+    "react-dom",
+    "react/jsx-runtime",
+    "react-dom/client",
+    "lodash",
+    /@c3/,
     /@collie/,
   ],
 };
