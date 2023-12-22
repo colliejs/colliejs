@@ -5,9 +5,6 @@ export const Button = styled("button", {
   color: "$white09",
   fontSize: 28,
   backgroundColor: "yellow",
-  boxShadow: "0 0 0 10px rgba(0, 0, 0, 0.3)",
-  
-
   variants: {
     size: {
       big: {
@@ -26,6 +23,17 @@ export const Button = styled("button", {
       },
     },
   },
+  compoundVariants: [
+    {
+      size: "big",
+      type: "primary",
+      css: {
+        border: "4px solid blue",
+        w: "auto",
+        background: "green",
+      },
+    },
+  ],
   defaultVariants: {
     // size: "big",
     type: "primary",

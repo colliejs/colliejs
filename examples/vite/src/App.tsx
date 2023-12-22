@@ -6,22 +6,23 @@ import React from "react";
 import CssButton from "./components/CssButton";
 import { ThemeButton } from "./components/ThemeButton";
 import ResponsiveButton from "./components/ResponsiveButton";
-export const pxToVw = (px: number, refWidth: number) =>
-  `${(px / refWidth) * 100}vw`;
+import { pxToVw } from "./common/pxToVw";
+import { Col } from "./components/Col";
+import { Row } from "./components/Row";
 
 export default function App() {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLInputElement>();
-  useEffect(() => {
-    ref.current?.focus?.();
-  }, []);
-
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-      <Button size="big">Button</Button>
-
-      <MyButton shape={"round"}> MyButton-1</MyButton>
-      <MyButton shape={[12]}> MyButton-2</MyButton>
+    <Col>
+      <Row>
+        <Button size="big">Button</Button>
+        <Button type="primary" size="big">
+          Button-Big-Primary
+        </Button>
+      </Row>
+      <Row>
+        <MyButton shape={"round"}> MyButton-1</MyButton>
+        <MyButton shape={[12]}> MyButton-2</MyButton>
+      </Row>
       <br />
       <SpecialButton shape={"round"}>SpecialButton1</SpecialButton>
       <br />
@@ -34,6 +35,6 @@ export default function App() {
       <ResponsiveButton x={[pxToVw(300, 375), "600px"]}>
         ResponsiveButton use vw
       </ResponsiveButton>
-    </div>
+    </Col>
   );
 }
