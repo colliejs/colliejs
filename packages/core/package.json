@@ -1,7 +1,7 @@
 {
   "name": "@colliejs/core",
   "version": "1.0.26",
-  "description": "@colliejs/core",
+  "description": "",
   "type": "module",
   "scripts": {
     "build": "rollup -c rollup.config.js && pnpm type ",
@@ -12,9 +12,9 @@
     "watchtype": "tsc --project . --watch"
   },
   "types": "./dist/index.d.ts",
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["css","static extract","emotion","styled-component","stitches"],
+  "author": "colliedog1001@gmail.com",
+  "license": "MIT",
   "devDependencies": {
     "@rollup/plugin-babel": "^6.0.3",
     "@rollup/plugin-node-resolve": "^15.1.0"

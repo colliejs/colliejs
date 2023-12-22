@@ -1,6 +1,5 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-# npm test
-# tsc  --project . --noEmitnpm test
-# lint-staged
+# npx lint-staged
+# pnpm test

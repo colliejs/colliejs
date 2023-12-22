@@ -132,4 +132,4 @@ export const collieConfig = {
       max: "999",
     },
   },
-} as const;
+} as const satisfies BaseConfig;

@@ -82,15 +82,15 @@ export const utils = {
     {} as Record<`_${(typeof pseudoClasses)[number]}`, UtilsFn>
   ),
 
-  "@phone": (css: CSSProperties) => {
-    return { "@media (min-width: 240px)": css };
-  },
+  // "@phone": (css: CSSProperties) => {
+  //   return { "@media (min-width: 240px)": css };
+  // },
 
-  "@pad": (css: CSSProperties) => {
-    return { "@media (min-width: 768px)": css };
-  },
-  "@pc": (css: CSSProperties) => {
-    return { "@media (min-width: 1024px)": css };
-  },
+  // "@pad": (css: CSSProperties) => {
+  //   return { "@media (min-width: 768px)": css };
+  // },
+  // "@pc": (css: CSSProperties) => {
+  //   return { "@media (min-width: 1024px)": css };
+  // },
   
 } as const satisfies BaseConfig["utils"];

@@ -8,7 +8,7 @@
     "build": "vite build"
   },
   "private": true,
-  "keywords": [],
+  "keywords": ["css","static extract","emotion","styled-component","stitches"],
   "author": "colliedog1001@gmail.com",
   "license": "MIT",
   "lint-staged": {

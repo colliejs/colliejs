@@ -12,9 +12,9 @@
     "watchtype": "tsc --project . --watch"
   },
   "types": "./dist/index.d.ts",
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["css","static extract","emotion","styled-component","stitches"],
+  "author": "colliedog1001@gmail.com",
+  "license": "MIT",
   "gitHead": "27b6889c4e336e4f58c20d23c710aa6ede398968",
   "exports": {
     ".": {

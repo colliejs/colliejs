@@ -25,8 +25,8 @@ export type StyledObject<Cfg extends BaseConfig> = CSSObject<Cfg> & {
         | CSSObject<Cfg>;
     };
   };
-  compoundVariants?: any;
-  defaultVariants?: any;
+  compoundVariants?: object[];
+  defaultVariants?: object;
 };
 
 //===========================================================
