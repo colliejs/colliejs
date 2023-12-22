@@ -1,6 +1,6 @@
 {
   "name": "@colliejs/core",
-  "version": "1.0.26",
+  "version": "1.0.27",
   "description": "",
   "type": "module",
   "scripts": {
@@ -12,7 +12,13 @@
     "watchtype": "tsc --project . --watch"
   },
   "types": "./dist/index.d.ts",
-  "keywords": ["css","static extract","emotion","styled-component","stitches"],
+  "keywords": [
+    "css",
+    "static extract",
+    "emotion",
+    "styled-component",
+    "stitches"
+  ],
   "author": "colliedog1001@gmail.com",
   "license": "MIT",
   "devDependencies": {

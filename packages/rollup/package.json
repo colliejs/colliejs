@@ -1,6 +1,6 @@
 {
   "name": "@colliejs/rollup",
-  "version": "1.0.72",
+  "version": "1.0.73",
   "description": "awesesome",
   "type": "module",
   "scripts": {
@@ -12,7 +12,13 @@
     "watchtype": "tsc --project . --watch"
   },
   "types": "./dist/index.d.ts",
-  "keywords": ["css","static extract","emotion","styled-component","stitches"],
+  "keywords": [
+    "css",
+    "static extract",
+    "emotion",
+    "styled-component",
+    "stitches"
+  ],
   "author": "colliedog1001@gmail.com",
   "license": "MIT",
   "dependencies": {
