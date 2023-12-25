@@ -22,9 +22,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@colliejs/react": "workspace:^",
-    "@colliejs/vite": "workspace:^",
-    "@colliejs/core": "workspace:^",
+    "@colliejs/react": "1.0.70",
+    "@colliejs/vite": "1.0.82",
     "@rollup/plugin-commonjs": "^24.1.0",
     "@rollup/plugin-node-resolve": "^15.1.0",
     "@vitejs/plugin-react": "^2.2.0",

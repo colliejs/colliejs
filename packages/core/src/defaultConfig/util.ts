@@ -1,6 +1,5 @@
 import type { BaseConfig, UtilsFn } from "../type";
-import type { CSS, CSSProperties } from "../types";
-import type { CSSObject } from "../type";
+import type { CSSProperties } from "../type";
 
 //Attention: don't include ::placeholder pseudo-element
 const pseudoElements = [
@@ -92,5 +91,4 @@ export const utils = {
   // "@pc": (css: CSSProperties) => {
   //   return { "@media (min-width: 1024px)": css };
   // },
-  
 } as const satisfies BaseConfig["utils"];

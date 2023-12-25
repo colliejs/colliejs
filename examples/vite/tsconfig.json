@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2015",
-    "useDefineForClassFields": true,
+    "target": "ES6",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": false,
     "skipLibCheck": true,
@@ -9,7 +8,7 @@
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "module": "ESNext",
+    "module": "ES2015",
     "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
