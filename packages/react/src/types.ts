@@ -1,4 +1,4 @@
-import React, { PropsWithoutRef, RefAttributes } from "react";
+import React, { ClassAttributes, ElementRef, PropsWithoutRef, RefAttributes } from "react";
 
 import type { Assign, BaseConfig, Widen, CSSObject } from "@colliejs/core";
 import { DynamicVariantFnName, DynamicVariantFn } from "@colliejs/transform";
@@ -112,19 +112,7 @@ export type MyStyledComponentWithAs<
       }
     >
   > &
-    RefAttributes<
-      As extends undefined
-        ? Type extends IntrinsicElementsKeys
-          ? Type extends IntrinsicElementsKeys
-            ? Type
-            : "div"
-          : React.ComponentProps<Type>["ref"]["current"]
-        : As extends IntrinsicElementsKeys
-        ? As extends IntrinsicElementsKeys
-          ? As
-          : "div"
-        : never
-    >
+    ClassAttributes<ElementRef<As extends IntrinsicElementsKeys ? As : Type>>
 >;
 
 export type MyStyledComponent<
