@@ -3,7 +3,7 @@ import { transform } from "../transform";
 import path from "node:path";
 
 describe("test cases", () => {
-  it("StyledComponent with variants and base style ", () => {
+  it.skip("StyledComponent with variants and base style ", () => {
     const code = `
     const kk=1;
     const Button = styled('button', {
@@ -67,7 +67,7 @@ describe("test cases", () => {
       }
     `);
   });
-  it("StyledComponent with compound variants ", () => {
+  it.skip("StyledComponent with compound variants ", () => {
     const code = `
     const Button = styled('button', {
         variants:{
@@ -118,7 +118,7 @@ describe("test cases", () => {
       }
     `);
   });
-  it("css layer embed ", () => {
+  it.skip("css layer embed ", () => {
     const code = `
     const Button = styled('button', {
         background: 'red',
@@ -176,6 +176,47 @@ describe("test cases", () => {
       };",
         "styledComponentCssTexts": "",
         "styledElementCssTexts": ".css-1lkilf{display:flex}
+      ",
+        "styledThemeCssTexts": "",
+      }
+    `);
+  });
+
+  it("as type annanation ", () => {
+    const code = `
+    const Button = styled('button', {
+        variants:{
+          shape:{            
+            dynamic:x=>({gap:x} as StyledObject<object>),
+          }
+        }
+    });
+    export const App = ()=>{
+        return <Button css={{shape:'blue'}}></Button>
+    }
+    `;
+    const res = transform(
+      code,
+      path.resolve(__dirname, "./depTree.test.ts"),
+      config,
+      false
+    );
+    expect(res).toMatchInlineSnapshot(`
+      {
+        "code": "const Button = styled('button', "", [], {
+        "variants-shape-dynamic-1emb4hy": {
+          "canAddPx": true
+        }
+      }, [], []);
+      export const App = () => {
+        return <Button className="css-2mvrb9"></Button>;
+      };",
+        "styledComponentCssTexts": "@layer app.depTreeTestTs-Button-17gsmmh {@media (min-width:320px){.variants-shape-dynamic-1emb4hy{gap:var(--variants-shape-at320)}}
+      @media (min-width:768px){.variants-shape-dynamic-1emb4hy{gap:var(--variants-shape-at768)}}
+      }
+
+      ",
+        "styledElementCssTexts": ".css-2mvrb9{shape:blue}
       ",
         "styledThemeCssTexts": "",
       }

@@ -22,9 +22,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@colliejs/react": "1.0.70",
-    "@colliejs/vite": "1.0.82",
-    "@rollup/plugin-commonjs": "^24.1.0",
+    "@colliejs/react": "1.0.71",
+    "@colliejs/vite": "1.0.83",
+    "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-node-resolve": "^15.1.0",
     "@vitejs/plugin-react": "^2.2.0",
     "dayjs": "^1.11.9",

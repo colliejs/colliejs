@@ -1,9 +1,11 @@
+import { CSSObject } from "@colliejs/core";
 import { config } from "../../../__tests__/common/config";
 import { convertStyledObject } from "../convertStyledObject";
+import { StyledObject } from "../types";
 
 describe("parseStyleObj", () => {
   it("plain object ", () => {
-    const styleObj: StyledObject = {
+    const styleObj: any = {
       background: "red",
       lineHeight: 1,
       variants: {
@@ -86,6 +88,8 @@ describe("parseStyleObj", () => {
       }
     `);
   });
+
+  
   it("with spreed function", () => {
     const f = x => ({ gap: x });
     const styleObj: Styling = {

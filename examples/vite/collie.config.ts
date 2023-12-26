@@ -9,5 +9,4 @@ export const collieConfig = {
    
     },  
   },
-  // utils:{}
 } as const satisfies BaseConfig;

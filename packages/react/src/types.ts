@@ -1,4 +1,9 @@
-import React, { ClassAttributes, ElementRef, PropsWithoutRef, RefAttributes } from "react";
+import React, {
+  ClassAttributes,
+  ElementRef,
+  PropsWithoutRef,
+  RefAttributes,
+} from "react";
 
 import type { Assign, BaseConfig, Widen, CSSObject } from "@colliejs/core";
 import { DynamicVariantFnName, DynamicVariantFn } from "@colliejs/transform";
@@ -20,9 +25,9 @@ export type StyledOption<Props, InnerAs extends IntrinsicElementsKeys> = {
 export type StyledObject<Cfg extends BaseConfig> = CSSObject<Cfg> & {
   variants?: {
     [key in string]: {
-      [V in DynamicVariantFnName | (string & {})]?:
-        | DynamicVariantFn<Cfg>
-        | CSSObject<Cfg>;
+      [k1 in DynamicVariantFnName]: DynamicVariantFn<Cfg>;
+    } & {
+      string?: CSSObject<Cfg>;
     };
   };
   compoundVariants?: object[];

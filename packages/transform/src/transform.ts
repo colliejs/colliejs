@@ -39,6 +39,7 @@ export const transform = <Config extends BaseConfig>(
       }
 
       removeTypeAnnotation(path);
+
       const styledComponent = new StyledComponent(
         path,
         curFile,

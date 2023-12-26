@@ -15,7 +15,14 @@ import {
 import { toHash } from "@c3/utils";
 import { canAddPx } from "./canAddPx";
 
-const toHashObject = (obj: any) => toHash(JSON.stringify(obj));
+const toHashObject = (obj: any) => {
+  try {
+    return toHash(JSON.stringify(obj));
+  } catch (e) {
+    console.log("===>error", obj);
+    throw e;
+  }
+};
 export type Props = { [k: string]: any };
 
 export const getBaseStyleSelector = (prefix: string, hash: string) => {
@@ -26,7 +33,7 @@ export const getBaseStyleSelector = (prefix: string, hash: string) => {
 };
 
 export const convertStyledObject = <Config extends BaseConfig>(
-  styling: StyledObject<Config>,
+  styledObject: StyledObject<Config>,
   config: Config,
   baseStylePrefix = ""
 ): StyledObjectParsed<Config> => {
@@ -34,7 +41,7 @@ export const convertStyledObject = <Config extends BaseConfig>(
   //===========================================================
   // 1.处理variants
   //===========================================================
-  const variants = styling["variants"];
+  const variants = styledObject["variants"];
   for (const variantName in variants) {
     const variantDeclBlock: VariantDeclBlock<Config> = variants[variantName];
     for (const variantValue in variantDeclBlock) {
@@ -58,6 +65,9 @@ export const convertStyledObject = <Config extends BaseConfig>(
         const cssObj = (cssObjOrDynamicFn as DynamicVariantFn<Config>)(
           cssVariable
         );
+        cssVariable
+        cssObjOrDynamicFn
+        cssObj
         const className = getVariantClassName(
           variantName,
           "dynamic",
@@ -94,7 +104,7 @@ export const convertStyledObject = <Config extends BaseConfig>(
   //===========================================================
   // 2.处理compoundVariants
   //===========================================================
-  const compoundVariants = styling["compoundVariants"] || [];
+  const compoundVariants = styledObject["compoundVariants"] || [];
   for (const cv of compoundVariants) {
     const cssObj = cv.css;
     //@ts-ignore
@@ -113,7 +123,7 @@ export const convertStyledObject = <Config extends BaseConfig>(
   //===========================================================
   // 3.deal with defaultVariant
   //===========================================================
-  const defaultVariants = styling["defaultVariants"] || {};
+  const defaultVariants = styledObject["defaultVariants"] || {};
   const classeNames = [];
   for (const [variantName, variantValue] of Object.entries(defaultVariants)) {
     const key = getVariantKey(variantName, variantValue, false);
@@ -128,9 +138,9 @@ export const convertStyledObject = <Config extends BaseConfig>(
   //===========================================================
   // 4.处理baseStyle
   //===========================================================
-  const keys = Object.keys(styling);
+  const keys = Object.keys(styledObject);
   const baseStyleCssObject = _.pick(
-    styling,
+    styledObject,
     keys.filter(
       key => !["variants", "compoundVariants", "defaultVariants"].includes(key)
     )

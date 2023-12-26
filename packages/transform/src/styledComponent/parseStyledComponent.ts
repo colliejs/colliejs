@@ -81,6 +81,7 @@ export const parseStyledComponentDeclaration = <Config extends BaseConfig>(
   moduleId: string,
   config: Config
 ): StyledDataType<Config> => {
+
   const { init, id } = path.node.declarations[0]; ////TODO: multiple declarator
   if (!init || !isStyledCallExpression(init, config)) {
     throw new Error("not a styledComponentDecl");
@@ -111,6 +112,7 @@ export const parseStyledComponentDeclaration = <Config extends BaseConfig>(
     styling = styling.expression;
   }
   if (t.isObjectExpression(styling)) {
+    console.log(generate(path.node).code);
     const stylingPath = getPathOfStyling(path);
     assert(!!stylingPath, "stylingPath should not be null", { styling, path });
     result.styling = evalObjectExp(stylingPath, moduleIdByName);
