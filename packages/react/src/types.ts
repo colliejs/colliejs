@@ -26,7 +26,7 @@ export type StyledObject<Config extends BaseConfig> = CSSObject<Config> & {
   variants?: {
     [key in string]?: {
       [k: string]: CSSObject<Config> | DynamicVariantFn<Config> | undefined;
-      dynamic: DynamicVariantFn<Config>;
+      dynamic?: DynamicVariantFn<Config>;
     };
   };
   compoundVariants?: object[];
