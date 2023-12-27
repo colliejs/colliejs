@@ -25,9 +25,8 @@ export type StyledOption<Props, InnerAs extends IntrinsicElementsKeys> = {
 export type StyledObject<Config extends BaseConfig> = CSSObject<Config> & {
   variants?: {
     [key in string]?: {
-      [k1 in DynamicVariantFnName]?: DynamicVariantFn<Config>;
-    } & {
-      [k in string]?: CSSObject<Config>;
+      [k: string]: CSSObject<Config> | DynamicVariantFn<Config> | undefined;
+      dynamic: DynamicVariantFn<Config>;
     };
   };
   compoundVariants?: object[];
