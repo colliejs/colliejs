@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.73](https://github.com/colliejs/colliejs/compare/@colliejs/react@1.0.72...@colliejs/react@1.0.73) (2023-12-27)
+
+### Bug Fixes
+
+- type fix ([ad9ac8f](https://github.com/colliejs/colliejs/commit/ad9ac8f733b8f511ef7441a97f2ea742beebf9d3))
+
 ## [1.0.72](https://github.com/colliejs/colliejs/compare/@colliejs/react@1.0.71...@colliejs/react@1.0.72) (2023-12-26)
 
 ### Bug Fixes
