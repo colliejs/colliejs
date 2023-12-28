@@ -112,6 +112,7 @@ export type MyStyledComponent<
       ComposedVariant<Type, ExtractPropsFromStyledObject<NStyledObject>> & {
         css?: CSSObject<Config>;
         as?: IntrinsicElementsKeys;
+        children?: React.ReactNode;
       }
     >
   > &

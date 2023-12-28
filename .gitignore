@@ -28,3 +28,5 @@ dist-ssr
 */**/.cache
 pnpm-publish-summary.json
 coverage/
+examples/nextjs/.next/**
+examples/nextjs/out/**
