@@ -1,7 +1,7 @@
 import type { BaseConfig } from "@colliejs/core";
 import _ from "lodash";
 import React, { ElementType, ForwardRefRenderFunction } from "react";
-import { MakeStyled } from "./types";
+import { Styled } from "./types";
 import {
   getCSSValue,
   getCSSVariable,
@@ -242,5 +242,5 @@ export const makeStyled = <Config extends BaseConfig>(config: Config) => {
     //@ts-ignore
     StyledComponent.__isStyledComponent = true;
     return StyledComponent;
-  } as unknown as MakeStyled<Config>;
+  } as unknown as Styled<Config>;
 };

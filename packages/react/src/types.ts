@@ -5,12 +5,17 @@ import React, {
   RefAttributes,
 } from "react";
 
-import type { Assign, BaseConfig, Widen, CSSObject } from "@colliejs/core";
+import {
+  Assign,
+  BaseConfig,
+  Widen,
+  CSSObject,
+} from "@colliejs/core";
 import { DynamicVariantFnName, DynamicVariantFn } from "@colliejs/transform";
+
 // export type IntrinsicElementsKeys = keyof JSX.IntrinsicElements | (string & {});
 export type IntrinsicElementsKeys = keyof JSX.IntrinsicElements;
 type IsHostComponent<T> = T extends IntrinsicElementsKeys ? true : false;
-
 export type Debug<T> = { [K in keyof T]: T[K] };
 
 export type StyledOption<Props, InnerAs extends IntrinsicElementsKeys> = {
@@ -19,18 +24,38 @@ export type StyledOption<Props, InnerAs extends IntrinsicElementsKeys> = {
   attrs?: Partial<Props> & JSX.IntrinsicElements[InnerAs];
 };
 
+type VariantValue<
+  NStyledObject extends { variants?: object },
+  K extends keyof NStyledObject["variants"]
+> = Widen<Exclude<keyof NStyledObject["variants"][K], "dynamic">>;
+
 //===========================================================
 // used by function styled
 //===========================================================
-export type StyledObject<Config extends BaseConfig> = CSSObject<Config> & {
-  variants?: {
-    [key in string]?: {
-      [k: string]: CSSObject<Config> | DynamicVariantFn<Config> | undefined;
-      dynamic?: DynamicVariantFn<Config>;
-    };
+type Variants<Config extends BaseConfig> = {
+  [key in string]?: {
+    [k: string]: CSSObject<Config> | DynamicVariantFn<Config> | undefined;
+    dynamic?: DynamicVariantFn<Config>;
   };
-  compoundVariants?: object[];
-  defaultVariants?: object;
+};
+type CompoundVariant<
+  Config extends BaseConfig,
+  NVariants extends { variants?: Variants<Config> }
+> = {
+  [k in keyof NVariants["variants"]]?: keyof NVariants["variants"][k];
+} & {
+  css: CSSObject<Config>;
+};
+
+export type StyledObject<
+  Config extends BaseConfig,
+  NVaraints extends Variants<Config>
+> = CSSObject<Config> & {
+  variants?: NVaraints;
+  compoundVariants?: CompoundVariant<Config, { variants?: NVaraints }>[];
+  defaultVariants?: {
+    [key in keyof NVaraints]?: keyof NVaraints[key];
+  };
 };
 
 //===========================================================
@@ -38,24 +63,19 @@ export type StyledObject<Config extends BaseConfig> = CSSObject<Config> & {
 // - DynamicFn:根据不同函数名，参数类型不同
 //===========================================================
 
-// 判断K1和K2是否有交集，如果有返回true,否则返回false
-export type Intersection<K1, K2> = K1 & K2 extends never ? false : true;
-
-export type ExtractPropsFromStyling<
-  T extends { variants?: { [name: string]: unknown } }
+export type ExtractPropsFromStyledObject<
+  NStyledObject extends { variants?: object }
 > = {
-  [K in keyof T["variants"]]?: Intersection<
-    keyof T["variants"][K],
-    DynamicVariantFnName
-  > extends true
-    ? //TODO: | Util.Widen<Omit<keyof T["variants"][K], DynamicVariantFnName>>
-      | ((Widen<keyof T["variants"][K]> | (string & {})) | number)
+  [K in keyof NStyledObject["variants"]]?: DynamicVariantFnName extends keyof NStyledObject["variants"][K]
+    ?
+        | ((VariantValue<NStyledObject, K> | (string & {})) | number)
         | (
-            | (Widen<keyof T["variants"][K]> | (string & {}))
+            | VariantValue<NStyledObject, K>
+            | (string & {})
             | number
             | undefined
           )[]
-    : Widen<keyof T["variants"][K]> | Widen<keyof T["variants"][K]>[];
+    : VariantValue<NStyledObject, K> | VariantValue<NStyledObject, K>[];
 };
 
 //===========================================================
@@ -63,46 +83,25 @@ export type ExtractPropsFromStyling<
 //TODO: 处理variants覆盖的情况
 //===========================================================
 
-type ComposeVariant<
-  C extends BaseConfig,
-  Type extends IntrinsicElementsKeys | React.ComponentType<any>,
-  Styling extends StyledObject<C>,
-  CurVaraints = ExtractPropsFromStyling<Styling>
-> = Type extends IntrinsicElementsKeys
-  ? CurVaraints
+type ComposedVariant<
+  TypeOfDeped extends IntrinsicElementsKeys | React.ComponentType<any>,
+  VariantsOfCurType extends object
+> = TypeOfDeped extends IntrinsicElementsKeys
+  ? VariantsOfCurType
   : {
-      [K in keyof CurVaraints]?: K extends keyof React.ComponentProps<Type>
-        ? CurVaraints[K] | React.ComponentProps<Type>[K]
-        : CurVaraints[K];
+      [K in keyof VariantsOfCurType]?: K extends keyof React.ComponentProps<TypeOfDeped>
+        ? VariantsOfCurType[K] | React.ComponentProps<TypeOfDeped>[K] //组合Type的variants和组件自带的CurVaraints
+        : VariantsOfCurType[K];
     };
 
-export type MyStyledComponentWithoutAs<
-  Config extends BaseConfig,
-  Type extends IntrinsicElementsKeys | React.ComponentType<any>,
-  Styling extends StyledObject<Config>
-> = React.ForwardRefExoticComponent<
-  Type extends IntrinsicElementsKeys
-    ? JSX.IntrinsicElements[Type] & {
-        css?: CSSObject<Config>;
-        as?: IntrinsicElementsKeys;
-      } & ExtractPropsFromStyling<Styling> &
-        RefAttributes<Type>
-    : Assign<
-        Omit<
-          React.ComponentPropsWithRef<Type>,
-          keyof ExtractPropsFromStyling<Styling>
-        >,
-        ComposeVariant<Config, Type, Styling>
-      >
->;
 type AttrOfAs<T> = T extends IntrinsicElementsKeys
   ? JSX.IntrinsicElements[T]
   : {};
 
-export type MyStyledComponentWithAs<
+export type MyStyledComponent<
   Config extends BaseConfig,
   Type extends IntrinsicElementsKeys | React.ComponentType<any>,
-  Styling extends StyledObject<Config>,
+  NStyledObject extends object,
   As extends IntrinsicElementsKeys | undefined
 > = React.ForwardRefExoticComponent<
   PropsWithoutRef<
@@ -110,7 +109,7 @@ export type MyStyledComponentWithAs<
       As extends IntrinsicElementsKeys
         ? Assign<React.ComponentPropsWithoutRef<Type>, AttrOfAs<As>>
         : React.ComponentPropsWithoutRef<Type>,
-      ComposeVariant<Config, Type, Styling> & {
+      ComposedVariant<Type, ExtractPropsFromStyledObject<NStyledObject>> & {
         css?: CSSObject<Config>;
         as?: IntrinsicElementsKeys;
       }
@@ -119,25 +118,24 @@ export type MyStyledComponentWithAs<
     ClassAttributes<ElementRef<As extends IntrinsicElementsKeys ? As : Type>>
 >;
 
-export type MyStyledComponent<
-  C extends BaseConfig,
+//===========================================================
+// Styled
+//===========================================================
+export type Styled<Config extends BaseConfig> = <
   Type extends IntrinsicElementsKeys | React.ComponentType<any>,
-  Styling extends StyledObject<C>,
-  As extends IntrinsicElementsKeys | undefined
-> =
-  // As extends undefined
-  // ? MyStyledComponentWithoutAs<C, Type, Styling>
-  MyStyledComponentWithAs<C, Type, Styling, As>;
+  NStyledObject extends StyledObject<Config, NStyledObject["variants"]>,
+  Option extends StyledOption<any, IntrinsicElementsKeys> = { as: undefined }
+>(
+  type: Type,
+  styledObject: NStyledObject,
+  option?: Option
+) => MyStyledComponent<Config, Type, NStyledObject, Option["as"]>;
 
 //===========================================================
 // MakeStyled
 //===========================================================
-export type MakeStyled<Config extends BaseConfig> = <
-  Type extends IntrinsicElementsKeys | React.ComponentType<any>,
-  T extends StyledObject<Config>,
-  Option extends StyledOption<any, IntrinsicElementsKeys> = { as: undefined }
->(
-  type: Type,
-  styledObject: T,
-  option?: Option
-) => MyStyledComponent<Config, Type, T, Option["as"]>;
+export declare const makeStyled: <Config extends BaseConfig>(
+  config: Config
+) => Styled<Config>;
+
+// export declare const defaultConfig: typeof defaultConfig;

@@ -20,7 +20,7 @@ export default function App() {
         </Button>
       </Row>
       <Row>
-        <MyButton shape={"round"}> MyButton-1</MyButton>
+        <MyButton shape={["round"]}> MyButton-1</MyButton>
         <MyButton shape={[12]}> MyButton-2</MyButton>
       </Row>
       <br />
