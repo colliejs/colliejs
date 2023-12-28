@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.76](https://github.com/colliejs/colliejs/compare/@colliejs/react@1.0.75...@colliejs/react@1.0.76) (2023-12-28)
+
+### Bug Fixes
+
+- default compound variants type ([8989f77](https://github.com/colliejs/colliejs/commit/8989f77b201985854950e5901253929bce323f08))
+
 ## [1.0.75](https://github.com/colliejs/colliejs/compare/@colliejs/react@1.0.74...@colliejs/react@1.0.75) (2023-12-27)
 
 ### Bug Fixes
