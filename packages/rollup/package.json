@@ -21,12 +21,14 @@
   ],
   "author": "colliedog1001@gmail.com",
   "license": "MIT",
-  "dependencies": {
+  "peerDependencies": {
     "@colliejs/config": "workspace:^",
     "@colliejs/core": "workspace:^",
-    "@colliejs/react": "workspace:^",
     "@colliejs/shared": "workspace:^",
     "@colliejs/transform": "workspace:^"
+  },
+  "devDependencies": {
+    "@colliejs/react": "workspace:^"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

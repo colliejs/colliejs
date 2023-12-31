@@ -33,7 +33,10 @@
   "publishConfig": {
     "access": "public"
   },
-  "dependencies": {
+  "peerDependencies": {
     "@colliejs/core": "workspace:^"
+  },
+  "dependencies": {
+    "@c3/utils": "^1.3.26"
   }
 }

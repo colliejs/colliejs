@@ -21,7 +21,8 @@
   ],
   "author": "colliedog1001@gmail.com",
   "license": "MIT",
-  "dependencies": {
+  "dependencies": {},
+  "peerDependencies": {
     "@colliejs/core": "workspace:^",
     "@colliejs/transform": "workspace:^"
   },

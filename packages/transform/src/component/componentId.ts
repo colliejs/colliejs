@@ -1,4 +1,3 @@
-import { REG_HOST_COMPONENT } from "../component/HostComponent";
 import path from "node:path";
 import { toCamelCase, toHash } from "@c3/utils";
 //===========================================================

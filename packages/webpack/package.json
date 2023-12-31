@@ -22,14 +22,15 @@
   "author": "colliedog1001@gmail.com",
   "license": "MIT",
   "dependencies": {
-    "@colliejs/config": "workspace:^",
-    "@colliejs/core": "workspace:^",
-    "@colliejs/react": "workspace:^",
-    "@colliejs/shared": "workspace:^",
-    "@colliejs/transform": "workspace:^",
     "loader-utils": "^3.2.1",
     "schema-utils": "^4.2.0",
-    "webpack": "^5.88.2"
+    "webpack": "^5.89.0"
+  },
+  "peerDependencies": {
+    "@colliejs/config": "workspace:^",
+    "@colliejs/core": "workspace:^",
+    "@colliejs/shared": "workspace:^",
+    "@colliejs/transform": "workspace:^"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
