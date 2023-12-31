@@ -44,7 +44,7 @@ type CompoundVariant<
 
 export type StyledObject<
   Config extends BaseConfig,
-  T extends StyledObject<Config, any>
+  T extends StyledObject<Config, T>
 > = CSSObject<Config> & {
   variants?: Variants<Config>;
   compoundVariants?: CompoundVariant<Config, T>[];
@@ -119,7 +119,7 @@ export type MyStyledComponent<
 //===========================================================
 export type Styled<Config extends BaseConfig> = <
   Type extends IntrinsicElementsKeys | React.ComponentType<any>,
-  NStyledObject extends StyledObject<Config, NStyledObject>,
+  const NStyledObject extends StyledObject<Config, NStyledObject>,
   Option extends StyledOption<any, IntrinsicElementsKeys> = { as: undefined }
 >(
   type: Type,
@@ -130,6 +130,6 @@ export type Styled<Config extends BaseConfig> = <
 //===========================================================
 // MakeStyled
 //===========================================================
-export declare const makeStyled: <Config extends BaseConfig>(
+export declare const makeStyled: <const Config extends BaseConfig>(
   config: Config
 ) => Styled<Config>;

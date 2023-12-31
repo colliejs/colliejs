@@ -1,5 +1,5 @@
-import {  makeStyled } from "../";
-import {defaultConfig} from '@colliejs/shared'
+import { makeStyled } from "../";
+import { defaultConfig } from "@colliejs/config";
 import generate from "@babel/generator";
 import * as t from "@babel/types";
 import {
