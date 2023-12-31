@@ -111,4 +111,4 @@ know more about examples,
 
 # Big thanks
 
-- [stitches]('https://github.com/stitchesjs/stitches') - a css-in-js library with multi-variant support
+- [stitches](https://github.com/stitchesjs/stitches) - a css-in-js library with multi-variant support
