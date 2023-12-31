@@ -1,4 +1,4 @@
-import { defaultConfig } from "@colliejs/core";
+import { defaultConfig } from "@colliejs/shared";
 import fs from "node:fs";
 import path from "node:path";
 import {

@@ -1,11 +1,9 @@
-import { BaseConfig, defaultConfig } from "@colliejs/core";
+import { BaseConfig } from "@colliejs/core";
 import { Alias, transform } from "@colliejs/transform";
 import { LoaderContext } from "webpack";
 import { FilterPattern, createFilter } from "@rollup/pluginutils";
 import path from "node:path";
-import { getCssFileName, writeFile } from "@colliejs/shared";
-
-
+import { getCssFileName, writeFile, writeThemeCssFile } from "@colliejs/shared";
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const jsFileReg = /\.[cm]?[tj]sx?$/;
@@ -16,6 +14,7 @@ type LoaderOption<Config extends BaseConfig> = {
   root?: string;
   include?: FilterPattern;
   exclude?: FilterPattern;
+  entry: string;
 };
 export default function collieWebpackLoader<Config extends BaseConfig>(
   this: LoaderContext<LoaderOption<Config>>,
@@ -24,11 +23,12 @@ export default function collieWebpackLoader<Config extends BaseConfig>(
   const options = this.getOptions();
 
   const {
-    styledConfig =defaultConfig,
+    styledConfig,
     alias = {},
     root = process.cwd(),
     include,
     exclude,
+    entry,
   } = options;
   const filter = createFilter(include, exclude);
   const url = this.resourcePath || "";
@@ -36,17 +36,36 @@ export default function collieWebpackLoader<Config extends BaseConfig>(
     return code;
   }
 
+  //===========================================================
+  // entry文件变动后，重新生成theme 样式文件
+  //===========================================================
+  const isEntryFile = path.resolve(root, entry) === url;
+  let themeCssFile = "";
+  if (isEntryFile) {
+    themeCssFile = writeThemeCssFile(
+      styledConfig.theme,
+      styledConfig.prefix,
+      root
+    );
+  }
+  const importThemeCssText = isEntryFile ? `import "${themeCssFile}";` : "";
+
+  //===========================================================
+  // 普通文件
+  //===========================================================
   let {
     code: transformedCode,
     styledComponentCssTexts,
     styledElementCssTexts,
   } = transform(code, url, styledConfig, alias, root);
-  const content = styledElementCssTexts + "\n" + styledComponentCssTexts;
-  const hasMeaningContent = content.replace(/\s/g, "").length > 0;
-  if (!hasMeaningContent) {
+  const cssText = styledElementCssTexts + "\n" + styledComponentCssTexts;
+  const hasMeaningCss = cssText.replace(/\s/g, "").length > 0;
+  if (!hasMeaningCss && !isEntryFile) {
     return code;
   }
   const cssFile = getCssFileName(url)(root);
-  writeFile(cssFile, content);
-  return `import "${cssFile}"; ${transformedCode}`;
+  writeFile(cssFile, cssText);
+
+  return `import "${cssFile}"; ${importThemeCssText};
+   ${transformedCode};`;
 }

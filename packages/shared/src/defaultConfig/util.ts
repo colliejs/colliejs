@@ -1,5 +1,4 @@
-import type { BaseConfig, UtilsFn } from "../type";
-import type { CSSProperties } from "../type";
+import type { BaseConfig, CSSObject, CSSProperties } from "@colliejs/core";
 
 //Attention: don't include ::placeholder pseudo-element
 const pseudoElements = [
@@ -58,9 +57,9 @@ export const utils = {
   bg: (bg: CSSProperties["background"]) => ({ background: bg }),
 
   ...pseudoElements.reduce(
-    (acc, pseudo: string) => ({
+    (acc, pseudo) => ({
       ...acc,
-      [`_${pseudo}`]: (css: CSSProperties) => ({
+      [`_${pseudo}`]: (css: CSSObject<BaseConfig>) => ({
         [`&::${pseudo}`]: {
           content: "",
           position: "absolute",
@@ -71,14 +70,22 @@ export const utils = {
         },
       }),
     }),
-    {} as Record<`_${(typeof pseudoElements)[number]}`, UtilsFn>
+    {} as Record<
+      `_${(typeof pseudoElements)[number]}`,
+      (css: CSSObject<BaseConfig>) => CSSObject<BaseConfig>
+    >
   ),
   ...pseudoClasses.reduce(
     (acc, pseudo) => ({
       ...acc,
-      [`_${pseudo}`]: (css: CSSProperties) => ({ [`&:${pseudo}`]: css }),
+      [`_${pseudo}`]: (css: CSSObject<BaseConfig>) => ({
+        [`&:${pseudo}`]: css,
+      }),
     }),
-    {} as Record<`_${(typeof pseudoClasses)[number]}`, UtilsFn>
+    {} as Record<
+      `_${(typeof pseudoClasses)[number]}`,
+      (css: CSSObject<BaseConfig>) => CSSObject<BaseConfig>
+    >
   ),
 
   // "@phone": (css: CSSProperties) => {

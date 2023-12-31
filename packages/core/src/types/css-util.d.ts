@@ -32,9 +32,10 @@ export type CSS<
   Utils extends object
 > =
   // nested at-rule css styles
+  // {
+  // [K in Util.Prefixed<"@", keyof Media>]?: CSS<Media, Theme, ThemeMap, Utils>;
+  // } &
   {
-    [K in Util.Prefixed<"@", keyof Media>]?: CSS<Media, Theme, ThemeMap, Utils>;
-  } & {
     // known property styles
     [K in keyof CSSProperties]?:
       | ValueByPropertyName<K>

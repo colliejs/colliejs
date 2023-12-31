@@ -1,24 +1,15 @@
-import { BaseConfig, createTheme, defaultConfig } from "@colliejs/core";
+import { BaseConfig, createTheme } from "@colliejs/core";
+import { defaultConfig } from "@colliejs/shared";
 import { Alias, transform } from "@colliejs/transform";
 import { FilterPattern, createFilter } from "@rollup/pluginutils";
 import log from "npmlog";
 
-import { writeFile, getCssFileName } from "@colliejs/shared";
+import { writeFile, getCssFileName, writeThemeCssFile } from "@colliejs/shared";
 import { createRequire } from "node:module";
 import path from "path";
-import { Plugin, ResolvedConfig } from "vite";
+import type { Plugin, ResolvedConfig } from "vite";
 
 global.require = global.require || createRequire(import.meta.url);
-
-global.window = {
-  //@ts-ignore
-  CSS: {
-    supports: () => {
-      return true;
-    },
-  },
-};
-const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 type VitePluginOptions<Config extends BaseConfig> = {
   include?: FilterPattern;
@@ -28,17 +19,8 @@ type VitePluginOptions<Config extends BaseConfig> = {
   root?: string;
   entry: string;
 };
-type LayerName = string;
 
 const UNCHANGED = null;
-
-const writeStyledThemeCssTexts = <Config extends BaseConfig>(
-  styledConfig: Config,
-  cssFileName: string
-) => {
-  const cssText = createTheme(styledConfig.prefix, styledConfig.theme);
-  writeFile(cssFileName, cssText);
-};
 
 const collie = <Config extends BaseConfig>(
   option: VitePluginOptions<Config>
@@ -49,7 +31,7 @@ const collie = <Config extends BaseConfig>(
     styledConfig = defaultConfig,
     alias = {},
     root = process.cwd(),
-    entry = "src/index.tsx",
+    entry,
   } = option || {};
   const filter = createFilter(include, exclude);
   let viteConfig: ResolvedConfig;
@@ -69,18 +51,22 @@ const collie = <Config extends BaseConfig>(
         return UNCHANGED;
       }
       log.verbose("transform", "changed url is: ", url);
+
       //===========================================================
-      // collie.config.js配置文件变动后，重新生成theme 样式文件
+      // entry变动后，重新生成theme 样式文件
       //===========================================================
-      const isEntry = path.resolve(root, entry) === url;
-      if (isEntry) {
-        const cssFile = path.resolve(__dirname, "theme.css");
-        writeStyledThemeCssTexts(styledConfig, cssFile);
-        return {
-          code: `import "${cssFile}"; ${code}`,
-          map: { mappings: "" },
-        };
+      const isEntryFile = path.resolve(root, entry) === url;
+      let themeCssFile = "";
+      if (isEntryFile) {
+        themeCssFile = writeThemeCssFile(
+          styledConfig.theme,
+          styledConfig.prefix,
+          root
+        );
       }
+      const importThemeCssText = themeCssFile
+        ? `import "${themeCssFile}";`
+        : "";
 
       //===========================================================
       // 普通文件
@@ -89,17 +75,17 @@ const collie = <Config extends BaseConfig>(
         code: transformedCode,
         styledElementCssTexts,
         styledComponentCssTexts,
-        styledThemeCssTexts
       } = transform(code, url, styledConfig, alias, root);
       const cssFile = getCssFileName(url)(root);
-      const content = styledElementCssTexts + "\n" + styledComponentCssTexts;
-      const hasContent = content.replace(/\s/g, "").length > 0;
-      if (!hasContent) {
+      const cssTexts = `${styledElementCssTexts}\n${styledComponentCssTexts}`;
+      const hasCssText = cssTexts.replace(/\s/g, "").length > 0;
+      if (!hasCssText && !isEntryFile) {
         return UNCHANGED;
       }
-      writeFile(cssFile, content);
+      writeFile(cssFile, cssTexts);
+
       return {
-        code: `import "${cssFile}";\n ${transformedCode}`,
+        code: `import "${cssFile}";\n ${importThemeCssText}; ${transformedCode}`,
         map: { mappings: "" },
       };
     },

@@ -1,4 +1,4 @@
-import { BaseConfig, CSSObject, defaultConfig } from "../type";
+import { BaseConfig, CSSObject, } from "../type";
 import { convertCssObjToMediaQuery } from "../convert";
 
 describe("convertCssObjToMediaQuery", () => {

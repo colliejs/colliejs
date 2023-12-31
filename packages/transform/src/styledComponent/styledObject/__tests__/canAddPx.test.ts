@@ -1,5 +1,5 @@
 import type { CSSObject } from "@colliejs/core";
-import { defaultConfig } from "@colliejs/core";
+import { defaultConfig } from "@colliejs/shared";
 import { canAddPx } from "../canAddPx";
 
 describe("canRemovePx", () => {

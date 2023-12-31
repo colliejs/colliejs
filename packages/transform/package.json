@@ -25,6 +25,7 @@
   "dependencies": {
     "@c3/css": "^2.0.1",
     "@colliejs/core": "workspace:^",
+    "@colliejs/shared": "workspace:^",
     "@types/jest": "^29.5.2",
     "lodash-es": "^4.17.21"
   },

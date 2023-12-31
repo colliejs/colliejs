@@ -12,7 +12,13 @@
     "type": "tsc --project . --paths null --emitDeclarationOnly --declaration",
     "watchtype": "tsc --project . --watch"
   },
-  "keywords": ["css","static extract","emotion","styled-component","stitches"],
+  "keywords": [
+    "css",
+    "static extract",
+    "emotion",
+    "styled-component",
+    "stitches"
+  ],
   "author": "colliedog1001@gmail.com",
   "license": "MIT",
   "dependencies": {
@@ -20,8 +26,10 @@
     "@babel/preset-env": "^7.22.5",
     "@babel/preset-react": "^7.22.5",
     "@babel/preset-typescript": "^7.22.5",
-    "@colliejs/react": "1.0.70",
-    "@colliejs/webpack": "1.0.29",
+    "@colliejs/core": "workspace:^",
+    "@colliejs/react": "workspace:^",
+    "@colliejs/shared": "workspace:^",
+    "@colliejs/webpack": "workspace:^",
     "antd": "4",
     "babel-loader": "^9.1.3",
     "clean-css": "^5.3.3",

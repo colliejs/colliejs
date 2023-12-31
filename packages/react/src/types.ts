@@ -5,12 +5,7 @@ import React, {
   RefAttributes,
 } from "react";
 
-import {
-  Assign,
-  BaseConfig,
-  Widen,
-  CSSObject,
-} from "@colliejs/core";
+import { Assign, BaseConfig, Widen, CSSObject } from "@colliejs/core";
 import { DynamicVariantFnName, DynamicVariantFn } from "@colliejs/transform";
 
 // export type IntrinsicElementsKeys = keyof JSX.IntrinsicElements | (string & {});
@@ -49,12 +44,12 @@ type CompoundVariant<
 
 export type StyledObject<
   Config extends BaseConfig,
-  NVaraints extends Variants<Config>
+  T extends StyledObject<Config, any>
 > = CSSObject<Config> & {
-  variants?: NVaraints;
-  compoundVariants?: CompoundVariant<Config, { variants?: NVaraints }>[];
+  variants?: Variants<Config>;
+  compoundVariants?: CompoundVariant<Config, T>[];
   defaultVariants?: {
-    [key in keyof NVaraints]?: keyof NVaraints[key];
+    [key in keyof T["variants"]]?: keyof T["variants"][key];
   };
 };
 
@@ -124,7 +119,7 @@ export type MyStyledComponent<
 //===========================================================
 export type Styled<Config extends BaseConfig> = <
   Type extends IntrinsicElementsKeys | React.ComponentType<any>,
-  NStyledObject extends StyledObject<Config, NStyledObject["variants"]>,
+  NStyledObject extends StyledObject<Config, NStyledObject>,
   Option extends StyledOption<any, IntrinsicElementsKeys> = { as: undefined }
 >(
   type: Type,
@@ -138,5 +133,3 @@ export type Styled<Config extends BaseConfig> = <
 export declare const makeStyled: <Config extends BaseConfig>(
   config: Config
 ) => Styled<Config>;
-
-// export declare const defaultConfig: typeof defaultConfig;

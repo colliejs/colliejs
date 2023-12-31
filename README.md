@@ -13,8 +13,9 @@
 # Example
 
 ```jsx
-import { makeStyled,defaultConfig } from "@colliejs/react";
-import {absYCenter} from '@collie-ui/css'
+import { makeStyled } from "@colliejs/react";
+import { defaultConfig } from '@colliejs/shared";
+import { absYCenter } from '@collie-ui/css'
 const styled = makeStyled(defaultConfig);
 const Button = styled("button", {
   w: 100,
@@ -29,6 +30,17 @@ const Button = styled("button", {
     ...absYCenter({righ: 10}),
   }
   variants: {
+    size:{
+      big:{
+        w:80,
+      },
+      md:{
+        w:40,
+      },
+      sm:{
+        w:20,
+      }
+    },
     shape: {
       round: {
         borderRadius: 9999,
@@ -45,6 +57,9 @@ const Button = styled("button", {
         },
       },
     },
+    defaultVariants:{
+      shape: 'rect',
+    }
   },
 });
 ```

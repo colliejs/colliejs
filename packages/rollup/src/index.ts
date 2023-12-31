@@ -1,4 +1,5 @@
-import { BaseConfig, createTheme, defaultConfig } from "@colliejs/core";
+import { BaseConfig, createTheme } from "@colliejs/core";
+import { defaultConfig } from "@colliejs/shared";
 import { Alias, transform } from "@colliejs/transform";
 import { FilterPattern, createFilter } from "@rollup/pluginutils";
 import fs from "node:fs";

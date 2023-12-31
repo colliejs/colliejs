@@ -2,7 +2,7 @@ import path from "node:path";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import collieWebpackLoader from "@colliejs/webpack";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
-import { defaultConfig } from "@colliejs/react";
+import { defaultConfig } from "@colliejs/shared";
 
 import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
@@ -18,6 +18,11 @@ export default {
   },
   resolve: {
     extensions: [".tsx", ".ts", ".mjs", ".jsx", ".js"],
+  },
+  performance: {
+    hints: false,
+    maxEntrypointSize: 512000,
+    maxAssetSize: 512000,
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -61,7 +66,11 @@ export default {
               "./node_modules/@colliejs/webpack/dist/loader.mjs"
             ),
             options: {
-              styledConfig: defaultConfig,
+              styledConfig: {
+                ...defaultConfig,
+                theme: { colors: { primary: "red" } },
+              },
+              entry: "./src/index.tsx",
             },
           },
         ],

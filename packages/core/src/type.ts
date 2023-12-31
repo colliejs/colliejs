@@ -21,19 +21,19 @@ export type BaseConfig = {
 // used by function css()
 //===========================================================
 export type CSSObject<Config extends BaseConfig> = {
-  [K in keyof CSS<Config>]: CSS<Config>[K] | CSS<Config>[K][];
+  [K in keyof CSS<Config>]: K extends keyof Config["utils"]
+    ? Parameters<Config["utils"][K]>[0] extends object
+      ? Parameters<Config["utils"][K]>[0]
+      : CSS<Config>[K] | CSS<Config>[K]
+    : CSS<Config>[K] | CSS<Config>[K];
 };
 
-// export declare const css: <Config extends BaseConfig>(
-//   cssObj: CSSObject<Config>,
-//   selector: string[],
-//   pseudoSelector: string[],
-//   config: Config
-// ) => string;
-
-// export declare const createTheme: <Config extends BaseConfig>(
-//   prefix: string,
-//   theme: object
-// ) => string;
-
-// export declare const defaultConfig: BaseConfig;
+// const config = {
+//   utils: {
+//     w: (value: CSSObject<any>) => ({ width: value }),
+//     h: (value: CSSProperties['height']) => ({ height: value }),
+//     _after: (value?: CSSObject<any>) => ({ '&::after': value }),
+//   },
+// } as const;
+// type A = CSSObject<typeof config>;
+// type A1 = A["_after"];

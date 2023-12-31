@@ -1,6 +1,4 @@
 import path from "path";
-import { fileURLToPath } from "url";
-import { defaultConfig } from "@colliejs/core";
 import { webpack } from "webpack";
 // import config from "./webpack.config";
 

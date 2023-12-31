@@ -3,7 +3,7 @@ import { transform } from "../transform";
 import path from "node:path";
 
 describe("test cases", () => {
-  it.skip("StyledComponent with variants and base style ", () => {
+  it("StyledComponent with variants and base style ", () => {
     const code = `
     const kk=1;
     const Button = styled('button', {
@@ -67,7 +67,7 @@ describe("test cases", () => {
       }
     `);
   });
-  it.skip("StyledComponent with compound variants ", () => {
+  it("StyledComponent with compound variants ", () => {
     const code = `
     const Button = styled('button', {
         variants:{
@@ -118,7 +118,7 @@ describe("test cases", () => {
       }
     `);
   });
-  it.skip("css layer embed ", () => {
+  it("css layer embed ", () => {
     const code = `
     const Button = styled('button', {
         background: 'red',

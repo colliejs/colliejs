@@ -4,7 +4,7 @@ import {
   getPathOfStyledComponentDecl,
 } from "../../__tests__/common/getPathOfJsxEle";
 import { generate } from "../../utils";
-import { defaultConfig } from "@colliejs/core";
+import { defaultConfig } from "@colliejs/shared";
 //@ts-ignore
 global.window = {
   //@ts-ignore

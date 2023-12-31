@@ -1,10 +1,8 @@
-import { defaultConfig } from "../";
 import { createTheme } from "../createTheme";
 
 describe("test cases", () => {
   it("should work ", () => {
     const config = {
-      ...defaultConfig,
       prefix: "co",
       theme: {
         colors: { primary: "blue", secondary: "white", positiveColor: "blue" },

@@ -1,5 +1,5 @@
 const path = require("path");
-const defaultConfig = require("@colliejs/react").defaultConfig;
+const defaultConfig = require("@colliejs/shared").defaultConfig;
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {

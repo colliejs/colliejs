@@ -96,8 +96,8 @@
     "react-test-renderer": "^18.2.0",
     "semver": "^7.5.2",
     "typescript": "^5.3.3",
-    "vite": "^3.2.7",
-    "vite-plugin-inspect": "^0.7.28",
+    "vite": "^5.0.10",
+    "vite-plugin-inspect": "^0.7.42",
     "zx": "^7.2.2"
   },
   "lint-staged": {

@@ -1,6 +1,4 @@
-import { defaultConfig } from "../../defaultConfig";
 export const config = {
-  ...defaultConfig,
   prefix: "co",
   breakpoints: [320, 768],
   theme: {

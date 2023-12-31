@@ -1,4 +1,4 @@
-import { defaultConfig } from "@colliejs/core";
+import { defaultConfig } from "@colliejs/shared";
 export const config = {
   ...defaultConfig,
   prefix: "co",
