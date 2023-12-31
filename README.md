@@ -49,6 +49,9 @@ export const StyledButton = styled("button", {
       sm: {
         w: 20,
       },
+      dynamic: x => ({ //any size you want
+        w: x,
+      }),
     },
     shape: {
       round: {
@@ -95,7 +98,8 @@ const App = (props)=> {
 
 [completed demo](https://codesandbox.io/p/github/colliejs/examples/main?embed=1&file=%2Fsrc%2FStyledButton.tsx)
 
-know more about examples, 
+know more about examples,
+
 ```bash
   git clone https://github.com/colliejs/examples && cd examples && pnpm install && pnpm dev
 ```
