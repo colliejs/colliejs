@@ -67,7 +67,6 @@ export const StyledButton = styled("button", {
       },
     },
   },
-  
 
   compoundVariants: [
     {
@@ -95,6 +94,11 @@ const App = (props)=> {
 # Get started
 
 [completed demo](https://codesandbox.io/p/github/colliejs/examples/main?embed=1&file=%2Fsrc%2FStyledButton.tsx)
+
+know more about examples, 
+```bash
+  git clone https://github.com/colliejs/examples && cd examples && pnpm install && pnpm dev
+```
 
 # How does it work
 
