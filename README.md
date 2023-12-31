@@ -3,12 +3,13 @@
 - There is no need to learn the syntax of preprocessors like less/sass/postcss, as you can achieve the same or even more functionality directly using JavaScript.
 - CSS encapsulation makes it easy to extend and override styles.
 - Better performance, as it transforms the CSS object at build time.
-- Boost your development with tailwindcss or @collie-ui/css.
-- Excellent TypeScript type hints.
-- Supports server-side rendering.
+- Boost your development with @collie-ui/css or tailwindcss(incoming).
+- Excellent DX.
+- Supports server-side rendering with nextjs.
 - Supports CSS breakpoint array syntax.
 - Supports theme customization and CSS property customization, simplifying CSS development.
 - Low learning curve - in 99% of cases, you only need to use the `styled` function.
+- have a best integration with react, webpack, rollup, vite, nextjs.
 
 # Example
 
@@ -89,13 +90,11 @@ const App = (props)=> {
   return <Button shape="round" disabled={props.disabled} >Login<Button/>
 }
 ```
-# demo
-<iframe src="https://codesandbox.io/p/github/colliejs/examples/main?embed=1&file=%2Fsrc%2FStyledButton.tsx"
-     style="width:100%; height: 500px; border:0; border-radius: 4px; overflow:hidden;"
-     title="colliejs/examples/main"
-     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
-   ></iframe>
-# How to work
 
-- transform the styled object to css text file at the build time
+# Get started
+
+[completed demo](https://codesandbox.io/p/github/colliejs/examples/main?embed=1&file=%2Fsrc%2FStyledButton.tsx)
+
+# How does it work
+
+- transform the styled object to css text at build time
