@@ -3,43 +3,52 @@
 - There is no need to learn the syntax of preprocessors like less/sass/postcss, as you can achieve the same or even more functionality directly using JavaScript.
 - CSS encapsulation makes it easy to extend and override styles.
 - Better performance, as it transforms the CSS object at build time.
-- Boost your development with tailwindcss or @collie-ui/css.
-- Excellent TypeScript type hints.
-- Supports server-side rendering.
+- Boost your development with @collie-ui/css or tailwindcss(incoming).
+- Excellent DX.
+- Supports server-side rendering with nextjs.
 - Supports CSS breakpoint array syntax.
 - Supports theme customization and CSS property customization, simplifying CSS development.
 - Low learning curve - in 99% of cases, you only need to use the `styled` function.
+- have a best integration with react, webpack, rollup, vite, nextjs.
 
 # Example
 
 ```jsx
+import { absYCenter } from "@collie-ui/css";
 import { makeStyled } from "@colliejs/react";
-import { defaultConfig } from '@colliejs/shared";
-import { absYCenter } from '@collie-ui/css'
-const styled = makeStyled(defaultConfig);
-const Button = styled("button", {
+import { collieConfig } from "../collie.config";
+export const styled = makeStyled(collieConfig);
+
+export const StyledButton = styled("button", {
   w: 100,
   h: 40,
   _hover: {
     opacity: 0.8,
-  },
-  _after:{ // after pseudo element
     background: "$primary",
-    h:'100%'.
+    borderRadius: 10,
+    color: "white",
+  },
+  _after: {
+    h: "100%",
     w: [10, 4],
-    ...absYCenter({righ: 10}),
-  }
+    background: "red",
+    ...absYCenter({ right: 0 }),
+  },
+
   variants: {
-    size:{
-      big:{
-        w:80,
+    size: {
+      full: {
+        w: "100%",
       },
-      md:{
-        w:40,
+      big: {
+        w: 80,
       },
-      sm:{
-        w:20,
-      }
+      md: {
+        w: 40,
+      },
+      sm: {
+        w: 20,
+      },
     },
     shape: {
       round: {
@@ -53,13 +62,23 @@ const Button = styled("button", {
       disabled: {
         true: {
           cursor: "not-allowed",
-          background: "$gray-200",
+          background: "$gray200",
         },
       },
     },
-    defaultVariants:{
-      shape: 'rect',
-    }
+  },
+
+  compoundVariants: [
+    {
+      size: "big",
+      shape: "round",
+      css: {
+        background: "$gray200",
+      },
+    },
+  ],
+  defaultVariants: {
+    shape: "rect",
   },
 });
 ```
@@ -72,6 +91,10 @@ const App = (props)=> {
 }
 ```
 
-# Principle
+# Get started
 
-- transform the styled object to css text file at the build time
+[completed demo](https://codesandbox.io/p/github/colliejs/examples/main?embed=1&file=%2Fsrc%2FStyledButton.tsx)
+
+# How does it work
+
+- transform the styled object to css text at build time
