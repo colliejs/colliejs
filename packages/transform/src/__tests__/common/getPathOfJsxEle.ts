@@ -3,7 +3,7 @@ import { parseCode } from "../../parse";
 import { traverse } from "../../utils/module";
 import { getImports } from "../../utils";
 import { isStyledComponentDecl } from "../../styledComponent/isStyledCompDelc";
-import { defaultConfig } from "@colliejs/shared";
+import { defaultConfig } from "@colliejs/config";
 
 export const getPathOfJSXElement = (source: string) => {
   const file = parseCode(source);

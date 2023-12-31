@@ -77,19 +77,19 @@ export const transform = <Config extends BaseConfig>(
     ///===========================================================
     // 3. transform styled Theme
     //===========================================================
-    CallExpression(path) {
-      if (!isCallCreateTheme(path)) {
-        return;
-      }
-      if (Object.keys(modulesByName).length === 0) {
-        modulesByName = getImports(fileAst.program, curFile, alias, root);
-      }
-      styledThemeCssTexts = compileCreateTheme(
-        path,
-        modulesByName,
-        config.prefix
-      ).cssGenText;
-    },
+    // CallExpression(path) {
+    //   if (!isCallCreateTheme(path)) {
+    //     return;
+    //   }
+    //   if (Object.keys(modulesByName).length === 0) {
+    //     modulesByName = getImports(fileAst.program, curFile, alias, root);
+    //   }
+    //   styledThemeCssTexts = compileCreateTheme(
+    //     path,
+    //     modulesByName,
+    //     config.prefix
+    //   ).cssGenText;
+    // },
   });
 
   //===========================================================

@@ -22,6 +22,7 @@
   "author": "colliedog1001@gmail.com",
   "license": "MIT",
   "dependencies": {
+    "@colliejs/config": "workspace:^",
     "@colliejs/core": "workspace:^",
     "@colliejs/react": "workspace:^",
     "@colliejs/shared": "workspace:^",

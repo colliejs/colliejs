@@ -1,5 +1,6 @@
 import { BaseConfig, createTheme } from "@colliejs/core";
-import { defaultConfig } from "@colliejs/shared";
+import { shouldSkip } from "@colliejs/shared";
+import { defaultConfig } from "@colliejs/config";
 import { Alias, transform } from "@colliejs/transform";
 import { FilterPattern, createFilter } from "@rollup/pluginutils";
 import fs from "node:fs";
@@ -38,10 +39,8 @@ const collie = <Config extends BaseConfig>(option?: Option<Config>): Plugin => {
   return {
     name: "collie",
     async transform(code, id) {
-      const REGEX_JS = /\.[tj]sx?$/;
-
-      if (!REGEX_JS.test(id) || !filter(id) || id.includes("node_modules")) {
-        return { code: code };
+      if (shouldSkip(id, filter)) {
+        return { code };
       }
 
       let {

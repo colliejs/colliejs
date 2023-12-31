@@ -1,10 +1,15 @@
 import { BaseConfig, createTheme } from "@colliejs/core";
-import { defaultConfig } from "@colliejs/shared";
+import { defaultConfig } from "@colliejs/config";
 import { Alias, transform } from "@colliejs/transform";
 import { FilterPattern, createFilter } from "@rollup/pluginutils";
 import log from "npmlog";
 
-import { writeFile, getCssFileName, writeThemeCssFile } from "@colliejs/shared";
+import {
+  writeFile,
+  getCssFileName,
+  writeThemeCssFile,
+  shouldSkip,
+} from "@colliejs/shared";
 import { createRequire } from "node:module";
 import path from "path";
 import type { Plugin, ResolvedConfig } from "vite";
@@ -43,15 +48,11 @@ const collie = <Config extends BaseConfig>(
       viteConfig = resolvedConfig;
     },
     async transform(code, url) {
-      if (
-        url.includes("node_modules") ||
-        !filter(url) ||
-        !/\.[cm]?[tj]sx?$/.test(url)
-      ) {
+      if (shouldSkip(url, filter)) {
         return UNCHANGED;
       }
+      
       log.verbose("transform", "changed url is: ", url);
-
       //===========================================================
       // entry变动后，重新生成theme 样式文件
       //===========================================================

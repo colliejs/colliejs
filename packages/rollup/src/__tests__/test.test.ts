@@ -44,9 +44,9 @@ describe("test cas2es", () => {
       import { jsx } from 'react/jsx-runtime';
       import { createRoot } from 'react-dom/client';
 
-      const BaseButton = styled('button', "baseStyle-BaseButton-1sjqm9w", [], {}, []);
+      const BaseButton = styled('button', "baseStyle-BaseButton-1sjqm9w", [], {}, [], []);
 
-      const Button = styled(BaseButton, "baseStyle-Button-129ntb2", ["variants-shape-square-4trf62", "variants-shape-round-q6q02o"], {}, []);
+      const Button = styled(BaseButton, "baseStyle-Button-129ntb2", ["variants-shape-square-4trf62", "variants-shape-round-q6q02o"], {}, [], []);
 
       function App() {
         return /*#__PURE__*/jsx(Button, {

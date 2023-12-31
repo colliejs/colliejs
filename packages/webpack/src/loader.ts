@@ -3,10 +3,12 @@ import { Alias, transform } from "@colliejs/transform";
 import { LoaderContext } from "webpack";
 import { FilterPattern, createFilter } from "@rollup/pluginutils";
 import path from "node:path";
-import { getCssFileName, writeFile, writeThemeCssFile } from "@colliejs/shared";
-
-const __dirname = path.dirname(new URL(import.meta.url).pathname);
-const jsFileReg = /\.[cm]?[tj]sx?$/;
+import {
+  getCssFileName,
+  shouldSkip,
+  writeFile,
+  writeThemeCssFile,
+} from "@colliejs/shared";
 
 type LoaderOption<Config extends BaseConfig> = {
   styledConfig?: Config;
@@ -32,7 +34,7 @@ export default function collieWebpackLoader<Config extends BaseConfig>(
   } = options;
   const filter = createFilter(include, exclude);
   const url = this.resourcePath || "";
-  if (url.includes("node_modules") || !filter(url) || !jsFileReg.test(url)) {
+  if (shouldSkip(url, filter)) {
     return code;
   }
 
