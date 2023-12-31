@@ -28,6 +28,7 @@ export const Button = styled("button", {
       },
     },
   },
+
   compoundVariants: [
     {
       type: "primary",
@@ -42,4 +43,7 @@ export const Button = styled("button", {
   defaultVariants: {
     size: "big",
   },
-});
+} );
+
+type X = React.ComponentProps<typeof Button>;
+type Y = X["size"];
