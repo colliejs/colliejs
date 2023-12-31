@@ -49,7 +49,8 @@ export const StyledButton = styled("button", {
       sm: {
         w: 20,
       },
-      dynamic: x => ({ //any size you want
+      dynamic: x => ({
+        //any size you want
         w: x,
       }),
     },
@@ -107,3 +108,7 @@ know more about examples,
 # How does it work
 
 - transform the styled object to css text at build time
+
+# Big thanks
+
+- [stitches]('https://github.com/stitchesjs/stitches') - a css-in-js library with multi-variant support
