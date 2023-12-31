@@ -1,6 +1,6 @@
 {
   "name": "@colliejs/vite",
-  "version": "1.0.91",
+  "version": "1.0.92",
   "description": "awesesome",
   "type": "module",
   "scripts": {
@@ -22,7 +22,6 @@
   "author": "colliedog1001@gmail.com",
   "license": "MIT",
   "dependencies": {
-
     "lodash": "^4.17.21"
   },
   "peerDependencies": {
