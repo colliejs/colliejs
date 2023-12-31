@@ -1,6 +1,6 @@
 {
   "name": "@colliejs/webpack",
-  "version": "1.0.37",
+  "version": "1.0.38",
   "description": "awesesome",
   "type": "module",
   "scripts": {

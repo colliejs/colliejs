@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.91](https://github.com/colliejs/colliejs/compare/@colliejs/vite@1.0.90...@colliejs/vite@1.0.91) (2023-12-31)
+
+### Features
+
+- add @collie/config ([0d55705](https://github.com/colliejs/colliejs/commit/0d557053167164c4481fd576ab585bc68de29cab))
+
 ## [1.0.90](https://github.com/colliejs/colliejs/compare/@colliejs/vite@1.0.89...@colliejs/vite@1.0.90) (2023-12-31)
 
 **Note:** Version bump only for package @colliejs/vite
