@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.81](https://github.com/colliejs/colliejs/compare/@colliejs/react@1.0.80...@colliejs/react@1.0.81) (2023-12-31)
+
+### Bug Fixes
+
+- add const type parameter for config and styledObject ([#6](https://github.com/colliejs/colliejs/issues/6)) ([d65678f](https://github.com/colliejs/colliejs/commit/d65678fe7abe904276c9b0c6c2f3ff5cd48424da))
+
 ## [1.0.80](https://github.com/colliejs/colliejs/compare/@colliejs/react@1.0.79...@colliejs/react@1.0.80) (2023-12-31)
 
 **Note:** Version bump only for package @colliejs/react
