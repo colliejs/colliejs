@@ -4,7 +4,7 @@
 - CSS encapsulation makes it easy to extend and override styles.
 - Better performance, as it transforms the CSS object at build time.
 - Boost your development with @collie-ui/css or tailwindcss(incoming).
-- Excellent DX.
+- Excellent DX with typescript type hints.
 - Supports server-side rendering with nextjs.
 - Supports CSS breakpoint array syntax.
 - Supports theme customization and CSS property customization, simplifying CSS development.
@@ -67,7 +67,6 @@ export const StyledButton = styled("button", {
       },
     },
   },
-  
 
   compoundVariants: [
     {
@@ -95,6 +94,11 @@ const App = (props)=> {
 # Get started
 
 [completed demo](https://codesandbox.io/p/github/colliejs/examples/main?embed=1&file=%2Fsrc%2FStyledButton.tsx)
+
+know more about examples, 
+```bash
+  git clone https://github.com/colliejs/examples && cd examples && pnpm install && pnpm dev
+```
 
 # How does it work
 
