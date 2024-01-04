@@ -3,7 +3,7 @@
 - There is no need to learn the syntax of preprocessors like less/sass/postcss, as you can achieve the same or even more functionality directly using JavaScript.
 - CSS encapsulation makes it easy to extend and override styles.
 - Better performance, as it transforms the CSS object at build time.
-- Boost your development with @collie-ui/css or tailwindcss(incoming).
+- Boost your development with [@collie-ui/css](https://github.com/colliejs/collie-ui) or tailwindcss(incoming).
 - Excellent DX with typescript type hints.
 - Supports server-side rendering with nextjs.
 - Supports CSS breakpoint array syntax.
@@ -111,4 +111,4 @@ know more about examples,
 
 # Big thanks
 
-- [stitches](https://github.com/stitchesjs/stitches) - a css-in-js library with multi-variant support
+- [stitches](https://github.com/stitchesjs/stitches)  - a css-in-js library with multi-variant support
