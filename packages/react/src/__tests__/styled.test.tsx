@@ -1,4 +1,4 @@
-import { makeStyled } from "../";
+import { makeStyled } from "../makeStyled";
 import { defaultConfig } from "@colliejs/config";
 import generate from "@babel/generator";
 import * as t from "@babel/types";

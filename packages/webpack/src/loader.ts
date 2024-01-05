@@ -1,5 +1,6 @@
 import { BaseConfig } from "@colliejs/core";
 import { Alias, transform } from "@colliejs/transform";
+import { defaultConfig } from "@colliejs/config";
 import { LoaderContext } from "webpack";
 import { FilterPattern, createFilter } from "@rollup/pluginutils";
 import path from "node:path";
@@ -25,7 +26,7 @@ export default function collieWebpackLoader<Config extends BaseConfig>(
   const options = this.getOptions();
 
   const {
-    styledConfig,
+    styledConfig = defaultConfig,
     alias = {},
     root = process.cwd(),
     include,

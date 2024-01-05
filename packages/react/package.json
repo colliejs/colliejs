@@ -23,6 +23,7 @@
   "license": "MIT",
   "peerDependencies": {
     "@colliejs/core": "workspace:^",
+    "@colliejs/config": "workspace:^",
     "@colliejs/transform": "workspace:^"
   },
   "lint-staged": {
@@ -33,7 +34,6 @@
     ]
   },
   "devDependencies": {
-    "@colliejs/config": "workspace:^",
     "@rollup/plugin-babel": "^6.0.3",
     "@rollup/plugin-node-resolve": "^15.1.0"
   },
