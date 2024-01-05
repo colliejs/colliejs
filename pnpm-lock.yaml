@@ -241,6 +241,9 @@ importers:
 
   packages/react:
     dependencies:
+      '@colliejs/config':
+        specifier: workspace:^
+        version: link:../config
       '@colliejs/core':
         specifier: workspace:^
         version: link:../core
@@ -248,9 +251,6 @@ importers:
         specifier: workspace:^
         version: link:../transform
     devDependencies:
-      '@colliejs/config':
-        specifier: workspace:^
-        version: link:../config
       '@rollup/plugin-babel':
         specifier: ^6.0.3
         version: 6.0.3(@babel/core@7.23.6)(rollup@3.25.1)

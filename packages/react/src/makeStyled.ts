@@ -8,6 +8,7 @@ import {
   getCompoundVariantClassNameUsed,
   getVariantClassNameFromCandidates,
   isObject,
+  isPlainObject,
   isString,
   toArray,
 } from "./utils";
@@ -106,12 +107,11 @@ export const makeStyled = <Config extends BaseConfig>(config: Config) => {
         isStaticVariantProp && (propsWithStaticVariant[prop] = valOfProp);
         // @ts-ignore
         restPropsWithoutVariant[prop] = undefined;
-        if (isStaticVariantProp && isObject(valOfProp)) {
+        if (isStaticVariantProp && isPlainObject(valOfProp)) {
           throw new Error(
-            "variant value must be string or number.because  it is used as css variable value. "
+            `invalid value ${valOfProp} for static variant ${prop} `
           );
         }
-
         if (isStaticVariantProp) {
           //静态variant
           outputClassNames.push(staticVariantClassName);
