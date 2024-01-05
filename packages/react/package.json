@@ -1,6 +1,6 @@
 {
   "name": "@colliejs/react",
-  "version": "1.0.81",
+  "version": "1.0.82",
   "description": "awesesome",
   "type": "module",
   "scripts": {
@@ -22,8 +22,8 @@
   "author": "colliedog1001@gmail.com",
   "license": "MIT",
   "peerDependencies": {
-    "@colliejs/core": "workspace:^",
     "@colliejs/config": "workspace:^",
+    "@colliejs/core": "workspace:^",
     "@colliejs/transform": "workspace:^"
   },
   "lint-staged": {

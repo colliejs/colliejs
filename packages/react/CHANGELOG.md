@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.82](https://github.com/colliejs/colliejs/compare/@colliejs/react@1.0.81...@colliejs/react@1.0.82) (2024-01-05)
+
+### Features
+
+- export styled function ([#9](https://github.com/colliejs/colliejs/issues/9)) ([c548bb1](https://github.com/colliejs/colliejs/commit/c548bb1a7dc3043ea3f4833b45bb6827d04533ac))
+
 ## [1.0.81](https://github.com/colliejs/colliejs/compare/@colliejs/react@1.0.80...@colliejs/react@1.0.81) (2023-12-31)
 
 ### Bug Fixes

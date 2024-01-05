@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.40](https://github.com/colliejs/colliejs/compare/@colliejs/webpack@1.0.39...@colliejs/webpack@1.0.40) (2024-01-05)
+
+### Features
+
+- export styled function ([#9](https://github.com/colliejs/colliejs/issues/9)) ([c548bb1](https://github.com/colliejs/colliejs/commit/c548bb1a7dc3043ea3f4833b45bb6827d04533ac))
+
 ## [1.0.39](https://github.com/colliejs/colliejs/compare/@colliejs/webpack@1.0.38...@colliejs/webpack@1.0.39) (2023-12-31)
 
 **Note:** Version bump only for package @colliejs/webpack
