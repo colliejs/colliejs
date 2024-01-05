@@ -24,8 +24,8 @@ export type CSSObject<Config extends BaseConfig> = {
   [K in keyof CSS<Config>]: K extends keyof Config["utils"]
     ? Parameters<Config["utils"][K]>[0] extends object
       ? Parameters<Config["utils"][K]>[0]
-      : CSS<Config>[K] | CSS<Config>[K]
-    : CSS<Config>[K] | CSS<Config>[K];
+      : CSS<Config>[K] | CSS<Config>[K][]
+    : CSS<Config>[K] | CSS<Config>[K][];
 };
 
 // const config = {
