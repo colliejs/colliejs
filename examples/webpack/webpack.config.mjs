@@ -2,7 +2,7 @@ import path from "node:path";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import collieWebpackLoader from "@colliejs/webpack";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
-import { defaultConfig } from "@colliejs/shared";
+import { defaultConfig } from "@colliejs/config";
 
 import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
@@ -61,10 +61,7 @@ export default {
             },
           },
           {
-            loader: path.resolve(
-              __dirname,
-              "./node_modules/@colliejs/webpack/dist/loader.mjs"
-            ),
+            loader: "@colliejs/webpack",
             options: {
               styledConfig: {
                 ...defaultConfig,

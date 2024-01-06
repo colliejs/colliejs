@@ -4,4 +4,5 @@ import { styled } from "../styled";
 
 export const MyButton = styled(Button, {
   background: "yellow",
+  color: "blue",
 });
