@@ -7,8 +7,8 @@ import { BaseImage } from "./components/Image";
 export default function Home() {
   return (
     <main>
-      <Button></Button>
-      <MyButton>MyBUtton</MyButton>
+      <Button>33333</Button>
+      <MyButton>1112211</MyButton>
       <MySpecialButton>MySpecialButton</MySpecialButton>
       <BaseImage src={"/next.svg"} />
       <Image

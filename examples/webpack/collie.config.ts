@@ -1,5 +1,5 @@
 import { type BaseConfig } from "@colliejs/core";
-import { defaultConfig } from "@collijes/shared";
+import { defaultConfig } from "@colliejs/config";
 export const collieConfig = {
   ...defaultConfig,
   breakpoints: [320, 768],

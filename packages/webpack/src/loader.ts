@@ -21,10 +21,9 @@ type LoaderOption<Config extends BaseConfig> = {
 };
 export default function collieWebpackLoader<Config extends BaseConfig>(
   this: LoaderContext<LoaderOption<Config>>,
-  code: string
+  content: string
 ) {
   const options = this.getOptions();
-
   const {
     styledConfig = defaultConfig,
     alias = {},
@@ -33,16 +32,18 @@ export default function collieWebpackLoader<Config extends BaseConfig>(
     exclude,
     entry,
   } = options;
+  const callback = this.async();
   const filter = createFilter(include, exclude);
   const url = this.resourcePath || "";
   if (shouldSkip(url, filter)) {
-    return code;
+    return callback(null, content);
   }
+  // const isPromise = typeof this._compiler.options.entry === "function";
 
   //===========================================================
   // entry文件变动后，重新生成theme 样式文件
   //===========================================================
-  const isEntryFile = path.resolve(root, entry) === url;
+  const isEntryFile = entry && path.resolve(root, entry) === url;
   let themeCssFile = "";
   if (isEntryFile) {
     themeCssFile = writeThemeCssFile(
@@ -57,18 +58,22 @@ export default function collieWebpackLoader<Config extends BaseConfig>(
   // 普通文件
   //===========================================================
   let {
-    code: transformedCode,
+    code,
     styledComponentCssTexts,
     styledElementCssTexts,
-  } = transform(code, url, styledConfig, alias, root);
+  } = transform(content, url, styledConfig, alias, root);
   const cssText = styledElementCssTexts + "\n" + styledComponentCssTexts;
   const hasMeaningCss = cssText.replace(/\s/g, "").length > 0;
   if (!hasMeaningCss && !isEntryFile) {
-    return code;
+    return callback(null, content);
   }
   const cssFile = getCssFileName(url)(root);
   writeFile(cssFile, cssText);
 
-  return `import "${cssFile}"; ${importThemeCssText};
-   ${transformedCode};`;
+  // this.addDependency(cssFile);
+  return callback(
+    null,
+    `import "${cssFile}"; ${importThemeCssText};
+   ${code};`
+  );
 }
