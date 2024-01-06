@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.41](https://github.com/colliejs/colliejs/compare/@colliejs/webpack@1.0.40...@colliejs/webpack@1.0.41) (2024-01-06)
+
+### Bug Fixes
+
+- examples ([#11](https://github.com/colliejs/colliejs/issues/11)) ([4799925](https://github.com/colliejs/colliejs/commit/4799925fdf9b323c127d231f2d7900c3ccf10301))
+
 ## [1.0.40](https://github.com/colliejs/colliejs/compare/@colliejs/webpack@1.0.39...@colliejs/webpack@1.0.40) (2024-01-05)
 
 ### Features
