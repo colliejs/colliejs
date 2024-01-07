@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.83](https://github.com/colliejs/colliejs/compare/@colliejs/react@1.0.82...@colliejs/react@1.0.83) (2024-01-07)
+
+**Note:** Version bump only for package @colliejs/react
+
 ## [1.0.82](https://github.com/colliejs/colliejs/compare/@colliejs/react@1.0.81...@colliejs/react@1.0.82) (2024-01-05)
 
 ### Features
