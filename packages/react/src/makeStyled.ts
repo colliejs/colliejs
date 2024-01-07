@@ -45,10 +45,7 @@ export const makeStyled = <Config extends BaseConfig>(config: Config) => {
    *
    * @todo: 使用forwardRef
    */
-  return function styled<
-    P1 extends BaseStyledComponentProps,
-    T = any
-  >(
+  return function styled<P1 extends BaseStyledComponentProps, T = any>(
     component: ElementType<P1>,
     __generatedBaseStyleClassName = "",
     __generatedStaticClassNames: VariantsType["staticClassName"][] = [],
@@ -173,30 +170,25 @@ export const makeStyled = <Config extends BaseConfig>(config: Config) => {
         const asIsWebComponent = isString(as) && as.includes("-");
         if (asIsWebComponent) {
           return React.createElement(as, {
-            ..._.omit(forwardProps, "className"),
+            ..._.omit(forwardProps, ["className"]),
             class: forwardProps.className,
           });
         }
-        return React.createElement(as || component, forwardProps);
+        return React.createElement(as || component, _.omit(forwardProps, "as"));
       }
       if (isStyledComponent) {
-        //@ts-ignore
         return React.createElement(component, {
           ...forwardProps,
           as: as || defaultPropsOfBaseComponent.as,
         });
       }
       if (isWebComponent) {
-        return React.createElement(
-          as || defaultPropsOfBaseComponent.as || component,
-          {
-            ..._.omit(forwardProps, "className"),
-            class: forwardProps.className,
-          }
-        );
+        return React.createElement(as || component, {
+          ..._.omit(forwardProps, "className"),
+          class: forwardProps.className,
+        });
       }
       if (is3rdComponent) {
-        //@ts-ignore
         return React.createElement(component, {
           ...forwardProps,
           as: as || defaultPropsOfBaseComponent.as,
