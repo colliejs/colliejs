@@ -11,17 +11,16 @@ import { DynamicVariantFnName, DynamicVariantFn } from "@colliejs/transform";
 
 // export type IntrinsicElementsKeys = keyof JSX.IntrinsicElements | (string & {});
 export type IntrinsicElementsKeys = keyof JSX.IntrinsicElements;
-type IsHostComponent<T> = T extends IntrinsicElementsKeys ? true : false;
 export type Debug<T> = { [K in keyof T]: T[K] };
 
-export type BaseTypePropsWithAs<
-  BaseComponent extends ElementType<any>,
-  As extends IntrinsicElementsKeys
-> = As extends undefined
-  ? React.ComponentProps<BaseComponent>
-  : React.ComponentProps<BaseComponent> & {
-      as: As;
-    } & React.ComponentProps<As>;
+export type DefaultProps<
+  BaseComponentProps extends React.ComponentProps<any>,
+  As extends IntrinsicElementsKeys | undefined
+> = As extends IntrinsicElementsKeys
+  ? React.ComponentProps<As>
+  : BaseComponentProps;
+
+type A = DefaultProps<React.ComponentProps<"div">, "button">;
 
 type VariantValue<
   NStyledObject extends { variants?: object },
@@ -77,11 +76,6 @@ export type ExtractPropsFromStyledObject<
     : VariantValue<NStyledObject, K> | VariantValue<NStyledObject, K>[];
 };
 
-//===========================================================
-// MyStyledComponent
-//TODO: 处理variants覆盖的情况
-//===========================================================
-
 type ComposedVariant<
   TypeOfDeped extends IntrinsicElementsKeys | React.ComponentType<any>,
   VariantsOfCurType extends object
@@ -101,21 +95,19 @@ export type MyStyledComponent<
   Config extends BaseConfig,
   Type extends IntrinsicElementsKeys | React.ComponentType<any>,
   NStyledObject extends object,
-  As extends IntrinsicElementsKeys | undefined = undefined
+  As extends IntrinsicElementsKeys | undefined
 > = React.ForwardRefExoticComponent<
-  PropsWithoutRef<
-    Assign<
-      As extends IntrinsicElementsKeys
-        ? Assign<React.ComponentPropsWithoutRef<Type>, AttrOfAs<As>>
-        : React.ComponentPropsWithoutRef<Type>,
-      ComposedVariant<Type, ExtractPropsFromStyledObject<NStyledObject>> & {
-        css?: CSSObject<Config>;
-        as?: As;
-        children?: React.ReactNode;
-      }
-    >
-  > &
-    ClassAttributes<ElementRef<As extends IntrinsicElementsKeys ? As : Type>>
+  Assign<
+    As extends IntrinsicElementsKeys
+      ? Assign<React.ComponentPropsWithoutRef<Type>, AttrOfAs<As>>
+      : React.ComponentPropsWithoutRef<Type>,
+    {
+      css?: CSSObject<Config>;
+      as?: IntrinsicElementsKeys; //TODO: infer As ,这里的As如果为真，那么应该支持更多属性。但是未实现
+      children?: React.ReactNode;
+      ref?: ElementRef<As extends IntrinsicElementsKeys ? As : Type>;
+    } & ComposedVariant<Type, ExtractPropsFromStyledObject<NStyledObject>>
+  >
 >;
 
 //===========================================================
@@ -123,12 +115,17 @@ export type MyStyledComponent<
 //===========================================================
 export type Styled<Config extends BaseConfig> = <
   BaseComponent extends ElementType<any>,
-  const NStyledObject extends StyledObject<Config, NStyledObject>
+  const NStyledObject extends StyledObject<Config, NStyledObject>,
+  const NDefaultProps extends DefaultProps<
+    React.ComponentProps<BaseComponent>,
+    As
+  >,
+  As extends IntrinsicElementsKeys | undefined = undefined
 >(
   baseComponent: BaseComponent,
   styledObject: NStyledObject,
-  propsOfBaseComponent?: React.ComponentProps<BaseComponent>
-) => MyStyledComponent<Config, BaseComponent, NStyledObject>;
+  props?: NDefaultProps & { as?: As }
+) => MyStyledComponent<Config, BaseComponent, NStyledObject, As>;
 
 //===========================================================
 // MakeStyled

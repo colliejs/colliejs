@@ -1,7 +1,7 @@
 import type { BaseConfig } from "@colliejs/core";
 import _ from "lodash";
 import React, { ElementType, ForwardRefRenderFunction } from "react";
-import { BaseTypePropsWithAs, Styled } from "./types";
+import { DefaultProps, Styled } from "./types";
 import {
   getCSSValue,
   getCSSVariable,
@@ -160,40 +160,36 @@ export const makeStyled = <Config extends BaseConfig>(config: Config) => {
       //===========================================================
       //  创建一个带classname的组件
       //===========================================================
+      const nAs = as || defaultPropsOfBaseComponent.as;
       //@ts-ignore
       const isStyledComponent = !!component.__isStyledComponent;
       const isHostComponent = isString(component) && !component.includes("-");
       const isWebComponent = isString(component) && component.includes("-");
       const is3rdComponent = !isHostComponent && !isStyledComponent;
+      const isAsWebComponent = isString(nAs) && nAs.includes("-");
 
-      if (isHostComponent) {
-        const asIsWebComponent = isString(as) && as.includes("-");
-        if (asIsWebComponent) {
-          return React.createElement(as, {
-            ..._.omit(forwardProps, ["className"]),
-            class: forwardProps.className,
-          });
-        }
-        return React.createElement(as || component, _.omit(forwardProps, "as"));
-      }
-      if (isStyledComponent) {
+      if (isStyledComponent || is3rdComponent) {
         return React.createElement(component, {
           ...forwardProps,
           as: as || defaultPropsOfBaseComponent.as,
         });
       }
-      if (isWebComponent) {
-        return React.createElement(as || component, {
-          ..._.omit(forwardProps, "className"),
+      if (isWebComponent || (isHostComponent && isAsWebComponent)) {
+        return React.createElement(nAs || component, {
+          ..._.omit(forwardProps, ["className", "as"]),
           class: forwardProps.className,
         });
       }
-      if (is3rdComponent) {
-        return React.createElement(component, {
-          ...forwardProps,
-          as: as || defaultPropsOfBaseComponent.as,
-        });
+      if (isHostComponent) {
+        if (isAsWebComponent) {
+          throw new Error(`impossible react type: ${component} as ${nAs}`);
+        }
+        return React.createElement(
+          nAs || component,
+          _.omit(forwardProps, "as")
+        );
       }
+
       throw new Error("impossible react type");
     };
     const StyledComponent = React.forwardRef(render);

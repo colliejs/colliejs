@@ -189,9 +189,9 @@ describe("render StyledComponent", () => {
 
   it("styled function width as option", () => {
     const Comp = styled("div", "baseStyle-gmqXFB", [], {}, [], [], { as: "a" });
-    const comp = TestRenderer.create(<Comp />); //div没有as属性，所以不会被替换为a
+    const comp = TestRenderer.create(<Comp />);
     expect(comp.toJSON()).toMatchInlineSnapshot(`
-      <div
+      <a
         className="baseStyle-gmqXFB "
       />
     `);
@@ -202,8 +202,8 @@ describe("render StyledComponent", () => {
     });
     const comp = TestRenderer.create(<Comp />);
     expect(comp.toJSON()).toMatchInlineSnapshot(`
-      <div
-        className="baseStyle-gmqXFB "
+      <u-stack
+        class="baseStyle-gmqXFB "
       />
     `);
   });
