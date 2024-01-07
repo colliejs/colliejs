@@ -4,6 +4,7 @@ import { styled } from "../styled";
 const ResponsiveButton = styled("button", {
   w: [200, 400],
   h: 40,
+
   background: "red",
   variants: {
     x: {

@@ -9,6 +9,7 @@ import ResponsiveButton from "./components/ResponsiveButton";
 import { pxToVw } from "./common/pxToVw";
 import { Col } from "./components/Col";
 import { Row } from "./components/Row";
+import ExampleButton from "./components/ExampleButton";
 
 export default function App() {
   return (
@@ -35,6 +36,7 @@ export default function App() {
       <ResponsiveButton x={[pxToVw(300, 375), "600px"]}>
         ResponsiveButton use vw
       </ResponsiveButton>
+      <ExampleButton>ExampleButton</ExampleButton>
     </Col>
   );
 }

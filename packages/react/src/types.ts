@@ -1,6 +1,7 @@
 import React, {
   ClassAttributes,
   ElementRef,
+  ElementType,
   PropsWithoutRef,
   RefAttributes,
 } from "react";
@@ -13,11 +14,14 @@ export type IntrinsicElementsKeys = keyof JSX.IntrinsicElements;
 type IsHostComponent<T> = T extends IntrinsicElementsKeys ? true : false;
 export type Debug<T> = { [K in keyof T]: T[K] };
 
-export type StyledOption<Props, InnerAs extends IntrinsicElementsKeys> = {
-  as?: InnerAs | undefined;
-  wrapper?: IntrinsicElementsKeys;
-  attrs?: Partial<Props> & JSX.IntrinsicElements[InnerAs];
-};
+export type BaseTypePropsWithAs<
+  BaseComponent extends ElementType<any>,
+  As extends IntrinsicElementsKeys
+> = As extends undefined
+  ? React.ComponentProps<BaseComponent>
+  : React.ComponentProps<BaseComponent> & {
+      as: As;
+    } & React.ComponentProps<As>;
 
 type VariantValue<
   NStyledObject extends { variants?: object },
@@ -97,7 +101,7 @@ export type MyStyledComponent<
   Config extends BaseConfig,
   Type extends IntrinsicElementsKeys | React.ComponentType<any>,
   NStyledObject extends object,
-  As extends IntrinsicElementsKeys | undefined
+  As extends IntrinsicElementsKeys | undefined = undefined
 > = React.ForwardRefExoticComponent<
   PropsWithoutRef<
     Assign<
@@ -106,7 +110,7 @@ export type MyStyledComponent<
         : React.ComponentPropsWithoutRef<Type>,
       ComposedVariant<Type, ExtractPropsFromStyledObject<NStyledObject>> & {
         css?: CSSObject<Config>;
-        as?: IntrinsicElementsKeys;
+        as?: As;
         children?: React.ReactNode;
       }
     >
@@ -118,18 +122,19 @@ export type MyStyledComponent<
 // Styled
 //===========================================================
 export type Styled<Config extends BaseConfig> = <
-  Type extends IntrinsicElementsKeys | React.ComponentType<any>,
-  const NStyledObject extends StyledObject<Config, NStyledObject>,
-  Option extends StyledOption<any, IntrinsicElementsKeys> = { as: undefined }
+  BaseComponent extends ElementType<any>,
+  const NStyledObject extends StyledObject<Config, NStyledObject>
 >(
-  type: Type,
+  baseComponent: BaseComponent,
   styledObject: NStyledObject,
-  option?: Option
-) => MyStyledComponent<Config, Type, NStyledObject, Option["as"]>;
+  propsOfBaseComponent?: React.ComponentProps<BaseComponent>
+) => MyStyledComponent<Config, BaseComponent, NStyledObject>;
 
 //===========================================================
 // MakeStyled
 //===========================================================
-export declare const makeStyled: <const Config extends BaseConfig>(
+export type MakeStyled = <const Config extends BaseConfig>(
   config: Config
 ) => Styled<Config>;
+
+// export declare const makeStyled: MakeStyled;
