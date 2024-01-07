@@ -8,7 +8,7 @@
     "buildOnly": "rollup -c rollup.config.js",
     "clean": "rm -rf dist  ",
     "reset": "pnpm clean && rm -rf node_modules && pnpm install",
-    "type": " cp -r src/types.ts dist/index.d.ts ",
+    "type": " tsc --project . --paths null --emitDeclarationOnly --declaration",
     "watchtype": "tsc --project . --watch"
   },
   "types": "./dist/index.d.ts",

@@ -189,60 +189,28 @@ describe("render StyledComponent", () => {
 
   it("styled function width as option", () => {
     const Comp = styled("div", "baseStyle-gmqXFB", [], {}, [], [], { as: "a" });
-    const comp = TestRenderer.create(<Comp />);
+    const comp = TestRenderer.create(<Comp />); //div没有as属性，所以不会被替换为a
     expect(comp.toJSON()).toMatchInlineSnapshot(`
-      <a
+      <div
         className="baseStyle-gmqXFB "
       />
     `);
   });
   it("web component should use `class` attributes", () => {
     const Comp = styled("div", "baseStyle-gmqXFB", [], {}, [], [], {
-      as: "u-stack",
-    });
-    const comp = TestRenderer.create(<Comp />);
-    expect(comp.toJSON()).toMatchInlineSnapshot(`
-      <u-stack
-        class="baseStyle-gmqXFB "
-      />
-    `);
-  });
-
-  it("enable wrapper", () => {
-    const Comp = styled("div", "baseStyle-gmqXFB", [], {}, [], [], {
-      wrapper: "a",
-    });
-    const comp = TestRenderer.create(<Comp />);
-    expect(comp.toJSON()).toMatchInlineSnapshot(`
-      <a
-        className="baseStyle-gmqXFB "
-      >
-        <div />
-      </a>
-    `);
-  });
-
-  it("add wrapper for 3rd component", () => {
-    const Button = props => {
-      return <button>hello</button>;
-    };
-    const Comp = styled(Button, "baseStyle-gmqXFB", [], {}, [], [], {
-      wrapper: "div",
+      as: "u-stack", //因为div没有as属性，所以不会被替换为u-stack
     });
     const comp = TestRenderer.create(<Comp />);
     expect(comp.toJSON()).toMatchInlineSnapshot(`
       <div
         className="baseStyle-gmqXFB "
-      >
-        <button>
-          hello
-        </button>
-      </div>
+      />
     `);
   });
+
   it("native attr  ", () => {
     const Comp = styled("a", "baseStyle-gmqXFB", [], {}, [], [], {
-      attrs: { target: "_blank" },
+      target: "_blank",
     });
     const comp = TestRenderer.create(<Comp target="_self" round />);
     expect(comp.toJSON()).toMatchInlineSnapshot(`
@@ -262,7 +230,7 @@ describe("render StyledComponent", () => {
   });
   it("attrs for event ", () => {
     const Link = styled("a", "baseStyle-gmqXFB", [], {}, [], [], {
-      attrs: { onClick: () => {} },
+      onClick: () => {},
     });
     const comp = TestRenderer.create(<Link />);
     expect(comp.toJSON()).toMatchInlineSnapshot(`

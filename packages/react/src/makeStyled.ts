@@ -1,7 +1,7 @@
 import type { BaseConfig } from "@colliejs/core";
 import _ from "lodash";
 import React, { ElementType, ForwardRefRenderFunction } from "react";
-import { Styled } from "./types";
+import { BaseTypePropsWithAs, Styled } from "./types";
 import {
   getCSSValue,
   getCSSVariable,
@@ -14,21 +14,10 @@ import {
 } from "./utils";
 import type { VariantsType } from "@colliejs/transform";
 
-export type StyledOption<
-  P extends BaseStyledComponentProps,
-  AS extends keyof JSX.IntrinsicElements
-> = {
-  as?: AS;
-  wrapper?: keyof JSX.IntrinsicElements;
-  attrs?: Partial<P> & JSX.IntrinsicElements[AS];
-};
-
 export type BaseStyledComponentProps = {
-  //css and static variants
-  className?: string;
+  className?: string; //static variants
   as?: keyof JSX.IntrinsicElements;
-  //dynamic variants
-  style?: React.CSSProperties & { [x: string]: any };
+  style?: React.CSSProperties & { [x: string]: any }; //dynamic variants
   ref?: any;
 };
 
@@ -37,9 +26,12 @@ export const makeStyled = <Config extends BaseConfig>(config: Config) => {
    * runtime版本的styled（编译器生成的版本）
    *
    * @param component
-   * @param __generatedClassNameOfBaseStyle：编译时生成的参数
+   * @param __generatedBaseStyleClassName
    * @param __generatedStaticClassNames:编译时生成的参数
+   * @param __generatedDynamicClassNameMap:编译时生成的参数
    * @param __generatedCompoundVariantClassNames:编译时生成的参数
+   * @param __generatedDefaultVariantClassNames:编译时生成的参数
+   * @param option
    * @returns
    * @example
    *   const Button = styled('button',
@@ -53,13 +45,8 @@ export const makeStyled = <Config extends BaseConfig>(config: Config) => {
    *
    * @todo: 使用forwardRef
    */
-  return function styled<
-    P1 extends BaseStyledComponentProps & P2,
-    P2,
-    As extends keyof JSX.IntrinsicElements,
-    T = any
-  >(
-    component: ElementType<P2>,
+  return function styled<P1 extends BaseStyledComponentProps, T = any>(
+    component: ElementType<P1>,
     __generatedBaseStyleClassName = "",
     __generatedStaticClassNames: VariantsType["staticClassName"][] = [],
     __generatedDynamicClassNameMap: Record<
@@ -68,7 +55,8 @@ export const makeStyled = <Config extends BaseConfig>(config: Config) => {
     > = {},
     __generatedCompoundVariantClassNames: VariantsType["compoundClassName"][] = [],
     __generatedDefaultVariantClassNames: string[] = [],
-    option: StyledOption<P1, As> = {}
+    // option: React.ComponentProps<ElementType<P1>> = {}
+    defaultPropsOfBaseComponent: React.ComponentProps<any> = {}
   ) {
     const render: ForwardRefRenderFunction<T, P1> = (props, ref) => {
       const { className, style = {}, as, ...restProps } = props;
@@ -145,12 +133,12 @@ export const makeStyled = <Config extends BaseConfig>(config: Config) => {
         }
       }
       //===========================================================
-      // defaultVariants
+      // get ClassName of defaultVariants
       //===========================================================
       outputClassNames.push(...__generatedDefaultVariantClassNames);
 
       //===========================================================
-      // compoundVariants.
+      // get ClassName of  compoundVariants.
       //===========================================================
       const compoundClassNames = getCompoundVariantClassNameUsed(
         __generatedCompoundVariantClassNames,
@@ -159,13 +147,13 @@ export const makeStyled = <Config extends BaseConfig>(config: Config) => {
       outputClassNames.push(...compoundClassNames);
 
       //===========================================================
-      // create forwardProps
+      // finally got forwardProps
       //===========================================================
       const forwardProps = {
         className: outputClassNames.join(" "),
         ref,
         style: Object.keys(style).length === 0 ? undefined : style,
-        ...(option.attrs || {}),
+        ...defaultPropsOfBaseComponent,
         ...restPropsWithoutVariant,
       };
 
@@ -178,60 +166,35 @@ export const makeStyled = <Config extends BaseConfig>(config: Config) => {
       const isWebComponent = isString(component) && component.includes("-");
       const is3rdComponent = !isHostComponent && !isStyledComponent;
 
-      if (option.wrapper) {
-        //TODO: className传递到wrapper上，其他的props传递到component上
-        const childProps = { ..._.omit(forwardProps, ["className", "style"]) };
-
-        let child: React.ReactNode;
-        if (isHostComponent || isWebComponent) {
-          child = React.createElement(as || option.as || component, childProps);
-        } else {
-          // isStyledComponent || is3rdComponent
-          //@ts-ignore
-          childProps.as = as || option.as;
-          //@ts-ignore
-          child = React.createElement(component, childProps);
-        }
-        return React.createElement(
-          option.wrapper,
-          { className: forwardProps.className, style: forwardProps.style },
-          child
-        );
-      }
-      //没有添加wrapper的情况
       if (isHostComponent) {
-        const _as = as || option.as;
-        const asIsWebComponent = isString(_as) && _as.includes("-");
+        const asIsWebComponent = isString(as) && as.includes("-");
         if (asIsWebComponent) {
-          //@ts-ignore
-          forwardProps.class = forwardProps.className;
-          //@ts-ignore
-          delete forwardProps.className;
-          return React.createElement(_as, forwardProps);
+          return React.createElement(as, {
+            ..._.omit(forwardProps, ["className"]),
+            class: forwardProps.className,
+          });
         }
-        return React.createElement(as || option.as || component, forwardProps);
+        return React.createElement(as || component, _.omit(forwardProps, "as"));
       }
       if (isStyledComponent) {
-        //@ts-ignore
-        forwardProps.as = as || option.as;
-        //@ts-ignore
-        return React.createElement(component, forwardProps);
+        return React.createElement(component, {
+          ...forwardProps,
+          as: as || defaultPropsOfBaseComponent.as,
+        });
       }
       if (isWebComponent) {
-        //@ts-ignore
-        forwardProps.class = forwardProps.className;
-        //@ts-ignore
-        delete forwardProps.className;
-        return React.createElement(as || option.as || component, forwardProps);
+        return React.createElement(as || component, {
+          ..._.omit(forwardProps, "className"),
+          class: forwardProps.className,
+        });
       }
       if (is3rdComponent) {
-        //@ts-ignore
-        forwardProps.as = as || option.as;
-        //@ts-ignore
-        return React.createElement(component, forwardProps);
+        return React.createElement(component, {
+          ...forwardProps,
+          as: as || defaultPropsOfBaseComponent.as,
+        });
       }
-
-      throw new Error("impossible");
+      throw new Error("impossible react type");
     };
     const StyledComponent = React.forwardRef(render);
     StyledComponent.displayName =
