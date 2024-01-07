@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.84](https://github.com/colliejs/colliejs/compare/@colliejs/react@1.0.83...@colliejs/react@1.0.84) (2024-01-07)
+
+### Bug Fixes
+
+- remove styled ([cef6f70](https://github.com/colliejs/colliejs/commit/cef6f70d7fa871888961aa9a4b35066bf23dfd98))
+
 ## [1.0.83](https://github.com/colliejs/colliejs/compare/@colliejs/react@1.0.82...@colliejs/react@1.0.83) (2024-01-07)
 
 **Note:** Version bump only for package @colliejs/react
