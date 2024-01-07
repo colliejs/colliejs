@@ -2,6 +2,7 @@ import React, {
   ClassAttributes,
   ElementRef,
   ElementType,
+  LegacyRef,
   PropsWithoutRef,
   RefAttributes,
 } from "react";
@@ -105,8 +106,8 @@ export type MyStyledComponent<
       css?: CSSObject<Config>;
       as?: IntrinsicElementsKeys; //TODO: infer As ,这里的As如果为真，那么应该支持更多属性。但是未实现
       children?: React.ReactNode;
-      ref?: ElementRef<As extends IntrinsicElementsKeys ? As : Type>;
-    } & ComposedVariant<Type, ExtractPropsFromStyledObject<NStyledObject>>
+      ref?: LegacyRef<ElementRef<As extends IntrinsicElementsKeys ? As : Type>>;
+    } & ComposedVariant<Type, ExtractPropsFromStyledObject<NStyledObject>> 
   >
 >;
 
