@@ -21,6 +21,7 @@ type VitePluginOptions<Config extends BaseConfig> = {
   exclude?: FilterPattern;
   styledConfig?: Config;
   entry: string;
+  alias?: Alias;
 };
 
 const UNCHANGED = null;
@@ -33,6 +34,7 @@ const collie = <Config extends BaseConfig>(
     exclude,
     styledConfig = defaultConfig,
     entry,
+    alias: _alias,
   } = option || {};
   const filter = createFilter(include, exclude);
   let viteConfig: ResolvedConfig;
@@ -50,7 +52,7 @@ const collie = <Config extends BaseConfig>(
 
       log.verbose("transform", "changed url is: ", url);
       const root = viteConfig.root || process.cwd();
-      const alias = viteConfig.resolve.alias || {};
+      const alias = _alias || viteConfig.resolve.alias || {};
       //===========================================================
       // entry变动后，重新生成theme 样式文件
       //===========================================================
