@@ -1,9 +1,5 @@
 lockfileVersion: "6.0"
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 importers:
   .:
     dependencies:
@@ -17293,3 +17289,7 @@ packages:
       webpod: 0.0.2
       which: 3.0.1
       yaml: 2.3.1
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false

@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.33](https://github.com/colliejs/colliejs/compare/@colliejs/core@1.0.32...@colliejs/core@1.0.33) (2024-01-13)
+
+**Note:** Version bump only for package @colliejs/core
+
 ## [1.0.32](https://github.com/colliejs/colliejs/compare/@colliejs/core@1.0.31...@colliejs/core@1.0.32) (2024-01-05)
 
 **Note:** Version bump only for package @colliejs/core
