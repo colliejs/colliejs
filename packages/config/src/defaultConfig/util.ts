@@ -6,13 +6,28 @@ const pseudoElements = [
   "after",
   "first-letter",
   "first-line",
+  "placeholder",
+  "selection",
+  "backdrop",
+  "marker",
+  "spelling-error",
+  "grammar-error",
+  "cue",
 ] as const;
 const pseudoClasses = [
   "hover",
   "focus",
   "active",
   "focus-within",
+  "focus-visible",
+  "link",
   "disabled",
+  "visited",
+  "checked",
+  "active",
+  "root",
+  "empty",
+  "target",
 ] as const;
 
 export const utils = {

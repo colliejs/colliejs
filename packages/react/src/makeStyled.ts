@@ -200,6 +200,6 @@ export const makeStyled = <Config extends BaseConfig>(config: Config) => {
 
     //@ts-ignore
     StyledComponent.__isStyledComponent = true;
-    return StyledComponent;
+    return React.memo(StyledComponent);
   } as unknown as Styled<Config>;
 };

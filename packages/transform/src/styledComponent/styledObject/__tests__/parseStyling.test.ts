@@ -52,7 +52,7 @@ describe("parseStyleObj", () => {
       }
     `);
   });
-  it("dynamic function without breakpoints", () => {
+  it("dynamic function with breakpoints", () => {
     const styleObj: any = {
       variants: {
         gap: {
