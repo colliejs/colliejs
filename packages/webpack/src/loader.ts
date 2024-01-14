@@ -57,11 +57,13 @@ export default function collieWebpackLoader<Config extends BaseConfig>(
   //===========================================================
   // 普通文件
   //===========================================================
-  let {
-    code,
-    styledComponentCssTexts,
-    styledElementCssTexts,
-  } = transform(content, url, styledConfig, alias, root);
+  let { code, styledComponentCssTexts, styledElementCssTexts } = transform(
+    content,
+    url,
+    styledConfig,
+    alias,
+    root
+  );
   const cssText = styledElementCssTexts + "\n" + styledComponentCssTexts;
   const hasMeaningCss = cssText.replace(/\s/g, "").length > 0;
   if (!hasMeaningCss && !isEntryFile) {
@@ -73,7 +75,10 @@ export default function collieWebpackLoader<Config extends BaseConfig>(
   // this.addDependency(cssFile);
   return callback(
     null,
-    `import "${cssFile}"; ${importThemeCssText};
-   ${code};`
+    `
+    ${code};
+    import "${cssFile}"; ${importThemeCssText};
+   
+   `
   );
 }

@@ -1,4 +1,4 @@
-import { styled } from "@colliejs/react";
+import { styled } from "../styled";
 
 const Button = styled(
   "button",
