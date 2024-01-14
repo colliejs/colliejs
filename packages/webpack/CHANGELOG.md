@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.42](https://github.com/colliejs/colliejs/compare/@colliejs/webpack@1.0.41...@colliejs/webpack@1.0.42) (2024-01-14)
+
+### Bug Fixes
+
+- move css to end of file ([9885dc0](https://github.com/colliejs/colliejs/commit/9885dc0e0b7f7a687373110954dae5fc252a0b1f))
+
 ## [1.0.41](https://github.com/colliejs/colliejs/compare/@colliejs/webpack@1.0.40...@colliejs/webpack@1.0.41) (2024-01-06)
 
 ### Bug Fixes
