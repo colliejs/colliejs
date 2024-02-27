@@ -6,7 +6,7 @@ export const Button = styled(
     border: "none",
     color: "$white09",
     fontSize: 28,
-    backgroundColor: "yellow",
+    backgroundColor: "red23423",
 
     variants: {
       size: {

@@ -22,10 +22,10 @@ export default function App() {
       </Row>
       <Row>
         <MyButton shape={["round"]}> MyButton-1</MyButton>
-        <MyButton shape={[12]}> MyButton-2</MyButton>
+        <MyButton shape={[12]}> MyButton-272</MyButton>
       </Row>
       <br />
-      <SpecialButton shape={"round"}>SpecialButton1</SpecialButton>
+      <SpecialButton shape={"round"}>SpecialButton12</SpecialButton>
       <br />
       <CssButton></CssButton>
       <ThemeButton>ThemeButton</ThemeButton>
@@ -37,6 +37,7 @@ export default function App() {
         ResponsiveButton use vw
       </ResponsiveButton>
       <ExampleButton>ExampleButton</ExampleButton>
+
     </Col>
   );
 }

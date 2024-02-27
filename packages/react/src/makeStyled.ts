@@ -1,7 +1,11 @@
-import type { BaseConfig } from "@colliejs/core";
+import {
+  convertStyledObject,
+  type BaseConfig,
+  getClassOfStyledObject,
+} from "@colliejs/core";
 import _ from "lodash";
 import React, { ElementType, ForwardRefRenderFunction } from "react";
-import { DefaultProps, Styled } from "./types";
+import { DefaultProps, Styled, StyledObject } from "./types";
 import {
   getCSSValue,
   getCSSVariable,
@@ -12,7 +16,7 @@ import {
   isString,
   toArray,
 } from "./utils";
-import type { VariantsType } from "@colliejs/transform";
+import type { VariantsType } from "@colliejs/core";
 
 export type BaseStyledComponentProps = {
   className?: string; //static variants
@@ -47,17 +51,18 @@ export const makeStyled = <Config extends BaseConfig>(config: Config) => {
    */
   return function styled<P1 extends BaseStyledComponentProps, T = any>(
     component: ElementType<P1>,
-    __generatedBaseStyleClassName = "",
-    __generatedStaticClassNames: VariantsType["staticClassName"][] = [],
-    __generatedDynamicClassNameMap: Record<
-      VariantsType["dynamicClassName"],
-      { canAddPx: boolean }
-    > = {},
-    __generatedCompoundVariantClassNames: VariantsType["compoundClassName"][] = [],
-    __generatedDefaultVariantClassNames: string[] = [],
-    // option: React.ComponentProps<ElementType<P1>> = {}
+    styledObject: any,
     defaultPropsOfBaseComponent: React.ComponentProps<any> = {}
   ) {
+    const result = convertStyledObject(styledObject, config);
+    const {
+      classNamesOfStaticVariant: __generatedStaticClassNames,
+      classNameMapOfDynamicVariant: __generatedDynamicClassNameMap,
+      classNamesOfCompoundVariants: __generatedCompoundVariantClassNames,
+      classNamesOfDefaultVariant: __generatedDefaultVariantClassNames,
+      classNameOfBaseStyle: __generatedBaseStyleClassName,
+    } = getClassOfStyledObject(result);
+
     const render: ForwardRefRenderFunction<T, P1> = (props, ref) => {
       const { className, style = {}, as, ...restProps } = props;
 

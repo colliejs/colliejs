@@ -1,0 +1,26 @@
+import { NodePath } from "@babel/traverse";
+import { ImportsByName, getPathOfFnCall } from "..";
+import * as t from "@babel/types";
+import { BaseConfig, CSSObject } from "@colliejs/core";
+import { cssFnName } from "../const";
+import { isCallExp } from "../utils/isCallExp";
+import { evalObjectExp } from "../utils/eval/evalObjectExp";
+import { assert } from "@c3/utils";
+
+export const isCssCallExpression = <Config extends BaseConfig>(
+  exp: t.Expression
+): exp is t.CallExpression => {
+  return isCallExp(exp, cssFnName);
+};
+
+export const parseCSSCallDeclaration = <Config extends BaseConfig>(
+  path: NodePath<t.CallExpression>,
+  moduleIdByName: ImportsByName,
+): CSSObject<Config> => {
+  if (!isCssCallExpression(path.node)) {
+    throw new Error("not a cssObjectDecl");
+  }
+  const cssObjectPath = getPathOfFnCall(path, cssFnName);
+  assert(!!cssObjectPath, "cssObjectPath should not be undefined");
+  return evalObjectExp(cssObjectPath, moduleIdByName);
+};

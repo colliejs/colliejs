@@ -1,0 +1,33 @@
+{
+  "name": "@colliejs/cli",
+  "version": "1.0.2",
+  "description": "awesesome",
+  "type": "commonjs",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "che3vinci@gmail.com",
+  "license": "MIT",
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "organize-imports-cli",
+      "prettier --write",
+      "eslint --cache --fix"
+    ]
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./css": "./dist/index.css"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@scriptbot/cli": "^1.0.159"
+  }
+}
