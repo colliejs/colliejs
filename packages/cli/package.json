@@ -28,6 +28,10 @@
   },
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@scriptbot/cli": "^1.0.159"
+    "@colliejs/config": "workspace:^",
+    "@colliejs/core": "workspace:^",
+    "@colliejs/extract": "workspace:^",
+    "@scriptbot/cli": "^1.0.159",
+    "chokidar": "^3.6.0"
   }
 }

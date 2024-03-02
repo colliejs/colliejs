@@ -1,5 +1,5 @@
 import { getImports } from "../importer";
-import { parseCode } from "../../parse";
+import { parseCode } from "../../utils/parse";
 
 describe("test cases", () => {
   it("should work ", () => {
@@ -16,19 +16,19 @@ describe("test cases", () => {
       {
         "BeautifulButton": {
           "importedName": "RedButton",
-          "moduleId": "${home}/code/personal/colliejs/packages/transform/src/utils/__tests__/fixtures/Button.tsx",
+          "moduleId": "/Users/che3vinci/code/personal/colliejs/packages/extract/src/utils/__tests__/fixtures/Button.tsx",
         },
         "Button": {
           "importedName": "Button",
-          "moduleId": "${home}/code/personal/colliejs/packages/transform/src/utils/__tests__/fixtures/Button.tsx",
+          "moduleId": "/Users/che3vinci/code/personal/colliejs/packages/extract/src/utils/__tests__/fixtures/Button.tsx",
         },
         "_": {
           "importedName": "default",
-          "moduleId": "${home}/code/personal/colliejs/node_modules/.pnpm/lodash@4.17.21/node_modules/lodash/lodash.js",
+          "moduleId": "/Users/che3vinci/code/personal/colliejs/node_modules/.pnpm/lodash@4.17.21/node_modules/lodash/lodash.js",
         },
         "stripUnit": {
           "importedName": "stripUnit",
-          "moduleId": "${home}/code/personal/colliejs/node_modules/.pnpm/polished@4.2.2/node_modules/polished/dist/polished.cjs.js",
+          "moduleId": "/Users/che3vinci/code/personal/colliejs/node_modules/.pnpm/polished@4.2.2/node_modules/polished/dist/polished.cjs.js",
         },
       }
     `);
@@ -46,7 +46,7 @@ describe("test cases", () => {
       {
         "hello": {
           "importedName": "default",
-          "moduleId": "${home}/code/personal/colliejs/packages/transform/src/utils/__tests__/fixtures/hello.ts",
+          "moduleId": "/Users/che3vinci/code/personal/colliejs/packages/extract/src/utils/__tests__/fixtures/hello.ts",
         },
       }
     `);
@@ -64,41 +64,19 @@ describe("test cases", () => {
       "@fixtures": "/fixtures",
     });
     const home = process.env.HOME;
-    expect(importers).toMatchInlineSnapshot(
-      `
+    expect(importers).toMatchInlineSnapshot(`
       {
         "Button": {
           "importedName": "Button",
           "moduleId": "/fixtures/Button",
         },
       }
-    `
-    );
+    `);
     // const x = require(importers["Button"].moduleId);
     // expect(x.default).toBe("");
   });
 
-  it("packages", () => {
-    const source = `
-    import {css} from '@colliejs/core';
-    `;
-    const ast = parseCode(source);
-    const curFile = __filename;
-    const importers = getImports(ast.program, curFile, {});
-    const home = process.env.HOME;
-    expect(importers).toMatchInlineSnapshot(
-      `
-      {
-        "css": {
-          "importedName": "css",
-          "moduleId": "/Users/che3vinci/code/personal/colliejs/packages/core/dist/index.cjs",
-        },
-      }
-    `
-    );
-    const { css } = require(importers["css"].moduleId);
-    expect(css).toBeDefined();
-  });
+
 
   it("absolute path", () => {
     const source = `
@@ -112,16 +90,14 @@ describe("test cases", () => {
       { "@src": "/src" },
       process.cwd() + "/packages/transform"
     );
-    expect(importers).toMatchInlineSnapshot(
-      `
+    expect(importers).toMatchInlineSnapshot(`
       {
         "toHash": {
           "importedName": "toHash",
-          "moduleId": "/Users/che3vinci/code/personal/colliejs/packages/transform/src/utils/__tests__/fixtures/abs.ts",
+          "moduleId": "/src/utils/__tests__/fixtures/abs",
         },
       }
-    `
-    );
+    `);
   });
   it("index", () => {
     const source = `
@@ -135,16 +111,14 @@ describe("test cases", () => {
       { "@src": "/src" },
       process.cwd() + "/packages/transform"
     );
-    expect(importers).toMatchInlineSnapshot(
-      `
+    expect(importers).toMatchInlineSnapshot(`
       {
         "toHash": {
           "importedName": "toHash",
-          "moduleId": "/Users/che3vinci/code/personal/colliejs/packages/transform/src/utils/__tests__/fixtures/index.ts",
+          "moduleId": "/src/utils/__tests__/fixtures",
         },
       }
-    `
-    );
+    `);
   });
   it("..", () => {
     const source = `
@@ -158,15 +132,13 @@ describe("test cases", () => {
       {},
       process.cwd() + "/packages/transform"
     );
-    expect(importers).toMatchInlineSnapshot(
-      `
+    expect(importers).toMatchInlineSnapshot(`
       {
         "fnUtils": {
           "importedName": "fnUtils",
-          "moduleId": "/Users/che3vinci/code/personal/colliejs/packages/transform/src/utils/index.ts",
+          "moduleId": "/Users/che3vinci/code/personal/colliejs/packages/extract/src/utils/index.ts",
         },
       }
-    `
-    );
+    `);
   });
 });

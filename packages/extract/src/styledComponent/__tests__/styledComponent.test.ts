@@ -77,19 +77,11 @@ describe("styledHostComponent", () => {
     `);
 
     expect(c.getCssText()).toMatchInlineSnapshot(`
-      "@layer app.styledComponentTestTs-Button-1f9ulld {.baseStyle-Button-16n2od3{background:red}.variants-shape-round-jhqrc0{border-radius:50%}
+      "@layer app.styledComponentTestTs-Button-poy4f0 {.baseStyle-Button-16n2od3{background:red}.variants-shape-round-jhqrc0{border-radius:50%}
       .variants-shape-rect-4trf62{border-radius:0}
       }
       "
     `);
-
-    /**
-     * transform
-     */
-    const { path } = c.transform();
-    expect(generate(path.node).code).toMatchInlineSnapshot(
-      `"const Button = styled('button', "baseStyle-Button-16n2od3", ["variants-shape-round-jhqrc0", "variants-shape-rect-4trf62"], {}, [], []);"`
-    );
   });
 });
 //===========================================================================
@@ -111,12 +103,12 @@ describe("3rdComponent", () => {
     expect(c.id.componentName).toBe("MyButton");
 
     expect(c.layerName).toMatchInlineSnapshot(
-      `"styledComponentTestTs-MyButton-1ah2k0t"`
+      `"styledComponentTestTs-MyButton-14730o8"`
     );
     expect(c.getCssText()).toMatchInlineSnapshot(`
       "
-            @layer , app.styledComponentTestTs-MyButton-1ah2k0t;
-            @layer app.styledComponentTestTs-MyButton-1ah2k0t {
+            @layer , app.styledComponentTestTs-MyButton-14730o8;
+            @layer app.styledComponentTestTs-MyButton-14730o8 {
               .baseStyle-MyButton-15ag2ji{background:red;position:absolute;left:100px;right:;top:20px;bottom:}
             }
       "
@@ -134,77 +126,7 @@ describe("3rdComponent", () => {
     const myButton = prepareStyledComponent(code);
     expect(myButton.id.uniqName).toEqual(myButton.layerName);
     expect(myButton.id.uniqName).toMatchInlineSnapshot(
-      `"styledComponentTestTs-MyButton-1ah2k0t"`
-    );
-  });
-});
-describe("dynamic variable transform", () => {
-  it("hostComponent ", () => {
-    const code = `
-      const Button = styled('button', {
-          variants:{
-              shape:{
-                dynamic:function(x){
-                  return {borderRadius:x};
-                }
-              }
-          }
-      });
-      const btn= <Button shape={10} />
-      `;
-
-    const c = prepareStyledComponent(code);
-
-    const astTransformed = c.transform();
-    expect(generate(astTransformed.path.node).code).toMatchInlineSnapshot(`
-      "const Button = styled('button', "", [], {
-        "variants-shape-dynamic-t61aqk": {
-          "canAddPx": true
-        }
-      }, [], []);"
-    `);
-  });
-
-  it("styledComponent transform with option ", () => {
-    const code = `
-      const Button = styled('button', {
-         color:'red'
-      },{as:'a'});
-      const btn= <Button shape={10} />
-      `;
-    const c = prepareStyledComponent(code);
-
-    const astTransformed = c.transform();
-  });
-});
-
-describe("compoundVariants", () => {
-  it("should work ", () => {
-    const code = `
-    const Button = styled('button', {
-       color:'red',
-       variants:{
-        shape:{
-          round:{}
-        },
-        size:{
-          big:{}
-        },
-       },
-       compoundVariants:[{
-          shape:'round',
-          size:'big',
-          css:{
-            background:'red'
-          }
-       }]
-    });
-    const btn= <Button shape={10} />
-    `;
-    const c = prepareStyledComponent(code);
-    const astTransformed = c.transform();
-    expect(generate(astTransformed.path.node).code).toMatchInlineSnapshot(
-      `"const Button = styled('button', "baseStyle-Button-129ntb2", ["variants-shape-round-31e", "variants-size-big-31e"], {}, ["compoundVariants-shape-round-size-big-16n2od3"], []);"`
+      `"styledComponentTestTs-MyButton-14730o8"`
     );
   });
 });

@@ -4,8 +4,8 @@ import {
   DepNode,
   getDepPaths,
   getLayerTextFromPath,
-  makeDepTree,
-} from "../depTree";
+  makeDepsTree,
+} from "../../../../../cli/src/depsTree/depsTree";
 
 export const printAsciiTree = (root: any) => {
   const t = new Tree({ root });
@@ -21,7 +21,7 @@ describe("test cases", () => {
       Text: "p",
     };
 
-    const res = makeDepTree(depObj);
+    const res = makeDepsTree(depObj);
     console.table(res.roots);
     expect(res.roots.length).toBe(2);
     expect(printAsciiTree(res.roots[0])).toMatchInlineSnapshot(`

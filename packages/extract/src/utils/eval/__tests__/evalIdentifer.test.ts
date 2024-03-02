@@ -1,5 +1,5 @@
 import { code } from "@scriptbot/cli";
-import { parseCode } from "../../../parse";
+import { parseCode } from "../../../utils/parse";
 import { getImports } from "../../importer";
 import { parseCodeAndGetBodyN } from "../../parseCodeAndGetBody0";
 import { evalIdentifer } from "../evalIdentifier";

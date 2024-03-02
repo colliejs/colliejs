@@ -1,5 +1,5 @@
 import * as t from "@babel/types";
-import { parseCode } from "../../parse";
+import { parseCode } from "../../utils/parse";
 import { traverse } from "../../utils/module";
 import { getImports } from "../../utils";
 import { isStyledComponentDecl } from "../../styledComponent/isStyledCompDelc";

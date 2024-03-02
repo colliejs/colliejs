@@ -4,7 +4,7 @@ import _ from "lodash";
 import log from "npmlog";
 import CustomComponent from "../component/CustomComponent";
 import { HostComponent } from "../component/HostComponent";
-import { generate, getPathOfFnCall } from "../utils/index";
+import { generate, getArgPathOfFnCall } from "../utils/index";
 import { ImportsByName, StyledComponentDecl } from "../utils/types";
 import { StyledComponent } from "./StyledComponent";
 import { assert } from "@c3/utils";
@@ -26,6 +26,9 @@ export const getStyledComponentName = (
   //TODO: support multiple declarator
   return (path.node.declarations[0].id as t.Identifier)?.name;
 };
+//===========================================================
+//
+//===========================================================
 export const getStyledDependent = <Config extends BaseConfig>(
   path: NodePath<t.VariableDeclaration>,
   moduleIdByName: ImportsByName,
@@ -51,8 +54,7 @@ export const getStyledDependent = <Config extends BaseConfig>(
       break;
     case "Identifier":
       assert(t.isIdentifier(exp), "exp should be StringLiteral");
-      //NOTE:默认认为是一个customeComponent.如果是一个styledComponent，
-      //那么会在后期被替换为styledComponent
+      //styledComponent 也被视为Custom component. 因为layername是一样的，
       const componentName = exp.name;
       dependent = new CustomComponent(
         ComponentId.make(
@@ -111,7 +113,7 @@ export const parseStyledComponentDeclaration = <Config extends BaseConfig>(
   }
   if (t.isObjectExpression(styledObjectExp)) {
     console.log(generate(path.node).code);
-    const styledObjectPath = getPathOfFnCall(path, styledFnName);
+    const styledObjectPath = getArgPathOfFnCall(path, styledFnName, 1);
     assert(!!styledObjectPath, "stylingPath should not be null", {
       styledObjectExp,
       path,

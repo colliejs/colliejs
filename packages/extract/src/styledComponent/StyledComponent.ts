@@ -9,7 +9,6 @@ import { NodePath } from "@babel/traverse";
 import { ComponentId } from "../component/componentId";
 import { Alias } from "../type";
 import { ImportsByName, Stylable } from "../utils/types";
-import { findLayerDeps } from "./findDeps";
 import { isStyledComponentDecl } from "./isStyledCompDelc";
 import { parseStyledComponentDeclaration as parseStyledComponentDecl } from "./parseStyledComponent";
 import { StyledObjectResult } from "@colliejs/core";
@@ -18,22 +17,21 @@ import {
   DynamicVariantKeyPrefix,
   StaticVariantKeyPrefix,
 } from "@colliejs/core";
-
+import { findLayerDeps } from "./depsTree/findDeps";
 export class StyledComponent<Config extends BaseConfig>
   extends CustomComponent
   implements Stylable
 {
   StyledObjectResult: StyledObjectResult<Config>;
   dependent: CustomComponent | HostComponent;
-  layerDeps: string[];
 
   constructor(
     public path: NodePath<t.VariableDeclaration>,
     moduleId: string,
     moduleIdByName: ImportsByName,
     public config: Config,
-    alias: Alias = {},
-    root: string = process.cwd(),
+    public alias: Alias = {},
+    public root: string = process.cwd(),
     getDeps = false
   ) {
     if (!isStyledComponentDecl) {
@@ -41,27 +39,28 @@ export class StyledComponent<Config extends BaseConfig>
       throw new Error("not a styledComponentDecl");
     }
 
-    const {
-      styledComponentName,
-      dependent,
-      styledObject: styling,
-    } = parseStyledComponentDecl<Config>(
-      path,
-      moduleIdByName,
-      moduleId,
-      config
-    );
+    const { styledComponentName, dependent, styledObject } =
+      parseStyledComponentDecl<Config>(path, moduleIdByName, moduleId, config);
     super(new ComponentId(moduleId, styledComponentName));
 
-    this.StyledObjectResult = convertStyledObject(
-      styling,
-      config,
-      styledComponentName
-    );
+    this.StyledObjectResult = convertStyledObject(styledObject, config);
     this.dependent = dependent;
-    if (getDeps) {
-      this.layerDeps = findLayerDeps(this, alias, root, config);
+  }
+  get layerDeps() {
+    return findLayerDeps(this, this.alias, this.root, this.config);
+  }
+
+  get directLayerDep() {
+    if (this.dependent instanceof CustomComponent) {
+      return this.dependent.layerName;
     }
+
+    return "";
+  }
+  get layerName() {
+    return this.config.layername
+      ? `${this.config.layername}.${super.layerName}`
+      : super.layerName;
   }
 
   getCssText() {
@@ -82,8 +81,9 @@ export class StyledComponent<Config extends BaseConfig>
       }
     }
     const thisLayerName = this.config.layername
-      ? `${this.config.layername}.${this.layerName}`
-      : this.layerName;
+    ? `${this.config.layername}.${this.layerName}`
+    : this.layerName;
+
     if (this.dependent instanceof CustomComponent) {
       return `
       @layer ${this.layerDeps

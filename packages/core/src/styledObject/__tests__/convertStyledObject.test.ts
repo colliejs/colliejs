@@ -1,4 +1,4 @@
-import { config } from "../../__tests__/stub/config";
+import { config } from "../../cssObject/__tests__/stub/config";
 import { convertStyledObject } from "../convertStyledObject";
 import { StyledObject } from "../types";
 

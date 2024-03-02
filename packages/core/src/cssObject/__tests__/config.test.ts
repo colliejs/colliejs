@@ -1,12 +1,12 @@
 import type { CSSObject } from "../type";
-import { css } from "../css";
+import { getCssText } from "../cssObject";
 
 describe("toHash", () => {
   it("should work ", () => {
     const cssObj = {
       lineHeight: 1,
     } as unknown as CSSObject<any>;
-    const res = css(cssObj, [".button"], undefined, {});
+    const res = getCssText(cssObj, [".button"], undefined, {});
     expect(res).toMatchInlineSnapshot(`".button{line-height:1}"`);
   });
 });

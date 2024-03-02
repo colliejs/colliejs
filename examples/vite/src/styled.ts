@@ -1,4 +1,4 @@
 import { makeStyled } from "@colliejs/react";
-import { collieConfig } from "../collie.config";
-export const styled = makeStyled(collieConfig);
+import config from "../collie.config";
+export const styled = makeStyled(config);
 

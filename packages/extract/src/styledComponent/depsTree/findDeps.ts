@@ -1,16 +1,16 @@
-import CustomComponent from "../component/CustomComponent";
+import CustomComponent from "../../component/CustomComponent";
 import fs from "node:fs";
-import { parseCode } from "../utils/parse";
-import { isStyledComponentDecl } from "./isStyledCompDelc";
-import {  getImports, traverse } from "../utils";
+import { parseCode } from "../../utils/parse";
+import { isStyledComponentDecl } from "../isStyledCompDelc";
+import {  getImports, traverse } from "../../utils";
 import {
   getStyledComponentName,
   getStyledDependent,
   parseStyledComponentDeclaration,
-} from "./parseStyledComponent";
-import { HostComponent } from "../component";
+} from "../parseStyledComponent";
+import { HostComponent } from "../../component";
 import type { BaseConfig } from "@colliejs/core";
-import { Alias } from "../type";
+import { Alias } from "../../type";
 
 /**
  * @todo:增加缓存来减少重复parseFile

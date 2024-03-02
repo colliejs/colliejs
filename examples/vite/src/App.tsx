@@ -10,6 +10,7 @@ import { pxToVw } from "./common/pxToVw";
 import { Col } from "./components/Col";
 import { Row } from "./components/Row";
 import ExampleButton from "./components/ExampleButton";
+import "../entry.css";
 
 export default function App() {
   return (
@@ -37,7 +38,6 @@ export default function App() {
         ResponsiveButton use vw
       </ResponsiveButton>
       <ExampleButton>ExampleButton</ExampleButton>
-
     </Col>
   );
 }

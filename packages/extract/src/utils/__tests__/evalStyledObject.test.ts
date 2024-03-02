@@ -1,9 +1,9 @@
-import { traverse } from "../../../utils/module";
-import { parseCode } from "../../../parse";
-import { getImports, parseCodeAndGetBodyN } from "../../../utils";
+import { traverse } from "../module";
+import { parseCode } from "../parse";
+import { getImports, parseCodeAndGetBodyN } from "../../utils";
 import * as t from "@babel/types";
-import { removeTypeAnnotation } from "../../../utils/removeType";
-import { evalObjectExp } from "../../../utils/eval/evalObjectExp";
+import { removeTypeAnnotation } from "../removeType";
+import { evalObjectExp } from "../eval/evalObjectExp";
 
 const evalObjectString = (sourcecode: string) => {
   const fileAst = parseCode(sourcecode);
@@ -58,7 +58,7 @@ describe("test cases", () => {
     const res = evalObjectString(code);
     expect(res).toMatchInlineSnapshot(`
       {
-        "backgroundImage": "url(/Users/che3vinci/code/personal/colliejs/packages/transform/src/styledComponent/styledObject/__tests__/fixtures/dog.jpeg)",
+        "backgroundImage": "url(./fixtures/dog.jpeg)",
         "color": "red",
         "position": "fixed",
       }

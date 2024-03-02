@@ -32,8 +32,8 @@ describe("findDeps", () => {
     const deps = c.layerDeps;
     expect(deps).toMatchInlineSnapshot(`
       [
-        "codeTs-MyButton-uygnw4",
-        "buttonTs-Button-ewa165",
+        "codeTs-MyButton-d4vr49",
+        "buttonTs-Button-1w3t6de",
       ]
     `);
   });

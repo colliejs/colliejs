@@ -22,6 +22,7 @@ export const extract = <Config extends BaseConfig>(
   const fileAst = parseCode(source);
   let styledComponentCssTexts = "";
   let styledElementCssTexts = "";
+  const layerDepsObject: Record<string, string> = {};
   let modulesByName = {};
 
   traverse(fileAst, {
@@ -49,6 +50,8 @@ export const extract = <Config extends BaseConfig>(
       );
       const cssText = styledComponent.getCssText();
       styledComponentCssTexts += cssText + "\n";
+      layerDepsObject[styledComponent.layerName] =
+        styledComponent.directLayerDep;
     },
 
     //===========================================================
@@ -73,6 +76,7 @@ export const extract = <Config extends BaseConfig>(
   });
 
   return {
+    layerDepsObject,
     styledElementCssTexts,
     styledComponentCssTexts,
   };
