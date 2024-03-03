@@ -3,7 +3,7 @@ import type { BaseConfig } from "@colliejs/core";
 import log from "npmlog";
 import CustomComponent from "../component/CustomComponent";
 import { HostComponent } from "../component/HostComponent";
-import { convertStyledObject } from "@colliejs/core";
+import { extractFromStyledObject } from "@colliejs/core";
 
 import { NodePath } from "@babel/traverse";
 import { ComponentId } from "../component/componentId";
@@ -17,7 +17,7 @@ import {
   DynamicVariantKeyPrefix,
   StaticVariantKeyPrefix,
 } from "@colliejs/core";
-import { findLayerDeps } from "./depsTree/findDeps";
+import { findLayerDeps } from "./findDeps";
 export class StyledComponent<Config extends BaseConfig>
   extends CustomComponent
   implements Stylable
@@ -43,7 +43,7 @@ export class StyledComponent<Config extends BaseConfig>
       parseStyledComponentDecl<Config>(path, moduleIdByName, moduleId, config);
     super(new ComponentId(moduleId, styledComponentName));
 
-    this.StyledObjectResult = convertStyledObject(styledObject, config);
+    this.StyledObjectResult = extractFromStyledObject(styledObject, config);
     this.dependent = dependent;
   }
   get layerDeps() {
@@ -57,11 +57,11 @@ export class StyledComponent<Config extends BaseConfig>
 
     return "";
   }
-  get layerName() {
-    return this.config.layername
-      ? `${this.config.layername}.${super.layerName}`
-      : super.layerName;
-  }
+  // get layerName() {
+  //   return this.config.layername
+  //     ? `${this.config.layername}.${super.layerName}`
+  //     : super.layerName;
+  // }
 
   getCssText() {
     let cssText = this.StyledObjectResult.baseStyle.cssGenText;
@@ -81,8 +81,8 @@ export class StyledComponent<Config extends BaseConfig>
       }
     }
     const thisLayerName = this.config.layername
-    ? `${this.config.layername}.${this.layerName}`
-    : this.layerName;
+      ? `${this.config.layername}.${this.layerName}`
+      : this.layerName;
 
     if (this.dependent instanceof CustomComponent) {
       return `

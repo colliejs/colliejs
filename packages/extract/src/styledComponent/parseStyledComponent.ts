@@ -12,7 +12,7 @@ import { ComponentId } from "../component/componentId";
 import type { BaseConfig, StyledObject } from "@colliejs/core";
 import { isStyledCallExpression } from "./isStyledCompDelc";
 import { evalObjectExp } from "../utils/eval/evalObjectExp";
-import { styledFnName } from "../const";
+import { STYLE_FN_NAME } from "../const";
 
 export type StyledDataType<Config extends BaseConfig> = {
   styledComponentName: string;
@@ -113,7 +113,7 @@ export const parseStyledComponentDeclaration = <Config extends BaseConfig>(
   }
   if (t.isObjectExpression(styledObjectExp)) {
     console.log(generate(path.node).code);
-    const styledObjectPath = getArgPathOfFnCall(path, styledFnName, 1);
+    const styledObjectPath = getArgPathOfFnCall(path, STYLE_FN_NAME, 1);
     assert(!!styledObjectPath, "stylingPath should not be null", {
       styledObjectExp,
       path,

@@ -34,7 +34,7 @@ export const getBaseStyleSelector = (prefix: string, hash: string) => {
   return `baseStyle-${hash}`;
 };
 
-export const convertStyledObject = <Config extends BaseConfig>(
+export const extractFromStyledObject = <Config extends BaseConfig>(
   styledObject: StyledObject<Config>,
   config: Config,
   baseStylePrefix = ""

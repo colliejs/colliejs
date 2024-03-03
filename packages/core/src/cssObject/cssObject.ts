@@ -23,3 +23,7 @@ export const getClassName = <Config extends BaseConfig>(
 ) => {
   return toHash(JSON.stringify(cssObj));
 };
+
+export const css = <Config extends BaseConfig>(cssObj: CSSObject<Config>) => {
+  return `css-${getClassName(cssObj)}`;
+};

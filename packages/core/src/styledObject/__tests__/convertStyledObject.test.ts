@@ -1,5 +1,5 @@
 import { config } from "../../cssObject/__tests__/stub/config";
-import { convertStyledObject } from "../convertStyledObject";
+import { extractFromStyledObject } from "../extract";
 import { StyledObject } from "../types";
 
 describe("parseStyleObj", () => {
@@ -14,7 +14,7 @@ describe("parseStyleObj", () => {
         },
       },
     };
-    const res = convertStyledObject(styleObj, config);
+    const res = extractFromStyledObject(styleObj, config);
     expect(res).toMatchInlineSnapshot(`
       {
         "baseStyle": {
@@ -59,7 +59,7 @@ describe("parseStyleObj", () => {
         },
       },
     };
-    const res = convertStyledObject(styleObj, config, "prefix");
+    const res = extractFromStyledObject(styleObj, config, "prefix");
     expect(res).toMatchInlineSnapshot(`
       {
         "baseStyle": {
@@ -97,7 +97,7 @@ describe("parseStyleObj", () => {
         },
       },
     };
-    const res = convertStyledObject(styleObj, config);
+    const res = extractFromStyledObject(styleObj, config);
     expect(res).toMatchInlineSnapshot(`
       {
         "baseStyle": {
@@ -147,7 +147,7 @@ describe("parseStyleObj", () => {
         },
       ],
     };
-    const res = convertStyledObject(styleObj, config);
+    const res = extractFromStyledObject(styleObj, config);
     expect(res).toMatchInlineSnapshot(`
       {
         "baseStyle": {
@@ -195,7 +195,7 @@ describe("parseStyleObj", () => {
         },
       },
     };
-    const res = convertStyledObject(styleObj, config, "prefix");
+    const res = extractFromStyledObject(styleObj, config, "prefix");
     expect(res).toMatchInlineSnapshot(`
       {
         "baseStyle": {
@@ -243,7 +243,7 @@ describe("parseStyleObj", () => {
         },
       },
     };
-    const res = convertStyledObject(styleObj, config, "prefix");
+    const res = extractFromStyledObject(styleObj, config, "prefix");
     expect(res).toMatchInlineSnapshot(`
       {
         "baseStyle": {
@@ -287,7 +287,7 @@ describe("parseStyleObj", () => {
         shape: "circle",
       },
     };
-    const res = convertStyledObject(styleObj, config, "prefix");
+    const res = extractFromStyledObject(styleObj, config, "prefix");
     expect(res).toMatchInlineSnapshot(`
       {
         "baseStyle": {

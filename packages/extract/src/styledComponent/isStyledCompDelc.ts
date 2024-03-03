@@ -1,12 +1,12 @@
 import * as t from "@babel/types";
 import { BaseConfig } from "@colliejs/core";
 import { StyledComponentDecl, isCallExp } from "../utils";
-import { styledFnName } from "../const";
+import { STYLE_FN_NAME } from "../const";
 
 export const isStyledCallExpression = <Config extends BaseConfig>(
   exp: t.Expression
 ): exp is t.CallExpression => {
-  return isCallExp(exp, styledFnName);
+  return isCallExp(exp, STYLE_FN_NAME);
 };
 
 /**

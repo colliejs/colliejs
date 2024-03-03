@@ -4,11 +4,12 @@ import { StyledComponent } from "./styledComponent";
 import { isStyledComponentDecl } from "./styledComponent/isStyledCompDelc";
 import { getImports, traverse } from "./utils";
 import { removeTypeAnnotation } from "./utils/removeType";
-import { isCssCallExpression } from "./cssObject/parseCssCall";
-import { extractCssObject } from "./cssObject";
+import { isCssCallExpression } from "./cssCall/parseCssCall";
 import * as t from "@babel/types";
+import { isPropExisted } from "./utils/jsx/prop";
+import { extractCssTextFromCssProps } from "./styledElement";
+import { STYLE_ELEMENT_PROP_NAME } from "./const";
 
-export const styledElementProp = "css";
 /**
  * NOTE: the module should be convert commonjs first
  */
@@ -57,8 +58,8 @@ export const extract = <Config extends BaseConfig>(
     //===========================================================
     // 2.transform styled element
     //===========================================================
-    CallExpression(path) {
-      if (!isCssCallExpression(path.node)) {
+    JSXElement(path) {
+      if (!isPropExisted(path, STYLE_ELEMENT_PROP_NAME)) {
         return;
       }
       if (Object.keys(modulesByName).length === 0) {
@@ -70,7 +71,7 @@ export const extract = <Config extends BaseConfig>(
         );
       }
       removeTypeAnnotation(path);
-      const { cssGenText } = extractCssObject(path, modulesByName, config);
+      const { cssGenText } = extractCssTextFromCssProps(path, modulesByName, config);
       styledElementCssTexts += cssGenText + "\n";
     },
   });

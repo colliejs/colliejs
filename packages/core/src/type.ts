@@ -15,4 +15,8 @@ export type BaseConfig = {
     [key: string]: UtilsFn;
   };
   layername?: string;
+  build?: {
+    watch?: string;
+    entry?: string;
+  };
 };

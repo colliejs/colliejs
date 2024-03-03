@@ -11,6 +11,7 @@ import { Col } from "./components/Col";
 import { Row } from "./components/Row";
 import ExampleButton from "./components/ExampleButton";
 import "../entry.css";
+import { HoverButton } from "./components/HoverButton";
 
 export default function App() {
   return (
@@ -20,7 +21,9 @@ export default function App() {
         <Button type="primary" size="big">
           Button-Big-Primary
         </Button>
+        <HoverButton>Button Hover It </HoverButton>
       </Row>
+
       <Row>
         <MyButton shape={["round"]}> MyButton-1</MyButton>
         <MyButton shape={[12]}> MyButton-272</MyButton>

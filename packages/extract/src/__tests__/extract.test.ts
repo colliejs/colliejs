@@ -34,7 +34,7 @@ describe("test cases", () => {
     res;
 
     expect(res["styledComponentCssTexts"]).toMatchInlineSnapshot(`
-      "@layer app.depTreeTestTs-Button-zah7ro {.baseStyle-Button-16n2od3{background:red}.variants-shape-round-jhqrc0{border-radius:50%}
+      "@layer app.depTreeTestTs-Button-zah7ro {.baseStyle-16n2od3{background:red}.variants-shape-round-jhqrc0{border-radius:50%}
       .variants-shape-rect-4trf62{border-radius:0}
       @media (min-width:320px){.variants-shape-dynamic-16i60sc{border-radius:var(--variants-shape-at320)}}
       @media (min-width:768px){.variants-shape-dynamic-16i60sc{border-radius:var(--variants-shape-at768)}}
@@ -79,6 +79,9 @@ describe("test cases", () => {
     );
     expect(res).toMatchInlineSnapshot(`
       {
+        "layerDepsObject": {
+          "depTreeTestTs-Button-zah7ro": "",
+        },
         "styledComponentCssTexts": "@layer app.depTreeTestTs-Button-zah7ro {.variants-shape-round-jhqrc0{border-radius:50%}
       .variants-size-big-1ja8ftc{font-size:20px}
       .compoundVariants-shape-round-size-big-13qnc0g{color:green}
@@ -101,18 +104,22 @@ describe("test cases", () => {
     `;
     const res = extract(
       code,
-      path.resolve(__dirname, "./depTree.test.ts"),
+      path.resolve(__dirname, "./extract.test.ts"),
       config,
       false
     );
     expect(res).toMatchInlineSnapshot(`
       {
-        "styledComponentCssTexts": "@layer app.depTreeTestTs-Button-zah7ro {.baseStyle-Button-16n2od3{background:red}}
+        "layerDepsObject": {
+          "extractTestTs-Button-f0bqw0": "",
+          "extractTestTs-MyButton-1dzsx8": "extractTestTs-Button-f0bqw0",
+        },
+        "styledComponentCssTexts": "@layer app.extractTestTs-Button-f0bqw0 {.baseStyle-16n2od3{background:red}}
 
 
-            @layer , app.depTreeTestTs-MyButton-tx4d0g;
-            @layer app.depTreeTestTs-MyButton-tx4d0g {
-              .baseStyle-MyButton-zuqrxm{background:blue}
+            @layer , app.extractTestTs-MyButton-1dzsx8;
+            @layer app.extractTestTs-MyButton-1dzsx8 {
+              .baseStyle-zuqrxm{background:blue}
             }
 
       ",
@@ -135,9 +142,9 @@ describe("test cases", () => {
     );
     expect(res).toMatchInlineSnapshot(`
       {
+        "layerDepsObject": {},
         "styledComponentCssTexts": "",
-        "styledElementCssTexts": ".css-129ntb2{color:red}
-      ",
+        "styledElementCssTexts": "",
       }
     `);
   });
@@ -163,6 +170,9 @@ describe("test cases", () => {
     );
     expect(res).toMatchInlineSnapshot(`
       {
+        "layerDepsObject": {
+          "depTreeTestTs-Button-zah7ro": "",
+        },
         "styledComponentCssTexts": "@layer app.depTreeTestTs-Button-zah7ro {@media (min-width:320px){.variants-shape-dynamic-1emb4hy{gap:var(--variants-shape-at320)}}
       @media (min-width:768px){.variants-shape-dynamic-1emb4hy{gap:var(--variants-shape-at768)}}
       }

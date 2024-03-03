@@ -7,6 +7,9 @@ import { writeThemeCssFile } from "./utils/writeThemeCssFile";
 import { shouldSkip } from "./utils/shouldSkip";
 
 run({
+  async init() {
+    console.log("init");
+  },
   async cssgen(options) {
     const root = options.root || process.cwd();
     const cssEntryFile = options.entry || process.cwd() + "/entry.css";

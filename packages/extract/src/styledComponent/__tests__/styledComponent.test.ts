@@ -48,8 +48,8 @@ describe("styledHostComponent", () => {
     expect(c.StyledObjectResult).toMatchInlineSnapshot(`
       {
         "baseStyle": {
-          "className": "baseStyle-Button-16n2od3",
-          "cssGenText": ".baseStyle-Button-16n2od3{background:red}",
+          "className": "baseStyle-16n2od3",
+          "cssGenText": ".baseStyle-16n2od3{background:red}",
           "cssRawObj": {
             "background": "red",
           },
@@ -77,7 +77,7 @@ describe("styledHostComponent", () => {
     `);
 
     expect(c.getCssText()).toMatchInlineSnapshot(`
-      "@layer app.styledComponentTestTs-Button-poy4f0 {.baseStyle-Button-16n2od3{background:red}.variants-shape-round-jhqrc0{border-radius:50%}
+      "@layer app.styledComponentTestTs-Button-poy4f0 {.baseStyle-16n2od3{background:red}.variants-shape-round-jhqrc0{border-radius:50%}
       .variants-shape-rect-4trf62{border-radius:0}
       }
       "
@@ -109,7 +109,7 @@ describe("3rdComponent", () => {
       "
             @layer , app.styledComponentTestTs-MyButton-14730o8;
             @layer app.styledComponentTestTs-MyButton-14730o8 {
-              .baseStyle-MyButton-15ag2ji{background:red;position:absolute;left:100px;right:;top:20px;bottom:}
+              .baseStyle-15ag2ji{background:red;position:absolute;left:100px;right:;top:20px;bottom:}
             }
       "
     `);

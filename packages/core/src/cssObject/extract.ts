@@ -1,13 +1,6 @@
-import { toHash } from "@c3/utils";
-import {
-  BaseConfig,
-  CSSObject,
-  CSSObjectResult,
-  getCssText,
-  getClassName,
-} from "@colliejs/core";
+import { BaseConfig, CSSObject, CSSObjectResult, css, getCssText } from "..";
 
-export const extract = <Config extends BaseConfig>(
+export const extractFromCssObject = <Config extends BaseConfig>(
   cssObject: CSSObject<Config>,
   config: Config
 ): CSSObjectResult<Config> => {
@@ -19,7 +12,7 @@ export const extract = <Config extends BaseConfig>(
       className: "",
     };
   }
-  const className = `css-${getClassName(cssObject)}`;
+  const className = css(cssObject);
   return {
     cssGenText: getCssText(cssObject, [`.${className}`], [], config),
     cssRawObj: cssObject,
