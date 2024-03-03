@@ -1,6 +1,6 @@
 {
   "name": "@colliejs/config",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "foo",
   "type": "module",
   "scripts": {
@@ -11,6 +11,7 @@
     "type": "tsc --project . --paths null --emitDeclarationOnly --declaration",
     "watchtype": "tsc --project . --watch"
   },
+ 
   "types": "./dist/index.d.ts",
   "keywords": [
     "css",

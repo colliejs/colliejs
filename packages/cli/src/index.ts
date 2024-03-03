@@ -4,7 +4,6 @@ import { extractCss } from "./utils/extractCss";
 import { getConfig } from "./utils/getConfig";
 import { writeFile } from "./utils/writeFile";
 import { writeThemeCssFile } from "./utils/writeThemeCssFile";
-import { shouldSkip } from "./utils/shouldSkip";
 
 run({
   async init() {
@@ -25,12 +24,11 @@ run({
       .on("change", async url => {
         console.log("changed:", url);
         // if (shouldSkip(url, filter)) return;
-        await extractCss(url, config, alias, root, cssEntryFile);
+        // await extractCss(url, config, alias, root, cssEntryFile);
       })
       .on("add", async url => {
         // if (shouldSkip(url, filter)) return;
-        // console.log(url);
-        await extractCss(url, config, alias, root, cssEntryFile);
+        // await extractCss(url, config, alias, root, cssEntryFile);
       });
   },
 });

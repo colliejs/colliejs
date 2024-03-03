@@ -1,10 +1,17 @@
 {
   "name": "@colliejs/cli",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "awesesome",
-  "type": "commonjs",
+  "type": "module",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build:dev": "NODE_ENV=development rollup -c rollup.config.js && pnpm type ",
+    "build": "rollup -c rollup.config.js",
+    "buildOnly": "rollup -c rollup.config.js",
+    "clean": "rm -rf dist  ",
+    "reset": "pnpm clean && rm -rf node_modules && pnpm install",
+    "type": "tsc --project . --paths null --emitDeclarationOnly --declaration",
+    "watchtype": "tsc --project . --watch "
   },
   "keywords": [],
   "author": "che3vinci@gmail.com",
@@ -15,6 +22,9 @@
       "prettier --write",
       "eslint --cache --fix"
     ]
+  },
+  "bin": {
+    "collie": "./dist/index.mjs"
   },
   "exports": {
     ".": {
@@ -31,7 +41,7 @@
     "@colliejs/config": "workspace:^",
     "@colliejs/core": "workspace:^",
     "@colliejs/extract": "workspace:^",
-    "@scriptbot/cli": "^1.0.159",
+    "@scriptbot/cli": "^1.0.164",
     "chokidar": "^3.6.0"
   }
 }
