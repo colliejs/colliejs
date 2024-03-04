@@ -4,7 +4,11 @@ import {
   getPathOfStyledComponentDecl,
 } from "../../__tests__/common/getPathOfJsxEle";
 import { generate } from "../../utils";
-import { defaultConfig } from "@colliejs/config";
+import { defaultConfig as _defaultConfig } from "@colliejs/config";
+const defaultConfig ={
+  ..._defaultConfig,
+  layername:'app'
+}
 //@ts-ignore
 global.window = {
   //@ts-ignore
