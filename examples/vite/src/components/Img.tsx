@@ -21,9 +21,3 @@ export const ImageButton = styled(
   }
 );
 
-type A = React.ComponentProps<typeof ImageButton>;
-type x = React.DialogHTMLAttributes<HTMLDialogElement>;
-type a = A["form"];
-const X: React.FC = () => {
-  return <ImageButton ref={} />;
-};

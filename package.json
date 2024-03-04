@@ -21,7 +21,8 @@
     "test:ci": "jest --ci ",
     "preversion": "pnpm -r build",
     "prepare": "husky install",
-    "release": "./scripts/cli.mjs release"
+    "release": "./scripts/cli.mjs release",
+    "prerelease": "./scripts/cli.mjs release --semver prerelease "
   },
   "workspaces": [
     "packages/*"

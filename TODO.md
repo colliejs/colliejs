@@ -84,3 +84,45 @@ export const Input = styled(_Input, {});
 export default Input;
 
 //NOTE:提取子类型的 variant的类型提示有问题
+
+
+FEAT1:
+- 支持variants的组合。比如variants:{
+- title:['gray','big']
+- }
+
+BUG: TITLE 未生效。正常应该是覆盖掉BaseCompoennt的对应的默认配置
+
+export const GasText = styled('p', {
+  color: 'white',
+  variants: {
+    size: {
+      sm: {
+        fontSize: vw(14),
+        fontWeight: 400,
+        lineHeight: 1,
+      },
+      md: {
+        fontSize: vw(16),
+        fontWeight: 500,
+        lineHeight: 1,
+      },
+    },
+    color: {
+      gray: {
+        opacity: 0.3,
+      },
+    },
+  },
+  defaultVariants: {
+    size: 'sm',
+    // color: 'white',
+  },
+});
+
+export const Title = styled(GasText, {
+  defaultVariants: {
+    size: 'sm',
+    color: 'gray',
+  },
+});

@@ -32,7 +32,6 @@
     "@colliejs/core": "link:/Users/che3vinci/code/personal/colliejs/packages/core",
     "@colliejs/react": "link:/Users/che3vinci/code/personal/colliejs/packages/react",
     "@colliejs/shared": "link:/Users/che3vinci/code/personal/colliejs/packages/shared",
-    "@colliejs/transform": "link:/Users/che3vinci/code/personal/colliejs/packages/transform",
     "@colliejs/vite": "link:/Users/che3vinci/code/personal/colliejs/packages/vite",
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-node-resolve": "^15.1.0",

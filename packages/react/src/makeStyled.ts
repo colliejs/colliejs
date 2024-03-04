@@ -1,24 +1,29 @@
-import type { BaseConfig } from "@colliejs/core";
+import {
+  extractFromStyledObject,
+  type BaseConfig,
+  getClassOfStyledObject,
+  css,
+} from "@colliejs/core";
 import _ from "lodash";
 import React, { ElementType, ForwardRefRenderFunction } from "react";
-import { DefaultProps, Styled } from "./types";
+import { DefaultProps, Styled, StyledObject } from "./types";
 import {
   getCSSValue,
   getCSSVariable,
   getCompoundVariantClassNameUsed,
   getVariantClassNameFromCandidates,
-  isObject,
   isPlainObject,
   isString,
   toArray,
 } from "./utils";
-import type { VariantsType } from "@colliejs/transform";
+import type { CSSObject, VariantsType } from "@colliejs/core";
 
-export type BaseStyledComponentProps = {
+export type BaseStyledComponentProps<Config extends BaseConfig> = {
   className?: string; //static variants
   as?: keyof JSX.IntrinsicElements;
   style?: React.CSSProperties & { [x: string]: any }; //dynamic variants
   ref?: any;
+  css?: CSSObject<Config>;
 };
 
 export const makeStyled = <Config extends BaseConfig>(config: Config) => {
@@ -45,26 +50,29 @@ export const makeStyled = <Config extends BaseConfig>(config: Config) => {
    *
    * @todo: 使用forwardRef
    */
-  return function styled<P1 extends BaseStyledComponentProps, T = any>(
+  return function styled<P1 extends BaseStyledComponentProps<Config>, T = any>(
     component: ElementType<P1>,
-    __generatedBaseStyleClassName = "",
-    __generatedStaticClassNames: VariantsType["staticClassName"][] = [],
-    __generatedDynamicClassNameMap: Record<
-      VariantsType["dynamicClassName"],
-      { canAddPx: boolean }
-    > = {},
-    __generatedCompoundVariantClassNames: VariantsType["compoundClassName"][] = [],
-    __generatedDefaultVariantClassNames: string[] = [],
-    // option: React.ComponentProps<ElementType<P1>> = {}
+    styledObject: any,
     defaultPropsOfBaseComponent: React.ComponentProps<any> = {}
   ) {
+    const result = extractFromStyledObject(styledObject, config);
+    const {
+      classNamesOfStaticVariant: __generatedStaticClassNames,
+      classNameMapOfDynamicVariant: __generatedDynamicClassNameMap,
+      classNamesOfCompoundVariants: __generatedCompoundVariantClassNames,
+      classNamesOfDefaultVariant: __generatedDefaultVariantClassNames,
+      classNameOfBaseStyle: __generatedBaseStyleClassName,
+    } = getClassOfStyledObject(result);
+
     const render: ForwardRefRenderFunction<T, P1> = (props, ref) => {
-      const { className, style = {}, as, ...restProps } = props;
+      const { className, style = {}, as, css: _css, ...restProps } = props;
+      const classNameFromCssProp = _css ? css(_css) : "";
 
       //查找variant对应的className
       let outputClassNames: string[] = [
         __generatedBaseStyleClassName,
         className || "",
+        classNameFromCssProp,
       ];
       //===========================================================
       // change variant props/value to className

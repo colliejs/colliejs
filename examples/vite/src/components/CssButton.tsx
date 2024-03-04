@@ -6,12 +6,15 @@ const CssButton: React.FC<any> = props => {
   return (
     <Button
       css={{
-        fontSize: 40,
-        color:'Pink'
+        fontSize: 16,
+        color: "yellow",
+        _hover: {
+          color: "red",
+        },
       }}
       {...restProps}
     >
-      StyledElement Button
+      cssButton
     </Button>
   );
 };

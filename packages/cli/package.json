@@ -1,0 +1,47 @@
+{
+  "name": "@colliejs/cli",
+  "version": "1.1.1-beta.1",
+  "description": "awesesome",
+  "type": "module",
+  "scripts": {
+    "test": "jest",
+    "build:dev": "NODE_ENV=development rollup -c rollup.config.js && pnpm type ",
+    "build": "rollup -c rollup.config.js",
+    "buildOnly": "rollup -c rollup.config.js",
+    "clean": "rm -rf dist  ",
+    "reset": "pnpm clean && rm -rf node_modules && pnpm install",
+    "type": "tsc --project . --paths null --emitDeclarationOnly --declaration",
+    "watchtype": "tsc --project . --watch "
+  },
+  "keywords": [],
+  "author": "che3vinci@gmail.com",
+  "license": "MIT",
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "organize-imports-cli",
+      "prettier --write",
+      "eslint --cache --fix"
+    ]
+  },
+  "bin": {
+    "collie": "./dist/index.mjs"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./css": "./dist/index.css"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@colliejs/config": "workspace:^",
+    "@colliejs/core": "workspace:^",
+    "@colliejs/extract": "workspace:^",
+    "@scriptbot/cli": "^1.0.164",
+    "chokidar": "^3.6.0"
+  }
+}

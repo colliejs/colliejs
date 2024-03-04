@@ -6,13 +6,17 @@ import { $ } from "zx";
 run({
   async release(option) {
     const { semver = "patch" } = option;
-    
+
     await $`git.ts login --user colliejs`;
     await $`pnpm test`;
     // await $`git add .`;
     // await $`git commit -m "chore: release"`;
 
-    await $`lerna version ${semver} --conventional-commits --no-commit-hooks -y`;
+    if (semver === "prerelease") {
+      await $`lerna version prerelease --preid beta --conventional-commits --no-commit-hooks -y`;
+    } else {
+      await $`lerna version ${semver} --conventional-commits --no-commit-hooks -y`;
+    }
 
     //exec pnpm -r build firstly
     await $`pnpm -r publish ----report-summary`;

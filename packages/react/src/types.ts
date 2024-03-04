@@ -8,7 +8,7 @@ import React, {
 } from "react";
 
 import { Assign, BaseConfig, Widen, CSSObject } from "@colliejs/core";
-import { DynamicVariantFnName, DynamicVariantFn } from "@colliejs/transform";
+import { DynamicVariantFnName, DynamicVariantFn } from "@colliejs/core";
 
 // export type IntrinsicElementsKeys = keyof JSX.IntrinsicElements | (string & {});
 export type IntrinsicElementsKeys = keyof JSX.IntrinsicElements;

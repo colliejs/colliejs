@@ -7,5 +7,5 @@ export const defaultConfig = {
   theme: {},
   breakpoints: [],
   utils,
-  layername: "app",
+  layername: "",
 } as const satisfies BaseConfig;

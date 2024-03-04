@@ -3,7 +3,7 @@ import type {
   ReadOnlyCSSVariableBp,
   VariantName,
   VariantValue,
-} from "@colliejs/transform";
+} from "@colliejs/core";
 export const CompoundVariantClassNamePrefix = "compoundVariants";
 
 export const isNil = (x: unknown): x is null | undefined =>
@@ -41,7 +41,7 @@ export const getVariantClassNameFromCandidates = (
   const name = `variants-${toCamelCase(variantName)}-${toCamelCase(
     `${variantValue}`
   )}`;
-  return classNames.find(e => e.startsWith(name));
+  return classNames?.find(e => e.startsWith(name)) || "";
 };
 //TODO:为了不依赖@colliejs/transform.必须复制一份。需要优化
 export const getCSSVariable = <T extends number | string | undefined>(

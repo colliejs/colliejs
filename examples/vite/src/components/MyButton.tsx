@@ -12,10 +12,10 @@ const MyButton = styled(Button, {
   variants: {
     shape: {
       square: {
-        borderRadius: 0,
+        borderRadius: 10,
       },
       round: {
-        borderRadius: 92299,
+        borderRadius: 92290,
       },
       dynamic: x => {
         return {
