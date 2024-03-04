@@ -5,18 +5,3 @@ export * from "./types/css";
 //===========================================================
 // BaseConfig Type,not the Actual Type
 //===========================================================
-export type UtilsFn = (value: any) => CSSProperties | any;
-export type BaseConfig = {
-  prefix?: string;
-  theme?: object;
-  breakpoints?: readonly number[];
-  themeMap?: object;
-  utils?: {
-    [key: string]: UtilsFn;
-  };
-  layername?: string;
-  build?: {
-    watch?: string;
-    entry?: string;
-  };
-};

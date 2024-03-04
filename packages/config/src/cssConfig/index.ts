@@ -1,6 +1,6 @@
 import { defaultThemeMap } from "./defaultThemeMap";
 import { utils } from "./util";
-import type { BaseConfig } from "@colliejs/core";
+import type { ConfigType } from "../type";
 export const defaultConfig = {
   prefix: "",
   themeMap: defaultThemeMap,
@@ -8,4 +8,4 @@ export const defaultConfig = {
   breakpoints: [],
   utils,
   layername: "",
-} as const satisfies BaseConfig;
+} as const satisfies ConfigType["css"];

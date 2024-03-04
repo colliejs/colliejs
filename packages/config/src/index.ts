@@ -1,1 +1,1 @@
-export { defaultConfig } from "./defaultConfig";
+export { defaultConfig } from "./cssConfig";

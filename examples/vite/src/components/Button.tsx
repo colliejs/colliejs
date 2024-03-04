@@ -7,6 +7,8 @@ export const Button = styled(
     color: "$white09",
     fontSize: 28,
     backgroundColor: "red",
+    p:[100],
+    color:'$black09'
 
     variants: {
       size: {
