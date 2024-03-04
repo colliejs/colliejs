@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.1-beta.1](https://github.com/colliejs/colliejs/compare/@colliejs/cli@1.1.1-beta.0...@colliejs/cli@1.1.1-beta.1) (2024-03-04)
+
+**Note:** Version bump only for package @colliejs/cli
+
 ## 1.1.1-beta.0 (2024-03-04)
 
 ### Bug Fixes

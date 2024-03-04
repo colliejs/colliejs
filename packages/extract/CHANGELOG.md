@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.1-beta.1](https://github.com/colliejs/colliejs/compare/@colliejs/extract@1.1.1-beta.0...@colliejs/extract@1.1.1-beta.1) (2024-03-04)
+
+### Bug Fixes
+
+- test case fix ([1c2f96d](https://github.com/colliejs/colliejs/commit/1c2f96d0a260067dfc238750240ebf1329ca8c51))
+
 ## 1.1.1-beta.0 (2024-03-04)
 
 ### Bug Fixes
