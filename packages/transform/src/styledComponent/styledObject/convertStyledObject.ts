@@ -6,6 +6,7 @@ import {
   DynamicVariantFn,
   ReadOnlyCSSVariableValue,
   ReadOnlyCSSVariableValueBP,
+  VariantValue,
   VariantsType,
   getCSSVariableValue,
   getVariantClassName,
@@ -126,7 +127,7 @@ export const convertStyledObject = <Config extends BaseConfig>(
   const defaultVariants = styledObject["defaultVariants"] || {};
   const classeNames = [];
   for (const [variantName, variantValue] of Object.entries(defaultVariants)) {
-    const key = getVariantKey(variantName, variantValue, false);
+    const key = getVariantKey(variantName, variantValue as VariantValue, false);
     classeNames.push(res[key].className);
   }
   res["defaultVariants"] = {
