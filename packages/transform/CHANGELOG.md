@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.58](https://github.com/colliejs/colliejs/compare/@colliejs/transform@1.0.57...@colliejs/transform@1.0.58) (2024-03-06)
+
+### Features
+
+- be compatible with win32 ([ebebd20](https://github.com/colliejs/colliejs/commit/ebebd20ddc071b2064fa0ecf9ea56288685ce1ad))
+
 ## [1.0.57](https://github.com/colliejs/colliejs/compare/@colliejs/transform@1.0.56...@colliejs/transform@1.0.57) (2024-01-13)
 
 **Note:** Version bump only for package @colliejs/transform
