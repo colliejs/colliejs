@@ -43,6 +43,8 @@
     "@colliejs/shared": "workspace:1.2.0-beta.1",
     "@colliejs/transform": "workspace:^",
     "@scriptbot/cli": "^1.0.164",
-    "chokidar": "^3.6.0"
+    "chokidar": "^3.6.0",
+    "fast-glob": "^3.3.2",
+    "picomatch": "^4.0.1"
   }
 }

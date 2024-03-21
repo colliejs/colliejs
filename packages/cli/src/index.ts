@@ -6,6 +6,9 @@ import { writeFile } from "./utils/writeFile";
 import { writeThemeCssFile } from "./utils/writeThemeCssFile";
 import log from "npmlog";
 import { noop } from "@c3/utils";
+import fg from "fast-glob";
+import { createFilter } from "@rollup/pluginutils";
+import { extractCss } from "./utils/extractCss";
 
 async function genThemeCssFile(
   prefix: string,
@@ -20,17 +23,25 @@ run({
   async cssgen(options) {
     const { config = "collie.config.ts" } = options;
     const {
-      build: { root = process.cwd(), entry },
+      build: { root = process.cwd(), entry, include, exclude, alias },
       css: cssConfig,
     } = await getConfig(path.resolve(config));
-
+    const cssEntryFile = getCssEntryFile(entry);
     await genThemeCssFile(
       cssConfig.prefix,
       cssConfig.theme,
-      getCssEntryFile(entry),
+      cssEntryFile,
       root
     );
-    await extractWhen("add", { config });
+    // await extractWhen("add", { config });
+    const filter = createFilter(include, exclude);
+    fg.globSync(`${root}/**/*`, {
+      ignore: ["node_modules/**", "dist/**", "**/.**"],
+    }).forEach(async url => {
+      if (filter(url)) {
+        await extractCss(url, cssConfig, alias, root, cssEntryFile);
+      }
+    });
   },
   async watch(options) {
     extractWhen("change", options, noop, url => {

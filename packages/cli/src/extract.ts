@@ -23,7 +23,7 @@ export function extractWhen(
 
   const cssEntryFile = getCssEntryFile(entry);
   const filter = createFilter(include, exclude);
-  chokidar
+  return chokidar
     .watch(root, {
       ignored: /node_modules|dist|\/\./,
     })
