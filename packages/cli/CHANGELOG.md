@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0-beta.3](https://github.com/colliejs/colliejs/compare/@colliejs/cli@1.2.0-beta.2...@colliejs/cli@1.2.0-beta.3) (2024-03-21)
+
+### Bug Fixes
+
+- cli ([714c3b0](https://github.com/colliejs/colliejs/commit/714c3b028155551d236c7d3c0eb516fca71a6249))
+
 # [1.2.0-beta.2](https://github.com/colliejs/colliejs/compare/@colliejs/cli@1.2.0-beta.1...@colliejs/cli@1.2.0-beta.2) (2024-03-21)
 
 ### Bug Fixes
