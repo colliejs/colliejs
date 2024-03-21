@@ -12,7 +12,8 @@ export function getCssEntryFile(entry: string) {
 export function extractWhen(
   event: string,
   options: { config: string },
-  onEvent?: (url) => void
+  onEvent?: (url) => void,
+  onExec?: (url) => void
 ) {
   const { config = "collie.config.ts" } = options;
   const {
@@ -31,6 +32,7 @@ export function extractWhen(
       if (shouldSkip(url, filter)) {
         return;
       }
+      onExec?.(url);
       await extractCss(url, cssConfig, alias, root, cssEntryFile);
     });
 }

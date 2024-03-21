@@ -5,6 +5,7 @@ import { getConfig } from "./utils/getConfig";
 import { writeFile } from "./utils/writeFile";
 import { writeThemeCssFile } from "./utils/writeThemeCssFile";
 import log from "npmlog";
+import { noop } from "@c3/utils";
 
 async function genThemeCssFile(
   prefix: string,
@@ -32,8 +33,8 @@ run({
     await extractWhen("add", { config });
   },
   async watch(options) {
-    extractWhen("change", options, url => {
-      log.info("changed url is: ", url);
+    extractWhen("change", options, noop, url => {
+      log.info("watch", `to process changed file:${url} `);
     });
   },
 });
