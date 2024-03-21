@@ -25,7 +25,7 @@ export function extractWhen(
   const filter = createFilter(include, exclude);
   chokidar
     .watch(root, {
-      ignored: /node_modules|dist|^\./,
+      ignored: /node_modules|dist|\/\./,
     })
     .on(event, async url => {
       onEvent?.(url);
