@@ -5,10 +5,11 @@ type Alias = {};
 
 export type CollieConfig = {
   css: CSSConfig;
-  build?: {
+  build: {
+    entry: string;
     include?: FilterPattern;
     exclude?: FilterPattern;
-    entry: string;
     alias?: Alias;
+    root?: string;
   };
 };

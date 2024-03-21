@@ -1,4 +1,4 @@
-const jsFileReg = /\.[cm]?[tj]sx?$/;
+export const jsFileReg = /\.[cm]?[tj]sx?$/;
 
 export const shouldSkip = (url: string, filter: Function) => {
   return (

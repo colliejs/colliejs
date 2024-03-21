@@ -12,7 +12,7 @@ export const Button = styled("button", {
     size: {
       big: {
         width: 200,
-        height: 40,
+        height: 41,
       },
       small: {
         width: 100,
@@ -25,7 +25,7 @@ export const Button = styled("button", {
         color: "white",
       },
       secondary: {
-        background: "red",
+        background: "yellow",
         color: "white",
       },
     },
@@ -36,7 +36,7 @@ export const Button = styled("button", {
       type: "primary",
       size: "big",
       css: {
-        border: "1px solid blue",
+        border: "2px solid blue",
         w: "auto",
         background: "green",
       },

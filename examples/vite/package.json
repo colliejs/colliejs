@@ -4,7 +4,9 @@
   "description": "vite project example ",
   "type": "module",
   "scripts": {
+    "prepare": "/node_modules/.bin/collie cssgen",
     "dev": "vite",
+    "watch": "./node_modules/.bin/collie watch",
     "build": "vite build"
   },
   "private": true,

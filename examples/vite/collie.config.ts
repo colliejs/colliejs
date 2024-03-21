@@ -1,6 +1,10 @@
 import { defaultConfig, type CollieConfig } from "@colliejs/config";
 export default {
-  build: { entry: "src/index.tsx", alias: { "@src": "src" } },
+  build: {
+    entry: "src/index.tsx",
+    alias: { "@src": "src" },
+    include: ["src/**/*.tsx", "src/**/*.ts"],
+  },
   css: {
     ...defaultConfig,
     breakpoints: [320, 768],

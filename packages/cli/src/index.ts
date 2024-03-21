@@ -1,49 +1,39 @@
 import { run } from "@scriptbot/cli";
-import chokidar from "chokidar";
+import path from "path";
+import { extractWhen, getCssEntryFile } from "./extract";
 import { getConfig } from "./utils/getConfig";
 import { writeFile } from "./utils/writeFile";
 import { writeThemeCssFile } from "./utils/writeThemeCssFile";
-import { shouldSkip } from "@colliejs/shared";
-import { extractCss } from "./utils/extractCss";
-import { FilterPattern, createFilter } from "@rollup/pluginutils";
-import path from "path";
+import log from "npmlog";
 
+async function genThemeCssFile(
+  prefix: string,
+  theme: object,
+  cssEntryFile: string,
+  root: string
+) {
+  const themeFilename = await writeThemeCssFile(prefix, theme, root);
+  writeFile(cssEntryFile, `@import "${themeFilename}";\n`, { flag: "a" });
+}
 run({
-  async init() {
-    console.log("init");
-  },
   async cssgen(options) {
-    const { config: _config } = options;
+    const { config = "collie.config.ts" } = options;
     const {
-      build: { include, exclude, root = process.cwd(), alias = {}, entry },
+      build: { root = process.cwd(), entry },
       css: cssConfig,
-    } = await getConfig(path.resolve(_config));
+    } = await getConfig(path.resolve(config));
 
-    const cssEntryFile = path.resolve(`${entry}/../collie-generated.css`);
-    const filename = await writeThemeCssFile(
+    await genThemeCssFile(
       cssConfig.prefix,
       cssConfig.theme,
+      getCssEntryFile(entry),
       root
     );
-
-    writeFile(cssEntryFile, "");
-    writeFile(cssEntryFile, `@import "${filename}";\n`, { flag: "a" });
-    const filter = createFilter(include, exclude);
-
-    chokidar
-      .watch("src/**/*.tsx")
-      .on("change", async url => {
-        console.log("changed:", url);
-        if (shouldSkip(url, filter)) {
-          return;
-        }
-        await extractCss(url, cssConfig, alias, root, cssEntryFile);
-      })
-      .on("add", async url => {
-        if (shouldSkip(url, filter)) {
-          return;
-        }
-        await extractCss(url, cssConfig, alias, root, cssEntryFile);
-      });
+    await extractWhen("add", { config });
+  },
+  async watch(options) {
+    extractWhen("change", options, url => {
+      log.info("changed url is: ", url);
+    });
   },
 });

@@ -3,7 +3,7 @@ import { assert } from "@c3/utils";
 import { transformTs } from "@colliejs/transform";
 import fs from "fs";
 
-export async function getConfig(configFilePath: string): Promise<CollieConfig> {
+export function getConfig(configFilePath: string): CollieConfig {
   let filePath = configFilePath;
   const suffix = /\.m?ts$/;
   const isTs = suffix.test(configFilePath);
