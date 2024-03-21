@@ -8,3 +8,4 @@ export * from "./module";
 export * from "./types";
 export * from "./getPathOfCall";
 export * from "./isCallExp";
+export * from "./transformTs";

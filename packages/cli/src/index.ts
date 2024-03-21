@@ -17,7 +17,7 @@ run({
     const {
       build: { include, exclude, root = process.cwd(), alias = {}, entry },
       css: cssConfig,
-    } = await getConfig(_config);
+    } = await getConfig(path.resolve(_config));
 
     const cssEntryFile = path.resolve(`${entry}/../collie-generated.css`);
     const filename = await writeThemeCssFile(

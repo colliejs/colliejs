@@ -6,12 +6,13 @@ import React from "react";
 import CssButton from "./components/CssButton";
 import { ThemeButton } from "./components/ThemeButton";
 import ResponsiveButton from "./components/ResponsiveButton";
-import { pxToVw } from "./common/pxToVw";
+import { pxToVw } from "@src/common/pxToVw";
 import { Col } from "./components/Col";
 import { Row } from "./components/Row";
 import ExampleButton from "./components/ExampleButton";
 import "./collie-generated.css";
 import { HoverButton } from "./components/HoverButton";
+
 
 export default function App() {
   return (
@@ -37,7 +38,7 @@ export default function App() {
       <ResponsiveButton x={["300px", "600px"]}>
         ResponsiveButton2 dynamic
       </ResponsiveButton>
-      <ResponsiveButton x={[pxToVw(300, 375), "600px"]}>
+      <ResponsiveButton x={[pxToVw(300), "600px"]}>
         ResponsiveButton use vw
       </ResponsiveButton>
       <ExampleButton>ExampleButton</ExampleButton>

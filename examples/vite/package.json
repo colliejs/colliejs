@@ -28,6 +28,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@colliejs/cli": "workspace:1.2.0-beta.0",
     "@colliejs/config": "link:/Users/che3vinci/code/personal/colliejs/packages/config",
     "@colliejs/core": "link:/Users/che3vinci/code/personal/colliejs/packages/core",
     "@colliejs/react": "link:/Users/che3vinci/code/personal/colliejs/packages/react",
