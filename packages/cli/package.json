@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "build:dev": "NODE_ENV=development rollup -c rollup.config.js && pnpm type ",
-    "build": "rollup -c rollup.config.js",
+    "build": "rollup -c rollup.config.js && pnpm type ",
     "buildOnly": "rollup -c rollup.config.js",
     "clean": "rm -rf dist  ",
     "reset": "pnpm clean && rm -rf node_modules && pnpm install",
@@ -40,7 +40,8 @@
   "dependencies": {
     "@colliejs/config": "workspace:^",
     "@colliejs/core": "workspace:^",
-    "@colliejs/extract": "workspace:^",
+    "@colliejs/shared": "workspace:1.1.1-beta.0",
+    "@colliejs/transform": "workspace:^",
     "@scriptbot/cli": "^1.0.164",
     "chokidar": "^3.6.0"
   }

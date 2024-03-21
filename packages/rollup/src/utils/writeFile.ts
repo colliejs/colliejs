@@ -7,7 +7,6 @@ export const writeFile = (
   option?: WriteFileOptions
 ) => {
   if (!fs.existsSync(filePath)) {
-    console.log("filePath: ", filePath);
     fs.mkdirSync(path.dirname(filePath), { recursive: true });
   }
   const option_ = option ?? { encoding: "utf-8", flag: "w" };

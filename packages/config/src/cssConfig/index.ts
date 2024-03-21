@@ -1,6 +1,7 @@
 import { defaultThemeMap } from "./defaultThemeMap";
 import { utils } from "./util";
-import type { ConfigType } from "../type";
+import type { CollieConfig } from "../type";
+
 export const defaultConfig = {
   prefix: "",
   themeMap: defaultThemeMap,
@@ -8,4 +9,4 @@ export const defaultConfig = {
   breakpoints: [],
   utils,
   layername: "",
-} as const satisfies ConfigType["css"];
+} as const satisfies CollieConfig["css"];

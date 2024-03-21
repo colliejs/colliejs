@@ -1,13 +1,15 @@
-import type { BaseConfig } from "@colliejs/core";
-import { defaultConfig } from "@colliejs/config";
+import { defaultConfig, type CollieConfig } from "@colliejs/config";
 export default {
-  ...defaultConfig,
-  breakpoints: [320, 768],
-  theme: {
-    colors: {
-      white01: "rgba(255,255,255,0.1)",
-      white09: "rgba(255,255,255,0.9)",
-      black09: "rgba(0,0,0,0.9)",
+  build: { entry: "src/index.tsx" },
+  css: {
+    ...defaultConfig,
+    breakpoints: [320, 768],
+    theme: {
+      colors: {
+        white01: "rgba(255,255,255,0.1)",
+        white09: "rgba(255,255,255,0.9)",
+        black09: "rgba(0,0,0,0.9)",
+      },
     },
   },
-} as const satisfies BaseConfig;
+} as const satisfies CollieConfig;

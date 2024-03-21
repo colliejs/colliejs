@@ -16,11 +16,11 @@ describe("test cases", () => {
       {
         "BeautifulButton": {
           "importedName": "RedButton",
-          "moduleId": "/Users/che3vinci/code/personal/colliejs/packages/extract/src/utils/__tests__/fixtures/Button.tsx",
+          "moduleId": "/Users/che3vinci/code/personal/colliejs/packages/transform/src/utils/__tests__/fixtures/Button.tsx",
         },
         "Button": {
           "importedName": "Button",
-          "moduleId": "/Users/che3vinci/code/personal/colliejs/packages/extract/src/utils/__tests__/fixtures/Button.tsx",
+          "moduleId": "/Users/che3vinci/code/personal/colliejs/packages/transform/src/utils/__tests__/fixtures/Button.tsx",
         },
         "_": {
           "importedName": "default",
@@ -46,7 +46,7 @@ describe("test cases", () => {
       {
         "hello": {
           "importedName": "default",
-          "moduleId": "/Users/che3vinci/code/personal/colliejs/packages/extract/src/utils/__tests__/fixtures/hello.ts",
+          "moduleId": "/Users/che3vinci/code/personal/colliejs/packages/transform/src/utils/__tests__/fixtures/hello.ts",
         },
       }
     `);
@@ -76,8 +76,6 @@ describe("test cases", () => {
     // expect(x.default).toBe("");
   });
 
-
-
   it("absolute path", () => {
     const source = `
     import {toHash} from '@src/utils/__tests__/fixtures/abs';
@@ -94,7 +92,7 @@ describe("test cases", () => {
       {
         "toHash": {
           "importedName": "toHash",
-          "moduleId": "/src/utils/__tests__/fixtures/abs",
+          "moduleId": "/Users/che3vinci/code/personal/colliejs/packages/transform/src/utils/__tests__/fixtures/abs.ts",
         },
       }
     `);
@@ -115,7 +113,7 @@ describe("test cases", () => {
       {
         "toHash": {
           "importedName": "toHash",
-          "moduleId": "/src/utils/__tests__/fixtures",
+          "moduleId": "/Users/che3vinci/code/personal/colliejs/packages/transform/src/utils/__tests__/fixtures/index.ts",
         },
       }
     `);
@@ -136,7 +134,7 @@ describe("test cases", () => {
       {
         "fnUtils": {
           "importedName": "fnUtils",
-          "moduleId": "/Users/che3vinci/code/personal/colliejs/packages/extract/src/utils/index.ts",
+          "moduleId": "/Users/che3vinci/code/personal/colliejs/packages/transform/src/utils/index.ts",
         },
       }
     `);

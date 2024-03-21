@@ -1,22 +1,14 @@
-import type { CSSProperties, Prefixed } from "@colliejs/core";
-type Alias = {};
-export type UtilsFn = (value: any) => CSSProperties | any;
-export type CSSConfig = {
-  prefix?: string;
-  theme?: object;
-  breakpoints?: readonly number[];
-  themeMap?: object;
-  utils?: {
-    [key: string]: UtilsFn;
-  };
-  layername?: string;
-};
+import type { CSSProperties, Prefixed, CSSConfig } from "@colliejs/core";
 
-export type ConfigType = {
+export type FilterPattern = string | RegExp | (string | RegExp)[];
+type Alias = {};
+
+export type CollieConfig = {
   css: CSSConfig;
   build?: {
-    includes?: string;
-    entry?: string;
+    include?: FilterPattern;
+    exclude?: FilterPattern;
+    entry: string;
     alias?: Alias;
   };
 };

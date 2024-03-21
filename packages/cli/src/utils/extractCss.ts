@@ -1,5 +1,4 @@
-import { extract } from "@colliejs/extract";
-import chokidar from "chokidar";
+import { transform } from "@colliejs/transform";
 import fs from "node:fs";
 import { BaseConfig } from "@colliejs/core";
 import { getCssFileName } from "./getCssFileName";
@@ -16,7 +15,7 @@ export async function extractCss<T extends BaseConfig>(
     encoding: "utf-8",
   });
   const sourceCode = fs.readFileSync(url, { encoding: "utf-8" });
-  let { styledElementCssTexts, styledComponentCssTexts } = extract(
+  let { styledElementCssTexts, styledComponentCssTexts } = transform(
     sourceCode,
     url,
     config,

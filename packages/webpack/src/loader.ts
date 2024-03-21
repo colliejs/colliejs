@@ -1,43 +1,27 @@
 import { BaseConfig } from "@colliejs/core";
+import { CollieConfig } from "@colliejs/config";
 import { Alias, transform } from "@colliejs/transform";
 import { defaultConfig } from "@colliejs/config";
 import { LoaderContext } from "webpack";
 import { FilterPattern, createFilter } from "@rollup/pluginutils";
 import path from "node:path";
-import {
-  getCssFileName,
-  shouldSkip,
-  writeFile,
-  writeThemeCssFile,
-} from "@colliejs/shared";
+import { shouldSkip } from "@colliejs/shared";
 
-type LoaderOption<Config extends BaseConfig> = {
-  styledConfig?: Config;
-  alias?: Alias;
-  root?: string;
-  include?: FilterPattern;
-  exclude?: FilterPattern;
-  entry: string;
-};
-export default function collieWebpackLoader<Config extends BaseConfig>(
-  this: LoaderContext<LoaderOption<Config>>,
+
+export default function collieWebpackLoader(
+  this: LoaderContext<CollieConfig>,
   source: string
 ) {
   const options = this.getOptions();
   const {
-    styledConfig = defaultConfig,
-    alias = {},
-    root = process.cwd(),
-    include,
-    exclude,
-    entry,
+    build: { include, exclude, entry, alias, root },
+    css: cssConfig,
   } = options;
-  // const callback = this.async();
   const filter = createFilter(include, exclude);
   const url = this.resourcePath || "";
   if (shouldSkip(url, filter)) {
     return source;
-  } 
-  let { code } = transform(source, url, styledConfig, alias, root);
+  }
+  let { code } = transform(source, url, cssConfig, alias, root);
   return code;
 }

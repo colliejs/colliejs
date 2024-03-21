@@ -1,4 +1,4 @@
-import { BaseConfig, createTheme } from "@colliejs/core";
+import { CollieConfig } from "@colliejs/config";
 import { defaultConfig } from "@colliejs/config";
 import { Alias, transform } from "@colliejs/transform";
 import { FilterPattern, createFilter } from "@rollup/pluginutils";
@@ -11,26 +11,15 @@ import type { Plugin, ResolvedConfig } from "vite";
 
 global.require = global.require || createRequire(import.meta.url);
 
-type VitePluginOptions<Config extends BaseConfig> = {
-  include?: FilterPattern;
-  exclude?: FilterPattern;
-  styledConfig?: Config;
-  entry: string;
-  alias?: Alias;
-};
+
 
 const UNCHANGED = null;
 
-const collie = <Config extends BaseConfig>(
-  option: VitePluginOptions<Config>
-): Plugin => {
+const collie = (option: CollieConfig): Plugin => {
   const {
-    include,
-    exclude,
-    styledConfig = defaultConfig,
-    entry,
-    alias: _alias,
-  } = option || {};
+    build: { include, exclude, entry, alias: _alias },
+    css:cssConfig,
+  } = option;
   const filter = createFilter(include, exclude);
   let viteConfig: ResolvedConfig;
 
@@ -52,7 +41,7 @@ const collie = <Config extends BaseConfig>(
       //===========================================================
       // 普通文件
       //===========================================================
-      let { code } = transform(source, url, styledConfig, alias, root);
+      let { code } = transform(source, url, cssConfig, alias, root);
       return {
         code,
         map: { mappings: "" },

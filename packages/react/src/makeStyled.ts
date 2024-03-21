@@ -124,6 +124,7 @@ export const makeStyled = <Config extends BaseConfig>(config: Config) => {
             });
           } else {
             if (Array.isArray(valOfProp)) {
+              console.error("prop", prop, "valOfProp", valOfProp);
               throw new Error(
                 "can not use array as dynamic variant value when breakpoints is empty"
               );

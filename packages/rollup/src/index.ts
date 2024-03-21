@@ -6,7 +6,7 @@ import { FilterPattern, createFilter } from "@rollup/pluginutils";
 import fs from "node:fs";
 import path from "node:path";
 import { type Plugin } from "rollup";
-import { writeFile } from "@colliejs/shared";
+import { writeFile } from "./utils/writeFile";
 
 type Option<Config extends BaseConfig> = {
   outDir: string;

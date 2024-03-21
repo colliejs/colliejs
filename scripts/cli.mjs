@@ -5,20 +5,21 @@ import { $ } from "zx";
 
 run({
   async release(option) {
-    const { semver = "patch" } = option;
+    const { version } = option;
 
     await $`git.ts login --user colliejs`;
     await $`pnpm test`;
     // await $`git add .`;
     // await $`git commit -m "chore: release"`;
 
-    if (semver === "prerelease") {
-      await $`lerna version prerelease --preid beta --conventional-commits --no-commit-hooks -y`;
+    if (version.startsWith("pre")) {
+      await $`lerna version ${version}  --preid beta --conventional-commits --no-commit-hooks -y`;
+      await $`pnpm -r publish --tag beta ----report-summary`;
     } else {
-      await $`lerna version ${semver} --conventional-commits --no-commit-hooks -y`;
+      await $`lerna version ${version} --conventional-commits --no-commit-hooks -y`;
+      await $`pnpm -r publish ----report-summary`;
     }
 
     //exec pnpm -r build firstly
-    await $`pnpm -r publish ----report-summary`;
   },
 });

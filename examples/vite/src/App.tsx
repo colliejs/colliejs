@@ -10,7 +10,7 @@ import { pxToVw } from "./common/pxToVw";
 import { Col } from "./components/Col";
 import { Row } from "./components/Row";
 import ExampleButton from "./components/ExampleButton";
-import "../entry.css";
+import "./collie-generated.css";
 import { HoverButton } from "./components/HoverButton";
 
 export default function App() {
