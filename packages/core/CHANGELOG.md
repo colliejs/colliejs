@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0-beta.0](https://github.com/colliejs/colliejs/compare/@colliejs/core@1.1.1-beta.0...@colliejs/core@1.2.0-beta.0) (2024-03-21)
+
+### Features
+
+- transform ([6da90ff](https://github.com/colliejs/colliejs/commit/6da90ffbb670ce63283e057271043c9acd680f7b))
+- v2 ([c46c926](https://github.com/colliejs/colliejs/commit/c46c92691f6b4a46c10274d400c061990a5475a9))
+
 ## [1.1.1-beta.0](https://github.com/colliejs/colliejs/compare/@colliejs/core@1.0.33...@colliejs/core@1.1.1-beta.0) (2024-03-04)
 
 ### Bug Fixes

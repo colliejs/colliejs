@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0-beta.0](https://github.com/colliejs/colliejs/compare/@colliejs/react@1.1.1-beta.0...@colliejs/react@1.2.0-beta.0) (2024-03-21)
+
+### Features
+
+- transform ([d0e9352](https://github.com/colliejs/colliejs/commit/d0e93525a4f5dabcad4a266f70031ebf23e09b39))
+- v2 ([c46c926](https://github.com/colliejs/colliejs/commit/c46c92691f6b4a46c10274d400c061990a5475a9))
+
 ## [1.1.1-beta.0](https://github.com/colliejs/colliejs/compare/@colliejs/react@1.0.87...@colliejs/react@1.1.1-beta.0) (2024-03-04)
 
 ### Bug Fixes
