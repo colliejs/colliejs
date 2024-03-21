@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0-beta.5](https://github.com/colliejs/colliejs/compare/@colliejs/cli@1.2.0-beta.4...@colliejs/cli@1.2.0-beta.5) (2024-03-21)
+
+### Bug Fixes
+
+- css build ([83c8024](https://github.com/colliejs/colliejs/commit/83c8024f2523d9d5076f3839104e59311dea6cac))
+
 # [1.2.0-beta.4](https://github.com/colliejs/colliejs/compare/@colliejs/cli@1.2.0-beta.3...@colliejs/cli@1.2.0-beta.4) (2024-03-21)
 
 ### Bug Fixes
