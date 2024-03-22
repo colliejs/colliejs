@@ -10,22 +10,26 @@ import fg from "fast-glob";
 import { createFilter } from "@rollup/pluginutils";
 import { extractCss } from "./utils/extractCss";
 import { shouldSkip } from "@colliejs/shared";
+import fs from "fs";
 
-async function genThemeCssFile(
+async function importThemeCssFile(
   prefix: string,
   theme: object,
   cssEntryFile: string,
   root: string
 ) {
   const themeFilename = await writeThemeCssFile(prefix, theme, root);
-  writeFile(
-    cssEntryFile,
-    `@import "${path.relative(
-      path.join(cssEntryFile, ".."),
-      themeFilename
-    )}";\n`,
-    { flag: "a" }
-  );
+  let cssEntryFileContent = fs.readFileSync(cssEntryFile, {
+    encoding: "utf-8",
+  });
+  const cssText = `@import "${path.relative(
+    path.join(cssEntryFile, ".."),
+    themeFilename
+  )}";\n`;
+  if (cssEntryFileContent.includes(cssText)) {
+    return;
+  }
+  writeFile(cssEntryFile, cssText, { flag: "a" });
 }
 run({
   async cssgen(options) {
@@ -35,7 +39,7 @@ run({
       css: cssConfig,
     } = await getConfig(path.resolve(config));
     const cssEntryFile = getCssEntryFile(entry);
-    await genThemeCssFile(
+    await importThemeCssFile(
       cssConfig.prefix,
       cssConfig.theme,
       cssEntryFile,
