@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0-beta.8](https://github.com/colliejs/colliejs/compare/@colliejs/cli@1.2.0-beta.7...@colliejs/cli@1.2.0-beta.8) (2024-03-22)
+
+### Bug Fixes
+
+- path filter ([9db3b22](https://github.com/colliejs/colliejs/commit/9db3b2221b6e3d5d0b20e01a82a5b1e6d47ad75b))
+
 # [1.2.0-beta.7](https://github.com/colliejs/colliejs/compare/@colliejs/cli@1.2.0-beta.6...@colliejs/cli@1.2.0-beta.7) (2024-03-22)
 
 ### Bug Fixes
