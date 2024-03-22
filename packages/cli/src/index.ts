@@ -17,7 +17,14 @@ async function genThemeCssFile(
   root: string
 ) {
   const themeFilename = await writeThemeCssFile(prefix, theme, root);
-  writeFile(cssEntryFile, `@import "${themeFilename}";\n`, { flag: "a" });
+  writeFile(
+    cssEntryFile,
+    `@import "${path.relative(
+      path.join(cssEntryFile, ".."),
+      themeFilename
+    )}";\n`,
+    { flag: "a" }
+  );
 }
 run({
   async cssgen(options) {

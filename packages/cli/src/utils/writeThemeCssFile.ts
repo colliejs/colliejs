@@ -6,8 +6,8 @@ export const writeThemeCssFile = async function (
   theme: object,
   root: string
 ) {
-  const themeCssFile = getCssFileName("styledTheme.css")(root);
+  const {absUrl} = getCssFileName("styledTheme")(root);
   const cssText = createTheme(prefix, theme);
-  writeFile(themeCssFile, cssText);
-  return themeCssFile;
+  writeFile(absUrl, cssText);
+  return absUrl;
 };

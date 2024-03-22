@@ -3,6 +3,7 @@ import fs from "node:fs";
 import { BaseConfig } from "@colliejs/core";
 import { getCssFileName } from "./getCssFileName";
 import { writeFile } from "./writeFile";
+import path from "node:path";
 
 export async function extractCss<T extends BaseConfig>(
   url: string,
@@ -29,15 +30,18 @@ export async function extractCss<T extends BaseConfig>(
   /**
    * 1.generate individual css file
    */
-  const cssFile = getCssFileName(url)(root);
+  const { absUrl, relativeUrl } = getCssFileName(url)(root);
   const cssTexts = `${styledElementCssTexts}\n${styledComponentCssTexts}`;
-  writeFile(cssFile, cssTexts);
+  writeFile(absUrl, cssTexts);
 
   /**
    *
    * 2. 加入到entryFile
    */
-  const importCss = `@import "${cssFile}";`;
+  const importCss = `@import "${path.relative(
+    path.join(cssEntryFile, ".."),
+    absUrl
+  )}";`;
   if (!cssEntryFileContent.includes(importCss)) {
     writeFile(cssEntryFile, `${importCss}\n`, { flag: "a" });
   }
