@@ -24,6 +24,7 @@ export const getImportDeclarations = (ast: t.Program) => {
   });
   return importDecls;
 };
+
 const isRelative = (path: string) =>
   path.startsWith(".") || path.startsWith("..");
 const isAbs = (path: string) => path.startsWith("/");
@@ -114,6 +115,9 @@ const doImportDecl = (
   const ModuleIdByName: ImportsByName = {};
   const matches = Object.keys(alias);
   let moduleId = importDecl.source.value;
+  if (/\.(png|jpg|svg|jpeg|mp4|gif)$/.test(moduleId)) {
+    return ModuleIdByName;
+  }
   matches.forEach(match => {
     if (moduleId.startsWith(match)) {
       const reg = new RegExp(`^${match}`);
@@ -123,7 +127,6 @@ const doImportDecl = (
 
   try {
     if (isRelative(moduleId)) {
-      //there is Bug if using require.resolve
       moduleId = getFileFromRelativePath(
         path.resolve(curDir, moduleId),
         extensions
@@ -131,7 +134,8 @@ const doImportDecl = (
     } else if (isAbs(moduleId)) {
       moduleId = getFileFromAbsPath(moduleId, extensions, root);
     } else {
-      moduleId = require.resolve(moduleId, { paths: [curDir] });
+      moduleId = resolve.sync(moduleId, { basedir: curDir, extensions });
+      // moduleId = require.resolve(moduleId, { paths: [curDir] });
     }
   } catch (e) {
     log.error(

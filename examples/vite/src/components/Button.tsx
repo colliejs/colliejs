@@ -1,4 +1,6 @@
 import { styled } from "../styled";
+import SVG1 from "@src/images/metamask.png";
+import SVG from "./../images/metamask.png";
 
 export const Button = styled("button", {
   border: "none",
