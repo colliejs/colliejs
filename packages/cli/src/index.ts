@@ -9,6 +9,7 @@ import { noop } from "@c3/utils";
 import fg from "fast-glob";
 import { createFilter } from "@rollup/pluginutils";
 import { extractCss } from "./utils/extractCss";
+import { shouldSkip } from "@colliejs/shared";
 
 async function genThemeCssFile(
   prefix: string,
@@ -40,14 +41,14 @@ run({
       cssEntryFile,
       root
     );
-    // await extractWhen("add", { config });
     const filter = createFilter(include, exclude);
     fg.globSync(`${root}/**/*`, {
       ignore: ["node_modules/**", "dist/**", "**/.**"],
     }).forEach(async url => {
-      if (filter(url)) {
-        await extractCss(url, cssConfig, alias, root, cssEntryFile);
+      if (shouldSkip(url, filter)) {
+        return;
       }
+      await extractCss(url, cssConfig, alias, root, cssEntryFile);
     });
   },
   async watch(options) {

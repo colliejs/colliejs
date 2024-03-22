@@ -100,6 +100,9 @@ const getFileFromAbsPath = (
 
 /**
  * NOTE：如果moduleId的后缀是没有指定的。这里有可能会出错。应该去坚持并自动补齐后缀
+ *
+ * @description:
+ * 图片文件必须处理，因为css中引用图片的url
  * @param importDecl
  * @param curFile
  * @returns
@@ -115,9 +118,9 @@ const doImportDecl = (
   const ModuleIdByName: ImportsByName = {};
   const matches = Object.keys(alias);
   let moduleId = importDecl.source.value;
-  if (/\.(png|jpg|svg|jpeg|mp4|gif)$/.test(moduleId)) {
-    return ModuleIdByName;
-  }
+  // if (/\.(png|jpg|svg|jpeg|mp4|gif)$/.test(moduleId)) {
+  //   return ModuleIdByName;
+  // }
   matches.forEach(match => {
     if (moduleId.startsWith(match)) {
       const reg = new RegExp(`^${match}`);
@@ -134,8 +137,8 @@ const doImportDecl = (
     } else if (isAbs(moduleId)) {
       moduleId = getFileFromAbsPath(moduleId, extensions, root);
     } else {
-      moduleId = resolve.sync(moduleId, { basedir: curDir, extensions });
-      // moduleId = require.resolve(moduleId, { paths: [curDir] });
+      // moduleId = resolve.sync(moduleId, { basedir: curDir, extensions });
+      moduleId = require.resolve(moduleId, { paths: [curDir] });
     }
   } catch (e) {
     log.error(

@@ -1,6 +1,5 @@
 import { styled } from "../styled";
 import SVG1 from "@src/images/metamask.png";
-import SVG from "./../images/metamask.png";
 
 export const Button = styled("button", {
   border: "none",
@@ -9,6 +8,7 @@ export const Button = styled("button", {
   backgroundColor: "red",
   py: [10],
   lineHeight: 1,
+  background:`url(${SVG1})`,
 
   variants: {
     size: {
