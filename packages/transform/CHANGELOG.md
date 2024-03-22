@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0-beta.2](https://github.com/colliejs/colliejs/compare/@colliejs/transform@1.2.0-beta.1...@colliejs/transform@1.2.0-beta.2) (2024-03-22)
+
+### Bug Fixes
+
+- path filter ([8ca0324](https://github.com/colliejs/colliejs/commit/8ca0324db7d58d52100d1ded9d245b795b1844fe))
+- path optimize ([4ce8065](https://github.com/colliejs/colliejs/commit/4ce806594ad86a5851683209da7991a1af49c452))
+
 # [1.2.0-beta.1](https://github.com/colliejs/colliejs/compare/@colliejs/transform@1.2.0-beta.0...@colliejs/transform@1.2.0-beta.1) (2024-03-21)
 
 ### Bug Fixes
