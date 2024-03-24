@@ -14,7 +14,7 @@
     "watchtype": "tsc --project . --watch "
   },
   "keywords": [],
-  "author": "che3vinci@gmail.com",
+  "author": "colliedog1001@gmail.com",
   "license": "MIT",
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

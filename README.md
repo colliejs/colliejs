@@ -32,7 +32,7 @@ export const StyledButton = styled("button", {
     h: "100%",
     w: [10, 4],
     background: "red",
-    ...absYCenter({ right: 0 }),
+    ...absYCenter({ right: 0 }),//obj=eval('Function') => css(obj)=>cssText. cssObject/styledObject
   },
 
   variants: {
@@ -72,7 +72,26 @@ export const StyledButton = styled("button", {
     },
   },
 
-  compoundVariants: [
+  compoundVariants: { 
+    type:{
+      title:{
+        size: "big",
+        shape: ?"round":'',
+        css: {
+          background: "$gray200",
+        },
+      },
+
+      subTitle:{
+        size: "md",
+        shape: "rect",
+        css: {
+          background: "$gray200",
+        },
+    }
+  }
+
+  [
     {
       size: "big",
       shape: "round",
@@ -86,6 +105,7 @@ export const StyledButton = styled("button", {
   },
 });
 ```
+<div className={xxx.variant-size-big}></div>
 
 # How to use
 
@@ -111,4 +131,4 @@ know more about examples,
 
 # Big thanks
 
-- [stitches](https://github.com/stitchesjs/stitches)  - a css-in-js library with multi-variant support
+- [stitches](https://github.com/stitchesjs/stitches) - a css-in-js library with multi-variant support

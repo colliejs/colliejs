@@ -47,7 +47,7 @@ run({
     );
     const filter = createFilter(include, exclude);
     fg.globSync(`${root}/**/*`, {
-      ignore: ["node_modules/**", "dist/**", "**/.**"],
+      ignore: [`${root}/**/node_modules/**/*`, `${root}/**/dist/**/*`],
     }).forEach(async url => {
       if (shouldSkip(url, filter)) {
         return;
