@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0-beta.9](https://github.com/colliejs/colliejs/compare/@colliejs/cli@1.2.0-beta.8...@colliejs/cli@1.2.0-beta.9) (2024-03-24)
+
+### Features
+
+- ignore all node_modules in cwd ([78dc203](https://github.com/colliejs/colliejs/commit/78dc203dda210229d236b896190256593b4b22cf))
+
 # [1.2.0-beta.8](https://github.com/colliejs/colliejs/compare/@colliejs/cli@1.2.0-beta.7...@colliejs/cli@1.2.0-beta.8) (2024-03-22)
 
 ### Bug Fixes
