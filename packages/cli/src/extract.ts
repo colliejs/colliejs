@@ -23,9 +23,10 @@ export function extractWhen(
 
   const cssEntryFile = getCssEntryFile(entry);
   const filter = createFilter(include, exclude);
+  const excludeArray = typeof exclude === "string" ? [exclude] : exclude;
   return chokidar
-    .watch(root, {
-      ignored: /node_modules|dist|\/\./,
+    .watch(include, {
+      ignored: [/node_modules|dist/, ...excludeArray],
     })
     .on(event, async url => {
       onEvent?.(url);
