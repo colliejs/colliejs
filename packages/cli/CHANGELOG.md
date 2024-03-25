@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0-beta.12](https://github.com/colliejs/colliejs/compare/@colliejs/cli@1.2.0-beta.11...@colliejs/cli@1.2.0-beta.12) (2024-03-25)
+
+### Bug Fixes
+
+- update glob filter ([a3fe340](https://github.com/colliejs/colliejs/commit/a3fe34016e83dc2b2cb094bab9ef04113f02b79f))
+
 # [1.2.0-beta.11](https://github.com/colliejs/colliejs/compare/@colliejs/cli@1.2.0-beta.10...@colliejs/cli@1.2.0-beta.11) (2024-03-25)
 
 ### Bug Fixes
