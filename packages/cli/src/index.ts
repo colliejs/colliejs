@@ -46,12 +46,12 @@ run({
       root
     );
     const filter = createFilter(include, exclude);
-    fg.globSync(`${root}/**/*`, {
-      ignore: [`${root}/**/node_modules/**/*`, `${root}/**/dist/**/*`],
+    fg.globSync(include, {
+      ignore: typeof exclude === "string" ? [exclude] : exclude,
     }).forEach(async url => {
-      if (shouldSkip(url, filter)) {
-        return;
-      }
+      // if (shouldSkip(url, filter)) {
+      //   return;
+      // }
       await extractCss(url, cssConfig, alias, root, cssEntryFile);
     });
   },
