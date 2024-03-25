@@ -56,7 +56,7 @@ run({
     });
   },
   async watch(options) {
-    extractWhen("change", options, noop, url => {
+    extractWhen("change", options, url => {
       log.info("watch", `to process changed file:${url} `);
     });
   },

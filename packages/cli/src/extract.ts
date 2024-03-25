@@ -13,7 +13,6 @@ export function extractWhen(
   event: string,
   options: { config: string },
   onEvent?: (url) => void,
-  onExec?: (url) => void
 ) {
   const { config = "collie.config.ts" } = options;
   const {
@@ -22,7 +21,7 @@ export function extractWhen(
   } = getConfig(path.resolve(config));
 
   const cssEntryFile = getCssEntryFile(entry);
-  const filter = createFilter(include, exclude);
+  // const filter = createFilter(include, exclude);
   const excludeArray = typeof exclude === "string" ? [exclude] : exclude;
   return chokidar
     .watch(include, {
@@ -30,10 +29,6 @@ export function extractWhen(
     })
     .on(event, async url => {
       onEvent?.(url);
-      if (shouldSkip(url, filter)) {
-        return;
-      }
-      onExec?.(url);
       await extractCss(url, cssConfig, alias, root, cssEntryFile);
     });
 }
