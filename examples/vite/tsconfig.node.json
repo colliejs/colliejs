@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "module": "ES2015",
+
+    "moduleResolution": "Bundler",
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "strict": true,
+    // "declaration": false,
+    "preserveSymlinks": true,
+
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["collie.config.ts", "vite.config.ts"]
+}

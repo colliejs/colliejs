@@ -1,0 +1,42 @@
+{
+  "name": "@colliejs/core",
+  "version": "1.2.0-beta.3",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "build": "rollup -c rollup.config.js && pnpm type ",
+    "buildOnly": "rollup -c rollup.config.js",
+    "clean": "rm -rf dist  ",
+    "reset": "pnpm clean && rm -rf node_modules && pnpm install",
+    "type": " tsc --project . --paths null --emitDeclarationOnly --declaration && cp -r src/types dist/types",
+    "watchtype": "tsc --project . --watch"
+  },
+  "types": "./dist/index.d.ts",
+  "keywords": [
+    "css",
+    "static extract",
+    "emotion",
+    "styled-component",
+    "stitches"
+  ],
+  "author": "colliedog1001@gmail.com",
+  "license": "MIT",
+  "devDependencies": {
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-node-resolve": "^15.1.0"
+  },
+  "gitHead": "27b6889c4e336e4f58c20d23c710aa6ede398968",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@colliejs/shared": "workspace:1.2.0-beta.4"
+  }
+}

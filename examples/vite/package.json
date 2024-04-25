@@ -1,0 +1,46 @@
+{
+  "name": "vite-demo",
+  "version": "1.0.0",
+  "description": "vite project example ",
+  "type": "module",
+  "scripts": {
+    "prepare": "/node_modules/.bin/collie cssgen",
+    "dev": "vite",
+    "watch": "./node_modules/.bin/collie watch --config ./collie.config.ts",
+    "cssgen": "./node_modules/.bin/collie cssgen --config ./collie.config.ts",
+    "build": "vite build"
+  },
+  "private": true,
+  "keywords": [
+    "css",
+    "static extract",
+    "emotion",
+    "styled-component",
+    "stitches"
+  ],
+  "author": "colliedog1001@gmail.com",
+  "license": "MIT",
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "organize-imports-cli",
+      "prettier --write",
+      "eslint --cache --fix"
+    ]
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@colliejs/cli": "link:/Users/tom/code/colliedog001/colliejs/packages/cli",
+    "@colliejs/config": "link:/Users/tom/code/colliedog001/colliejs/packages/config",
+    "@colliejs/core": "link:/Users/tom/code/colliedog001/colliejs/packages/core",
+    "@colliejs/react": "link:/Users/tom/code/colliedog001/colliejs/packages/react",
+    "@colliejs/shared": "link:/Users/tom/code/colliedog001/colliejs/packages/shared",
+    "@colliejs/vite": "link:/Users/tom/code/colliedog001/colliejs/packages/vite",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.1.0",
+    "@vitejs/plugin-react": "^2.2.0",
+    "dayjs": "^1.11.9",
+    "vite-plugin-inspect": "^0.7.28"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "name": "webpack-demo",
+  "version": "1.0.24",
+  "description": "awesesome",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "npx webpack --config webpack.config.mjs",
+    "dev": "webpack serve --config webpack.config.mjs",
+    "clean": "rm -rf dist  ",
+    "reset": "pnpm clean && rm -rf node_modules && pnpm install",
+    "type": "tsc --project . --paths null --emitDeclarationOnly --declaration",
+    "watchtype": "tsc --project . --watch"
+  },
+  "keywords": [
+    "css",
+    "static extract",
+    "emotion",
+    "styled-component",
+    "stitches"
+  ],
+  "author": "colliedog1001@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/core": "^7.22.5",
+    "@babel/preset-env": "^7.22.5",
+    "@babel/preset-react": "^7.22.5",
+    "@babel/preset-typescript": "^7.22.5",
+    "@colliejs/config": "link:/Users/tom/code/personal/colliejs/packages/config",
+    "@colliejs/core": "link:/Users/tom/code/personal/colliejs/packages/core",
+    "@colliejs/react": "link:/Users/tom/code/personal/colliejs/packages/react",
+    "@colliejs/shared": "link:/Users/tom/code/personal/colliejs/packages/shared",
+    "@colliejs/webpack": "link:/Users/tom/code/personal/colliejs/packages/webpack",
+    "antd": "4",
+    "babel-loader": "^9.1.3",
+    "clean-css": "^5.3.3",
+    "css-loader": "^6.8.1",
+    "html-minifier-terser": "^7.2.0",
+    "html-webpack-plugin": "^5.6.0",
+    "loader-utils": "^3.2.1",
+    "mini-css-extract-plugin": "^2.7.6",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "schema-utils": "^4.2.0",
+    "style-loader": "^3.3.3",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "organize-imports-cli",
+      "prettier --write",
+      "eslint --cache --fix"
+    ]
+  }
+}

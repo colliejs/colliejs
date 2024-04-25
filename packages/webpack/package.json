@@ -1,0 +1,61 @@
+{
+  "name": "@colliejs/webpack",
+  "version": "1.1.0-beta.3",
+  "description": "awesesome",
+  "type": "module",
+  "scripts": {
+    "build": "rollup -c rollup.config.js && pnpm type ",
+    "buildOnly": "node ./build.js",
+    "clean": "rm -rf dist  ",
+    "reset": "pnpm clean && rm -rf node_modules && pnpm install",
+    "type": "tsc --project . --paths null --emitDeclarationOnly --declaration",
+    "watchtype": "tsc --project . --watch"
+  },
+  "types": "./dist/index.d.ts",
+  "keywords": [
+    "css",
+    "static extract",
+    "emotion",
+    "styled-component",
+    "stitches"
+  ],
+  "author": "colliedog1001@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "loader-utils": "^3.2.1",
+    "schema-utils": "^4.2.0",
+    "webpack": "^5.89.0"
+  },
+  "peerDependencies": {
+    "@colliejs/config": "workspace:^",
+    "@colliejs/core": "workspace:^",
+    "@colliejs/shared": "workspace:^",
+    "@colliejs/transform": "workspace:^"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "organize-imports-cli",
+      "prettier --write",
+      "eslint --cache --fix"
+    ]
+  },
+  "gitHead": "27b6889c4e336e4f58c20d23c710aa6ede398968",
+  "exports": {
+    "./plugin": {
+      "require": "./dist/plugin.cjs",
+      "import": "./dist/plugin.mjs",
+      "types": "./dist/index.d.ts"
+    },
+    ".": {
+      "require": "./dist/loader.cjs",
+      "import": "./dist/loader.mjs"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "html-webpack-plugin": "^5.6.0",
+    "mini-css-extract-plugin": "^2.7.6"
+  }
+}

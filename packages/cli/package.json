@@ -1,0 +1,50 @@
+{
+  "name": "@colliejs/cli",
+  "version": "1.2.0-beta.15",
+  "description": "awesesome",
+  "type": "module",
+  "scripts": {
+    "test": "jest",
+    "build:dev": "NODE_ENV=development rollup -c rollup.config.js && pnpm type ",
+    "build": "rollup -c rollup.config.js && pnpm type ",
+    "buildOnly": "rollup -c rollup.config.js",
+    "clean": "rm -rf dist  ",
+    "reset": "pnpm clean && rm -rf node_modules && pnpm install",
+    "type": "tsc --project . --paths null --emitDeclarationOnly --declaration",
+    "watchtype": "tsc --project . --watch "
+  },
+  "keywords": [],
+  "author": "colliedog1001@gmail.com",
+  "license": "MIT",
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "organize-imports-cli",
+      "prettier --write",
+      "eslint --cache --fix"
+    ]
+  },
+  "bin": {
+    "collie": "./dist/index.mjs"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./css": "./dist/index.css"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@colliejs/config": "workspace:^",
+    "@colliejs/core": "workspace:^",
+    "@colliejs/shared": "workspace:1.2.0-beta.4",
+    "@colliejs/transform": "workspace:^",
+    "chokidar": "^3.6.0",
+    "fast-glob": "^3.3.2",
+    "npmlog": "^7.0.1",
+    "picomatch": "^4.0.1"
+  }
+}
