@@ -1,5 +1,6 @@
+import { getCssText } from "../css";
 import type { CSSObject } from "../type";
-import { getCssText } from "../cssObject";
+import { describe, it ,expect} from "vitest";
 
 describe("toHash", () => {
   it("should work ", () => {

@@ -1,10 +1,13 @@
 import type { BaseConfig } from "@colliejs/core";
 import { traverse } from "./traverse";
 import { generate } from "./utils";
+import { noop } from "lodash-es";
+import { extractCssFromCssCall } from "./cssCall";
+
 /**
  * NOTE: the module should be convert commonjs first
  */
-export const transform = <Config extends BaseConfig>(
+export const extractCss = <Config extends BaseConfig>(
   source: string,
   curFile: string,
   config: Config,
@@ -12,10 +15,7 @@ export const transform = <Config extends BaseConfig>(
   root = process.cwd()
 ) => {
   let styledComponentCssTexts = "";
-  let styledElementCssTexts = "";
-  const layerDepsObject: Record<string, string> = {};
-  let code = "";
-
+  let cssCallCssTexts = "";
   traverse(
     source,
     curFile,
@@ -23,23 +23,20 @@ export const transform = <Config extends BaseConfig>(
     alias,
     root,
     styledComponent => {
-      styledComponent.transform();
       styledComponentCssTexts += styledComponent.getCssText() + "\n";
-      layerDepsObject[styledComponent.layerName] =
-        styledComponent.directLayerDep;
     },
-    styledElement => {
-      styledElement.transform();
-      styledElementCssTexts += styledElement.getCssText() + "\n";
-    },
-    fileAst => {
-      code = generate(fileAst).code;
+    noop,
+    noop,
+    (path, modulesByName, config) => {
+      cssCallCssTexts += extractCssFromCssCall(
+        path,
+        modulesByName,
+        config
+      ).cssGenText;
     }
   );
   return {
-    code,
-    layerDepsObject,
-    styledElementCssTexts,
+    styledElementCssTexts: cssCallCssTexts,
     styledComponentCssTexts,
   };
 };

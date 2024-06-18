@@ -8,10 +8,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-//add .ts extension
 const extensions = [".js", ".jsx", ".ts", ".tsx"];
 const babelConfigFile = path.join(__dirname, "../babel.config.cjs");
-console.log("process.env.NODE_ENV", process.env.NODE_ENV);
 
 /**
  * @type {import('rollup').RollupOptions}
@@ -31,8 +29,6 @@ const config = {
   plugins: [
     replace({
       preventAssignment: true,
-      __buildDate__: () => JSON.stringify(new Date()),
-      __buildVersion: 15,
       __DEV__: process.env.NODE_ENV === "development",
     }),
 
@@ -43,7 +39,7 @@ const config = {
     commonjs(),
     json(),
     babel({ babelHelpers: "bundled", extensions, configFile: babelConfigFile }),
-    strip({ include: /src\/.*\.[mc]?[jt]sx?$/ }),
+    // strip({ include: /src\/.*\.[mc]?[jt]sx?$/ }),
   ],
   external: [
     "react",
@@ -61,7 +57,6 @@ const config = {
     "npmlog",
     "dayjs",
     /@colliejs\//,
-    /@c3\//,
     /@babel\//,
     /@rollup\//,
     /node:/,

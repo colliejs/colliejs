@@ -18,7 +18,6 @@ export const getArgPathOfFnCall = (
         ipath.parentPath.node.callee?.name === fnName &&
         t.isNodesEquivalent(ipath.parentPath.node.arguments[argIndex], ipath.node)
       ) {
-        console.log(ipath);
         res = ipath;
         ipath.stop();
       }

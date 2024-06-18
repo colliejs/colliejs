@@ -39,7 +39,7 @@ export const getCtxOf = (
   try {
     return _getCtxOf(path, imports);
   } catch (e) {
-    log.error("===>error", "getCtxOf", { path, imports });
+    log.error("===>error", "getCtxOf");
     throw e;
   }
 };

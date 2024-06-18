@@ -1,6 +1,7 @@
 import { config } from "./common/config";
-import { transform } from "../transform";
+import { extractCss } from "../extract";
 import path from "node:path";
+import { describe, it, expect } from "vitest";
 
 describe("test cases", () => {
   it("StyledComponent with variants and base style ", () => {
@@ -26,14 +27,14 @@ describe("test cases", () => {
         return <Button css={{color:'blue'}}></Button>
     }
     `;
-    const res = transform(
+    const res = extractCss(
       code,
       path.resolve(__dirname, "./depTree.test.ts"),
       config
     );
 
     expect(res["styledComponentCssTexts"]).toMatchInlineSnapshot(`
-      "@layer app.depTreeTestTs-Button-17gsmmh {.baseStyle-16n2od3{background:red}.variants-shape-round-jhqrc0{border-radius:50%}
+      "@layer app.depTreeTestTs-Button-19zo4rs {.baseStyle-16n2od3{background:red}.variants-shape-round-jhqrc0{border-radius:50%}
       .variants-shape-rect-4trf62{border-radius:0}
       @media (min-width:320px){.variants-shape-dynamic-16i60sc{border-radius:var(--variants-shape-at320)}}
       @media (min-width:768px){.variants-shape-dynamic-16i60sc{border-radius:var(--variants-shape-at768)}}
@@ -71,23 +72,15 @@ describe("test cases", () => {
         return <Button></Button>
     }
     `;
-    const res = transform(
+    const res = extractCss(
       code,
       path.resolve(__dirname, "./depTree.test.ts"),
       config
     );
     expect(res).toMatchInlineSnapshot(`
       {
-        "code": "const Button = styled('button', "", ["variants-shape-round-jhqrc0", "variants-size-big-1ja8ftc"], {}, ["compoundVariants-shape-round-size-big-13qnc0g"], []);
-      export const App = () => {
-        return <Button></Button>;
-      };",
-        "layerDepsObject": {
-          "depTreeTestTs-Button-17gsmmh": "",
-        },
-        "styledComponentCssTexts": "@layer app.depTreeTestTs-Button-17gsmmh {.variants-shape-round-jhqrc0{border-radius:50%}
+        "styledComponentCssTexts": "@layer app.depTreeTestTs-Button-19zo4rs {.variants-shape-round-jhqrc0{border-radius:50%}
       .variants-size-big-1ja8ftc{font-size:20px}
-      .compoundVariants-shape-round-size-big-13qnc0g{color:green}
       }
 
       ",
@@ -105,7 +98,7 @@ describe("test cases", () => {
         return <MyButton ></MyButton>
     }
     `;
-    const res = transform(
+    const res = extractCss(
       code,
       path.resolve(__dirname, "./extract.test.ts"),
       config,
@@ -113,20 +106,11 @@ describe("test cases", () => {
     );
     expect(res).toMatchInlineSnapshot(`
       {
-        "code": "const Button = styled('button', "baseStyle-16n2od3", [], {}, [], []);
-      const MyButton = styled(Button, "baseStyle-zuqrxm", [], {}, [], []);
-      export const App = () => {
-        return <MyButton></MyButton>;
-      };",
-        "layerDepsObject": {
-          "extractTestTs-Button-n6n5qt": "",
-          "extractTestTs-MyButton-18m9bz5": "extractTestTs-Button-n6n5qt",
-        },
-        "styledComponentCssTexts": "@layer app.extractTestTs-Button-n6n5qt {.baseStyle-16n2od3{background:red}}
+        "styledComponentCssTexts": "@layer app.extractTestTs-Button-ppinw4 {.baseStyle-16n2od3{background:red}}
 
 
-            @layer , app.extractTestTs-MyButton-18m9bz5;
-            @layer app.extractTestTs-MyButton-18m9bz5 {
+            @layer , app.extractTestTs-MyButton-1jfewg0;
+            @layer app.extractTestTs-MyButton-1jfewg0 {
               .baseStyle-zuqrxm{background:blue}
             }
 
@@ -142,7 +126,7 @@ describe("test cases", () => {
         return <div className={css({color:'red'})}></div>
     }
     `;
-    const res = transform(
+    const res = extractCss(
       code,
       path.resolve(__dirname, "./depTree.test.ts"),
       config,
@@ -150,14 +134,8 @@ describe("test cases", () => {
     );
     expect(res).toMatchInlineSnapshot(`
       {
-        "code": "export const App = () => {
-        return <div className={css({
-          color: 'red'
-        })}></div>;
-      };",
-        "layerDepsObject": {},
         "styledComponentCssTexts": "",
-        "styledElementCssTexts": "",
+        "styledElementCssTexts": ".css-129ntb2{color:red}",
       }
     `);
   });
@@ -175,7 +153,7 @@ describe("test cases", () => {
         return <Button></Button>
     }
     `;
-    const res = transform(
+    const res = extractCss(
       code,
       path.resolve(__dirname, "./depTree.test.ts"),
       config,
@@ -183,18 +161,7 @@ describe("test cases", () => {
     );
     expect(res).toMatchInlineSnapshot(`
       {
-        "code": "const Button = styled('button', "", [], {
-        "variants-shape-dynamic-1emb4hy": {
-          "canAddPx": true
-        }
-      }, [], []);
-      export const App = () => {
-        return <Button></Button>;
-      };",
-        "layerDepsObject": {
-          "depTreeTestTs-Button-17gsmmh": "",
-        },
-        "styledComponentCssTexts": "@layer app.depTreeTestTs-Button-17gsmmh {@media (min-width:320px){.variants-shape-dynamic-1emb4hy{gap:var(--variants-shape-at320)}}
+        "styledComponentCssTexts": "@layer app.depTreeTestTs-Button-19zo4rs {@media (min-width:320px){.variants-shape-dynamic-1emb4hy{gap:var(--variants-shape-at320)}}
       @media (min-width:768px){.variants-shape-dynamic-1emb4hy{gap:var(--variants-shape-at768)}}
       }
 

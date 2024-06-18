@@ -4,6 +4,7 @@
   "description": "awesesome",
   "type": "module",
   "scripts": {
+    "test": "vitest run",
     "build:dev": "NODE_ENV=development rollup -c rollup.config.js && pnpm type ",
     "build": "rollup -c rollup.config.js && pnpm type ",
     "buildOnly": "rollup -c rollup.config.js",
@@ -23,7 +24,8 @@
   "author": "colliedog1001@gmail.com",
   "license": "MIT",
   "dependencies": {
-    "lodash-es": "^4.17.21"
+    "lodash-es": "^4.17.21",
+    "tsx": "^4.15.6"
   },
   "peerDependencies": {
     "@colliejs/config": "workspace:^",
@@ -38,8 +40,7 @@
     ]
   },
   "devDependencies": {
-    "@nindaff/ascii-tree": "^0.0.2",
-    "@types/jest": "^29.5.2"
+    "@nindaff/ascii-tree": "^0.0.2"
   },
   "gitHead": "27b6889c4e336e4f58c20d23c710aa6ede398968",
   "exports": {

@@ -1,5 +1,6 @@
 import { BaseConfig, CSSObject, } from "../type";
 import { convertCssObjToMediaQuery } from "../convert";
+import { describe, it ,expect} from "vitest";
 
 describe("convertCssObjToMediaQuery", () => {
   it("work for array syntax ", () => {

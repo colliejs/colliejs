@@ -107,7 +107,7 @@ export type MyStyledComponent<
       as?: IntrinsicElementsKeys; //TODO: infer As ,这里的As如果为真，那么应该支持更多属性。但是未实现
       children?: React.ReactNode;
       ref?: LegacyRef<ElementRef<As extends IntrinsicElementsKeys ? As : Type>>;
-    } & ComposedVariant<Type, ExtractPropsFromStyledObject<NStyledObject>> 
+    } & ComposedVariant<Type, ExtractPropsFromStyledObject<NStyledObject>>
   >
 >;
 
@@ -125,7 +125,8 @@ export type Styled<Config extends BaseConfig> = <
 >(
   baseComponent: BaseComponent,
   styledObject: NStyledObject,
-  props?: NDefaultProps & { as?: As }
+  props?: NDefaultProps & { as?: As },
+  debug?: string
 ) => MyStyledComponent<Config, BaseComponent, NStyledObject, As>;
 
 //===========================================================

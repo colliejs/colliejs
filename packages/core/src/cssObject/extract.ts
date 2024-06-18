@@ -1,4 +1,6 @@
-import { BaseConfig, CSSObject, CSSObjectResult, css, getCssText } from "..";
+import { type BaseConfig } from "../type";
+import { getCssText, css } from "./css";
+import { CSSObject, CSSObjectResult } from "./type";
 
 export const extractFromCssObject = <Config extends BaseConfig>(
   cssObject: CSSObject<Config>,

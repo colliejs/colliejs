@@ -1,6 +1,6 @@
 import { toCssRules } from "../toCssRules";
-import { BaseConfig, CSSObject } from "../../type";
 import { config as defaultConfig } from "../../cssObject/__tests__/stub/config";
+import { describe, it, expect } from "vitest";
 
 describe("test cases", () => {
   it(" property with util ", () => {

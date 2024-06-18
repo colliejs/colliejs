@@ -6,7 +6,7 @@
     "target": "es6",
     "module": "ES2020",
     "jsx": "react-jsx",
-    "types": ["node", "jest"],
+    "types": ["node"],
     "esModuleInterop": true,
     "moduleResolution": "Bundler",
     "allowSyntheticDefaultImports": true,
@@ -27,8 +27,6 @@
     "commitlint.config.cjs",
     "**/node_modules/**",
     "**/dist/**",
-    "jest.config.cjs",
-    "jestSetupTests.js",
-    "./wallaby.js"
+    "wallaby.ts"
   ]
 }

@@ -6,14 +6,12 @@ import fs, { existsSync } from "node:fs";
 import resolve from "resolve";
 import log from "npmlog";
 import { ImportsByName } from "./types";
-import { createRequire } from "module";
 import { assert } from "@colliejs/shared";
 import { PathLike } from "fs";
 import { Alias } from "../type";
-//@ts-ignore
-if (!global.__JEST__) {
-  global.require = global.require || createRequire(import.meta.url);
-}
+import { createRequire } from "module";
+
+const nodeRequire = createRequire(import.meta.url)
 
 export const getImportDeclarations = (ast: t.Program) => {
   const importDecls: t.ImportDeclaration[] = [];
@@ -28,6 +26,9 @@ export const getImportDeclarations = (ast: t.Program) => {
 const isRelative = (path: string) =>
   path.startsWith(".") || path.startsWith("..");
 const isAbs = (path: string) => path.startsWith("/");
+const isAlias = (path: string, alias: Alias) =>
+  Object.keys(alias).some(key => path.startsWith(key));
+
 const isFile = (file: PathLike) =>
   existsSync(file) && fs.statSync(file).isFile();
 const isDir = (file: PathLike) =>
@@ -94,9 +95,62 @@ const getFileFromAbsPath = (
     }
   }
   log.error("MODULE NOT FOUND", "moduleId=%s,root=%s", pathLike, root);
-  // return moduleId;
   throw new Error("MODULE NOT FOUND");
 };
+function getSourceType(source: string, alias: Alias) {
+  if (isRelative(source)) {
+    return "relative";
+  } else if (isAbs(source)) {
+    return "abs";
+  } else if (isAlias(source, alias)) {
+    return "alias";
+  } else {
+    return "node_modules";
+  }
+}
+
+function getModuleId(
+  importDecl: t.ImportDeclaration,
+  curFile: string,
+  alias: Alias,
+  extensions: string[],
+  root: string
+) {
+  const curDir = path.dirname(curFile);
+  const source = importDecl.source.value;
+  try {
+    const type = getSourceType(source, alias);
+    switch (type) {
+      case "relative":
+        return getFileFromRelativePath(
+          path.resolve(curDir, source),
+          extensions
+        );
+      case "abs":
+        return getFileFromAbsPath(source, extensions, root);
+      case "alias":
+        let newSource = "";
+        for (const from of Object.keys(alias)) {
+          if (source.startsWith(from)) {
+            newSource = source.replace(new RegExp(`^${from}`), alias[from]);
+          }
+        }
+        return getFileFromAbsPath(newSource, extensions, root);
+
+      case "node_modules":
+        return nodeRequire.resolve(source);
+    }
+  } catch (e) {
+    log.error(
+      e.message,
+      "resolve.sync:moduleId=%s,curFile=%s",
+      source,
+      curFile
+    );
+    console.log(JSON.stringify(importDecl, null, 2));
+    return "";
+  }
+}
 
 /**
  * NOTE：如果moduleId的后缀是没有指定的。这里有可能会出错。应该去坚持并自动补齐后缀
@@ -114,65 +168,32 @@ const doImportDecl = (
   extensions: string[],
   root: string
 ) => {
-  const curDir = path.dirname(curFile);
-  const ModuleIdByName: ImportsByName = {};
-  const matches = Object.keys(alias);
-  let moduleId = importDecl.source.value;
-  // if (/\.(png|jpg|svg|jpeg|mp4|gif)$/.test(moduleId)) {
-  //   return ModuleIdByName;
-  // }
-  matches.forEach(match => {
-    if (moduleId.startsWith(match)) {
-      const reg = new RegExp(`^${match}`);
-      moduleId = moduleId.replace(reg, alias[match]);
-    }
-  });
+  let moduleId = getModuleId(importDecl, curFile, alias, extensions, root);
 
-  try {
-    if (isRelative(moduleId)) {
-      moduleId = getFileFromRelativePath(
-        path.resolve(curDir, moduleId),
-        extensions
-      );
-    } else if (isAbs(moduleId)) {
-      moduleId = getFileFromAbsPath(moduleId, extensions, root);
-    } else {
-      // moduleId = resolve.sync(moduleId, { basedir: curDir, extensions });
-      moduleId = require.resolve(moduleId, { paths: [curDir] });
-    }
-  } catch (e) {
-    log.error(
-      e.message,
-      "resolve.sync:moduleId=%s,curFile=%s",
-      moduleId,
-      curFile
-    );
-    console.log(JSON.stringify(importDecl, null, 2));
-  }
-
+  const importsByName: ImportsByName = {};
   importDecl.specifiers.forEach(specifier => {
     switch (specifier.type) {
       case "ImportDefaultSpecifier":
-        ModuleIdByName[specifier.local.name] = {
+        importsByName[specifier.local.name] = {
           moduleId,
           importedName: "default",
         };
         break;
       case "ImportNamespaceSpecifier":
-        ModuleIdByName[specifier.local.name] = {
+        importsByName[specifier.local.name] = {
           moduleId,
           importedName: "*",
         };
         break;
       case "ImportSpecifier":
-        ModuleIdByName[specifier.local.name] = {
+        importsByName[specifier.local.name] = {
           moduleId,
           importedName: getName(specifier.imported) || specifier.local.name,
         };
         break;
     }
   });
-  return ModuleIdByName;
+  return importsByName;
 };
 const cwd = process.cwd();
 export const getImports = (
@@ -182,13 +203,13 @@ export const getImports = (
   root = cwd,
   extensions: string[] = [".tsx", ".ts", ".js", ".jsx", ".cjs", ".mjs"]
 ) => {
-  const ModuleIdByName: ImportsByName = {};
+  const importsIdByName: ImportsByName = {};
   const importDecls = getImportDeclarations(program);
   importDecls.forEach(decl => {
     const res = doImportDecl(decl, curFile, alias, extensions, root);
-    Object.assign(ModuleIdByName, res);
+    Object.assign(importsIdByName, res);
   });
-  return ModuleIdByName;
+  return importsIdByName;
 };
 
 //===========================================================

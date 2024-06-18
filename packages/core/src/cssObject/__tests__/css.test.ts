@@ -1,6 +1,8 @@
-import { getCssText } from "../cssObject";
-import { BaseConfig, CSSObject } from "../type";
+import { BaseConfig } from "../../type";
+import { getCssText } from "../css";
+import {  CSSObject } from "../type";
 import { config } from "./stub/config";
+import { describe, it ,expect} from "vitest";
 
 describe("test cases", () => {
   it("should work ", () => {

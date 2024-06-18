@@ -1,119 +1,88 @@
 import { getImports } from "../importer";
 import { parseCode } from "../../utils/parse";
+import { describe, it, expect } from "vitest";
 
 describe("test cases", () => {
-  it("should work ", () => {
+  it("relative path ", () => {
     const source = `
         import _ from 'lodash';
         import {stripUnit} from 'polished';
         import {Button} from './fixtures/Button';
         import {RedButton as BeautifulButton} from './fixtures/Button';
+        import * as MyButton from './fixtures/Button';
+        import { parse } from "@babel/parser";
+
     `;
     const ast = parseCode(source);
     const curFile = __filename;
-    const home = process.env.HOME;
     expect(getImports(ast.program, curFile)).toMatchInlineSnapshot(`
       {
         "BeautifulButton": {
           "importedName": "RedButton",
-          "moduleId": "/Users/tom/code/personal/colliejs/packages/transform/src/utils/__tests__/fixtures/Button.tsx",
+          "moduleId": "/Users/tom/code/colliedog001/colliejs/packages/transform/src/utils/__tests__/fixtures/Button.tsx",
         },
         "Button": {
           "importedName": "Button",
-          "moduleId": "/Users/tom/code/personal/colliejs/packages/transform/src/utils/__tests__/fixtures/Button.tsx",
+          "moduleId": "/Users/tom/code/colliedog001/colliejs/packages/transform/src/utils/__tests__/fixtures/Button.tsx",
+        },
+        "MyButton": {
+          "importedName": "*",
+          "moduleId": "/Users/tom/code/colliedog001/colliejs/packages/transform/src/utils/__tests__/fixtures/Button.tsx",
         },
         "_": {
           "importedName": "default",
-          "moduleId": "/Users/tom/code/personal/colliejs/node_modules/.pnpm/lodash@4.17.21/node_modules/lodash/lodash.js",
+          "moduleId": "/Users/tom/code/colliedog001/colliejs/node_modules/.pnpm/lodash@4.17.21/node_modules/lodash/lodash.js",
+        },
+        "parse": {
+          "importedName": "parse",
+          "moduleId": "/Users/tom/code/colliedog001/colliejs/node_modules/.pnpm/@babel+parser@7.22.5/node_modules/@babel/parser/lib/index.js",
         },
         "stripUnit": {
           "importedName": "stripUnit",
-          "moduleId": "/Users/tom/code/personal/colliejs/node_modules/.pnpm/polished@4.2.2/node_modules/polished/dist/polished.cjs.js",
+          "moduleId": "/Users/tom/code/colliedog001/colliejs/node_modules/.pnpm/polished@4.2.2/node_modules/polished/dist/polished.cjs.js",
         },
       }
     `);
   });
 
-  it("get default export", () => {
+  it("with alias", () => {
     const source = `
-    import hello from './fixtures/hello';
-`;
-    const ast = parseCode(source);
-    const curFile = __filename;
-    const importers = getImports(ast.program, curFile, {});
-    const home = process.env.HOME;
-    expect(importers).toMatchInlineSnapshot(`
-      {
-        "hello": {
-          "importedName": "default",
-          "moduleId": "/Users/tom/code/personal/colliejs/packages/transform/src/utils/__tests__/fixtures/hello.ts",
-        },
-      }
-    `);
-    const x = require(importers["hello"].moduleId);
-    expect(x.default).toEqual("hello,world");
-  });
-
-  it("alias", () => {
-    const source = `
-    import {Button} from '@fixtures/Button';
-    `;
-    const ast = parseCode(source);
-    const curFile = __filename;
-    const importers = getImports(ast.program, curFile, {
-      "@fixtures": "/fixtures",
-    });
-    const home = process.env.HOME;
-    expect(importers).toMatchInlineSnapshot(`
-      {
-        "Button": {
-          "importedName": "Button",
-          "moduleId": "/fixtures/Button",
-        },
-      }
-    `);
-    // const x = require(importers["Button"].moduleId);
-    // expect(x.default).toBe("");
-  });
-
-  it("absolute path", () => {
-    const source = `
-    import {toHash} from '@src/utils/__tests__/fixtures/abs';
+    import {toHash} from '@fixtures/abs';
     `;
     const ast = parseCode(source);
     const curFile = __filename;
     const importers = getImports(
       ast.program,
       curFile,
-      { "@src": "/src" },
-      process.cwd() + "/packages/transform"
+      { "@fixtures": "/fixtures" },
+      __dirname
     );
     expect(importers).toMatchInlineSnapshot(`
       {
         "toHash": {
           "importedName": "toHash",
-          "moduleId": "/Users/tom/code/personal/colliejs/packages/transform/src/utils/__tests__/fixtures/abs.ts",
+          "moduleId": "/Users/tom/code/colliedog001/colliejs/packages/transform/src/utils/__tests__/fixtures/abs.ts",
         },
       }
     `);
   });
   it("index", () => {
     const source = `
-    import {toHash} from '@src/utils/__tests__/fixtures';
+    import {toHash} from '@fixtures';
     `;
     const ast = parseCode(source);
     const curFile = __filename;
     const importers = getImports(
       ast.program,
       curFile,
-      { "@src": "/src" },
-      process.cwd() + "/packages/transform"
+      { "@fixtures": "/fixtures" },
+      __dirname
     );
     expect(importers).toMatchInlineSnapshot(`
       {
         "toHash": {
           "importedName": "toHash",
-          "moduleId": "/Users/tom/code/personal/colliejs/packages/transform/src/utils/__tests__/fixtures/index.ts",
+          "moduleId": "/Users/tom/code/colliedog001/colliejs/packages/transform/src/utils/__tests__/fixtures/index.ts",
         },
       }
     `);
@@ -134,7 +103,7 @@ describe("test cases", () => {
       {
         "fnUtils": {
           "importedName": "fnUtils",
-          "moduleId": "/Users/tom/code/personal/colliejs/packages/transform/src/utils/index.ts",
+          "moduleId": "/Users/tom/code/colliedog001/colliejs/packages/transform/src/utils/index.ts",
         },
       }
     `);

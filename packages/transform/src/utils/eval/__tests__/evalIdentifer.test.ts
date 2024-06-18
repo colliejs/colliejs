@@ -3,11 +3,9 @@ import * as t from "@babel/types";
 import { parseCode } from "../../../utils/parse";
 import { getImports } from "../../importer";
 import { evalIdentifer } from "../evalIdentifier";
+import { describe, it, expect } from "vitest";
 
-const evalObjectString = (code: string) => {
-  const fileAst = parseCode(code);
-  const imports = getImports(fileAst.program, __filename);
-};
+
 
 describe("test cases", () => {
   it("should work ", () => {

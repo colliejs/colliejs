@@ -1,4 +1,5 @@
 import { toResolvedSelectors } from '../toResolvedSelectors';
+import { describe, it, expect } from "vitest";
 
 describe('test cases', () => {
   it('selector nested ', () => {

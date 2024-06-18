@@ -14,7 +14,6 @@ const config = {
     "react-dom/client",
     "lodash",
     "chokidar",
-    /@c3/,
     /@collie/,
   ],
 };

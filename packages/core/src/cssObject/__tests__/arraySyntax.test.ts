@@ -1,4 +1,5 @@
 import { arraySyntax } from "../arraySyntax";
+import { describe, it ,expect} from "vitest";
 
 describe("arraySyntax", () => {
   it("arraySyntax", () => {

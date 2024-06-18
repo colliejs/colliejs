@@ -1,26 +1,39 @@
 import { styled } from "../styled";
-import SVG1 from "@src/images/metamask.png";
+import SVG1 from "@/images/metamask.png";
 
 export const Button = styled("button", {
   border: "none",
   color: "$white09",
-  fontSize: 28,
-
   backgroundColor: "red",
   py: [10],
   lineHeight: 1,
-  background: `url(${SVG1})`,
+  // background: `url("${SVG1}") no-repeat center center`,
 
   variants: {
+    shape: {
+      round: {
+        borderRadius: 999,
+      },
+      rect: {
+        borderRadius: 0,
+      },
+    },
     size: {
       big: {
         width: 200,
-        height: 41,
+        // height: 41,
+        fontSize: 28,
       },
       small: {
         width: 100,
         height: 20,
+        fontSize: 14,
+        py: 0,
       },
+      dynamic: x => ({
+        width: x,
+        height: `auto`,
+      }),
     },
     type: {
       primary: {
@@ -31,24 +44,14 @@ export const Button = styled("button", {
         background: "yellow",
         color: "white",
       },
-    },
-  },
-
-  compoundVariants: [
-    {
-      type: "primary",
-      size: "big",
-      css: {
-        border: "2px solid blue",
-        w: "auto",
+      
+      title: {
+        mixins: ["shape.round", "size.big"],
         background: "green",
       },
     },
-  ],
+  },
   defaultVariants: {
     size: "big",
   },
 });
-
-type X = React.ComponentProps<typeof Button>;
-type Y = X["size"];

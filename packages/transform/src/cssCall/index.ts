@@ -1,9 +1,9 @@
-import * as t from "@babel/types";
 import { NodePath } from "@babel/traverse";
+import * as t from "@babel/types";
+import { BaseConfig, extractFromCssObject } from "@colliejs/core";
 import { ImportsByName } from "../utils";
-import { isCssCallExpression, parseCSSCallDeclaration } from "./parseCssCall";
-import { extract } from "../cssObject/extract";
-import { BaseConfig } from "@colliejs/core";
+import { parseCSSCallDeclaration } from "./parseCssCall";
+export { isCssCallExpression } from "./parseCssCall";
 
 export const extractCssFromCssCall = <C extends BaseConfig>(
   path: NodePath<t.CallExpression>,
@@ -11,5 +11,6 @@ export const extractCssFromCssCall = <C extends BaseConfig>(
   config: C
 ) => {
   const cssObject = parseCSSCallDeclaration(path, moduleIdByName);
-  return extract(cssObject, config);
+  return extractFromCssObject(cssObject, config);
 };
+

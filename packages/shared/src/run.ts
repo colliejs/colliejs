@@ -16,7 +16,6 @@ export async function run(options: Option, ministOpts?: minimist.Opts) {
     return;
   }
   if (argv.edit) {
-    //TODO:show file of source code
     const sourceFile = process.argv[1];
     console.log(sourceFile);
     return;

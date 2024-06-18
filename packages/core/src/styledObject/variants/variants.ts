@@ -7,48 +7,46 @@ import {
   VariantsType,
 } from "./type";
 
-export const getVariantClassNameFromCandidates = (
+export function getVariantClassNameFromCandidates(
   variantName: VariantName,
   variantValue: VariantValue,
   classNames: string[]
-) => {
+) {
   const name = `variants-${toCamelCase(variantName)}-${toCamelCase(
     `${variantValue}`
   )}`;
   return classNames.find(e => e.startsWith(name));
-};
-export const StaticVariantKeyPrefix = "static-variants";
-export const DynamicVariantKeyPrefix = "dynamic-variants";
-export const CompoundVariantKeyPrefix = "compoundVariants";
-export const VariantClassNamePrefix = "variants";
-export const CompoundVariantClassNamePrefix = "compoundVariants";
-export const getVariantKey = (
-  variantName: VariantName,
-  variantValue: VariantValue,
-  isDynamic = false
-) => {
-  const variantNameCamelCase = toCamelCase(variantName);
-  if (isDynamic) {
-    return `${DynamicVariantKeyPrefix}-${variantNameCamelCase}` as VariantsType["dynamicKey"];
-  }
-  return `${StaticVariantKeyPrefix}-${variantNameCamelCase}-${toCamelCase(
-    `${variantValue}`
-  )}` as VariantsType["staticKey"];
-};
+}
 
-export const getVariantClassName = (
+export const VariantKeyPrefix = "variants";
+export const VariantClassNamePrefix = "variants";
+
+export function getVariantKey(
+  variantName: VariantName,
+  variantValue: VariantValue
+): VariantsType["variantKey"] {
+  return `variants-${toCamelCase(variantName)}-${toCamelCase(
+    variantValue
+  )}` as const;
+}
+
+// export function isStaticVariantKey(key: string) {
+//   return key.startsWith(StaticVariantKeyPrefix);
+// }
+
+export function getVariantClassName(
   variantName: VariantName,
   variantValue: VariantValue,
   randomString: string,
   isDynamic = false
-) => {
+) {
   const variantNameCamelCase = toCamelCase(variantName);
   const variantValueCamelCase = toCamelCase(String(variantValue));
   if (isDynamic) {
     return `${VariantClassNamePrefix}-${variantNameCamelCase}-dynamic-${randomString}` as VariantsType["dynamicClassName"];
   }
   return `${VariantClassNamePrefix}-${variantNameCamelCase}-${variantValueCamelCase}-${randomString}` as VariantsType["staticClassName"];
-};
+}
 
 //因为variable只在当前元素生效，所以不需要加上其他限制
 export const getCSSVariable = <T extends number | string | undefined>(

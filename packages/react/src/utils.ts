@@ -57,19 +57,6 @@ export const getCSSVariable = <T extends number | string | undefined>(
   return `--variants-${vn}-at${breakpointName}` as ReadOnlyCSSVariableBp;
 };
 
-/**
- *
- * @param className '
- * @param staticClasses
- * @returns
- */
-export const isStaticVariantClass = (
-  prop: string,
-  value: string | number,
-  staticClasses: string[]
-) => {
-  return !!getVariantClassNameFromCandidates(prop, value, staticClasses);
-};
 
 /**
  * 获取可用的compoundVariantsClassName
@@ -102,3 +89,5 @@ export const getCompoundVariantClassNameUsed = (
   }
   return res;
 };
+
+

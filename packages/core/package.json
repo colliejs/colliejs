@@ -4,6 +4,7 @@
   "description": "",
   "type": "module",
   "scripts": {
+    "test": "vitest run",
     "build": "rollup -c rollup.config.js && pnpm type ",
     "buildOnly": "rollup -c rollup.config.js",
     "clean": "rm -rf dist  ",

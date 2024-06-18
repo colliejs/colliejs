@@ -1,4 +1,5 @@
 import { toCssString } from '../toCssRules';
+import { describe, it, expect } from "vitest";
 
 describe('test cases', () => {
   it('should work ', () => {

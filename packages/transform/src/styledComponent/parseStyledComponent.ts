@@ -112,7 +112,6 @@ export const parseStyledComponentDeclaration = <Config extends BaseConfig>(
     styledObjectExp = styledObjectExp.expression;
   }
   if (t.isObjectExpression(styledObjectExp)) {
-    console.log(generate(path.node).code);
     const styledObjectPath = getArgPathOfFnCall(path, STYLE_FN_NAME, 1);
     assert(!!styledObjectPath, "stylingPath should not be null", {
       styledObjectExp,

@@ -1,7 +1,8 @@
+import { mixin } from "lodash";
 import { config } from "../../cssObject/__tests__/stub/config";
 import { extractFromStyledObject } from "../extract";
 import { StyledObject } from "../types";
-
+import { describe, it ,expect} from "vitest";
 describe("parseStyleObj", () => {
   it("plain object ", () => {
     const styleObj: any = {
@@ -11,6 +12,12 @@ describe("parseStyleObj", () => {
         size: {
           small: { width: "100px", span: { w: 50 } },
           medium: { w: 200 },
+        },
+        type: {
+          title: {
+            mixins: ["size.small"],
+            background: "green",
+          },
         },
       },
     };
@@ -26,18 +33,16 @@ describe("parseStyleObj", () => {
           },
         },
         "defaultVariants": {
-          "className": "",
-          "cssGenText": "",
-          "cssRawObj": {},
+          "getClassName": [Function],
         },
-        "static-variants-size-medium": {
+        "variants-size-medium": {
           "className": "variants-size-medium-1pcm56b",
           "cssGenText": ".variants-size-medium-1pcm56b{width:200px}",
           "cssRawObj": {
             "w": 200,
           },
         },
-        "static-variants-size-small": {
+        "variants-size-small": {
           "className": "variants-size-small-4b43qv",
           "cssGenText": ".variants-size-small-4b43qv{width:100px}
       .variants-size-small-4b43qv span{width:50px}",
@@ -46,6 +51,16 @@ describe("parseStyleObj", () => {
               "w": 50,
             },
             "width": "100px",
+          },
+        },
+        "variants-type-title": {
+          "className": "variants-type-title-gwbdgl",
+          "cssGenText": ".variants-type-title-gwbdgl{background:green}",
+          "cssRawObj": {
+            "background": "green",
+            "mixins": [
+              "size.small",
+            ],
           },
         },
       }
@@ -68,11 +83,9 @@ describe("parseStyleObj", () => {
           "cssRawObj": {},
         },
         "defaultVariants": {
-          "className": "",
-          "cssGenText": "",
-          "cssRawObj": {},
+          "getClassName": [Function],
         },
-        "dynamic-variants-gap": {
+        "variants-gap-dynamic": {
           "canAddPx": true,
           "className": "variants-gap-dynamic-1dnk4w",
           "cssGenText": "@media (min-width:320px){.variants-gap-dynamic-1dnk4w{gap:var(--variants-gap-at320)}}
@@ -106,11 +119,9 @@ describe("parseStyleObj", () => {
           "cssRawObj": {},
         },
         "defaultVariants": {
-          "className": "",
-          "cssGenText": "",
-          "cssRawObj": {},
+          "getClassName": [Function],
         },
-        "dynamic-variants-gap": {
+        "variants-gap-dynamic": {
           "canAddPx": true,
           "className": "variants-gap-dynamic-1dnk4w",
           "cssGenText": "@media (min-width:320px){.variants-gap-dynamic-1dnk4w{gap:var(--variants-gap-at320)}}
@@ -155,26 +166,17 @@ describe("parseStyleObj", () => {
           "cssGenText": "",
           "cssRawObj": {},
         },
-        "compoundVariants-size-small-type-primary": {
-          "className": "compoundVariants-size-small-type-primary-16n2od3",
-          "cssGenText": ".compoundVariants-size-small-type-primary-16n2od3{background:red}",
-          "cssRawObj": {
-            "background": "red",
-          },
-        },
         "defaultVariants": {
-          "className": "",
-          "cssGenText": "",
-          "cssRawObj": {},
+          "getClassName": [Function],
         },
-        "static-variants-size-small": {
+        "variants-size-small": {
           "className": "variants-size-small-13jn9t5",
           "cssGenText": ".variants-size-small-13jn9t5{width:100px}",
           "cssRawObj": {
             "width": "100px",
           },
         },
-        "static-variants-type-primary": {
+        "variants-type-primary": {
           "className": "variants-type-primary-129ntb2",
           "cssGenText": ".variants-type-primary-129ntb2{color:red}",
           "cssRawObj": {
@@ -204,11 +206,9 @@ describe("parseStyleObj", () => {
           "cssRawObj": {},
         },
         "defaultVariants": {
-          "className": "",
-          "cssGenText": "",
-          "cssRawObj": {},
+          "getClassName": [Function],
         },
-        "dynamic-variants-size": {
+        "variants-size-dynamicWidthAt": {
           "canAddPx": true,
           "className": "variants-size-dynamic-ximlsg",
           "cssGenText": "@media (min-width:320px){.variants-size-dynamic-ximlsg{width:var(--variants-size-at320)}}
@@ -220,7 +220,7 @@ describe("parseStyleObj", () => {
             ],
           },
         },
-        "dynamic-variants-size1": {
+        "variants-size1-dynamicWidth": {
           "canAddPx": true,
           "className": "variants-size1-dynamic-1iv7rh0",
           "cssGenText": "@media (min-width:320px){.variants-size1-dynamic-1iv7rh0{width:var(--variants-size1-at320)}}
@@ -252,11 +252,9 @@ describe("parseStyleObj", () => {
           "cssRawObj": {},
         },
         "defaultVariants": {
-          "className": "",
-          "cssGenText": "",
-          "cssRawObj": {},
+          "getClassName": [Function],
         },
-        "dynamic-variants-size": {
+        "variants-size-dynamicAt": {
           "canAddPx": true,
           "className": "variants-size-dynamic-ximlsg",
           "cssGenText": "@media (min-width:320px){.variants-size-dynamic-ximlsg{width:var(--variants-size-at320)}}
@@ -296,18 +294,16 @@ describe("parseStyleObj", () => {
           "cssRawObj": {},
         },
         "defaultVariants": {
-          "className": "variants-size-small-13jn9t5 variants-shape-circle-jhqrc0",
-          "cssGenText": "",
-          "cssRawObj": {},
+          "getClassName": [Function],
         },
-        "static-variants-shape-circle": {
+        "variants-shape-circle": {
           "className": "variants-shape-circle-jhqrc0",
           "cssGenText": ".variants-shape-circle-jhqrc0{border-radius:50%}",
           "cssRawObj": {
             "borderRadius": "50%",
           },
         },
-        "static-variants-size-small": {
+        "variants-size-small": {
           "className": "variants-size-small-13jn9t5",
           "cssGenText": ".variants-size-small-13jn9t5{width:100px}",
           "cssRawObj": {

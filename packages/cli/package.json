@@ -4,7 +4,7 @@
   "description": "awesesome",
   "type": "module",
   "scripts": {
-    "test": "jest",
+    "test": "vitest run",
     "build:dev": "NODE_ENV=development rollup -c rollup.config.js && pnpm type ",
     "build": "rollup -c rollup.config.js && pnpm type ",
     "buildOnly": "rollup -c rollup.config.js",

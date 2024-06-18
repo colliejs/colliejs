@@ -1,9 +1,10 @@
 import { traverse } from "../module";
 import { parseCode } from "../parse";
-import { getImports, parseCodeAndGetBodyN } from "../../utils";
+import { getImports } from "../../utils";
 import * as t from "@babel/types";
 import { removeTypeAnnotation } from "../removeType";
 import { evalObjectExp } from "../eval/evalObjectExp";
+import { describe, it, expect } from "vitest";
 
 const evalObjectString = (sourcecode: string) => {
   const fileAst = parseCode(sourcecode);
@@ -19,7 +20,6 @@ const evalObjectString = (sourcecode: string) => {
           fileAst.program.body[lastOne].declarations[0].init
         )
       ) {
-        console.log(path.node.type);
         res = evalObjectExp(path, imports);
         path.stop();
       }
@@ -58,7 +58,7 @@ describe("test cases", () => {
     const res = evalObjectString(code);
     expect(res).toMatchInlineSnapshot(`
       {
-        "backgroundImage": "url(./fixtures/dog.jpeg)",
+        "backgroundImage": "url(/Users/tom/code/colliedog001/colliejs/packages/transform/src/utils/__tests__/fixtures/dog.jpeg)",
         "color": "red",
         "position": "fixed",
       }

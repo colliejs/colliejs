@@ -18,11 +18,11 @@ export const getCssText = <C extends BaseConfig>(
   return res.slice(0, -1);
 };
 
-export const getClassName = <Config extends BaseConfig>(
+export function getClassName<Config extends BaseConfig>(
   cssObj: CSSObject<Config>
-) => {
+) {
   return toHash(JSON.stringify(cssObj));
-};
+}
 
 export const css = <Config extends BaseConfig>(cssObj: CSSObject<Config>) => {
   return `css-${getClassName(cssObj)}`;

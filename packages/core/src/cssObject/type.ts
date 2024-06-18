@@ -13,6 +13,7 @@ export type UtilsParams0<
   K extends keyof Config["utils"]
 > = Parameters<Config["utils"][K]>[0];
 
+//TODO: recursive type
 export type CSSObject<Config extends BaseConfig> = {
   [K in keyof CSS<Config>]: K extends keyof Config["utils"]
     ? UtilsParams0<Config, K> extends CSSObject<any>

@@ -19,9 +19,19 @@ import { makeStyled } from "@colliejs/react";
 import { collieConfig } from "../collie.config";
 export const styled = makeStyled(collieConfig);
 
+const size = variant({
+  big: {
+    width: 9999,
+  },
+  sm: {
+    width: 20,
+  },
+});
+
 export const StyledButton = styled("button", {
   w: 100,
   h: 40,
+  ...size.big,
   _hover: {
     opacity: 0.8,
     background: "$primary",
@@ -32,7 +42,7 @@ export const StyledButton = styled("button", {
     h: "100%",
     w: [10, 4],
     background: "red",
-    ...absYCenter({ right: 0 }),//obj=eval('Function') => css(obj)=>cssText. cssObject/styledObject
+    ...absYCenter({ right: 0 }),
   },
 
   variants: {
@@ -49,6 +59,7 @@ export const StyledButton = styled("button", {
       sm: {
         w: 20,
       },
+
       dynamic: x => ({
         //any size you want
         w: x,
@@ -64,34 +75,21 @@ export const StyledButton = styled("button", {
     },
     status: {
       disabled: {
-        true: {
-          cursor: "not-allowed",
-          background: "$gray200",
-        },
+        cursor: "not-allowed",
+        background: "$gray200",
+      },
+    },
+    type: {
+      subtitle:{
+        mixins: ["size.big", "shape.rect"],
+      },
+      title: {
+        minxins: ["type.subtitle", "shape.rect"],
       },
     },
   },
 
-  compoundVariants: { 
-    type:{
-      title:{
-        size: "big",
-        shape: ?"round":'',
-        css: {
-          background: "$gray200",
-        },
-      },
-
-      subTitle:{
-        size: "md",
-        shape: "rect",
-        css: {
-          background: "$gray200",
-        },
-    }
-  }
-
-  [
+  compoundVariants: [
     {
       size: "big",
       shape: "round",
@@ -105,7 +103,8 @@ export const StyledButton = styled("button", {
   },
 });
 ```
-<div className={xxx.variant-size-big}></div>
+
+<div className={css({})}></div>
 
 # How to use
 

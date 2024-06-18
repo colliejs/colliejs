@@ -3,21 +3,14 @@ import {
   getImportFromSource,
   getPathOfStyledComponentDecl,
 } from "../../__tests__/common/getPathOfJsxEle";
-import { generate } from "../../utils";
 import { defaultConfig as _defaultConfig } from "@colliejs/config";
+import { describe, it, expect } from "vitest";
+
 const defaultConfig = {
   ..._defaultConfig,
   layername: "app",
 };
-//@ts-ignore
-global.window = {
-  //@ts-ignore
-  CSS: {
-    supports: () => {
-      return true;
-    },
-  },
-};
+
 const prepareStyledComponent = (sourcecode: string) => {
   let styledCompDeclPath = getPathOfStyledComponentDecl(sourcecode);
   return new StyledComponent(
@@ -26,8 +19,7 @@ const prepareStyledComponent = (sourcecode: string) => {
     getImportFromSource(sourcecode, __filename),
     defaultConfig,
     {},
-    process.cwd(),
-    true
+    process.cwd()
   );
 };
 
@@ -59,18 +51,16 @@ describe("styledHostComponent", () => {
           },
         },
         "defaultVariants": {
-          "className": "",
-          "cssGenText": "",
-          "cssRawObj": {},
+          "getClassName": [Function],
         },
-        "static-variants-shape-rect": {
+        "variants-shape-rect": {
           "className": "variants-shape-rect-4trf62",
           "cssGenText": ".variants-shape-rect-4trf62{border-radius:0}",
           "cssRawObj": {
             "borderRadius": 0,
           },
         },
-        "static-variants-shape-round": {
+        "variants-shape-round": {
           "className": "variants-shape-round-jhqrc0",
           "cssGenText": ".variants-shape-round-jhqrc0{border-radius:50%}",
           "cssRawObj": {
@@ -81,7 +71,7 @@ describe("styledHostComponent", () => {
     `);
 
     expect(c.getCssText()).toMatchInlineSnapshot(`
-      "@layer app.styledComponentTestTs-Button-1f9ulld {.baseStyle-16n2od3{background:red}.variants-shape-round-jhqrc0{border-radius:50%}
+      "@layer app.styledComponentTestTs-Button-1dnxvg0 {.baseStyle-16n2od3{background:red}.variants-shape-round-jhqrc0{border-radius:50%}
       .variants-shape-rect-4trf62{border-radius:0}
       }
       "
@@ -96,7 +86,7 @@ describe("3rdComponent", () => {
   it("basic ", () => {
     const code = `
   import { Button } from './Button';
-  import {abs} from '@unstyled-ui/css';
+    const abs = ()=>({position:'absolute'});
       const MyButton = styled(Button, {
           background: 'red',
           ...abs({left:100,top:20}),            
@@ -107,13 +97,12 @@ describe("3rdComponent", () => {
     expect(c.id.componentName).toBe("MyButton");
 
     expect(c.layerName).toMatchInlineSnapshot(
-      `"styledComponentTestTs-MyButton-1ah2k0t"`
-    );
+    `"styledComponentTestTs-MyButton-1raxqd8"`);
     expect(c.getCssText()).toMatchInlineSnapshot(`
       "
-            @layer , app.styledComponentTestTs-MyButton-1ah2k0t;
-            @layer app.styledComponentTestTs-MyButton-1ah2k0t {
-              .baseStyle-15ag2ji{background:red;position:absolute;left:100px;right:;top:20px;bottom:}
+            @layer , app.styledComponentTestTs-MyButton-1raxqd8;
+            @layer app.styledComponentTestTs-MyButton-1raxqd8 {
+              .baseStyle-cwb4fr{background:red;position:absolute}
             }
       "
     `);
@@ -121,7 +110,7 @@ describe("3rdComponent", () => {
   it("My layerName is calculated by moduleId and className", () => {
     const code = `
   import { Button } from './Button';
-  import {abs} from '@unstyled-ui/css';
+  const abs = ()=>({})
       const MyButton = styled(Button, {
           background: 'red',
           ...abs({left:100,top:20}),            
@@ -130,7 +119,7 @@ describe("3rdComponent", () => {
     const myButton = prepareStyledComponent(code);
     expect(myButton.id.uniqName).toEqual(myButton.layerName);
     expect(myButton.id.uniqName).toMatchInlineSnapshot(
-      `"styledComponentTestTs-MyButton-1ah2k0t"`
-    );
+      
+    `"styledComponentTestTs-MyButton-1raxqd8"`);
   });
 });

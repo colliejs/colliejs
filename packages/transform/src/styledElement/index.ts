@@ -8,12 +8,16 @@ import {
 } from "@colliejs/core";
 import { getPropValue } from "../utils/jsx/getPropVal";
 
-
 import { ImportsByName, Stylable } from "../utils/types";
 import _ from "lodash";
 import { NodePath } from "@babel/traverse";
 import { STYLE_ELEMENT_PROP_NAME } from "../const";
-import { delAttr, getAttr, getValExpOfAttr, isPropExisted } from "../utils/jsx/prop";
+import {
+  delAttr,
+  getAttr,
+  getValExpOfAttr,
+  isPropExisted,
+} from "../utils/jsx/prop";
 
 export class StyledElement<Config extends BaseConfig> implements Stylable {
   cssObjectResult: CSSObjectResult<Config>;
@@ -45,7 +49,7 @@ export class StyledElement<Config extends BaseConfig> implements Stylable {
 
   transform() {
     //===========================================================
-    // 合并className
+    // 1.合并className
     //===========================================================
     const isClassNameExisted = isPropExisted(this.path, "className");
     if (isClassNameExisted) {
@@ -72,17 +76,12 @@ export class StyledElement<Config extends BaseConfig> implements Stylable {
     }
 
     //===========================================================
-    // 处理CSS Props
+    // 2.delete CSS Props
     //===========================================================
     const hasCssProp = isPropExisted(this.path, STYLE_ELEMENT_PROP_NAME);
     if (hasCssProp) {
       delAttr(this.path, STYLE_ELEMENT_PROP_NAME);
-
-      //without css layer
-      return {
-        cssText: `${this.cssObjectResult.cssGenText}`,
-        path: this.path,
-      };
+      return;
     }
     throw new Error("not impossisble");
   }

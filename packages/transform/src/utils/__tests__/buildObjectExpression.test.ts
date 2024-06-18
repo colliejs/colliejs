@@ -1,6 +1,7 @@
 import { buildObjectExpression } from "../buildObjectExpression";
 
 const generate = require("@babel/generator").default;
+import { describe, it, expect } from "vitest";
 
 describe("build object expression", () => {
   it("object ", () => {

@@ -21,7 +21,6 @@ export function extractWhen(
   } = getConfig(path.resolve(config));
 
   const cssEntryFile = getCssEntryFile(entry);
-  // const filter = createFilter(include, exclude);
   const excludeArray = typeof exclude === "string" ? [exclude] : exclude;
   return chokidar
     .watch(include, {
