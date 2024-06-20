@@ -110,8 +110,9 @@ export const StyledButton = styled("button", {
 # How to use
 
 ```jsx
+import {css} from '@colliejs/core'
 const App = (props)=> {
-  return <Button shape="round" disabled={props.disabled} css={{background:'red'}}>Login<Button/>
+  return <Button shape="round" disabled={props.disabled} className={css({background:'red'})}>Login<Button/>
 }
 ```
 
