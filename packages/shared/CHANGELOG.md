@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.2.0 (2024-06-20)
+
+### Features
+
+- prepare to remove plugin ([8d4ef39](https://github.com/colliejs/colliejs/commit/8d4ef39c9a110a33b79992846097394b8a5c95ad))
+- v2 ([ab6a1f6](https://github.com/colliejs/colliejs/commit/ab6a1f6aeaee1310cfbfd838ba3354fd64fe035e))
+
 # 1.2.0-beta.4 (2024-04-25)
 
 ### Features
