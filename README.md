@@ -1,6 +1,7 @@
 # Advantages
 
 - There is no need to learn the syntax of preprocessors like less/sass/postcss, as you can achieve the same or even more functionality directly using JavaScript.
+- use mixins to compose mixin
 - CSS encapsulation makes it easy to extend and override styles.
 - Better performance, as it transforms the CSS object at build time.
 - Boost your development with [@collie-ui/css](https://github.com/colliejs/collie-ui) or tailwindcss(incoming).
