@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.5](https://github.com/colliejs/colliejs/compare/@colliejs/cli@1.2.4...@colliejs/cli@1.2.5) (2024-06-23)
+
+### Bug Fixes
+
+- boolean variant ([1625a73](https://github.com/colliejs/colliejs/commit/1625a73d2428c7372d38549d6f2bac04d24d935d))
+
 ## [1.2.4](https://github.com/colliejs/colliejs/compare/@colliejs/cli@1.2.3...@colliejs/cli@1.2.4) (2024-06-23)
 
 **Note:** Version bump only for package @colliejs/cli

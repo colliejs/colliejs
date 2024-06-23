@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.1](https://github.com/colliejs/colliejs/compare/@colliejs/core@1.2.0...@colliejs/core@1.2.1) (2024-06-23)
+
+### Bug Fixes
+
+- boolean variant ([1625a73](https://github.com/colliejs/colliejs/commit/1625a73d2428c7372d38549d6f2bac04d24d935d))
+
 # 1.2.0 (2024-06-20)
 
 ### Features
