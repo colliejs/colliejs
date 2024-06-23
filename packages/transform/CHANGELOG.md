@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.3](https://github.com/colliejs/colliejs/compare/@colliejs/transform@1.2.2...@colliejs/transform@1.2.3) (2024-06-23)
+
+### Bug Fixes
+
+- fix module not found error ([064ce54](https://github.com/colliejs/colliejs/commit/064ce542cf7fbcb4b6ad85696a15eea44b289858))
+
 ## [1.2.2](https://github.com/colliejs/colliejs/compare/@colliejs/transform@1.2.1...@colliejs/transform@1.2.2) (2024-06-23)
 
 ### Bug Fixes
