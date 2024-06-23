@@ -16,18 +16,18 @@ export default function App() {
   return (
     <div>
       <div>
-        {/* <Button size="big">big Button</Button>{" "} */}
-        <Button type="title" size="small">
+        <Button size="big">big Button</Button>{" "}
+        <Button type="title" >
           Button-type-title
         </Button>
-        {/* <span> </span>
+        <span> </span>
         <Button size="small"> small Button</Button>
-        <Button size={[60, 120]}> dynamic Button</Button>
+        {<Button size={[60, 120]}> dynamic Button</Button>}
         <Button type="primary">Button-type-primary</Button>
-        <HoverButton>Button Hover It </HoverButton> */}
+        <HoverButton>Button Hover It </HoverButton>
       </div>
 
-      {/* <Row>
+      <Row>
         <MyButton shape={["round"]}> MyButton-1</MyButton>
         <MyButton shape={[12]}> MyButton-272</MyButton>
       </Row>
@@ -43,7 +43,7 @@ export default function App() {
       <ResponsiveButton x={[pxToVw(300), "600px"]}>
         ResponsiveButton use vw
       </ResponsiveButton>
-      <ExampleButton>ExampleButton</ExampleButton> */}
+      <ExampleButton>ExampleButton</ExampleButton>
     </div>
   );
 }

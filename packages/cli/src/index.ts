@@ -54,15 +54,15 @@ run({
     fg.globSync(include, {
       ignore: typeof exclude === "string" ? [exclude] : exclude,
     }).forEach(async url => {
-      // if (shouldSkip(url, filter)) {
-      //   return;
-      // }
+      if (shouldSkip(url, filter)) {
+        return;
+      }
       await extractCss(url, cssConfig, alias, root, cssEntryFile);
     });
   },
   async watch(options: { config: string }) {
-    extractWhen("change", options, url => {
-      log.info("watch", `to process changed file:${url} `);
+    await extractWhen("change", options, url => {
+      log.info("watch", `changed file:${url} `);
     });
   },
 });

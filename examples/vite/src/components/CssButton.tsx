@@ -1,17 +1,19 @@
 import React from "react";
 import { Button } from "./Button";
+import { css } from "@colliejs/core";
 
 const CssButton: React.FC<any> = props => {
   const { ...restProps } = props;
   return (
     <Button
-      css={{
+      className={css({
         fontSize: 16,
         color: "yellow",
+        cursor: "pointer",
         _hover: {
-          color: "red",
+          color: "blue",
         },
-      }}
+      })}
       {...restProps}
     >
       cssButton

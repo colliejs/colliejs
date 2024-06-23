@@ -60,6 +60,7 @@ export const makeStyled = <Config extends BaseConfig>(config: Config) => {
             if (collisionIdx >= 0) {
               console.error("Object.entities(props)", JSON.stringify(kvs));
               console.error("mixins", mixins);
+              //TODO: 
               throw new Error(
                 `[error]:style collision for mixin ${e} and props ${kvs[
                   collisionIdx

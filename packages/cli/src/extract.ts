@@ -9,16 +9,16 @@ import log from "npmlog";
 export function getCssEntryFile(entry: string) {
   return path.resolve(`${entry}/../collie-generated.css`);
 }
-export function extractWhen(
+export async function  extractWhen(
   event: string,
   options: { config: string },
-  onEvent?: (url) => void,
+  onEvent?: (url) => void
 ) {
   const { config = "collie.config.ts" } = options;
   const {
     build: { include, exclude, root = process.cwd(), alias = {}, entry },
     css: cssConfig,
-  } = getConfig(path.resolve(config));
+  } = await getConfig(path.resolve(config));
 
   const cssEntryFile = getCssEntryFile(entry);
   const excludeArray = typeof exclude === "string" ? [exclude] : exclude;

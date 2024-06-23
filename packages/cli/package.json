@@ -40,7 +40,7 @@
   "dependencies": {
     "@colliejs/config": "workspace:^",
     "@colliejs/core": "workspace:^",
-    "@colliejs/shared": "workspace:1.2.0",
+    "@colliejs/shared": "workspace:^",
     "@colliejs/transform": "workspace:^",
     "chokidar": "^3.6.0",
     "fast-glob": "^3.3.2",
