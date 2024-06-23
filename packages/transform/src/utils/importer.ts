@@ -11,7 +11,7 @@ import { PathLike } from "fs";
 import { Alias } from "../type";
 import { createRequire } from "module";
 
-const nodeRequire = createRequire(import.meta.url)
+const nodeRequire = createRequire(import.meta.url);
 
 export const getImportDeclarations = (ast: t.Program) => {
   const importDecls: t.ImportDeclaration[] = [];
@@ -161,13 +161,13 @@ function getModuleId(
  * @param curFile
  * @returns
  */
-const doImportDecl = (
+function doImportDecl(
   importDecl: t.ImportDeclaration,
   curFile: string,
   alias: Alias,
   extensions: string[],
   root: string
-) => {
+) {
   let moduleId = getModuleId(importDecl, curFile, alias, extensions, root);
 
   const importsByName: ImportsByName = {};
@@ -194,7 +194,7 @@ const doImportDecl = (
     }
   });
   return importsByName;
-};
+}
 const cwd = process.cwd();
 export const getImports = (
   program: t.Program,
@@ -216,7 +216,7 @@ export const getImports = (
 // getImageImports
 //===========================================================
 
-export const getFileModuleImport = (imports: ImportsByName) => {
+export function getFileModuleImport(imports: ImportsByName) {
   const imgPair = Object.entries(imports)
     .filter(([key, value]) => {
       return (
@@ -233,4 +233,4 @@ export const getFileModuleImport = (imports: ImportsByName) => {
       return acc;
     }, {} as any);
   return imgPair;
-};
+}

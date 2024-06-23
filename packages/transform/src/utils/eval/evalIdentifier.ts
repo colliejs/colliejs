@@ -29,11 +29,11 @@ export const evalIdentifer = (
     return _evalIdentifer(path, imports);
   } catch (e) {
     console.error({ function: "evalIdentifer", path, imports });
-    log.error("===>error", "c", {
-      function: "evalIdentifer",
-      path,
-      imports,
-    });
+    // log.error("===>error", "c", {
+    //   function: "evalIdentifer",
+    //   path,
+    //   imports,
+    // });
     throw e;
   }
 };

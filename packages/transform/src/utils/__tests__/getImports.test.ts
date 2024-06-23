@@ -11,6 +11,7 @@ describe("test cases", () => {
         import {RedButton as BeautifulButton} from './fixtures/Button';
         import * as MyButton from './fixtures/Button';
         import { parse } from "@babel/parser";
+        import {arrayify} from '@colliejs/shared';
 
     `;
     const ast = parseCode(source);
@@ -32,6 +33,10 @@ describe("test cases", () => {
         "_": {
           "importedName": "default",
           "moduleId": "/Users/tom/code/colliedog001/colliejs/node_modules/.pnpm/lodash@4.17.21/node_modules/lodash/lodash.js",
+        },
+        "arrayify": {
+          "importedName": "arrayify",
+          "moduleId": "/Users/tom/code/colliedog001/colliejs/packages/shared/dist/index.cjs",
         },
         "parse": {
           "importedName": "parse",
