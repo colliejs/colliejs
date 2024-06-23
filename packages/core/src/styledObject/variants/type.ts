@@ -1,15 +1,15 @@
 import type { CSSProperties, BaseConfig, Prefixed } from "../../index";
 import { CSSObjectResult, CSSObject } from "../../cssObject/type";
 export type VariantName = string; //size,
-export type VariantValue = string ; //sm, xs, md, lg,dynamic{}
+export type VariantValue = string | boolean; //sm, xs, md, lg,dynamic{}
 export type CSSPropKey = keyof CSSProperties;
 export type RandomString = string;
 
 export type VariantsType = {
   // staticVariantKey: `static-variants-${VariantName}-${VariantValue}`;
-  // dynamicKey: `dynamic-variants-${VariantName}`;  
+  // dynamicKey: `dynamic-variants-${VariantName}`;
   // compoundKey: `compoundVariants-${string}`;
-  
+
   variantKey: `variants-${VariantName}-${VariantValue}`;
   defaultVariantKey: `defaultVariants`;
   staticClassName: `variants-${VariantName}-${VariantValue}-${RandomString}`;

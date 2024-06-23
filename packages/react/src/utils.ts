@@ -1,9 +1,3 @@
-import type {
-  ReadOnlyCSSVariable,
-  ReadOnlyCSSVariableBp,
-  VariantName,
-  VariantValue,
-} from "@colliejs/core";
 export const CompoundVariantClassNamePrefix = "compoundVariants";
 
 export const isNil = (x: unknown): x is null | undefined =>
@@ -31,63 +25,3 @@ export const getCSSValue = (value: string | number, canAddPx: boolean) => {
   }
   return value;
 };
-
-//TODO:为了不依赖@colliejs/transform.必须复制一份。需要优化
-export const getVariantClassNameFromCandidates = (
-  variantName: VariantName,
-  variantValue: VariantValue,
-  classNames: string[]
-) => {
-  const name = `variants-${toCamelCase(variantName)}-${toCamelCase(
-    `${variantValue}`
-  )}`;
-  return classNames?.find(e => e.startsWith(name)) || "";
-};
-//TODO:为了不依赖@colliejs/transform.必须复制一份。需要优化
-export const getCSSVariable = <T extends number | string | undefined>(
-  variantName: VariantName,
-  breakpointName?: T
-): T extends number | string ? ReadOnlyCSSVariable : ReadOnlyCSSVariableBp => {
-  const vn = toCamelCase(variantName);
-  if (breakpointName === undefined) {
-    //TODO: 这里的类型推断有问题
-    //@ts-ignore
-    return `--variants-${vn}` as ReadOnlyCSSVariable;
-  }
-  return `--variants-${vn}-at${breakpointName}` as ReadOnlyCSSVariableBp;
-};
-
-
-/**
- * 获取可用的compoundVariantsClassName
- * staticVariantsProps: {shape:"round",size:"large",device:'mobile"}
- * compoundClasses: "compoundVariants-shape-round-size-large-device-mobile-${randomString}"
- * @param compoundClasses
- */
-export const getCompoundVariantClassNameUsed = (
-  compoundClasses: string[],
-  staticVariantsProps: Record<string, string | number>
-) => {
-  const res: string[] = [];
-  for (const compoundClass of compoundClasses) {
-    const _compoundClass = compoundClass
-      .replace(`${CompoundVariantClassNamePrefix}-`, "")
-      .replace(/-\w+$/, "");
-    const staticVariants = _compoundClass.split("-");
-    let isCompoundClassUsed = true;
-    for (let i = 0; i < staticVariants.length; i = i + 2) {
-      const key = staticVariants[i];
-      const value = staticVariants[i + 1];
-      if (staticVariantsProps[key] !== value) {
-        isCompoundClassUsed = false;
-        break;
-      }
-    }
-    if (isCompoundClassUsed) {
-      res.push(compoundClass);
-    }
-  }
-  return res;
-};
-
-

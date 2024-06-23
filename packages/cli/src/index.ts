@@ -36,10 +36,12 @@ run({
   async init(options) {
     const { config = "collie.config.ts" } = options;
     const {
-      build: { entry },
+      build: { entry, root },
     } = await getConfig(path.resolve(config));
     const cssEntryFile = getCssEntryFile(entry);
     fs.writeFileSync(cssEntryFile, "");
+    fs.writeFileSync(`${root}/collie.config.ts`, "export default {} as const;");
+    // fs.writeFileSync(entry, "import './collie.css';");
   },
   async createTheme(options) {
     const { config = "collie.config.ts" } = options;

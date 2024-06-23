@@ -4,23 +4,19 @@ import {
   getVariantResultByProp,
   getVariantKeyTypeByProp,
   type BaseConfig,
+  getCSSVariable,
 } from "@colliejs/core";
 import _ from "lodash";
 import React, { ElementType, ForwardRefRenderFunction } from "react";
 import { Styled } from "./types";
-import {
-  getCSSValue,
-  getCSSVariable,
-  isPlainObject,
-  isString,
-  toArray,
-} from "./utils";
+import { getCSSValue, isPlainObject, isString, toArray } from "./utils";
 
 export type BaseStyledComponentProps<Config extends BaseConfig> = {
   className?: string; //static variants
   as?: keyof JSX.IntrinsicElements;
   style?: React.CSSProperties & { [x: string]: any }; //dynamic variants
   ref?: any;
+  __dbg?: boolean;
   css?: CSSObject<Config>;
 };
 
@@ -32,7 +28,7 @@ export const makeStyled = <Config extends BaseConfig>(config: Config) => {
   ) {
     const result = extractFromStyledObject(styledObject, config);
     const render: ForwardRefRenderFunction<T, P1> = (props, ref) => {
-      const { className, style = {}, as, ...restProps } = props;
+      const { className, style = {}, as, __dbg = false, ...restProps } = props;
       let outputClassNames: string[] = [
         result.baseStyle.className,
         className || "",
@@ -47,6 +43,8 @@ export const makeStyled = <Config extends BaseConfig>(config: Config) => {
       let kvs = Object.entries(restProps);
       for (const [prop, valOfProp] of kvs) {
         const varientKeyType = getVariantKeyTypeByProp(prop, valOfProp, result);
+        __dbg &&
+          console.log("==>varientKeyType", prop, valOfProp, varientKeyType);
         const variantResult = getVariantResultByProp(prop, valOfProp, result);
         function appendMixinIfNeeded() {
           const mixins = variantResult?.cssRawObj?.mixins || [];
@@ -60,7 +58,7 @@ export const makeStyled = <Config extends BaseConfig>(config: Config) => {
             if (collisionIdx >= 0) {
               console.error("Object.entities(props)", JSON.stringify(kvs));
               console.error("mixins", mixins);
-              //TODO: 
+              //TODO:
               throw new Error(
                 `[error]:style collision for mixin ${e} and props ${kvs[
                   collisionIdx
@@ -130,6 +128,7 @@ export const makeStyled = <Config extends BaseConfig>(config: Config) => {
         style: Object.keys(style).length === 0 ? undefined : style,
         ...propsOfBaseComponent,
         ...unknownProps,
+        // "data-test-result": option.debug ? JSON.stringify(result) : undefined,
       };
 
       //===========================================================

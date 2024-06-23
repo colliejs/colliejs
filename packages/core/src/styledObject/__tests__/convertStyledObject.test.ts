@@ -19,6 +19,11 @@ describe("parseStyleObj", () => {
             background: "green",
           },
         },
+        big:{
+          true:{
+            width: 200
+          }
+        }
       },
     };
     const res = extractFromStyledObject(styleObj, config);
@@ -34,6 +39,13 @@ describe("parseStyleObj", () => {
         },
         "defaultVariants": {
           "getClassName": [Function],
+        },
+        "variants-big-true": {
+          "className": "variants-big-true-1gvmlhe",
+          "cssGenText": ".variants-big-true-1gvmlhe{width:200px}",
+          "cssRawObj": {
+            "width": 200,
+          },
         },
         "variants-size-medium": {
           "className": "variants-size-medium-1pcm56b",

@@ -1,3 +1,4 @@
+import { s } from "@colliejs/shared";
 import { BaseConfig } from "../type";
 import { StyledObjectResult } from "./types";
 import { getVariantKey, VariantKeyPrefix } from "./variants/variants";
@@ -7,8 +8,12 @@ export function getVariantKeyByProp<Config extends BaseConfig>(
   propVal: any,
   result: StyledObjectResult<Config>
 ) {
-  if (typeof propVal === "string") {
-    const key = getVariantKey(propName, propVal);
+  if (
+    typeof propVal === "string" ||
+    typeof propVal === "boolean" ||
+    typeof propVal === "number"
+  ) {
+    const key = getVariantKey(propName, s(propVal));
     if (result[key]) {
       return key;
     }

@@ -21,7 +21,7 @@ export type StyledObjectResult<Config extends BaseConfig> = {
 };
 
 export type VariantDeclBlock<Config extends BaseConfig> = Record<
-  VariantValue,
+  VariantValue extends boolean ? `${VariantValue}` : string,
   CSSObject<Config> | DynamicVariantFn<Config>
 >;
 

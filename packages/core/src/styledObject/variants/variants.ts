@@ -1,4 +1,4 @@
-import { toCamelCase } from "@colliejs/shared";
+import { s, toCamelCase } from "@colliejs/shared";
 import {
   ReadOnlyCSSVariable,
   ReadOnlyCSSVariableBp,
@@ -7,16 +7,6 @@ import {
   VariantsType,
 } from "./type";
 
-export function getVariantClassNameFromCandidates(
-  variantName: VariantName,
-  variantValue: VariantValue,
-  classNames: string[]
-) {
-  const name = `variants-${toCamelCase(variantName)}-${toCamelCase(
-    `${variantValue}`
-  )}`;
-  return classNames.find(e => e.startsWith(name));
-}
 
 export const VariantKeyPrefix = "variants";
 export const VariantClassNamePrefix = "variants";
@@ -26,7 +16,7 @@ export function getVariantKey(
   variantValue: VariantValue
 ): VariantsType["variantKey"] {
   return `variants-${toCamelCase(variantName)}-${toCamelCase(
-    variantValue
+    s(variantValue)
   )}` as const;
 }
 

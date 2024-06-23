@@ -10,21 +10,20 @@ import { pxToVw } from "@/common/pxToVw";
 import { Col } from "./components/Col";
 import { Row } from "./components/Row";
 import ExampleButton from "./components/ExampleButton";
-import "./collie-generated.css";
+import "./collie.css";
 import { HoverButton } from "./components/HoverButton";
 export default function App() {
   return (
     <div>
       <div>
         <Button size="big">big Button</Button>{" "}
-        <Button type="title" >
-          Button-type-title
-        </Button>
+        <Button type="title">Button-type-title</Button>
         <span> </span>
         <Button size="small"> small Button</Button>
         {<Button size={[60, 120]}> dynamic Button</Button>}
         <Button type="primary">Button-type-primary</Button>
         <HoverButton>Button Hover It </HoverButton>
+        <Button italic>italic Button</Button>
       </div>
 
       <Row>

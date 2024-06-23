@@ -4,7 +4,7 @@ import { extractCss } from "./utils/extractCss";
 import { getConfig } from "./utils/getConfig";
 
 export function getCssEntryFile(entry: string) {
-  return path.resolve(`${entry}/../collie-generated.css`);
+  return path.resolve(`${entry}/../collie.css`);
 }
 export async function extractWhen(
   event: string,
