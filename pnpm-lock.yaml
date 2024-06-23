@@ -256,7 +256,7 @@ importers:
         specifier: workspace:^
         version: link:../core
       "@colliejs/transform":
-        specifier: workspace:1.2.1
+        specifier: workspace:1.2.2
         version: link:../transform
     devDependencies:
       "@rollup/plugin-babel":

@@ -1,6 +1,6 @@
 {
   "name": "@colliejs/react",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "awesesome",
   "type": "module",
   "scripts": {
@@ -49,6 +49,6 @@
     "access": "public"
   },
   "dependencies": {
-    "@colliejs/transform": "workspace:1.2.1"
+    "@colliejs/transform": "workspace:1.2.2"
   }
 }

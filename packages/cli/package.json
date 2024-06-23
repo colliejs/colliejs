@@ -1,6 +1,6 @@
 {
   "name": "@colliejs/cli",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "awesesome",
   "type": "module",
   "scripts": {

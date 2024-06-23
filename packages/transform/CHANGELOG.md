@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.2](https://github.com/colliejs/colliejs/compare/@colliejs/transform@1.2.1...@colliejs/transform@1.2.2) (2024-06-23)
+
+### Bug Fixes
+
+- cli optimization ([f166d1e](https://github.com/colliejs/colliejs/commit/f166d1eba5b758cb688bcc0e043a499f758b1d0d))
+
 ## [1.2.1](https://github.com/colliejs/colliejs/compare/@colliejs/transform@1.2.0...@colliejs/transform@1.2.1) (2024-06-23)
 
 ### Bug Fixes
