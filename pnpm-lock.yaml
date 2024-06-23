@@ -256,7 +256,7 @@ importers:
         specifier: workspace:^
         version: link:../core
       "@colliejs/transform":
-        specifier: workspace:1.2.0
+        specifier: workspace:1.2.1
         version: link:../transform
     devDependencies:
       "@rollup/plugin-babel":
@@ -265,25 +265,6 @@ importers:
       "@rollup/plugin-node-resolve":
         specifier: ^15.1.0
         version: 15.1.0(rollup@3.25.1)
-
-  packages/rollup:
-    dependencies:
-      "@colliejs/config":
-        specifier: workspace:^
-        version: link:../config
-      "@colliejs/core":
-        specifier: workspace:^
-        version: link:../core
-      "@colliejs/shared":
-        specifier: workspace:^
-        version: link:../shared
-      "@colliejs/transform":
-        specifier: workspace:^
-        version: link:../transform
-    devDependencies:
-      "@colliejs/react":
-        specifier: workspace:^
-        version: link:../react
 
   packages/shared: {}
 
