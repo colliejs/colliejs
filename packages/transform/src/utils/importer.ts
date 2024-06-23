@@ -138,7 +138,7 @@ function getModuleId(
         return getFileFromAbsPath(newSource, extensions, root);
 
       case "node_modules":
-        return nodeRequire.resolve(source);
+        return nodeRequire.resolve(source, { paths: [curFile] });
     }
   } catch (e) {
     log.error(

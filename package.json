@@ -52,7 +52,6 @@
     "static-eval": "^2.1.0"
   },
   "devDependencies": {
-    "@collie-ui/css": "1.0.23",
     "@babel/core": "^7.22.5",
     "@babel/generator": "^7.22.5",
     "@babel/preset-env": "^7.22.5",
