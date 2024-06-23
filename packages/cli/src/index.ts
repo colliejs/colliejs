@@ -1,15 +1,14 @@
+import { createTheme } from "@colliejs/core";
 import { run } from "@colliejs/shared";
+import fg from "fast-glob";
+import fs from "fs";
+import log from "npmlog";
 import path from "path";
 import { extractWhen, getCssEntryFile } from "./extract";
+import { extractCss } from "./utils/extractCss";
 import { getConfig } from "./utils/getConfig";
 import { writeFile } from "./utils/writeFile";
 import { writeThemeCssFile } from "./utils/writeThemeCssFile";
-import log from "npmlog";
-import fg from "fast-glob";
-import { createFilter } from "@rollup/pluginutils";
-import { extractCss } from "./utils/extractCss";
-import { shouldSkip } from "@colliejs/shared";
-import fs from "fs";
 
 async function importThemeCssFile(
   prefix: string,
@@ -17,6 +16,9 @@ async function importThemeCssFile(
   cssEntryFile: string,
   root: string
 ) {
+  if (!fs.existsSync(cssEntryFile)) {
+    writeFile(cssEntryFile, "");
+  }
   const themeFilename = await writeThemeCssFile(prefix, theme, root);
   let cssEntryFileContent = fs.readFileSync(cssEntryFile, {
     encoding: "utf-8",
@@ -31,6 +33,22 @@ async function importThemeCssFile(
   writeFile(cssEntryFile, cssText, { flag: "a" });
 }
 run({
+  async init(options) {
+    const { config = "collie.config.ts" } = options;
+    const {
+      build: { entry },
+    } = await getConfig(path.resolve(config));
+    const cssEntryFile = getCssEntryFile(entry);
+    fs.writeFileSync(cssEntryFile, "");
+  },
+  async createTheme(options) {
+    const { config = "collie.config.ts" } = options;
+    const {
+      css: { prefix, theme },
+    } = await getConfig(path.resolve(config));
+    return createTheme(prefix, theme);
+  },
+
   async cssgen(options) {
     const { config = "collie.config.ts" } = options;
     const {
@@ -50,13 +68,13 @@ run({
       cssEntryFile,
       root
     );
-    const filter = createFilter(include, exclude);
+    const ignore =
+      typeof exclude === "string"
+        ? [exclude, "node_modules"]
+        : [...exclude, "node_modules"];
     fg.globSync(include, {
-      ignore: typeof exclude === "string" ? [exclude] : exclude,
+      ignore: ignore,
     }).forEach(async url => {
-      if (shouldSkip(url, filter)) {
-        return;
-      }
       await extractCss(url, cssConfig, alias, root, cssEntryFile);
     });
   },

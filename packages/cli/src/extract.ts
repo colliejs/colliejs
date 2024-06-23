@@ -1,15 +1,12 @@
-import path from "path";
-import { getConfig } from "./utils/getConfig";
-import { FilterPattern, createFilter } from "@rollup/pluginutils";
 import chokidar from "chokidar";
-import { shouldSkip } from "@colliejs/shared";
+import path from "path";
 import { extractCss } from "./utils/extractCss";
-import log from "npmlog";
+import { getConfig } from "./utils/getConfig";
 
 export function getCssEntryFile(entry: string) {
   return path.resolve(`${entry}/../collie-generated.css`);
 }
-export async function  extractWhen(
+export async function extractWhen(
   event: string,
   options: { config: string },
   onEvent?: (url) => void

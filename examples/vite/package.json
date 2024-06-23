@@ -6,8 +6,8 @@
   "scripts": {
     "prepare": "/node_modules/.bin/collie cssgen",
     "dev": "vite",
-    "watch": "./node_modules/.bin/collie watch --config ./collie.config.ts",
-    "cssgen": "./node_modules/.bin/collie cssgen --config ./collie.config.ts",
+    "watch": "npx collie watch --config ./collie.config.ts",
+    "cssgen": "npx collie cssgen --config ./collie.config.ts",
     "build": "vite build"
   },
   "private": true,

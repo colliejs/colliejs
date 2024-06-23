@@ -147,7 +147,7 @@ function getModuleId(
       source,
       curFile
     );
-    console.log(JSON.stringify(importDecl, null, 2));
+    // console.log(JSON.stringify(importDecl, null, 2));
     return "";
   }
 }
