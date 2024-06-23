@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.1](https://github.com/colliejs/colliejs/compare/@colliejs/cli@1.2.0...@colliejs/cli@1.2.1) (2024-06-23)
+
+### Bug Fixes
+
+- css function ([7cfc08a](https://github.com/colliejs/colliejs/commit/7cfc08aac8bbc8aee405379df1491736214d5176))
+
 # 1.2.0 (2024-06-20)
 
 ### Features
