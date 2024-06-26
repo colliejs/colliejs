@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.5](https://github.com/colliejs/colliejs/compare/@colliejs/transform@1.2.4...@colliejs/transform@1.2.5) (2024-06-26)
+
+### Features
+
+- deps ([8524c12](https://github.com/colliejs/colliejs/commit/8524c127584eb1e6a274f58fe888224b1c8d50b0))
+
 ## [1.2.4](https://github.com/colliejs/colliejs/compare/@colliejs/transform@1.2.3...@colliejs/transform@1.2.4) (2024-06-26)
 
 ### Features

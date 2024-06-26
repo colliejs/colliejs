@@ -1,6 +1,6 @@
 {
   "name": "@colliejs/cli",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "description": "awesesome",
   "type": "module",
   "scripts": {
@@ -41,13 +41,13 @@
   },
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "chokidar": "^3.6.0",
-    "fast-glob": "^3.3.2",
-    "npmlog": "^7.0.1",
     "@colliejs/config": "workspace:^",
     "@colliejs/core": "workspace:^",
     "@colliejs/shared": "workspace:^",
     "@colliejs/transform": "workspace:^",
+    "chokidar": "^3.6.0",
+    "fast-glob": "^3.3.2",
+    "npmlog": "^7.0.1",
     "picomatch": "^4.0.1"
   }
 }

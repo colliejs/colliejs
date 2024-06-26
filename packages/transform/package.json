@@ -1,6 +1,6 @@
 {
   "name": "@colliejs/transform",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "awesesome",
   "type": "module",
   "scripts": {
@@ -27,10 +27,10 @@
   "author": "colliedog1001@gmail.com",
   "license": "MIT",
   "dependencies": {
-    "lodash-es": "^4.17.21",
     "@colliejs/config": "workspace:^",
     "@colliejs/core": "workspace:^",
     "@colliejs/shared": "workspace:^",
+    "lodash-es": "^4.17.21",
     "tsx": "^4.15.6"
   },
   "lint-staged": {
