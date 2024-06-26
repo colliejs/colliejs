@@ -7,7 +7,7 @@ run({
   async release(option) {
     const { version } = option;
     await $`git.ts login --user colliejs`;
-    await $`pnpm -r build`;
+    // await $`pnpm -r build`;
     await $`pnpm test`;
     if (version.startsWith("pre")) {
       await $`lerna version ${version}  --preid beta --conventional-commits --no-commit-hooks -y`;

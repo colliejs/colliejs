@@ -28,12 +28,10 @@
   "license": "MIT",
   "dependencies": {
     "lodash-es": "^4.17.21",
-    "tsx": "^4.15.6"
-  },
-  "peerDependencies": {
     "@colliejs/config": "workspace:^",
     "@colliejs/core": "workspace:^",
-    "@colliejs/shared": "workspace:^"
+    "@colliejs/shared": "workspace:^",
+    "tsx": "^4.15.6"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

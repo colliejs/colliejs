@@ -40,16 +40,14 @@
     "access": "public"
   },
   "types": "./dist/index.d.ts",
-  "peerDependencies": {
-    "@colliejs/config": "workspace:^",
-    "@colliejs/core": "workspace:^",
-    "@colliejs/shared": "workspace:^",
-    "@colliejs/transform": "workspace:^"
-  },
   "dependencies": {
     "chokidar": "^3.6.0",
     "fast-glob": "^3.3.2",
     "npmlog": "^7.0.1",
+    "@colliejs/config": "workspace:^",
+    "@colliejs/core": "workspace:^",
+    "@colliejs/shared": "workspace:^",
+    "@colliejs/transform": "workspace:^",
     "picomatch": "^4.0.1"
   }
 }
