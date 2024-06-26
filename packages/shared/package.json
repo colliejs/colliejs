@@ -12,6 +12,9 @@
     "watchtype": "tsc --project . --watch"
   },
   "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "keywords": [
     "css",
     "static extract",

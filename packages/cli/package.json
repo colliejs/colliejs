@@ -26,6 +26,9 @@
   "bin": {
     "collie": "./dist/index.mjs"
   },
+  "files": [
+    "dist"
+  ],
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
@@ -37,11 +40,13 @@
     "access": "public"
   },
   "types": "./dist/index.d.ts",
-  "dependencies": {
+  "peerDependencies": {
     "@colliejs/config": "workspace:^",
     "@colliejs/core": "workspace:^",
     "@colliejs/shared": "workspace:^",
-    "@colliejs/transform": "workspace:^",
+    "@colliejs/transform": "workspace:^"
+  },
+  "dependencies": {
     "chokidar": "^3.6.0",
     "fast-glob": "^3.3.2",
     "npmlog": "^7.0.1",

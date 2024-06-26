@@ -1,7 +1,7 @@
 import { extractCss as _extractCss } from "@colliejs/transform";
 import fs from "node:fs";
 import { BaseConfig } from "@colliejs/core";
-import { getCssFileName } from "./getCssFileName";
+import { getCssFileName } from "./fileurl";
 import { writeFile } from "./writeFile";
 import path from "node:path";
 
@@ -9,7 +9,7 @@ export async function extractCss<T extends BaseConfig>(
   url: string,
   config: T,
   alias: Record<string, string>,
-  root: string,
+  cssRoot: string,
   cssEntryFile: string
 ) {
   let cssEntryFileContent = fs.readFileSync(cssEntryFile, {
@@ -21,7 +21,7 @@ export async function extractCss<T extends BaseConfig>(
     url,
     config,
     alias,
-    root
+    cssRoot
   );
   if (!styledComponentCssTexts && !styledElementCssTexts) {
     return;
@@ -30,7 +30,7 @@ export async function extractCss<T extends BaseConfig>(
   /**
    * 1.generate individual css file
    */
-  const { absUrl, relativeUrl } = getCssFileName(url)(root);
+  const { absUrl, relativeUrl } = getCssFileName(url)(cssRoot);
   const cssTexts = `${styledElementCssTexts}\n${styledComponentCssTexts}`;
   writeFile(absUrl, cssTexts);
 

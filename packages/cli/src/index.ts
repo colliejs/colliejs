@@ -4,71 +4,45 @@ import fg from "fast-glob";
 import fs from "fs";
 import log from "npmlog";
 import path from "path";
-import { extractWhen, getCssEntryFile } from "./extract";
+import { extractWhen } from "./extract";
+import { addThemeToCssEntryFile } from "./theme";
 import { extractCss } from "./utils/extractCss";
+import { getCssEntryFile } from "./utils/fileurl";
 import { getConfig } from "./utils/getConfig";
-import { writeFile } from "./utils/writeFile";
-import { writeThemeCssFile } from "./utils/writeThemeCssFile";
+import { contentOfCollieConfigFile, contentOfStyledFile } from "./template";
 
-async function importThemeCssFile(
-  prefix: string,
-  theme: object,
-  cssEntryFile: string,
-  root: string
-) {
-  if (!fs.existsSync(cssEntryFile)) {
-    writeFile(cssEntryFile, "");
-  }
-  const themeFilename = await writeThemeCssFile(prefix, theme, root);
-  let cssEntryFileContent = fs.readFileSync(cssEntryFile, {
-    encoding: "utf-8",
-  });
-  const cssText = `@import "${path.relative(
-    path.join(cssEntryFile, ".."),
-    themeFilename
-  )}";\n`;
-  if (cssEntryFileContent.includes(cssText)) {
-    return;
-  }
-  writeFile(cssEntryFile, cssText, { flag: "a" });
-}
 run({
-  async init(options) {
-    const { config = "collie.config.ts" } = options;
+  async init({ config = "collie.config.ts" }) {
     const {
       build: { entry, root },
     } = await getConfig(path.resolve(config));
     const cssEntryFile = getCssEntryFile(entry);
+    const srcRoot = path.dirname(entry);
+    const collieConfFile = path.resolve(root, "collie.config.ts");
+    const styleFile = path.resolve(srcRoot, "styled.ts");
     fs.writeFileSync(cssEntryFile, "");
-    fs.writeFileSync(`${root}/collie.config.ts`, "export default {} as const;");
-    // fs.writeFileSync(entry, "import './collie.css';");
+    fs.writeFileSync(collieConfFile, contentOfCollieConfigFile);
+    fs.writeFileSync(styleFile, contentOfStyledFile);
   },
-  async createTheme(options) {
-    const { config = "collie.config.ts" } = options;
+  async createTheme({ config = "collie.config.ts" }) {
     const {
       css: { prefix, theme },
     } = await getConfig(path.resolve(config));
     return createTheme(prefix, theme);
   },
 
-  async cssgen(options) {
-    const { config = "collie.config.ts" } = options;
+  async cssgen({ config = "collie.config.ts" }) {
     const {
-      build: {
-        root = process.cwd(),
-        entry,
-        include,
-        exclude = ["node_modules"],
-        alias,
-      },
+      build: { entry, include, exclude, alias },
       css: cssConfig,
     } = await getConfig(path.resolve(config));
+    const cssRoot = path.resolve(path.dirname(entry));
     const cssEntryFile = getCssEntryFile(entry);
-    await importThemeCssFile(
+    await addThemeToCssEntryFile(
       cssConfig.prefix,
       cssConfig.theme,
       cssEntryFile,
-      root
+      cssRoot
     );
     const ignore =
       typeof exclude === "string"
@@ -77,7 +51,7 @@ run({
     fg.globSync(include, {
       ignore: ignore,
     }).forEach(async url => {
-      await extractCss(url, cssConfig, alias, root, cssEntryFile);
+      await extractCss(url, cssConfig, alias, cssRoot, cssEntryFile);
     });
   },
   async watch(options: { config: string }) {

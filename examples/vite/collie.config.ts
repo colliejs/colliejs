@@ -4,7 +4,7 @@ export default {
     entry: "src/index.tsx",
     alias: { "@src": "src" },
     include: ["src/**/*.tsx", "src/**/*.ts"],
-    exclude: ["node_modules"],
+    exclude: ["**/node_modules"],
   },
   css: {
     ...defaultConfig,

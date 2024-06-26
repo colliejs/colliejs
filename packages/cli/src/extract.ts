@@ -2,10 +2,9 @@ import chokidar from "chokidar";
 import path from "path";
 import { extractCss } from "./utils/extractCss";
 import { getConfig } from "./utils/getConfig";
+import { getCssEntryFile } from "./utils/fileurl";
 
-export function getCssEntryFile(entry: string) {
-  return path.resolve(`${entry}/../collie.css`);
-}
+
 export async function extractWhen(
   event: string,
   options: { config: string },

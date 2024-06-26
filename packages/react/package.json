@@ -22,10 +22,6 @@
   ],
   "author": "colliedog1001@gmail.com",
   "license": "MIT",
-  "peerDependencies": {
-    "@colliejs/config": "workspace:^",
-    "@colliejs/core": "workspace:^"
-  },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "organize-imports-cli",
@@ -48,7 +44,16 @@
   "publishConfig": {
     "access": "public"
   },
-  "dependencies": {
-    "@colliejs/transform": "workspace:1.2.3"
+  "files": [
+    "dist"
+  ],
+  "dependencies": {},
+  "peerDependencies": {
+    "@colliejs/transform": "workspace:^",
+    "@colliejs/config": "workspace:^",
+    "@colliejs/core": "workspace:^",
+    "@colliejs/shared": "workspace:^",
+    "react": ">=17.0.2",
+    "react-dom": ">=17.0.2"
   }
 }
