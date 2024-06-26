@@ -234,7 +234,7 @@ importers:
   packages/core:
     dependencies:
       "@colliejs/shared":
-        specifier: workspace:1.2.0
+        specifier: workspace:1.2.1
         version: link:../shared
     devDependencies:
       "@rollup/plugin-babel":
@@ -252,9 +252,18 @@ importers:
       "@colliejs/core":
         specifier: workspace:^
         version: link:../core
+      "@colliejs/shared":
+        specifier: workspace:^
+        version: link:../shared
       "@colliejs/transform":
-        specifier: workspace:1.2.3
+        specifier: workspace:^
         version: link:../transform
+      react:
+        specifier: ">=17.0.2"
+        version: 18.2.0
+      react-dom:
+        specifier: ">=17.0.2"
+        version: 18.2.0(react@18.2.0)
     devDependencies:
       "@rollup/plugin-babel":
         specifier: ^6.0.3

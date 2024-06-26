@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.6](https://github.com/colliejs/colliejs/compare/@colliejs/react@1.2.5...@colliejs/react@1.2.6) (2024-06-26)
+
+### Features
+
+- deps ([ca32c2e](https://github.com/colliejs/colliejs/commit/ca32c2eb1c02ecbd0c532b73a5833abf207e7d05))
+
 ## [1.2.5](https://github.com/colliejs/colliejs/compare/@colliejs/react@1.2.4...@colliejs/react@1.2.5) (2024-06-23)
 
 ### Bug Fixes
