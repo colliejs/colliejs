@@ -202,7 +202,7 @@ importers:
         specifier: ^7.2.2
         version: 7.2.2
 
-  examples/vite:
+  examples/vite1:
     dependencies:
       '@colliejs/cli':
         specifier: link:/Users/tom/code/colliedog001/colliejs/packages/cli
@@ -223,7 +223,7 @@ importers:
         specifier: link:/Users/tom/code/colliedog001/colliejs/packages/vite
         version: link:../../packages/vite
       '@rollup/plugin-commonjs':
-        specifier: ^25.0.7
+        specifier: ^25.0.8
         version: 25.0.8
       '@rollup/plugin-node-resolve':
         specifier: ^15.1.0

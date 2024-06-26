@@ -6,8 +6,8 @@
   "scripts": {
     "prepare": "/node_modules/.bin/collie cssgen",
     "dev": "vite",
-    "watch": "npx collie watch --config ./collie.config.ts",
-    "cssgen": "npx collie cssgen --config ./collie.config.ts",
+    "css:watch": "npx collie watch --config ./collie.config.ts",
+    "css:gen": "npx collie cssgen --config ./collie.config.ts",
     "build": "vite build"
   },
   "private": true,
@@ -37,7 +37,7 @@
     "@colliejs/react": "link:/Users/tom/code/colliedog001/colliejs/packages/react",
     "@colliejs/shared": "link:/Users/tom/code/colliedog001/colliejs/packages/shared",
     "@colliejs/vite": "link:/Users/tom/code/colliedog001/colliejs/packages/vite",
-    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-commonjs": "^25.0.8",
     "@rollup/plugin-node-resolve": "^15.1.0",
     "@vitejs/plugin-react": "^2.2.0",
     "dayjs": "^1.11.9",

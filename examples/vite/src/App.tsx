@@ -20,7 +20,7 @@ export default function App() {
         <Button type="title">Button-type-title</Button>
         <span> </span>
         <Button size="small"> small Button</Button>
-        {<Button size={[60, 120]}> dynamic Button</Button>}
+        {<Button size={[60, 110]}> dynamic Button</Button>}
         <Button type="primary">Button-type-primary</Button>
         <HoverButton>Button Hover It </HoverButton>
         <Button italic>italic Button</Button>

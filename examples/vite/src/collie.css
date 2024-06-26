@@ -11,3 +11,17 @@
 @import "../.collie/src/components/Row.tsx.css";
 @import "../.collie/src/components/SpeciButton.tsx.css";
 @import "../.collie/src/components/ThemeButton.tsx.css";
+@import "styledTheme.css";
+@import ".collie/components/Button.tsx.css";
+@import ".collie/components/Col.tsx.css";
+@import ".collie/components/CssButton.tsx.css";
+@import ".collie/components/ExampleButton.tsx.css";
+@import ".collie/components/HoverButton.tsx.css";
+@import ".collie/components/Img.tsx.css";
+@import ".collie/components/MyButton.tsx.css";
+@import ".collie/components/MyCssButton.tsx.css";
+@import ".collie/components/ResponsiveButton.tsx.css";
+@import ".collie/components/Row.tsx.css";
+@import ".collie/components/SpeciButton.tsx.css";
+@import ".collie/components/ThemeButton.tsx.css";
+@import ".collie/styledTheme.css";

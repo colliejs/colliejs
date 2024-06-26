@@ -141,12 +141,12 @@ function getModuleId(
         return nodeRequire.resolve(source, { paths: [curFile] });
     }
   } catch (e) {
-    log.error(
-      e.message,
-      "resolve.sync:moduleId=%s,curFile=%s",
-      source,
-      curFile
-    );
+    // log.error(
+    //   e.message,
+    //   "resolve.sync:moduleId=%s,curFile=%s",
+    //   source,
+    //   curFile
+    // );
     // console.log(JSON.stringify(importDecl, null, 2));
     return "";
   }

@@ -1,14 +1,17 @@
 import path from "node:path";
-export const CSS_ENTRY_FILE = "collie.css";
-
+import { CSS_CACHE_DIR, CSS_ENTRY_FILE, CSS_THEME_FILE } from "../const";
 export function getCssEntryFile(entry: string) {
   return path.join(path.dirname(entry), CSS_ENTRY_FILE);
 }
+export function getCssRoot(srcRoot: string) {
+  return path.resolve(srcRoot, CSS_CACHE_DIR).replace(/\\/g, "/");
+}
 
-export const getCssFileName = (url: string) => {
-  return (cssRoot: string) => {
-    const prefix = path.resolve(cssRoot, ".collie").replace(/\\/g, "/");
-    let newUrl = `${prefix}/${path.relative(cssRoot, url)}.css`;
-    return { absUrl: newUrl, relativeUrl: path.relative(cssRoot, newUrl) };
-  };
-};
+export function getCssFileNameFromJs(absJsUrl: string, srcRoot: string) {
+  let newUrl = `${getCssRoot(srcRoot)}/${path.relative(srcRoot, absJsUrl)}.css`;
+  return { absUrl: newUrl, relativeUrl: path.relative(srcRoot, newUrl) };
+}
+
+export function getCssThemeFile(srcRoot: string) {
+  return path.join(getCssRoot(srcRoot), CSS_THEME_FILE);
+}
