@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.8](https://github.com/colliejs/colliejs/compare/@colliejs/cli@1.2.7...@colliejs/cli@1.2.8) (2024-06-26)
+
+### Features
+
+- deps ([c898f04](https://github.com/colliejs/colliejs/commit/c898f046dfee05ad28a7fb1b50b54a84d6d15b0e))
+
 ## [1.2.7](https://github.com/colliejs/colliejs/compare/@colliejs/cli@1.2.6...@colliejs/cli@1.2.7) (2024-06-26)
 
 ### Features
