@@ -6,7 +6,7 @@ import replace from "@rollup/plugin-replace";
 import strip from "@rollup/plugin-strip";
 import path from "path";
 import { fileURLToPath } from "url";
-import terser  from "@rollup/plugin-terser";
+import terser from "@rollup/plugin-terser";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const extensions = [".js", ".jsx", ".ts", ".tsx"];
@@ -40,15 +40,29 @@ const config = {
     json(),
     babel({ babelHelpers: "bundled", extensions, configFile: babelConfigFile }),
     // strip({ include: /src\/.*\.[mc]?[jt]sx?$/ }),
-    terser(),
+    // terser(),
   ],
   external: [
     "react",
     "react-dom",
+    "lodash",
     "react/jsx-runtime",
     "react-dom/client",
+    "picomatch",
+    "lodash",
+    /tsx\//,
+    "tsx",
+    "npmlog",
+    "chokidar",
+    "fast-glob",
     "rollup",
-    "@rollup/pluginutils",
+    /@rollup\//,
+    "resolve",
+    "numeral",
+    "npmlog",
+    "dayjs",
+    /@colliejs\//,
+    /@babel\//,
     /@rollup\//,
     /node:/,
   ],
