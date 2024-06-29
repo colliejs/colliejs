@@ -1,6 +1,6 @@
 {
   "name": "@colliejs/core",
-  "version": "1.2.2",
+  "version": "1.2.3-beta.0",
   "description": "",
   "type": "module",
   "scripts": {
@@ -41,6 +41,6 @@
     "access": "public"
   },
   "dependencies": {
-    "@colliejs/shared": "workspace:1.2.1"
+    "@colliejs/shared": "workspace:1.2.2-beta.0"
   }
 }

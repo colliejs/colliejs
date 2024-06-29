@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.9-beta.0](https://github.com/colliejs/colliejs/compare/@colliejs/react@1.2.8...@colliejs/react@1.2.9-beta.0) (2024-06-29)
+
+### Bug Fixes
+
+- build ([bf250db](https://github.com/colliejs/colliejs/commit/bf250dbae377015cfe56c657c5845d37049dfae5))
+
 ## [1.2.8](https://github.com/colliejs/colliejs/compare/@colliejs/react@1.2.7...@colliejs/react@1.2.8) (2024-06-26)
 
 **Note:** Version bump only for package @colliejs/react

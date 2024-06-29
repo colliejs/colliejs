@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.2-beta.0](https://github.com/colliejs/colliejs/compare/@colliejs/shared@1.2.1...@colliejs/shared@1.2.2-beta.0) (2024-06-29)
+
+### Bug Fixes
+
+- build ([bf250db](https://github.com/colliejs/colliejs/commit/bf250dbae377015cfe56c657c5845d37049dfae5))
+
 ## [1.2.1](https://github.com/colliejs/colliejs/compare/@colliejs/shared@1.2.0...@colliejs/shared@1.2.1) (2024-06-26)
 
 ### Features
