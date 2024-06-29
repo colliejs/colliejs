@@ -1,5 +1,5 @@
 import * as t from "@babel/types";
-import _ from "lodash";
+import _ from "lodash-es";
 import log from "npmlog";
 
 /**

@@ -1,4 +1,4 @@
-import _ from "lodash";
+import _ from "lodash-es";
 
 /**
  * @param propertyKey: "width"
@@ -9,11 +9,11 @@ import _ from "lodash";
  * - breakpoints[a,b,c]变为区间[[undefined,a],[a,b],[b,c],[c,undefined]]
  * - 每一个区间对应一个media query
  */
-export const arraySyntax = (
+export function arraySyntax(
   propertyKey: string,
   valueInArray: any[],
   breakpoints: readonly number[] = []
-): Record<`@media ${string}`, object> => {
+): Record<`@media ${string}`, object> {
   const mediaQueries = breakpoints
     .map((bk, index) => {
       if (!valueInArray[index]) {
@@ -25,8 +25,8 @@ export const arraySyntax = (
     })
     .filter(Boolean);
   return mediaQueries.reduce((acc, cur) => ({ ...acc, ...cur }), {});
-};
+}
 
-export const isArraySyntax = (value: any): value is any[] => {
+export function isArraySyntax(value: any): value is any[] {
   return Array.isArray(value) && value.length > 0;
-};
+}

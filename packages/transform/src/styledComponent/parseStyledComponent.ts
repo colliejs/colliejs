@@ -1,6 +1,6 @@
 import { NodePath } from "@babel/traverse";
 import * as t from "@babel/types";
-import _ from "lodash";
+import _ from "lodash-es";
 import log from "npmlog";
 import CustomComponent from "../component/CustomComponent";
 import { HostComponent } from "../component/HostComponent";

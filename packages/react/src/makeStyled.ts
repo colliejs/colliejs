@@ -6,7 +6,7 @@ import {
   type BaseConfig,
   getCSSVariable,
 } from "@colliejs/core";
-import _ from "lodash";
+import _ from "lodash-es";
 import React, { ElementType, ForwardRefRenderFunction } from "react";
 import { Styled } from "./types";
 import { getCSSValue, isPlainObject, isString, toArray } from "./utils";

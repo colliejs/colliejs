@@ -9,7 +9,7 @@ import {
 import { getPropValue } from "../utils/jsx/getPropVal";
 
 import { ImportsByName, Stylable } from "../utils/types";
-import _ from "lodash";
+import _ from "lodash-es";
 import { NodePath } from "@babel/traverse";
 import { STYLE_ELEMENT_PROP_NAME } from "../const";
 import {
@@ -37,7 +37,7 @@ export class StyledElement<Config extends BaseConfig> implements Stylable {
       importsByName
     );
     if (!_.isObject(cssObject)) {
-      log.error("css prop must be a object", cssObject);
+      log.error("css prop must be a object", JSON.stringify(cssObject));
       throw new Error("css prop must be a object");
     }
     this.cssObjectResult = extractFromCssObject(cssObject, config);

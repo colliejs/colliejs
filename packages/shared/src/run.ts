@@ -1,5 +1,5 @@
 import minimist from "minimist";
-import _ from "lodash";
+import _ from "lodash-es";
 
 export type Option = {
   [cmd: string]: (options: Record<string, string>) => Promise<any> | any;

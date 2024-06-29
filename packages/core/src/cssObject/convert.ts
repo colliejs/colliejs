@@ -1,4 +1,4 @@
-import _ from "lodash";
+import _ from "lodash-es";
 import { arraySyntax, isArraySyntax } from "./arraySyntax";
 import { isObjectSyntax, objectSyntax } from "./objectSyntax";
 import { CSSObject } from "./type";

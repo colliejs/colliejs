@@ -1,18 +1,22 @@
 import { toHash } from "@colliejs/shared";
-import _ from "lodash";
+import _ from "lodash-es";
 import { omit } from "lodash-es";
 import { getCssText } from "../cssObject/css";
 import { CSSObject } from "../cssObject/type";
 import { type BaseConfig } from "../type";
 import { canAddPx } from "./canAddPx";
-import type { StyledObject, StyledObjectResult, VariantDeclBlock } from "./types";
+import type {
+  StyledObject,
+  StyledObjectResult,
+  VariantDeclBlock,
+} from "./types";
 import {
   DynamicVariantFn,
   ReadOnlyCSSVariableValue,
   ReadOnlyCSSVariableValueBP,
   getCSSVariableValue,
   getVariantClassName,
-  getVariantKey
+  getVariantKey,
 } from "./variants";
 const toHashObject = (obj: any) => {
   try {
@@ -36,7 +40,7 @@ export const extractFromStyledObject = <Config extends BaseConfig>(
   baseStylePrefix = ""
 ): StyledObjectResult<Config> => {
   const res = {} as StyledObjectResult<Config>;
-  
+
   //===========================================================
   // 1.处理baseStyle
   //===========================================================
@@ -94,7 +98,7 @@ export const extractFromStyledObject = <Config extends BaseConfig>(
         );
         res[variantKey] = {
           cssGenText: getCssText(
-            omit(cssObj, "mixins"),
+            omit(cssObj, "mixins") as CSSObject<Config>,
             [`.${className}`],
             [],
             config
@@ -113,7 +117,7 @@ export const extractFromStyledObject = <Config extends BaseConfig>(
         );
         res[variantKey] = {
           cssGenText: getCssText(
-            omit(cssObj, "mixins"),
+            omit(cssObj, "mixins") as CSSObject<Config>,
             [`.${className}`],
             [],
             config
@@ -124,7 +128,7 @@ export const extractFromStyledObject = <Config extends BaseConfig>(
       }
     }
   }
-  
+
   //===========================================================
   // 3.deal with defaultVariant
   //===========================================================

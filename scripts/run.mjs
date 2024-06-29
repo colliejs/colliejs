@@ -1,5 +1,5 @@
 import minimist from "minimist";
-import _ from "lodash";
+import _ from "lodash-es";
 
 
 
