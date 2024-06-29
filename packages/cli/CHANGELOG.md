@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.10-beta.0](https://github.com/colliejs/colliejs/compare/@colliejs/cli@1.2.9-beta.0...@colliejs/cli@1.2.10-beta.0) (2024-06-29)
+
+### Bug Fixes
+
+- fix ([3a3f449](https://github.com/colliejs/colliejs/commit/3a3f4491c83e3aa6b89589a135e2de81be77b479))
+
 ## [1.2.9-beta.0](https://github.com/colliejs/colliejs/compare/@colliejs/cli@1.2.8...@colliejs/cli@1.2.9-beta.0) (2024-06-29)
 
 **Note:** Version bump only for package @colliejs/cli
