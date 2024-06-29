@@ -4,18 +4,28 @@ import fg from "fast-glob";
 import log from "npmlog";
 import path from "path";
 import { extractWhen } from "./extract";
-import { contentOfStyledFile } from "./template";
+import { contentOfStyledFile, contentOfCollieConfigFile } from "./template";
 import { addThemeToCssEntryFile, createThemeFile } from "./theme";
 import { extractCss } from "./utils/extractCss";
 import { getCssEntryFile } from "./utils/fileurl";
 import { getConfig } from "./utils/getConfig";
 import { writeFile } from "./utils/writeFile";
+import { pathExistsSync, existsSync } from "fs-extra";
 
 run({
-  async init({ config = "collie.config.ts" }) {
+  async init() {
+    const filename = "collie.config.ts";
+    if (!existsSync(filename)) {
+      writeFile("collie.config.ts", contentOfCollieConfigFile);
+    }
     const {
       build: { entry },
-    } = await getConfig(path.resolve(config));
+    } = await getConfig(path.resolve(filename));
+    if (!existsSync(entry)) {
+      log.error("init", `entry file not found: ${entry}`);
+      process.exit(1);
+    }
+
     const cssEntryFile = getCssEntryFile(entry);
     writeFile(cssEntryFile, "");
 
