@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.10-beta.0](https://github.com/colliejs/colliejs/compare/@colliejs/react@1.2.9-beta.0...@colliejs/react@1.2.10-beta.0) (2024-07-01)
+
+### Features
+
+- deps ([2ec4674](https://github.com/colliejs/colliejs/commit/2ec467408c9c8fb323e5d3a853cbfb4058198de9))
+
 ## [1.2.9-beta.0](https://github.com/colliejs/colliejs/compare/@colliejs/react@1.2.8...@colliejs/react@1.2.9-beta.0) (2024-06-29)
 
 ### Bug Fixes
