@@ -32,6 +32,11 @@ run({
     const srcRoot = path.dirname(entry);
     const styleFile = path.resolve(srcRoot, "styled.ts");
     writeFile(styleFile, contentOfStyledFile);
+    writeFile(".gitignore", `${srcRoot}/.collie/\n`);
+    //TODO: add `npx collie watch` to your package.json scripts automatically
+    console.log(
+      'add `npx collie watch` to your package.json scripts like this `"dev": "vite & npx collie watch & wait"`'
+    );
   },
   async createTheme({ config = "collie.config.ts" }) {
     const {
