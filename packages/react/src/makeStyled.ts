@@ -6,7 +6,7 @@ import {
   type BaseConfig,
   getCSSVariable,
 } from "@colliejs/core";
-import _ from "lodash-es";
+import { uniq, omit } from "lodash-es";
 import React, { ElementType, ForwardRefRenderFunction } from "react";
 import { Styled } from "./types";
 import { getCSSValue, isPlainObject, isString, toArray } from "./utils";
@@ -123,7 +123,7 @@ export const makeStyled = <Config extends BaseConfig>(config: Config) => {
       // finally got forwardProps
       //===========================================================
       const forwardProps = {
-        className: _.uniq(outputClassNames).join(" "),
+        className: uniq(outputClassNames).join(" "),
         ref,
         style: Object.keys(style).length === 0 ? undefined : style,
         ...propsOfBaseComponent,
@@ -150,7 +150,7 @@ export const makeStyled = <Config extends BaseConfig>(config: Config) => {
       }
       if (isWebComponent || (isHostComponent && isAsWebComponent)) {
         return React.createElement(nAs || component, {
-          ..._.omit(forwardProps, ["className", "as"]),
+          ...omit(forwardProps, ["className", "as"]),
           class: forwardProps.className,
         });
       }
@@ -160,7 +160,7 @@ export const makeStyled = <Config extends BaseConfig>(config: Config) => {
         }
         return React.createElement(
           nAs || component,
-          _.omit(forwardProps, "as")
+          omit(forwardProps, "as")
         );
       }
 

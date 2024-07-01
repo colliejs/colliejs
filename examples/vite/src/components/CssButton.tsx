@@ -1,11 +1,12 @@
 import React from "react";
 import { Button } from "./Button";
 import { css } from "@colliejs/core";
+import { dbg } from "../common/css";
 
 const CssButton: React.FC<any> = props => {
   const { ...restProps } = props;
   return (
-    <Button
+    <div
       className={css({
         fontSize: 16,
         color: "yellow",
@@ -13,11 +14,13 @@ const CssButton: React.FC<any> = props => {
         _hover: {
           color: "blue",
         },
+        ...dbg,
       })}
       {...restProps}
     >
       cssButton
-    </Button>
+      <p>hello,cssButton</p>
+    </div>
   );
 };
 

@@ -1,6 +1,6 @@
 import { NodePath } from "@babel/traverse";
 import * as t from "@babel/types";
-import _ from "lodash-es";
+import {isObject} from "lodash-es";
 import log from "npmlog";
 import CustomComponent from "../component/CustomComponent";
 import { HostComponent } from "../component/HostComponent";
@@ -43,7 +43,7 @@ export const getStyledDependent = <Config extends BaseConfig>(
   const { arguments: _arguments } = init;
   let exp = _arguments[0];
   let type = exp.type;
-  if (_.isObject(exp) && t.isTSAsExpression(exp)) {
+  if (isObject(exp) && t.isTSAsExpression(exp)) {
     exp = (exp as t.TSAsExpression).expression;
     type = exp.type;
   }

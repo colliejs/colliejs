@@ -12,8 +12,6 @@ const config = {
     "react-dom",
     "react/jsx-runtime",
     "react-dom/client",
-    "lodash",
-    /@collie/,
   ],
 };
 export default config;

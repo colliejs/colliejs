@@ -1,4 +1,3 @@
-import _ from "lodash-es";
 
 /**
  * @param propertyKey: "width"

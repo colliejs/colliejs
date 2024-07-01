@@ -1,4 +1,3 @@
-import { mixin } from "lodash";
 import { config } from "../../cssObject/__tests__/stub/config";
 import { extractFromStyledObject } from "../extract";
 import { StyledObject } from "../types";

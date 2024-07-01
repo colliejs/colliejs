@@ -1,5 +1,5 @@
 import * as t from "@babel/types";
-import _ from "lodash-es";
+import {isPlainObject} from "lodash-es";
 import log from "npmlog";
 
 /**
@@ -17,7 +17,7 @@ export const buildObjectExpression = (
   let exp: t.ObjectExpression | t.ArrayExpression;
   if (isArray) {
     exp = t.arrayExpression([]);
-  } else if (_.isPlainObject(obj)) {
+  } else if (isPlainObject(obj)) {
     exp = t.objectExpression([]);
   } else {
     throw new Error("not support type");

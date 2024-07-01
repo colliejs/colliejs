@@ -48,6 +48,7 @@ const config = {
     "react/jsx-runtime",
     "react-dom/client",
     /tsx\//,
+    // 'lodash-es',
     "tsx",
     /node:/,
   ],

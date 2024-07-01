@@ -30,7 +30,6 @@
     "@colliejs/config": "workspace:^",
     "@colliejs/core": "workspace:^",
     "@colliejs/shared": "workspace:^",
-    "lodash-es": "^4.17.21",
     "tsx": "^4.15.6"
   },
   "lint-staged": {

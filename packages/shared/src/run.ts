@@ -1,5 +1,5 @@
 import minimist from "minimist";
-import _ from "lodash-es";
+import { last, omit } from "lodash-es";
 
 export type Option = {
   [cmd: string]: (options: Record<string, string>) => Promise<any> | any;
@@ -21,7 +21,7 @@ export async function run(options: Option, ministOpts?: minimist.Opts) {
     return;
   }
 
-  const subCmd: string | undefined = _.last(argv._);
+  const subCmd: string | undefined = last(argv._);
   if (!subCmd) {
     throw new Error(
       `please specify a valid subcommand. and handler current is ${subCmd}`
@@ -32,5 +32,5 @@ export async function run(options: Option, ministOpts?: minimist.Opts) {
     await options["default"].call(options, { value: subCmd });
     return;
   }
-  await options[subCmd].call(options, _.omit(argv, ["_"]));
+  await options[subCmd].call(options, omit(argv, ["_"]));
 }

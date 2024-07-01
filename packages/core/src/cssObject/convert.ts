@@ -1,4 +1,4 @@
-import _ from "lodash-es";
+import {merge} from "lodash-es";
 import { arraySyntax, isArraySyntax } from "./arraySyntax";
 import { isObjectSyntax, objectSyntax } from "./objectSyntax";
 import { CSSObject } from "./type";
@@ -22,7 +22,7 @@ export const convertCssObjToMediaQuery = <Config extends BaseConfig>(
   Object.keys(cssObj).forEach(key => {
     const value = cssObj[key];
     if (isArraySyntax(value)) {
-      res = _.merge(res, arraySyntax(key, value, breakpoints));
+      res = merge(res, arraySyntax(key, value, breakpoints));
       // } else if (isObjectSyntax(value)) {
       // res = _.merge(res, objectSyntax(key, value));
     } else if (typeof value === "object" && value) {

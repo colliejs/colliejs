@@ -1,6 +1,5 @@
 import { toHash } from "@colliejs/shared";
-import _ from "lodash-es";
-import { omit } from "lodash-es";
+import { omit, pick } from "lodash-es";
 import { getCssText } from "../cssObject/css";
 import { CSSObject } from "../cssObject/type";
 import { type BaseConfig } from "../type";
@@ -45,7 +44,7 @@ export const extractFromStyledObject = <Config extends BaseConfig>(
   // 1.处理baseStyle
   //===========================================================
   const keys = Object.keys(styledObject);
-  const baseStyleCssObject = _.pick(
+  const baseStyleCssObject = pick(
     styledObject,
     keys.filter(
       key => !["variants", "compoundVariants", "defaultVariants"].includes(key)

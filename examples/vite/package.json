@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "prepare": "/node_modules/.bin/collie cssgen",
-    "dev": "vite",
+    "dev": "vite & npx collie watch --config ./collie.config.ts & wait",
     "css:watch": "npx collie watch --config ./collie.config.ts",
     "css:gen": "npx collie cssgen --config ./collie.config.ts",
     "build": "vite build"

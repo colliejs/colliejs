@@ -12,7 +12,6 @@ const config = {
     "react-dom",
     "react/jsx-runtime",
     "react-dom/client",
-    "lodash",
     "chokidar",
     /@collie/,
   ],
