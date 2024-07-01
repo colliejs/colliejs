@@ -1,6 +1,6 @@
 {
   "name": "@colliejs/shared",
-  "version": "1.2.2-beta.0",
+  "version": "1.2.3-beta.0",
   "description": "foo",
   "type": "module",
   "scripts": {
