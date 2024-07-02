@@ -24,12 +24,12 @@ export async function addThemeToCssEntryFile(
   writeFile(cssEntryFile, cssText, { flag: "a" });
 }
 export function createThemeFile(
-  srcRoot: string,
+  cssRoot: string,
   prefix: string,
   theme: object
 ) {
   const cssText = createTheme(prefix, theme);
-  const absUrl = getCssThemeFile(srcRoot);
+  const absUrl = getCssThemeFile(cssRoot);
   writeFile(absUrl, cssText);
   return absUrl;
 }

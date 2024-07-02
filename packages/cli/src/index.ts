@@ -7,7 +7,7 @@ import { extractWhen } from "./extract";
 import { contentOfStyledFile, contentOfCollieConfigFile } from "./template";
 import { addThemeToCssEntryFile, createThemeFile } from "./theme";
 import { extractCss } from "./utils/extractCss";
-import { getCssEntryFile } from "./utils/fileurl";
+import { getCssEntryFile, getCssRoot } from "./utils/fileurl";
 import { getConfig } from "./utils/getConfig";
 import { writeFile } from "./utils/writeFile";
 import { pathExistsSync, existsSync } from "fs-extra";
@@ -29,10 +29,10 @@ run({
     const cssEntryFile = getCssEntryFile(entry);
     writeFile(cssEntryFile, "");
 
-    const srcRoot = path.dirname(entry);
-    const styleFile = path.resolve(srcRoot, "styled.ts");
+    const cssRoot = path.dirname(entry);
+    const styleFile = path.resolve(cssRoot, "styled.ts");
     writeFile(styleFile, contentOfStyledFile);
-    writeFile(".gitignore", `${srcRoot}/.collie/\n`);
+    writeFile(".gitignore", `${cssRoot}/.collie/\n`);
     //TODO: add `npx collie watch` to your package.json scripts automatically
     console.log(
       'add `npx collie watch` to your package.json scripts like this `"dev": "vite & npx collie watch & wait"`'
@@ -47,13 +47,12 @@ run({
 
   async cssgen({ config = "collie.config.ts" }) {
     const {
-      build: { entry, include, exclude, alias },
+      build: { entry, include, exclude, alias, root },
       css: cssConfig,
     } = await getConfig(path.resolve(config));
-    const srcRoot = path.resolve(path.dirname(entry));
     const cssEntryFile = getCssEntryFile(entry);
     const themeFile = createThemeFile(
-      srcRoot,
+      getCssRoot(entry),
       cssConfig.prefix,
       cssConfig.theme
     );
@@ -66,7 +65,7 @@ run({
     fg.globSync(include, {
       ignore: ignore,
     }).forEach(async url => {
-      await extractCss(url, cssConfig, alias, srcRoot, cssEntryFile);
+      await extractCss(url, cssConfig, alias, root, cssEntryFile);
     });
   },
   async watch({ config = "collie.config.ts" }) {

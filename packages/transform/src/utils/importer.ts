@@ -68,7 +68,7 @@ const getFileFromRelativePath = (absPath: string, exts: string[]) => {
 const getFileFromAbsPath = (
   pathLike: string,
   extension: string[],
-  root = process.cwd()
+  projectDir: string
 ) => {
   assert(pathLike.startsWith("/"), "absolute path must start with /");
   if (isFile(pathLike)) {
@@ -78,13 +78,13 @@ const getFileFromAbsPath = (
   for (const ex of extension) {
     assert(ex.startsWith("."), "extension must start with .");
     // absolute path of whole filesystem
-    const file1 = pathLike + ex;
+    const file1 = `${pathLike}${ex}`;
     if (isFile(file1)) {
       return file1;
     }
 
-    const prefix = path.join(root, pathLike);
-    const file2 = prefix + ex;
+    const prefix = path.join(projectDir, pathLike);
+    const file2 = `${prefix}${ex}`;
     if (isFile(file2)) {
       return file2;
     }
@@ -94,7 +94,7 @@ const getFileFromAbsPath = (
       return file3;
     }
   }
-  log.error("MODULE NOT FOUND", "moduleId=%s,root=%s", pathLike, root);
+  log.error("MODULE NOT FOUND", "moduleId=%s,projectDir=%s", pathLike, projectDir);
   throw new Error("MODULE NOT FOUND");
 };
 function getSourceType(source: string, alias: Alias) {
@@ -114,7 +114,7 @@ function getModuleId(
   curFile: string,
   alias: Alias,
   extensions: string[],
-  root: string
+  projectDir: string
 ) {
   const curDir = path.dirname(curFile);
   const source = importDecl.source.value;
@@ -127,7 +127,7 @@ function getModuleId(
           extensions
         );
       case "abs":
-        return getFileFromAbsPath(source, extensions, root);
+        return getFileFromAbsPath(source, extensions, projectDir);
       case "alias":
         let newSource = "";
         for (const from of Object.keys(alias)) {
@@ -135,7 +135,7 @@ function getModuleId(
             newSource = source.replace(new RegExp(`^${from}`), alias[from]);
           }
         }
-        return getFileFromAbsPath(newSource, extensions, root);
+        return getFileFromAbsPath(newSource, extensions, projectDir);
 
       case "node_modules":
         return nodeRequire.resolve(source, { paths: [curFile] });
@@ -166,9 +166,9 @@ function doImportDecl(
   curFile: string,
   alias: Alias,
   extensions: string[],
-  root: string
+  projectDir: string
 ) {
-  let moduleId = getModuleId(importDecl, curFile, alias, extensions, root);
+  let moduleId = getModuleId(importDecl, curFile, alias, extensions, projectDir);
 
   const importsByName: ImportsByName = {};
   importDecl.specifiers.forEach(specifier => {
@@ -200,13 +200,13 @@ export const getImports = (
   program: t.Program,
   curFile: string,
   alias: Alias = {},
-  root = cwd,
+  projectDir = cwd,
   extensions: string[] = [".tsx", ".ts", ".js", ".jsx", ".cjs", ".mjs"]
 ) => {
   const importsIdByName: ImportsByName = {};
   const importDecls = getImportDeclarations(program);
   importDecls.forEach(decl => {
-    const res = doImportDecl(decl, curFile, alias, extensions, root);
+    const res = doImportDecl(decl, curFile, alias, extensions, projectDir);
     Object.assign(importsIdByName, res);
   });
   return importsIdByName;

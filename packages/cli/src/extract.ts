@@ -16,6 +16,7 @@ export async function extractWhen(
     css: cssConfig,
   } = await getConfig(path.resolve(config));
 
+
   const cssEntryFile = getCssEntryFile(entry);
   const excludeArray = typeof exclude === "string" ? [exclude] : exclude;
   return chokidar

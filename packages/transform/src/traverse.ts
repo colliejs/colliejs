@@ -22,7 +22,7 @@ export const traverse = <Config extends BaseConfig>(
   curFile: string,
   config: Config,
   alias = {},
-  root = process.cwd(),
+  projectDir = process.cwd(),
   onStyledComponent: (styledComponent: StyledComponent<Config>) => void,
   onStyledElement: (styledElement: StyledElement<Config>) => void,
   onGenerate?: (fileAst: ReturnType<typeof parse>) => void,
@@ -44,7 +44,7 @@ export const traverse = <Config extends BaseConfig>(
           return;
         }
         if (Object.keys(modulesByName).length === 0) {
-          modulesByName = getImports(fileAst.program, curFile, alias, root);
+          modulesByName = getImports(fileAst.program, curFile, alias, projectDir);
         }
 
         removeTypeAnnotation(path);
@@ -54,7 +54,7 @@ export const traverse = <Config extends BaseConfig>(
           modulesByName,
           config,
           alias,
-          root
+          projectDir
         );
         onStyledComponent(styledComponent);
       },
@@ -71,7 +71,7 @@ export const traverse = <Config extends BaseConfig>(
             parseCode(source).program,
             curFile,
             alias,
-            root
+            projectDir
           );
         }
         removeTypeAnnotation(path);
@@ -88,7 +88,7 @@ export const traverse = <Config extends BaseConfig>(
             parseCode(source).program,
             curFile,
             alias,
-            root
+            projectDir
           );
         }
         onCssFnCall?.(path, modulesByName, config);

@@ -3,7 +3,7 @@
   export default {
     build: {
       entry: "src/index.tsx",
-      alias: { "@src": "src" },
+      alias: { "@/": "src/" },
       include: ["src/**/*.tsx", "src/**/*.ts"],
       exclude: ["**/node_modules"],
     },

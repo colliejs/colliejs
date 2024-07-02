@@ -3,15 +3,19 @@ import { CSS_CACHE_DIR, CSS_ENTRY_FILE, CSS_THEME_FILE } from "../const";
 export function getCssEntryFile(entry: string) {
   return path.join(path.dirname(entry), CSS_ENTRY_FILE);
 }
-export function getCssRoot(srcRoot: string) {
-  return path.resolve(srcRoot, CSS_CACHE_DIR).replace(/\\/g, "/");
+export function getCssCacheRoot(cssRoot: string) {
+  return path.resolve(cssRoot, CSS_CACHE_DIR).replace(/\\/g, "/");
 }
 
-export function getCssFileNameFromJs(absJsUrl: string, srcRoot: string) {
-  let newUrl = `${getCssRoot(srcRoot)}/${path.relative(srcRoot, absJsUrl)}.css`;
-  return { absUrl: newUrl, relativeUrl: path.relative(srcRoot, newUrl) };
+export function getCssFileNameFromJs(absJsUrl: string, cssRoot: string) {
+  let newUrl = `${getCssCacheRoot(cssRoot)}/${path.relative(cssRoot, absJsUrl)}.css`;
+  return { absUrl: newUrl, relativeUrl: path.relative(cssRoot, newUrl) };
 }
 
-export function getCssThemeFile(srcRoot: string) {
-  return path.join(getCssRoot(srcRoot), CSS_THEME_FILE);
+export function getCssThemeFile(cssRoot: string) {
+  return path.join(getCssCacheRoot(cssRoot), CSS_THEME_FILE);
+}
+
+export function getCssRoot(cssEntry: string) {
+  return path.resolve(path.dirname(cssEntry));
 }

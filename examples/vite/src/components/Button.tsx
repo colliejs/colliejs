@@ -6,7 +6,7 @@ export const Button = styled(
   {
     border: "none",
     color: "$white09",
-    backgroundColor: "red",
+    backgroundColor: "blue",
     py: [10],
     lineHeight: 1,
     // background: `url("${SVG1}") no-repeat center center`,
