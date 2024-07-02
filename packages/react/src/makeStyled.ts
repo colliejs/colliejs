@@ -43,9 +43,15 @@ export const makeStyled = <Config extends BaseConfig>(config: Config) => {
       let kvs = Object.entries(restProps);
       for (const [prop, valOfProp] of kvs) {
         const varientKeyType = getVariantKeyTypeByProp(prop, valOfProp, result);
-        __dbg &&
-          console.log("==>varientKeyType", prop, valOfProp, varientKeyType);
         const variantResult = getVariantResultByProp(prop, valOfProp, result);
+        __dbg &&
+          console.log(
+            "==>varientKeyType",
+            prop,
+            valOfProp,
+            varientKeyType,
+            variantResult
+          );
         function appendMixinIfNeeded() {
           const mixins = variantResult?.cssRawObj?.mixins || [];
           const hasMixin = mixins.length > 0;
@@ -158,10 +164,7 @@ export const makeStyled = <Config extends BaseConfig>(config: Config) => {
         if (isAsWebComponent) {
           throw new Error(`impossible react type: ${component} as ${nAs}`);
         }
-        return React.createElement(
-          nAs || component,
-          omit(forwardProps, "as")
-        );
+        return React.createElement(nAs || component, omit(forwardProps, "as"));
       }
 
       throw new Error("impossible react type");
