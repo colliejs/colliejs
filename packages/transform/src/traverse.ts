@@ -40,7 +40,7 @@ export const traverse = <Config extends BaseConfig>(
       // 1.transform styled component
       //===========================================================
       VariableDeclaration(path) {
-        if (!isStyledComponentDecl(path.node, config)) {
+        if (!isStyledComponentDecl(path.node)) {
           return;
         }
         if (Object.keys(modulesByName).length === 0) {

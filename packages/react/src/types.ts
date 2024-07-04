@@ -107,6 +107,7 @@ export type MyStyledComponent<
       as?: IntrinsicElementsKeys; //TODO: infer As ,这里的As如果为真，那么应该支持更多属性。但是未实现
       children?: React.ReactNode;
       ref?: LegacyRef<ElementRef<As extends IntrinsicElementsKeys ? As : Type>>;
+      __dbg: boolean;
     } & ComposedVariant<Type, ExtractPropsFromStyledObject<NStyledObject>>
   >
 >;

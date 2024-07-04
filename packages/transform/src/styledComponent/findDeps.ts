@@ -2,7 +2,7 @@ import CustomComponent from "../component/CustomComponent";
 import fs from "node:fs";
 import { parseCode } from "../utils/parse";
 import { isStyledComponentDecl } from "./isStyledCompDelc";
-import {  getImports, traverse } from "../utils";
+import { getImports, traverse } from "../utils";
 import {
   getStyledComponentName,
   getStyledDependent,
@@ -18,12 +18,12 @@ import { Alias } from "../type";
  * @param componentName
  * @returns
  */
-export const findDirectDep = <Config extends BaseConfig>(
+export function findDirectDep<Config extends BaseConfig>(
   comp: CustomComponent,
   alias: Alias,
   root: string,
   config: Config
-): HostComponent | CustomComponent | undefined => {
+): HostComponent | CustomComponent | undefined {
   const { moduleId, componentName } = comp.id;
   if (moduleId.includes("node_modules")) {
     return;
@@ -33,7 +33,7 @@ export const findDirectDep = <Config extends BaseConfig>(
   let dep;
   traverse(fileAst, {
     VariableDeclaration(path) {
-      if (!isStyledComponentDecl(path.node, config)) {
+      if (!isStyledComponentDecl(path.node)) {
         return;
       }
       const styledComponentName = getStyledComponentName(path);
@@ -46,13 +46,13 @@ export const findDirectDep = <Config extends BaseConfig>(
   });
 
   return dep;
-};
-export const findDeps = <Config extends BaseConfig>(
+}
+export function findDeps<Config extends BaseConfig>(
   comp: CustomComponent,
   alias: Alias,
   root: string,
   config: Config
-) => {
+) {
   const deps: CustomComponent[] = [];
   const dep = findDirectDep(comp, alias, root, config);
   if (dep instanceof CustomComponent) {
@@ -61,13 +61,13 @@ export const findDeps = <Config extends BaseConfig>(
     deps.push(..._deps);
   }
   return deps;
-};
-export const findLayerDeps = <Config extends BaseConfig>(
+}
+export function findLayerDeps<Config extends BaseConfig>(
   comp: CustomComponent,
   alias: Alias,
   root: string,
   config: Config
-) => {
+) {
   const deps = findDeps(comp, alias, root, config);
   return deps.map(e => e.layerName);
-};
+}

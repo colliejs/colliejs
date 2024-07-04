@@ -24,7 +24,7 @@ export const getPathOfStyledComponentDecl = (
   let path;
   traverse(file, {
     VariableDeclaration(ipath) {
-      if (isStyledComponentDecl(ipath.node, defaultConfig)) {
+      if (isStyledComponentDecl(ipath.node)) {
         if (componentName) {
           const name = (ipath.node.declarations[0].id as t.Identifier).name;
           if (name !== componentName) {

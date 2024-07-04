@@ -3,11 +3,11 @@ import { BaseConfig } from "@colliejs/core";
 import { StyledComponentDecl, isCallExp } from "../utils";
 import { STYLE_FN_NAME } from "../const";
 
-export const isStyledCallExpression = <Config extends BaseConfig>(
+export function isStyledCallExpression(
   exp: t.Expression
-): exp is t.CallExpression => {
+): exp is t.CallExpression {
   return isCallExp(exp, STYLE_FN_NAME);
-};
+}
 
 /**
  *
@@ -16,10 +16,9 @@ export const isStyledCallExpression = <Config extends BaseConfig>(
  * @example:
  * const Button = styled('button',{})
  */
-export const isStyledComponentDecl = <Config extends BaseConfig>(
-  node: t.Node,
-  config: Config
-): node is StyledComponentDecl => {
+export function isStyledComponentDecl(
+  node: t.Node
+): node is StyledComponentDecl {
   if (t.isVariableDeclaration(node)) {
     const { declarations } = node;
     if (declarations.length === 1) {
@@ -29,4 +28,4 @@ export const isStyledComponentDecl = <Config extends BaseConfig>(
     }
   }
   return false;
-};
+}

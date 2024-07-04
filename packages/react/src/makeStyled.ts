@@ -17,7 +17,6 @@ export type BaseStyledComponentProps<Config extends BaseConfig> = {
   style?: React.CSSProperties & { [x: string]: any }; //dynamic variants
   ref?: any;
   __dbg?: boolean;
-  css?: CSSObject<Config>;
 };
 
 export const makeStyled = <Config extends BaseConfig>(config: Config) => {
@@ -50,7 +49,6 @@ export const makeStyled = <Config extends BaseConfig>(config: Config) => {
             prop,
             valOfProp,
             varientKeyType,
-            variantResult
           );
         function appendMixinIfNeeded() {
           const mixins = variantResult?.cssRawObj?.mixins || [];
