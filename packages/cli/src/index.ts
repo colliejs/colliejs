@@ -12,10 +12,14 @@ import { extractCss } from "./utils/extractCss";
 import { getCssEntryFile, getCssRoot } from "./utils/fileurl";
 import { getConfig } from "./utils/getConfig";
 import { writeFile } from "./utils/writeFile";
+
+function ussingTs() {
+  return existsSync("tsconfig.json");
+}
+const configureFile = ussingTs() ? "collie.config.ts" : "collie.config.js";
+
 run({
   async init() {
-    const filename = "collie.config.ts";
-
     async function createConfigFile() {
       async function inputEntry() {
         const { entry } = await prompt<{ entry: string }>({
@@ -50,8 +54,8 @@ run({
       } else {
         entry = await inputEntry();
       }
-      writeFile("collie.config.ts", contentOfCollieConfigFile(entry));
-      consola.success("collie.config.ts created");
+      writeFile(configureFile, contentOfCollieConfigFile(entry));
+      consola.success(`${configureFile} created`);
     }
     async function addWatchToPackageJson() {
       const packageJson = path.resolve("package.json");
@@ -87,12 +91,12 @@ run({
       consola.info("==> run `npm run dev` to start dev server");
     }
 
-    if (!existsSync(filename)) {
+    if (!existsSync(configureFile)) {
       await createConfigFile();
     }
     const {
       build: { entry },
-    } = await getConfig(path.resolve(filename));
+    } = await getConfig(path.resolve(configureFile));
     const cssEntryFile = getCssEntryFile(entry);
     writeFile(cssEntryFile, "");
 
@@ -104,14 +108,14 @@ run({
     await addWatchToPackageJson();
     consola.success("collie init done");
   },
-  async createTheme({ config = "collie.config.ts" }) {
+  async createTheme({ config = configureFile }) {
     const {
       css: { prefix = "", theme = {} },
     } = await getConfig(path.resolve(config));
     return createTheme(prefix, theme);
   },
 
-  async cssgen({ config = "collie.config.ts" }) {
+  async cssgen({ config = configureFile }) {
     const {
       build: { entry, include, exclude, alias, root },
       css: cssConfig,
@@ -134,7 +138,7 @@ run({
       await extractCss(url, cssConfig, alias, root, cssEntryFile);
     });
   },
-  async watch({ config = "collie.config.ts" }) {
+  async watch({ config = configureFile }) {
     await this.cssgen({ config });
     await extractWhen("change", { config }, url => {
       consola.info(`file changed:${url} `);

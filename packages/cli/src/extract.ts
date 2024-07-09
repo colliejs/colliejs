@@ -9,7 +9,7 @@ export async function extractWhen(
   options: { config: string },
   onEvent?: (url: string) => void
 ) {
-  const { config = "collie.config.ts" } = options;
+  const { config } = options;
   const {
     build: { include, exclude, root = process.cwd(), alias = {}, entry },
     css: cssConfig,
