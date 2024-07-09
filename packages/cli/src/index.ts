@@ -132,7 +132,7 @@ run({
       await addConfigFileToTsConfigIfNeeded("tsconfig.json");
     }
     consola.success("collie init done");
-    consola.info(`==> run 'npm run dev' to start dev server`);
+    consola.info(`==>next: run 'npm run dev' to start dev server`);
   },
   async createTheme({ config = configureFile }) {
     const {
