@@ -134,8 +134,7 @@ run({
     writeFile(".gitignore", `${cssRoot}/.collie/\n`);
     await addWatchToPackageJson();
     if (usingTs) {
-      existsSync("tsconfig.json") &&
-        (await addConfigFileToTsConfigIfNeeded("tsconfig.json"));
+      await addConfigFileToTsConfigIfNeeded("tsconfig.app.json");
     }
     consola.success("collie init done");
   },
