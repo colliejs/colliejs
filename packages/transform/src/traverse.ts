@@ -3,7 +3,12 @@ import { STYLE_ELEMENT_PROP_NAME } from "./const";
 import { StyledComponent } from "./styledComponent";
 import { isStyledComponentDecl } from "./styledComponent/isStyledCompDelc";
 import { StyledElement } from "./styledElement";
-import { generate, getImports, traverse as _traverse, ImportsByName } from "./utils";
+import {
+  generate,
+  getImports,
+  traverse as _traverse,
+  ImportsByName,
+} from "./utils";
 import { isPropExisted } from "./utils/jsx/prop";
 import { parseCode } from "./utils/parse";
 import { removeTypeAnnotation } from "./utils/removeType";
@@ -17,7 +22,7 @@ import { NodePath } from "@babel/traverse";
 /**
  * NOTE: the module should be convert commonjs first
  */
-export const traverse = <Config extends BaseConfig>(
+export function traverse<Config extends BaseConfig>(
   source: string,
   curFile: string,
   config: Config,
@@ -31,7 +36,7 @@ export const traverse = <Config extends BaseConfig>(
     modulesByName: ImportsByName,
     config: Config
   ) => void
-) => {
+) {
   try {
     const fileAst = parseCode(source);
     let modulesByName = {};
@@ -44,7 +49,12 @@ export const traverse = <Config extends BaseConfig>(
           return;
         }
         if (Object.keys(modulesByName).length === 0) {
-          modulesByName = getImports(fileAst.program, curFile, alias, projectDir);
+          modulesByName = getImports(
+            fileAst.program,
+            curFile,
+            alias,
+            projectDir
+          );
         }
 
         removeTypeAnnotation(path);
@@ -99,8 +109,8 @@ export const traverse = <Config extends BaseConfig>(
     //===========================================================
     return onGenerate?.(fileAst);
   } catch (e) {
-    consola.error(e.message, "===>[transform]:curFile=%s,", curFile);
-    consola.error(e.message, "===>[transform]:alias=%s,", alias);
+    consola.error(e.message, `===>[transform]:curFile=${curFile},`);
+    consola.error(e.message, `===>[transform]:alias=${alias}`);
     throw e;
   }
-};
+}

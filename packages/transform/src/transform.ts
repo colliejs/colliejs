@@ -4,13 +4,13 @@ import { generate } from "./utils";
 /**
  * NOTE: the module should be convert commonjs first
  */
-export const transform = <Config extends BaseConfig>(
+export function transform<Config extends BaseConfig>(
   source: string,
   curFile: string,
   config: Config,
   alias = {},
   root = process.cwd()
-) => {
+) {
   let styledComponentCssTexts = "";
   let styledElementCssTexts = "";
   const layerDepsObject: Record<string, string> = {};
@@ -42,4 +42,4 @@ export const transform = <Config extends BaseConfig>(
     styledElementCssTexts,
     styledComponentCssTexts,
   };
-};
+}

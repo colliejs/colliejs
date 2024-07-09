@@ -58,7 +58,7 @@ describe("test cases", () => {
     const res = evalObjectString(code);
     expect(res).toMatchInlineSnapshot(`
       {
-        "backgroundImage": "url(/Users/tom/code/colliedog001/colliejs/packages/transform/src/utils/__tests__/fixtures/dog.jpeg)",
+        "backgroundImage": "url(/src/utils/__tests__/fixtures/dog.jpeg)",
         "color": "red",
         "position": "fixed",
       }

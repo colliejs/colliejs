@@ -2,12 +2,11 @@ import { NodePath } from "@babel/traverse";
 import * as t from "@babel/types";
 import { ImportsByName, traverse } from "..";
 import { evalIdentifer } from "./evalIdentifier";
-import log from "consola";
+import consola from "consola";
 
 //获得当前节点的所有变量和他的值
-const _getCtxOf = (path: NodePath<t.Node>, imports: ImportsByName = {}) => {
+function _getCtxOf(path: NodePath<t.Node>, imports: ImportsByName = {}) {
   const ctx = {};
-
 
   path.traverse({
     Identifier(ipath) {
@@ -30,16 +29,13 @@ const _getCtxOf = (path: NodePath<t.Node>, imports: ImportsByName = {}) => {
     },
   });
   return ctx;
-};
+}
 
-export const getCtxOf = (
-  path: NodePath<t.Node>,
-  imports: ImportsByName = {}
-) => {
+export function getCtxOf(path: NodePath<t.Node>, imports: ImportsByName = {}) {
   try {
     return _getCtxOf(path, imports);
   } catch (e) {
-    log.error("===>error", "getCtxOf");
+    consola.debug("===>error", "getCtxOf");
     throw e;
   }
-};
+}

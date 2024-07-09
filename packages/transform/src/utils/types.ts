@@ -9,6 +9,5 @@ export interface Stylable {
 
 export type ImportsByName = Record<
   string,
-  { moduleId: string; importedName: string }
+  { moduleId: string; importedName: string;  }
 >;
-

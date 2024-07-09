@@ -3,7 +3,12 @@ import { run } from "@colliejs/shared";
 import { consola } from "consola";
 import { prompt } from "enquirer";
 import fg from "fast-glob";
-import { existsSync, readJSONSync, writeJsonSync } from "fs-extra";
+import {
+  existsSync,
+  readJSONSync,
+  writeJsonSync,
+  readFileSync,
+} from "fs-extra";
 import path from "path";
 import { extractWhen } from "./extract";
 import { contentOfCollieConfigFile, contentOfStyledFile } from "./template";
@@ -12,6 +17,12 @@ import { extractCss } from "./utils/extractCss";
 import { getCssEntryFile, getCssRoot } from "./utils/fileurl";
 import { getConfig } from "./utils/getConfig";
 import { writeFile } from "./utils/writeFile";
+import {
+  CMD_COLLIE_CSSGEN,
+  CMD_COLLIE_WATCH,
+  CSS_CACHE_DIR,
+  STYLED_TS_FILE,
+} from "./const";
 
 const usingTs = existsSync("tsconfig.json");
 const configureFile = usingTs ? "collie.config.ts" : "collie.config.js";
@@ -61,31 +72,33 @@ run({
         consola.error("init", "package.json not found");
         process.exit(1);
       }
-      const json = await readJSONSync(packageJson);
-      const { dev, prepare } = json.scripts || {};
-      writeJsonSync(
-        packageJson,
-        {
-          ...json,
-          scripts: {
-            ...json.scripts,
-            dev: dev
-              ? dev.includes("collie watch")
-                ? dev
-                : `${dev} & collie watch & wait`
-              : "collie watch",
-            prepare: prepare
-              ? prepare.includes("collie cssgen")
-                ? prepare
-                : `${prepare} & npx collie cssgen & wait`
-              : "npx collie cssgen",
+      try {
+        const json = await readJSONSync(packageJson);
+        const { dev, prepare } = json.scripts || {};
+        writeJsonSync(
+          packageJson,
+          {
+            ...json,
+            scripts: {
+              ...json.scripts,
+              dev: dev
+                ? dev.includes(CMD_COLLIE_WATCH)
+                  ? dev
+                  : `${dev} & ${CMD_COLLIE_WATCH} & wait`
+                : CMD_COLLIE_WATCH,
+              prepare: prepare
+                ? prepare.includes(CMD_COLLIE_CSSGEN)
+                  ? prepare
+                  : `${prepare} & ${CMD_COLLIE_CSSGEN} & wait`
+                : CMD_COLLIE_CSSGEN,
+            },
           },
-        },
-        {
-          spaces: 2,
-        }
-      );
-      consola.success("watch added to package.json");
+          {
+            spaces: 2,
+          }
+        );
+        consola.success("watch added to package.json");
+      } catch (e) {}
     }
     async function addConfigFileToTsConfigIfNeeded(tsconfigFile: string) {
       if (!usingTs) {
@@ -112,6 +125,18 @@ run({
       );
       consola.success("collie.config.ts added to tsconfig.json");
     }
+    async function addIndexCssToEntryFile(entry: string) {
+      const cssEntryFile = getCssEntryFile(entry);
+      const fileContent = readFileSync(entry, {
+        encoding: "utf-8",
+      });
+      console.log(fileContent);
+      const importState = `\nimport "./${path.relative(
+        path.dirname(entry),
+        cssEntryFile
+      )}";\n`;
+      writeFile(entry, `${importState} ${fileContent}`);
+    }
 
     if (!existsSync(configureFile)) {
       await createConfigFile();
@@ -123,14 +148,15 @@ run({
     writeFile(cssEntryFile, "");
 
     const cssRoot = path.dirname(entry);
-    const styleFile = path.resolve(cssRoot, "styled.ts");
+    const styleFile = path.resolve(cssRoot, STYLED_TS_FILE);
 
     writeFile(styleFile, contentOfStyledFile);
-    writeFile(".gitignore", `${cssRoot}/.collie/\n`);
+    writeFile(".gitignore", `${cssRoot}/${CSS_CACHE_DIR}/\n`);
     await addWatchToPackageJson();
     if (usingTs) {
       await addConfigFileToTsConfigIfNeeded("tsconfig.app.json");
     }
+    await addIndexCssToEntryFile(entry);
     consola.success("collie init done");
     consola.info(`==>next: run 'npm run dev' to start dev server`);
   },

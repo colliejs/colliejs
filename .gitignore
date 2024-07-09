@@ -25,7 +25,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-*/**/.cache
+**/.cache
 pnpm-publish-summary.json
 coverage/
 examples/nextjs/.next/**

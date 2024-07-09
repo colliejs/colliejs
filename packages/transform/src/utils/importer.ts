@@ -3,8 +3,7 @@ import { getName } from "./getName";
 import * as t from "@babel/types";
 import path from "path";
 import fs, { existsSync } from "node:fs";
-import resolve from "resolve";
-import log from "consola";
+import log, { consola } from "consola";
 import { ImportsByName } from "./types";
 import { assert } from "@colliejs/shared";
 import { PathLike } from "fs";
@@ -13,7 +12,7 @@ import { createRequire } from "module";
 
 const nodeRequire = createRequire(import.meta.url);
 
-export const getImportDeclarations = (ast: t.Program) => {
+export function getImportDeclarations(ast: t.Program) {
   const importDecls: t.ImportDeclaration[] = [];
   ast.body.forEach(node => {
     if (t.isImportDeclaration(node)) {
@@ -21,20 +20,26 @@ export const getImportDeclarations = (ast: t.Program) => {
     }
   });
   return importDecls;
-};
+}
 
-const isRelative = (path: string) =>
-  path.startsWith(".") || path.startsWith("..");
-const isAbs = (path: string) => path.startsWith("/");
-const isAlias = (path: string, alias: Alias) =>
-  Object.keys(alias).some(key => path.startsWith(key));
+function isRelative(path: string) {
+  return path.startsWith(".") || path.startsWith("..");
+}
+function isAbs(path: string) {
+  return path.startsWith("/");
+}
+function isAlias(path: string, alias: Alias) {
+  return Object.keys(alias).some(key => path.startsWith(key));
+}
 
-const isFile = (file: PathLike) =>
-  existsSync(file) && fs.statSync(file).isFile();
-const isDir = (file: PathLike) =>
-  existsSync(file) && fs.statSync(file).isDirectory();
+function isFile(file: PathLike) {
+  return existsSync(file) && fs.statSync(file).isFile();
+}
+function isDir(file: PathLike) {
+  return existsSync(file) && fs.statSync(file).isDirectory();
+}
 
-const getIndex = (path: PathLike, ext: string) => {
+function getIndex(path: PathLike, ext: string) {
   // assert(isDir(path), "path must be a dir");
   if (!isDir(path)) {
     return;
@@ -43,9 +48,14 @@ const getIndex = (path: PathLike, ext: string) => {
   if (isFile(file)) {
     return file;
   }
-};
+}
 
-const getFileFromRelativePath = (absPath: string, exts: string[]) => {
+const getFileFromRelativePath = (
+  curDir: string,
+  relpath: string,
+  exts: string[]
+) => {
+  const absPath = path.resolve(curDir, relpath);
   if (isFile(absPath)) {
     return absPath;
   }
@@ -71,9 +81,16 @@ const getFileFromAbsPath = (
   projectDir: string
 ) => {
   assert(pathLike.startsWith("/"), "absolute path must start with /");
+
   if (isFile(pathLike)) {
     return pathLike;
   }
+  //TODO: public is a hard code
+  const relativePublicPathLike = path.join(projectDir, "public", pathLike);
+  if (isFile(relativePublicPathLike)) {
+    return relativePublicPathLike;
+  }
+  const reltaiveProjectDirPath = path.join(projectDir, pathLike);
 
   for (const ex of extension) {
     assert(ex.startsWith("."), "extension must start with .");
@@ -83,18 +100,30 @@ const getFileFromAbsPath = (
       return file1;
     }
 
-    const prefix = path.join(projectDir, pathLike);
-    const file2 = `${prefix}${ex}`;
+    // relative to the projectDir
+    const file2 = `${reltaiveProjectDirPath}${ex}`;
     if (isFile(file2)) {
       return file2;
     }
 
-    const file3 = getIndex(prefix, ex);
-    if (isDir(prefix) && file3) {
+    //?
+    const file3 = getIndex(reltaiveProjectDirPath, ex);
+    if (isDir(reltaiveProjectDirPath) && file3) {
       return file3;
     }
+
+    // relative to the public dir
+    const file4 = `${relativePublicPathLike}${ex}`;
+    if (isFile(file4)) {
+      return file4;
+    }
   }
-  log.error("MODULE NOT FOUND", "moduleId=%s,projectDir=%s", pathLike, projectDir);
+  log.error(
+    "MODULE NOT FOUND",
+    "moduleId=%s,projectDir=%s",
+    pathLike,
+    projectDir
+  );
   throw new Error("MODULE NOT FOUND");
 };
 function getSourceType(source: string, alias: Alias) {
@@ -122,10 +151,7 @@ function getModuleId(
     const type = getSourceType(source, alias);
     switch (type) {
       case "relative":
-        return getFileFromRelativePath(
-          path.resolve(curDir, source),
-          extensions
-        );
+        return getFileFromRelativePath(curDir, source, extensions);
       case "abs":
         return getFileFromAbsPath(source, extensions, projectDir);
       case "alias":
@@ -141,13 +167,10 @@ function getModuleId(
         return nodeRequire.resolve(source, { paths: [curFile] });
     }
   } catch (e) {
-    // log.error(
-    //   e.message,
-    //   "resolve.sync:moduleId=%s,curFile=%s",
-    //   source,
-    //   curFile
-    // );
-    // console.log(JSON.stringify(importDecl, null, 2));
+    consola.debug(
+      e.message,
+      `resolve.sync:moduleId=${source},curFile=${curFile}`
+    );
     return "";
   }
 }
@@ -168,7 +191,16 @@ function doImportDecl(
   extensions: string[],
   projectDir: string
 ) {
-  let moduleId = getModuleId(importDecl, curFile, alias, extensions, projectDir);
+  let moduleId = getModuleId(
+    importDecl,
+    curFile,
+    alias,
+    extensions,
+    projectDir
+  );
+  moduleId = isFileModule(moduleId)
+    ? `/${path.relative(projectDir, moduleId)}`
+    : moduleId;
 
   const importsByName: ImportsByName = {};
   importDecl.specifiers.forEach(specifier => {
@@ -196,41 +228,37 @@ function doImportDecl(
   return importsByName;
 }
 const cwd = process.cwd();
-export const getImports = (
+export function getImports(
   program: t.Program,
   curFile: string,
   alias: Alias = {},
   projectDir = cwd,
   extensions: string[] = [".tsx", ".ts", ".js", ".jsx", ".cjs", ".mjs"]
-) => {
-  const importsIdByName: ImportsByName = {};
-  const importDecls = getImportDeclarations(program);
-  importDecls.forEach(decl => {
-    const res = doImportDecl(decl, curFile, alias, extensions, projectDir);
-    Object.assign(importsIdByName, res);
-  });
-  return importsIdByName;
-};
+) {
+  return getImportDeclarations(program).reduce((a, decl) => {
+    return {
+      ...a,
+      ...doImportDecl(decl, curFile, alias, extensions, projectDir),
+    };
+  }, {});
+}
+
+export function isFileModule(modelId: string) {
+  return [IMG_REG, VIDEO_REG, FONT_REG].some(reg => reg.test(modelId));
+}
 
 //===========================================================
 // getImageImports
 //===========================================================
-
 export function getFileModuleImport(imports: ImportsByName) {
-  const imgPair = Object.entries(imports)
-    .filter(([key, value]) => {
-      return (
-        IMG_REG.test(value.moduleId) ||
-        VIDEO_REG.test(value.moduleId) ||
-        FONT_REG.test(value.moduleId)
-      );
-    })
-    .map(([key, value]) => {
-      return [key, value.moduleId];
+  return Object.entries(imports)
+    .filter(([, value]) => {
+      return isFileModule(value.moduleId);
     })
     .reduce((acc, [key, value]) => {
-      acc[key] = value;
-      return acc;
-    }, {} as any);
-  return imgPair;
+      return {
+        ...acc,
+        [key]: value.moduleId,
+      };
+    }, {});
 }

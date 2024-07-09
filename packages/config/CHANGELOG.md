@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.4-beta.1](https://github.com/colliejs/colliejs/compare/@colliejs/config@1.2.4-beta.0...@colliejs/config@1.2.4-beta.1) (2024-07-09)
+
+**Note:** Version bump only for package @colliejs/config
+
 ## [1.2.4-beta.0](https://github.com/colliejs/colliejs/compare/@colliejs/config@1.2.3-beta.0...@colliejs/config@1.2.4-beta.0) (2024-07-01)
 
 **Note:** Version bump only for package @colliejs/config

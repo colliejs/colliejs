@@ -10,8 +10,8 @@ import { pxToVw } from "@/common/pxToVw";
 import { Col } from "./components/Col";
 import { Row } from "./components/Row";
 import ExampleButton from "./components/ExampleButton";
-import "./collie.css";
 import { HoverButton } from "./components/HoverButton";
+import { ImageButton } from "./components/ImgButton";
 export default function App() {
   return (
     <div>
@@ -43,6 +43,7 @@ export default function App() {
         ResponsiveButton use vw
       </ResponsiveButton>
       <ExampleButton>ExampleButton</ExampleButton>
+      <ImageButton>ImageButton</ImageButton>
     </div>
   );
 }

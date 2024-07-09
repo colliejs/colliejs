@@ -7,13 +7,13 @@ import { extractCssFromCssCall } from "./cssCall";
 /**
  * NOTE: the module should be convert commonjs first
  */
-export const extractCss = <Config extends BaseConfig>(
+export function extractCss<Config extends BaseConfig>(
   source: string,
   curFile: string,
   config: Config,
   alias = {},
   root = process.cwd()
-) => {
+) {
   let styledComponentCssTexts = "";
   let cssCallCssTexts = "";
   traverse(
@@ -39,4 +39,4 @@ export const extractCss = <Config extends BaseConfig>(
     styledElementCssTexts: cssCallCssTexts,
     styledComponentCssTexts,
   };
-};
+}

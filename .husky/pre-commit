@@ -1,5 +1,6 @@
 #!/usr/bin/env zsh
-. "$(dirname -- "$0")/_/husky.sh"
+# . "$(dirname -- "$0")/_/husky.sh"
 
+git.ts checkUser
 # npx lint-staged
 # pnpm test

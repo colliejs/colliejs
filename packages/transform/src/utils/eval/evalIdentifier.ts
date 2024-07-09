@@ -6,41 +6,33 @@ import { getFileModuleImport } from "../importer";
 import { ImportsByName } from "../types";
 import { load } from "./require";
 import { getCtxOf } from "./getCtx";
-import log from "consola";
+import consola from "consola";
 
-const getExternalIdentifierValue = (
+function getExternalIdentifierValue(
   variable: t.Identifier,
   imports: ImportsByName
-) => {
+) {
   const name = variable.name;
-  const fileMap = getFileModuleImport(imports);
-  if (name in fileMap) {
-    return fileMap[name];
+  const fileModleMap = getFileModuleImport(imports);
+  if (name in fileModleMap) {
+    return fileModleMap[name];
   } else {
     return load(imports, name);
   }
-};
+}
 
-export const evalIdentifer = (
+export function evalIdentifer(
   path: NodePath<t.Identifier>,
   imports: ImportsByName
-) => {
+) {
   try {
     return _evalIdentifer(path, imports);
   } catch (e) {
-    console.error({ function: "evalIdentifer", path, imports });
-    // log.error("===>error", "c", {
-    //   function: "evalIdentifer",
-    //   path,
-    //   imports,
-    // });
+    consola.debug({ function: "evalIdentifer", path, imports });
     throw e;
   }
-};
-const _evalIdentifer = (
-  path: NodePath<t.Identifier>,
-  imports: ImportsByName
-) => {
+}
+function _evalIdentifer(path: NodePath<t.Identifier>, imports: ImportsByName) {
   assert(path.isIdentifier(), "path should be Identifier", { path, imports });
   const name = path.node.name;
   const binding = path.scope.getBinding(name);
@@ -69,4 +61,4 @@ const _evalIdentifer = (
       }
     }
   }
-};
+}
