@@ -13,15 +13,13 @@ import { getCssEntryFile, getCssRoot } from "./utils/fileurl";
 import { getConfig } from "./utils/getConfig";
 import { writeFile } from "./utils/writeFile";
 
-function ussingTs() {
-  return existsSync("tsconfig.json");
-}
-const configureFile = ussingTs() ? "collie.config.ts" : "collie.config.js";
+const usingTs = existsSync("tsconfig.json");
+const configureFile = usingTs ? "collie.config.ts" : "collie.config.js";
 
 run({
   async init() {
     async function createConfigFile() {
-      async function inputEntry() {
+      async function inputEntryfile() {
         const { entry } = await prompt<{ entry: string }>({
           type: "input",
           name: "entry",
@@ -47,12 +45,12 @@ run({
           choices: existIndexFiles.concat("none of them"),
         });
         if (res.entry == "none of them") {
-          entry = await inputEntry();
+          entry = await inputEntryfile();
         } else {
           entry = res.entry;
         }
       } else {
-        entry = await inputEntry();
+        entry = await inputEntryfile();
       }
       writeFile(configureFile, contentOfCollieConfigFile(entry));
       consola.success(`${configureFile} created`);
@@ -88,7 +86,36 @@ run({
         }
       );
       consola.success("watch added to package.json");
-      consola.info("==> run `npm run dev` to start dev server");
+      consola.info(`
+        ${usingTs ? "add collie.config.ts to ts configure file\n" : ""}.
+        ==> run 'npm run dev' to start dev server
+        `);
+    }
+    async function addConfigFileToTsConfigIfNeeded(tsconfigFile: string) {
+      if (!usingTs) {
+        return;
+      }
+      const tsconfig = path.resolve(tsconfigFile);
+      if (!existsSync(tsconfig)) {
+        consola.error("init", `${tsconfigFile} not found`);
+        process.exit(1);
+      }
+      const { include, ...restJson } = await readJSONSync(tsconfig);
+      writeJsonSync(
+        tsconfig,
+        {
+          ...restJson,
+          include: include
+            ? include.includes(configureFile)
+              ? include
+              : [...include, configureFile]
+            : [configureFile],
+        },
+        {
+          spaces: 2,
+        }
+      );
+      consola.success("collie.config.ts added to tsconfig.json");
     }
 
     if (!existsSync(configureFile)) {
@@ -106,6 +133,10 @@ run({
     writeFile(styleFile, contentOfStyledFile);
     writeFile(".gitignore", `${cssRoot}/.collie/\n`);
     await addWatchToPackageJson();
+    if (usingTs) {
+      existsSync("tsconfig.json") &&
+        (await addConfigFileToTsConfigIfNeeded("tsconfig.json"));
+    }
     consola.success("collie init done");
   },
   async createTheme({ config = configureFile }) {
