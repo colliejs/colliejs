@@ -3,7 +3,7 @@ import { getName } from "./getName";
 import * as t from "@babel/types";
 import path from "path";
 import fs, { existsSync } from "node:fs";
-import log from "consola";
+import log, { consola } from "consola";
 import { ImportsByName } from "./types";
 import { assert } from "@colliejs/shared";
 import { PathLike } from "fs";
@@ -12,7 +12,7 @@ import { createRequire } from "module";
 
 const nodeRequire = createRequire(import.meta.url);
 
-export const getImportDeclarations = (ast: t.Program) => {
+export function getImportDeclarations(ast: t.Program) {
   const importDecls: t.ImportDeclaration[] = [];
   ast.body.forEach(node => {
     if (t.isImportDeclaration(node)) {
@@ -20,20 +20,26 @@ export const getImportDeclarations = (ast: t.Program) => {
     }
   });
   return importDecls;
-};
+}
 
-const isRelative = (path: string) =>
-  path.startsWith(".") || path.startsWith("..");
-const isAbs = (path: string) => path.startsWith("/");
-const isAlias = (path: string, alias: Alias) =>
-  Object.keys(alias).some(key => path.startsWith(key));
+function isRelative(path: string) {
+  return path.startsWith(".") || path.startsWith("..");
+}
+function isAbs(path: string) {
+  return path.startsWith("/");
+}
+function isAlias(path: string, alias: Alias) {
+  return Object.keys(alias).some(key => path.startsWith(key));
+}
 
-const isFile = (file: PathLike) =>
-  existsSync(file) && fs.statSync(file).isFile();
-const isDir = (file: PathLike) =>
-  existsSync(file) && fs.statSync(file).isDirectory();
+function isFile(file: PathLike) {
+  return existsSync(file) && fs.statSync(file).isFile();
+}
+function isDir(file: PathLike) {
+  return existsSync(file) && fs.statSync(file).isDirectory();
+}
 
-const getIndex = (path: PathLike, ext: string) => {
+function getIndex(path: PathLike, ext: string) {
   // assert(isDir(path), "path must be a dir");
   if (!isDir(path)) {
     return;
@@ -42,9 +48,14 @@ const getIndex = (path: PathLike, ext: string) => {
   if (isFile(file)) {
     return file;
   }
-};
+}
 
-const getFileFromRelativePath = (absPath: string, exts: string[]) => {
+const getFileFromRelativePath = (
+  curDir: string,
+  relpath: string,
+  exts: string[]
+) => {
+  const absPath = path.resolve(curDir, relpath);
   if (isFile(absPath)) {
     return absPath;
   }
@@ -140,10 +151,7 @@ function getModuleId(
     const type = getSourceType(source, alias);
     switch (type) {
       case "relative":
-        return getFileFromRelativePath(
-          path.resolve(curDir, source),
-          extensions
-        );
+        return getFileFromRelativePath(curDir, source, extensions);
       case "abs":
         return getFileFromAbsPath(source, extensions, projectDir);
       case "alias":
@@ -159,13 +167,10 @@ function getModuleId(
         return nodeRequire.resolve(source, { paths: [curFile] });
     }
   } catch (e) {
-    // log.error(
-    //   e.message,
-    //   "resolve.sync:moduleId=%s,curFile=%s",
-    //   source,
-    //   curFile
-    // );
-    // console.log(JSON.stringify(importDecl, null, 2));
+    consola.debug(
+      e.message,
+      `resolve.sync:moduleId=${source},curFile=${curFile}`
+    );
     return "";
   }
 }
@@ -193,6 +198,9 @@ function doImportDecl(
     extensions,
     projectDir
   );
+  moduleId = isFileModule(moduleId)
+    ? `/${path.relative(projectDir, moduleId)}`
+    : moduleId;
 
   const importsByName: ImportsByName = {};
   importDecl.specifiers.forEach(specifier => {
@@ -220,21 +228,20 @@ function doImportDecl(
   return importsByName;
 }
 const cwd = process.cwd();
-export const getImports = (
+export function getImports(
   program: t.Program,
   curFile: string,
   alias: Alias = {},
   projectDir = cwd,
   extensions: string[] = [".tsx", ".ts", ".js", ".jsx", ".cjs", ".mjs"]
-) => {
-  const importsIdByName: ImportsByName = {};
-  const importDecls = getImportDeclarations(program);
-  importDecls.forEach(decl => {
-    const res = doImportDecl(decl, curFile, alias, extensions, projectDir);
-    Object.assign(importsIdByName, res);
-  });
-  return importsIdByName;
-};
+) {
+  return getImportDeclarations(program).reduce((a, decl) => {
+    return {
+      ...a,
+      ...doImportDecl(decl, curFile, alias, extensions, projectDir),
+    };
+  }, {});
+}
 
 export function isFileModule(modelId: string) {
   return [IMG_REG, VIDEO_REG, FONT_REG].some(reg => reg.test(modelId));
@@ -248,11 +255,10 @@ export function getFileModuleImport(imports: ImportsByName) {
     .filter(([, value]) => {
       return isFileModule(value.moduleId);
     })
-    .map(([key, value]) => {
-      return [key, value.moduleId];
-    })
     .reduce((acc, [key, value]) => {
-      acc[key] = value;
-      return acc;
-    }, {} as any);
+      return {
+        ...acc,
+        [key]: value.moduleId,
+      };
+    }, {});
 }

@@ -4,10 +4,11 @@
   "description": "vite project example ",
   "type": "module",
   "scripts": {
-    "dev": "npx vite & npx collie watch --config ./collie.config.ts & wait",
+    "dev": "npx vite & CONSOLA_LEVEL=5 npx collie watch --config ./collie.config.ts & wait",
     "css:watch": "npx collie watch --config ./collie.config.ts",
     "css:gen": "npx collie cssgen --config ./collie.config.ts",
     "build": "vite build",
+    "serve": "vite preview",
     "prepare": "npx collie cssgen"
   },
   "private": true,

@@ -4,11 +4,11 @@ import * as t from "@babel/types";
  *
  * @param parentPath :styled()函数变量声明的Node
  */
-export const getArgPathOfFnCall = (
+export function getArgPathOfFnCall(
   parentPath: NodePath<t.Node>,
   fnName: string,
   argIndex: number
-) => {
+) {
   let res: NodePath<t.ObjectExpression> | undefined = undefined;
   parentPath.traverse({
     ObjectExpression(ipath) {
@@ -16,7 +16,10 @@ export const getArgPathOfFnCall = (
         ipath.parentPath.node.type === "CallExpression" &&
         //@ts-ignore
         ipath.parentPath.node.callee?.name === fnName &&
-        t.isNodesEquivalent(ipath.parentPath.node.arguments[argIndex], ipath.node)
+        t.isNodesEquivalent(
+          ipath.parentPath.node.arguments[argIndex],
+          ipath.node
+        )
       ) {
         res = ipath;
         ipath.stop();
@@ -24,4 +27,4 @@ export const getArgPathOfFnCall = (
     },
   });
   return res;
-};
+}

@@ -1,5 +1,5 @@
 import * as t from "@babel/types";
-import {isPlainObject} from "lodash-es";
+import { isPlainObject } from "lodash-es";
 import log from "consola";
 
 /**
@@ -9,10 +9,10 @@ import log from "consola";
  * @returns
  */
 
-export const buildObjectExpression = (
+export function buildObjectExpression(
   obj: Record<string, any>,
   replacer?: (val: any) => any
-) => {
+) {
   const isArray = Array.isArray(obj);
   let exp: t.ObjectExpression | t.ArrayExpression;
   if (isArray) {
@@ -63,6 +63,6 @@ export const buildObjectExpression = (
     }
   }
   return exp;
-};
+}
 
 export const buildArrayExpression = buildObjectExpression;

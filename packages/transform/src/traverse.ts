@@ -22,7 +22,7 @@ import { NodePath } from "@babel/traverse";
 /**
  * NOTE: the module should be convert commonjs first
  */
-export const traverse = <Config extends BaseConfig>(
+export function traverse<Config extends BaseConfig>(
   source: string,
   curFile: string,
   config: Config,
@@ -36,7 +36,7 @@ export const traverse = <Config extends BaseConfig>(
     modulesByName: ImportsByName,
     config: Config
   ) => void
-) => {
+) {
   try {
     const fileAst = parseCode(source);
     let modulesByName = {};
@@ -113,4 +113,4 @@ export const traverse = <Config extends BaseConfig>(
     consola.error(e.message, `===>[transform]:alias=${alias}`);
     throw e;
   }
-};
+}

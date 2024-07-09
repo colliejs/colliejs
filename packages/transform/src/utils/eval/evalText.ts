@@ -1,6 +1,6 @@
 import log from "consola";
 
-export const evalExpText = (code: string, context: object = {}) => {
+export function evalExpText(code: string, context: object = {}) {
   const body = `return ${code};`;
   try {
     return new Function(...Object.keys(context), body)(
@@ -11,4 +11,4 @@ export const evalExpText = (code: string, context: object = {}) => {
     log.error("eval", "context=", context);
     throw e;
   }
-};
+}

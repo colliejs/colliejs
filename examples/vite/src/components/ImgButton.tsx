@@ -5,19 +5,10 @@ console.log("SVG1", SVG1);
 export const ImageButton = styled(
   "button",
   {
-    w: 100,
-    h: 100,
+    w: 101,
+    h: 101,
+
     background: `url("${SVG1}") no-repeat center center`,
-    variants: {
-      type: {
-        primary: {
-          background: "red",
-        },
-        secondary: {
-          background: "blue",
-        },
-      },
-    },
   },
   {
     as: "button",
