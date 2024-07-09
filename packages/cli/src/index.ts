@@ -129,7 +129,7 @@ run({
     writeFile(".gitignore", `${cssRoot}/.collie/\n`);
     await addWatchToPackageJson();
     if (usingTs) {
-      await addConfigFileToTsConfigIfNeeded("tsconfig.json");
+      await addConfigFileToTsConfigIfNeeded("tsconfig.node.json");
     }
     consola.success("collie init done");
     consola.info(`==>next: run 'npm run dev' to start dev server`);
