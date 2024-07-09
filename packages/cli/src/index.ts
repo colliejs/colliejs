@@ -86,10 +86,6 @@ run({
         }
       );
       consola.success("watch added to package.json");
-      consola.info(`
-        ${usingTs ? "add collie.config.ts to ts configure file\n" : ""}.
-        ==> run 'npm run dev' to start dev server
-        `);
     }
     async function addConfigFileToTsConfigIfNeeded(tsconfigFile: string) {
       if (!usingTs) {
@@ -97,8 +93,7 @@ run({
       }
       const tsconfig = path.resolve(tsconfigFile);
       if (!existsSync(tsconfig)) {
-        consola.error("init", `${tsconfigFile} not found`);
-        process.exit(1);
+        return;
       }
       const { include, ...restJson } = await readJSONSync(tsconfig);
       writeJsonSync(
@@ -134,9 +129,10 @@ run({
     writeFile(".gitignore", `${cssRoot}/.collie/\n`);
     await addWatchToPackageJson();
     if (usingTs) {
-      await addConfigFileToTsConfigIfNeeded("tsconfig.app.json");
+      await addConfigFileToTsConfigIfNeeded("tsconfig.json");
     }
     consola.success("collie init done");
+    consola.info(`==> run 'npm run dev' to start dev server`);
   },
   async createTheme({ config = configureFile }) {
     const {
