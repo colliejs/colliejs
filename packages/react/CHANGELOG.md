@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.11-beta.3](https://github.com/colliejs/colliejs/compare/@colliejs/react@1.2.11-beta.2...@colliejs/react@1.2.11-beta.3) (2024-07-09)
+
+### Bug Fixes
+
+- fix prepare script logic ([97cb0c0](https://github.com/colliejs/colliejs/commit/97cb0c0d7a8efc0afe3176d95284f3b4e9098088))
+
 ## [1.2.11-beta.2](https://github.com/colliejs/colliejs/compare/@colliejs/react@1.2.11-beta.1...@colliejs/react@1.2.11-beta.2) (2024-07-04)
 
 ### Features
