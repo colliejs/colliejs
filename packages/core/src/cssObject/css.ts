@@ -21,6 +21,7 @@ export const getCssText = <C extends BaseConfig>(
 export function getClassName<Config extends BaseConfig>(
   cssObj: CSSObject<Config>
 ) {
+  //TODO: exclude url-like property
   return toHash(JSON.stringify(cssObj));
 }
 

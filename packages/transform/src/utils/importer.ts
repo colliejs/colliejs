@@ -3,7 +3,6 @@ import { getName } from "./getName";
 import * as t from "@babel/types";
 import path from "path";
 import fs, { existsSync } from "node:fs";
-import resolve from "resolve";
 import log from "consola";
 import { ImportsByName } from "./types";
 import { assert } from "@colliejs/shared";
@@ -71,9 +70,16 @@ const getFileFromAbsPath = (
   projectDir: string
 ) => {
   assert(pathLike.startsWith("/"), "absolute path must start with /");
+
   if (isFile(pathLike)) {
     return pathLike;
   }
+  //TODO: public is a hard code
+  const relativePublicPathLike = path.join(projectDir, "public", pathLike);
+  if (isFile(relativePublicPathLike)) {
+    return relativePublicPathLike;
+  }
+  const reltaiveProjectDirPath = path.join(projectDir, pathLike);
 
   for (const ex of extension) {
     assert(ex.startsWith("."), "extension must start with .");
@@ -83,18 +89,30 @@ const getFileFromAbsPath = (
       return file1;
     }
 
-    const prefix = path.join(projectDir, pathLike);
-    const file2 = `${prefix}${ex}`;
+    // relative to the projectDir
+    const file2 = `${reltaiveProjectDirPath}${ex}`;
     if (isFile(file2)) {
       return file2;
     }
 
-    const file3 = getIndex(prefix, ex);
-    if (isDir(prefix) && file3) {
+    //?
+    const file3 = getIndex(reltaiveProjectDirPath, ex);
+    if (isDir(reltaiveProjectDirPath) && file3) {
       return file3;
     }
+
+    // relative to the public dir
+    const file4 = `${relativePublicPathLike}${ex}`;
+    if (isFile(file4)) {
+      return file4;
+    }
   }
-  log.error("MODULE NOT FOUND", "moduleId=%s,projectDir=%s", pathLike, projectDir);
+  log.error(
+    "MODULE NOT FOUND",
+    "moduleId=%s,projectDir=%s",
+    pathLike,
+    projectDir
+  );
   throw new Error("MODULE NOT FOUND");
 };
 function getSourceType(source: string, alias: Alias) {
@@ -168,7 +186,13 @@ function doImportDecl(
   extensions: string[],
   projectDir: string
 ) {
-  let moduleId = getModuleId(importDecl, curFile, alias, extensions, projectDir);
+  let moduleId = getModuleId(
+    importDecl,
+    curFile,
+    alias,
+    extensions,
+    projectDir
+  );
 
   const importsByName: ImportsByName = {};
   importDecl.specifiers.forEach(specifier => {
@@ -212,18 +236,17 @@ export const getImports = (
   return importsIdByName;
 };
 
+export function isFileModule(modelId: string) {
+  return [IMG_REG, VIDEO_REG, FONT_REG].some(reg => reg.test(modelId));
+}
+
 //===========================================================
 // getImageImports
 //===========================================================
-
 export function getFileModuleImport(imports: ImportsByName) {
-  const imgPair = Object.entries(imports)
-    .filter(([key, value]) => {
-      return (
-        IMG_REG.test(value.moduleId) ||
-        VIDEO_REG.test(value.moduleId) ||
-        FONT_REG.test(value.moduleId)
-      );
+  return Object.entries(imports)
+    .filter(([, value]) => {
+      return isFileModule(value.moduleId);
     })
     .map(([key, value]) => {
       return [key, value.moduleId];
@@ -232,5 +255,4 @@ export function getFileModuleImport(imports: ImportsByName) {
       acc[key] = value;
       return acc;
     }, {} as any);
-  return imgPair;
 }

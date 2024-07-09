@@ -6,16 +6,15 @@ import { getFileModuleImport } from "../importer";
 import { ImportsByName } from "../types";
 import { load } from "./require";
 import { getCtxOf } from "./getCtx";
-import log from "consola";
 
 const getExternalIdentifierValue = (
   variable: t.Identifier,
   imports: ImportsByName
 ) => {
   const name = variable.name;
-  const fileMap = getFileModuleImport(imports);
-  if (name in fileMap) {
-    return fileMap[name];
+  const fileModleMap = getFileModuleImport(imports);
+  if (name in fileModleMap) {
+    return fileModleMap[name];
   } else {
     return load(imports, name);
   }
