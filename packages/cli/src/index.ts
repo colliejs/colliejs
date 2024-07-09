@@ -30,7 +30,7 @@ run({
         }
         return entry;
       }
-      const indexFiles = ["index", "entry"]
+      const indexFiles = ["index", "entry", "main"]
         .map(e => ["ts", "tsx", "js", "jsx"].map(ee => `src/${e}.${ee}`))
         .flat();
       const existIndexFiles = indexFiles.filter(existsSync);
@@ -84,6 +84,7 @@ run({
         }
       );
       consola.success("watch added to package.json");
+      consola.info("==> run `npm run dev` to start dev server");
     }
 
     if (!existsSync(filename)) {
