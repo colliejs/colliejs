@@ -1,6 +1,6 @@
 {
   "name": "@colliejs/transform",
-  "version": "1.2.8-beta.2",
+  "version": "1.2.8-beta.3",
   "description": "awesesome",
   "type": "module",
   "scripts": {
@@ -30,7 +30,6 @@
     "@colliejs/config": "workspace:^",
     "@colliejs/core": "workspace:^",
     "@colliejs/shared": "workspace:^",
-
     "consola": "^3.2.3",
     "tsx": "^4.15.6"
   },

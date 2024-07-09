@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.8-beta.3](https://github.com/colliejs/colliejs/compare/@colliejs/transform@1.2.8-beta.2...@colliejs/transform@1.2.8-beta.3) (2024-07-09)
+
+### Features
+
+- add dev script automatically ([f88be76](https://github.com/colliejs/colliejs/commit/f88be76d409d1f194f3d4e0b03253693c975b092))
+
 ## [1.2.8-beta.2](https://github.com/colliejs/colliejs/compare/@colliejs/transform@1.2.8-beta.1...@colliejs/transform@1.2.8-beta.2) (2024-07-04)
 
 ### Features
