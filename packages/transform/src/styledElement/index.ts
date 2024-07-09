@@ -1,5 +1,5 @@
 import * as t from "@babel/types";
-import log from "npmlog";
+import log from "consola";
 import {
   type BaseConfig,
   extractFromCssObject,

@@ -1,46 +1,111 @@
 import { createTheme } from "@colliejs/core";
 import { run } from "@colliejs/shared";
+import { consola } from "consola";
+import { prompt } from "enquirer";
 import fg from "fast-glob";
-import log from "npmlog";
+import { existsSync, readJSONSync, writeJsonSync } from "fs-extra";
 import path from "path";
 import { extractWhen } from "./extract";
-import { contentOfStyledFile, contentOfCollieConfigFile } from "./template";
+import { contentOfCollieConfigFile, contentOfStyledFile } from "./template";
 import { addThemeToCssEntryFile, createThemeFile } from "./theme";
 import { extractCss } from "./utils/extractCss";
 import { getCssEntryFile, getCssRoot } from "./utils/fileurl";
 import { getConfig } from "./utils/getConfig";
 import { writeFile } from "./utils/writeFile";
-import { pathExistsSync, existsSync } from "fs-extra";
-
 run({
   async init() {
     const filename = "collie.config.ts";
+
+    async function createConfigFile() {
+      async function inputEntry() {
+        const { entry } = await prompt<{ entry: string }>({
+          type: "input",
+          name: "entry",
+          message: "specify the entry file",
+          initial: "",
+        });
+        if (!existsSync(entry)) {
+          consola.error("init", `entry file not found: ${entry}`);
+          process.exit(1);
+        }
+        return entry;
+      }
+      const indexFiles = ["index", "entry"]
+        .map(e => ["ts", "tsx", "js", "jsx"].map(ee => `src/${e}.${ee}`))
+        .flat();
+      const existIndexFiles = indexFiles.filter(existsSync);
+      let entry = "";
+      if (existIndexFiles.length > 0) {
+        const res = await prompt<{ entry: string }>({
+          type: "select",
+          name: "entry",
+          message: "Which file is the entry file?",
+          choices: existIndexFiles.concat("none of them"),
+        });
+        if (res.entry == "none of them") {
+          entry = await inputEntry();
+        } else {
+          entry = res.entry;
+        }
+      } else {
+        entry = await inputEntry();
+      }
+      writeFile("collie.config.ts", contentOfCollieConfigFile(entry));
+      consola.success("collie.config.ts created");
+    }
+    async function addWatchToPackageJson() {
+      const packageJson = path.resolve("package.json");
+      if (!existsSync(packageJson)) {
+        consola.error("init", "package.json not found");
+        process.exit(1);
+      }
+      const json = await readJSONSync(packageJson);
+      const { dev, prepare } = json.scripts || {};
+      writeJsonSync(
+        packageJson,
+        {
+          ...json,
+          scripts: {
+            ...json.scripts,
+            dev: dev
+              ? dev.includes("collie watch")
+                ? dev
+                : `${dev} & collie watch & wait`
+              : "collie watch",
+            prepare: prepare
+              ? prepare.includes("collie cssgen")
+                ? prepare
+                : `${prepare} & npx collie cssgen & wait`
+              : "npx collie cssgen",
+          },
+        },
+        {
+          spaces: 2,
+        }
+      );
+      consola.success("watch added to package.json");
+    }
+
     if (!existsSync(filename)) {
-      writeFile("collie.config.ts", contentOfCollieConfigFile);
+      await createConfigFile();
     }
     const {
       build: { entry },
     } = await getConfig(path.resolve(filename));
-    if (!existsSync(entry)) {
-      log.error("init", `entry file not found: ${entry}`);
-      process.exit(1);
-    }
-
     const cssEntryFile = getCssEntryFile(entry);
     writeFile(cssEntryFile, "");
 
     const cssRoot = path.dirname(entry);
     const styleFile = path.resolve(cssRoot, "styled.ts");
+
     writeFile(styleFile, contentOfStyledFile);
     writeFile(".gitignore", `${cssRoot}/.collie/\n`);
-    //TODO: add `npx collie watch` to your package.json scripts automatically
-    console.log(
-      'add `npx collie watch` to your package.json scripts like this `"dev": "vite & npx collie watch & wait"`'
-    );
+    await addWatchToPackageJson();
+    consola.success("collie init done");
   },
   async createTheme({ config = "collie.config.ts" }) {
     const {
-      css: { prefix, theme },
+      css: { prefix = "", theme = {} },
     } = await getConfig(path.resolve(config));
     return createTheme(prefix, theme);
   },
@@ -71,7 +136,7 @@ run({
   async watch({ config = "collie.config.ts" }) {
     await this.cssgen({ config });
     await extractWhen("change", { config }, url => {
-      log.info("watch", `changed file:${url} `);
+      consola.info(`file changed:${url} `);
     });
   },
 });

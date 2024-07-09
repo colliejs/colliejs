@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "dist",
-    "strict": false
+    "module": "ESNext"
   },
   "include": ["src/index.ts"]
 }

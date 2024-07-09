@@ -1,6 +1,6 @@
 import * as tt from "@babel/types";
 import { generate } from "./module";
-import log from "npmlog";
+import log from "consola";
 
 export type Fun =
   | tt.FunctionDeclaration

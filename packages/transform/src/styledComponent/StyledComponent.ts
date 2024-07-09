@@ -1,7 +1,7 @@
 import * as t from "@babel/types";
 import type { BaseConfig } from "@colliejs/core";
 import { extractFromStyledObject } from "@colliejs/core";
-import log from "npmlog";
+import log from "consola";
 import CustomComponent from "../component/CustomComponent";
 import { HostComponent } from "../component/HostComponent";
 

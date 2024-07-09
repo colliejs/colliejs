@@ -6,14 +6,6 @@ import rollupConfig from "../../scripts/rollup.config.js";
 const config = {
   ...rollupConfig,
 
-  external: [
-    ...rollupConfig.external,
-    "react",
-    "react-dom",
-    "react/jsx-runtime",
-    "react-dom/client",
-    "chokidar",
-    /@collie/,
-  ],
+  external: [...rollupConfig.external, "chokidar"],
 };
 export default config;

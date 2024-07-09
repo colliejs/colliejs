@@ -7,7 +7,7 @@ import { generate, getImports, traverse as _traverse, ImportsByName } from "./ut
 import { isPropExisted } from "./utils/jsx/prop";
 import { parseCode } from "./utils/parse";
 import { removeTypeAnnotation } from "./utils/removeType";
-import log from "npmlog";
+import consola from "consola";
 import { parse } from "@babel/parser";
 import { isCssCallExpression } from "./cssCall";
 import { CallExpression } from "@babel/types";
@@ -99,8 +99,8 @@ export const traverse = <Config extends BaseConfig>(
     //===========================================================
     return onGenerate?.(fileAst);
   } catch (e) {
-    log.error(e.message, "===>[transform]:curFile=%s,", curFile);
-    log.error(e.message, "===>[transform]:alias=%s,", alias);
+    consola.error(e.message, "===>[transform]:curFile=%s,", curFile);
+    consola.error(e.message, "===>[transform]:alias=%s,", alias);
     throw e;
   }
 };

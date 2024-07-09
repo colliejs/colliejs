@@ -1,6 +1,6 @@
 import * as t from "@babel/types";
 import {isPlainObject} from "lodash-es";
-import log from "npmlog";
+import log from "consola";
 
 /**
  * 支持数组和对象

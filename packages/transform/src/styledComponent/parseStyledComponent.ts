@@ -1,7 +1,7 @@
 import { NodePath } from "@babel/traverse";
 import * as t from "@babel/types";
 import {isObject} from "lodash-es";
-import log from "npmlog";
+import log from "consola";
 import CustomComponent from "../component/CustomComponent";
 import { HostComponent } from "../component/HostComponent";
 import { generate, getArgPathOfFnCall } from "../utils/index";

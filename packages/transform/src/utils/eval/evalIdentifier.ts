@@ -6,7 +6,7 @@ import { getFileModuleImport } from "../importer";
 import { ImportsByName } from "../types";
 import { load } from "./require";
 import { getCtxOf } from "./getCtx";
-import log from "npmlog";
+import log from "consola";
 
 const getExternalIdentifierValue = (
   variable: t.Identifier,

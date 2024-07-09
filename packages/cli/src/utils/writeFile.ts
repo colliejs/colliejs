@@ -2,14 +2,16 @@ import path from "node:path";
 import fs, { WriteFileOptions } from "node:fs";
 
 export function writeFile(
-  filePath: string,
+  file: string,
   content: string,
   option?: WriteFileOptions
 ) {
-  if (!fs.existsSync(filePath)) {
-    console.log("filePath: ", filePath);
-    fs.mkdirSync(path.dirname(filePath), { recursive: true });
+  if (!fs.existsSync(file)) {
+    fs.mkdirSync(path.dirname(file), { recursive: true });
   }
-  const option_ = option ?? { encoding: "utf-8", flag: "w" };
-  fs.writeFileSync(filePath, content, option_);
+  fs.writeFileSync(
+    file,
+    content,
+    option ?? { encoding: "utf-8", flag: "w" }
+  );
 }

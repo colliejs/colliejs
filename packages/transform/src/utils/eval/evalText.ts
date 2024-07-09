@@ -1,4 +1,4 @@
-import log from "npmlog";
+import log from "consola";
 
 export const evalExpText = (code: string, context: object = {}) => {
   const body = `return ${code};`;

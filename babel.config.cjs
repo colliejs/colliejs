@@ -19,5 +19,5 @@ const presets = [
 
 module.exports = {
   presets: presets,
-  plugins: [],
+  plugins: ['@babel/plugin-syntax-import-attributes'],
 };

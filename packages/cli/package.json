@@ -46,6 +46,7 @@
     "@colliejs/shared": "workspace:^",
     "@colliejs/transform": "workspace:^",
     "chokidar": "^3.6.0",
+    "consola": "^3.2.3",
     "fast-glob": "^3.3.2",
     "npmlog": "^7.0.1",
     "picomatch": "^4.0.1"

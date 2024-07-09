@@ -1,6 +1,6 @@
 import { NodePath } from "@babel/traverse";
 import * as t from "@babel/types";
-import log from "npmlog";
+import log from "consola";
 import { ImportsByName } from "../types";
 import { getAttr, getValPathOfProp } from "./prop";
 import { evalIdentifer } from "../eval/evalIdentifier";

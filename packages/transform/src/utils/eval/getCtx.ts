@@ -2,7 +2,7 @@ import { NodePath } from "@babel/traverse";
 import * as t from "@babel/types";
 import { ImportsByName, traverse } from "..";
 import { evalIdentifer } from "./evalIdentifier";
-import log from "npmlog";
+import log from "consola";
 
 //获得当前节点的所有变量和他的值
 const _getCtxOf = (path: NodePath<t.Node>, imports: ImportsByName = {}) => {

@@ -4,7 +4,7 @@ import * as t from "@babel/types";
 import path from "path";
 import fs, { existsSync } from "node:fs";
 import resolve from "resolve";
-import log from "npmlog";
+import log from "consola";
 import { ImportsByName } from "./types";
 import { assert } from "@colliejs/shared";
 import { PathLike } from "fs";

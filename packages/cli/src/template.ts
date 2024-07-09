@@ -9,11 +9,11 @@ export const contentOfStyledFile = `
   export const css = (cssObj: CSSObject<CSSConfig>) => _css<CSSConfig>(cssObj);
 `;
 
-export const contentOfCollieConfigFile = `
+export const contentOfCollieConfigFile = (entryFile: string) => `
   import { defaultConfig, type CollieConfig } from "@colliejs/config";
   export default {
     build: {
-      entry: "src/index.tsx",
+      entry: "${entryFile}",
       alias: { "@/": "src/" },
       include: ["src/**/*.tsx", "src/**/*.ts"],
       exclude: ["**/node_modules"],

@@ -4,18 +4,16 @@ import { extractCss } from "./utils/extractCss";
 import { getConfig } from "./utils/getConfig";
 import { getCssEntryFile } from "./utils/fileurl";
 
-
 export async function extractWhen(
   event: string,
   options: { config: string },
-  onEvent?: (url) => void
+  onEvent?: (url: string) => void
 ) {
   const { config = "collie.config.ts" } = options;
   const {
     build: { include, exclude, root = process.cwd(), alias = {}, entry },
     css: cssConfig,
   } = await getConfig(path.resolve(config));
-
 
   const cssEntryFile = getCssEntryFile(entry);
   const excludeArray = typeof exclude === "string" ? [exclude] : exclude;
