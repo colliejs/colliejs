@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.12-beta.4](https://github.com/colliejs/colliejs/compare/@colliejs/cli@1.2.12-beta.3...@colliejs/cli@1.2.12-beta.4) (2024-07-09)
+
+### Bug Fixes
+
+- fix prepare script logic ([512d8d7](https://github.com/colliejs/colliejs/commit/512d8d76b816c5866ae2d83d9177c3925b96fd31))
+
 ## [1.2.12-beta.3](https://github.com/colliejs/colliejs/compare/@colliejs/cli@1.2.12-beta.2...@colliejs/cli@1.2.12-beta.3) (2024-07-09)
 
 ### Features
