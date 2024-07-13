@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
+git.ts checkUser
 . "$(dirname -- "$0")/_/husky.sh"
 
-git.ts checkUser
 # npx lint-staged
 # pnpm test
