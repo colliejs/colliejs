@@ -21,7 +21,6 @@ function getExternalIdentifierValue(
   }
 }
 
-
 export function evalIdentifer(
   path: NodePath<t.Identifier>,
   imports: ImportsByName
