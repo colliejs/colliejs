@@ -1,15 +1,17 @@
 # Advantages
 
-- There is no need to learn the syntax of preprocessors like less/sass/postcss, as you can achieve the same or even more functionality directly using JavaScript.
-- use mixins to compose mixin
-- CSS encapsulation makes it easy to extend and override styles.
-- Better performance, as it transforms the CSS object at build time.
+- static CSS-In-JSS: with the flexible of JavaScript   
+- extendable: extend the base Component to enhance the ability
+- composable: use mixins to compose mixin
+- variants supports: 
+- easy to use: in 99% of cases, you only need to use the `styled` function.
+- No style collision: CSS encapsulation makes it easy to extend and override styles.
+- Better performance: transform the CSS object at build time.
 - Boost your development with [@collie-ui/css](https://github.com/colliejs/collie-ui) or tailwindcss(incoming).
 - Excellent DX with typescript type hints.
 - Supports server-side rendering with nextjs.
 - Supports CSS breakpoint array syntax.
 - Supports theme customization and CSS property customization, simplifying CSS development.
-- Low learning curve - in 99% of cases, you only need to use the `styled` function.
 - have a best integration with react, webpack, rollup, vite, nextjs.
 
 # Example
