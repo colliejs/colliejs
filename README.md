@@ -1,6 +1,6 @@
 # Advantages
 
-- static CSS-In-JSS: with the flexible of JavaScript   
+- static CSS-In-JS: with the flexible of JavaScript   
 - extendable: extend the base Component to enhance the ability
 - composable: use mixins to compose mixin
 - variants supports: 
